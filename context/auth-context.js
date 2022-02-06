@@ -1,50 +1,73 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useCallback, useEffect } from "react";
 import { Auth } from "aws-amplify";
+import { Alert } from "react-native";
 
 const AuthContext = createContext();
 
-export default function AuthProvider({ children }) {
-  const [isLoggedIn, setIsLoggedIn] = useState();
-  const [auth, setAuth] = useState();
+function AuthProvider({ children }) {
+  const [loading, setLoading] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState(null);
 
-  const handleSignup = async (username, password) => {
+  const signup = useCallback(async (username, password) => {
     try {
       const { user } = await Auth.signUp(username, password);
       console.log("successful", user);
     } catch (err) {
       console.log("error", err);
     }
-  };
+  }, []);
 
-  const handleConfirmation = async (username, confirmation) => {
+  const confirmation = useCallback(async (username, confirmation) => {
+    let confirmedUser;
     try {
-      await Auth.confirmSignUp(username, confirmation);
+      confirmedUser = await Auth.confirmSignUp(username, confirmation);
     } catch (err) {
       console.log("error confirming", err);
     }
-  };
+    console.log(confirmedUser);
+  }, []);
 
-  const handleResend = async (username) => {
+  const resend = useCallback(async (username) => {
     try {
       await Auth.resendSignUp(username);
       console.log("code resent successfully");
     } catch (err) {
       console.log("error resending code:", err);
     }
-  };
+  }, []);
 
-  const handleSignin = async (username, password) => {
-    let user;
+  const signin = useCallback(async (username, password) => {
+    let signedInUser;
     try {
-      user = await Auth.signIn(username, password);
+      signedInUser = await Auth.signIn(username, password);
     } catch (err) {
+      Alert.alert(
+        "Invalid Credentials",
+        "Please check your email and password then try again"
+      );
       console.log("error", err);
+      return;
     }
-    if (!user) {
-      return console.log("no user found");
-    }
-    return user;
-  };
+    setIsLoggedIn(true);
+    setUser(signedInUser);
+    return signedInUser;
+  }, []);
 
-  return <AuthContext.Provider value="">{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider
+      value={{
+        user,
+        isLoggedIn,
+        signup,
+        resend,
+        signin,
+        confirmation,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 }
+
+export { AuthContext, AuthProvider };

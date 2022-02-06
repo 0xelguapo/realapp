@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -6,20 +6,18 @@ import {
   Pressable,
   Keyboard,
   TouchableWithoutFeedback,
-  Modal,
-  Button,
-  TextInput,
 } from "react-native";
 import {
   VALIDATOR_EMAIL,
   VALIDATOR_MINLENGTH,
   VALIDATOR_REQUIRE,
 } from "../../utility/validators";
-import { Auth } from "aws-amplify";
+import { AuthContext } from "../../context/auth-context";
 import Input from "../Input";
 import useForm from "../../hooks/form-hook";
 
 export default function Login({ navigation }) {
+  const { user, signin } = useContext(AuthContext);
   const [formState, inputHandler] = useForm(
     {
       email: {
@@ -35,16 +33,16 @@ export default function Login({ navigation }) {
   );
 
   const handleSignin = async () => {
-    let user;
-    try {
-      user = await Auth.signIn(
-        formState.inputs.email.value,
-        formState.inputs.password.value
-      );
-    } catch (err) {
-      console.log("error", err);
+    const response = await signin(
+      formState.inputs.email.value,
+      formState.inputs.password.value
+    );
+    if (!response) {
+      return;
+    } else {
+      console.log("res", response);
+      navigation.navigate("Clients");
     }
-    console.log(user)
   };
 
   return (

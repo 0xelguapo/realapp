@@ -5,7 +5,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Amplify from "aws-amplify";
 import awsconfig from "./src/aws-exports";
-import AuthProvider from "./context/auth-context";
+import { AuthProvider, AuthContext } from "./context/auth-context";
 import Clients from "./components/pages/Clients";
 import Tasks from "./components/pages/Tasks";
 import Welcome from "./components/auth/Welcome";
@@ -33,6 +33,9 @@ export default function App() {
             />
             <Stack.Screen name="Signup" component={Signup} />
             <Stack.Screen name="Login" component={Login} />
+          </Stack.Group>
+          <Stack.Group>
+            <Stack.Screen name="Clients" component={Clients} />
           </Stack.Group>
         </Stack.Navigator>
       </NavigationContainer>

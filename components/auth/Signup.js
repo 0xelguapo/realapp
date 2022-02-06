@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import {
   StyleSheet,
   Text,
@@ -16,10 +16,12 @@ import {
   VALIDATOR_REQUIRE,
 } from "../../utility/validators";
 import { Auth } from "aws-amplify";
+import { AuthContext } from "../../context/auth-context";
 import Input from "../Input";
 import useForm from "../../hooks/form-hook";
 
 export default function Signup({ navigation }) {
+  const { signup, resend, confirmation, user } = useContext(AuthContext);
   const [showModal, setShowModal] = useState(false);
   const [confirmationText, setConfirmationText] = useState("");
   const [formState, inputHandler] = useForm(
@@ -38,32 +40,21 @@ export default function Signup({ navigation }) {
 
   const handleSignup = async () => {
     setShowModal(!showModal);
-    try {
-      const { user } = await Auth.signUp({
-        username: formState.inputs.email.value,
-        password: formState.inputs.password.value,
-      });
-      console.log("successful", user);
-    } catch (err) {
-      console.log("error", err);
-    }
+    const result = signup(
+      formState.inputs.email.value,
+      formState.inputs.password.value
+    );
+    console.log("signup", result);
   };
 
   const handleConfirmation = async () => {
-    try {
-      await Auth.confirmSignUp(formState.inputs.email.value, confirmationText);
-    } catch (err) {
-      console.log("error confirming", err);
-    }
+    const result = confirmation(formState.inputs.email.value, confirmationText);
+    console.log("confirmation", result);
   };
 
   const handleResend = async () => {
-    try {
-      await Auth.resendSignUp(formState.inputs.email.value);
-      console.log("code resent successfully");
-    } catch (err) {
-      console.log("error resending code:", err);
-    }
+    const result = resend(formState.inputs.email.value);
+    console.log("resend", result);
   };
 
   return (
