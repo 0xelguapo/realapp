@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useState, useContext } from "react";
 import {
   StyleSheet,
   Text,
@@ -6,18 +6,23 @@ import {
   Pressable,
   Keyboard,
   TouchableWithoutFeedback,
+  Modal,
+  Button,
+  TextInput,
 } from "react-native";
 import {
   VALIDATOR_EMAIL,
   VALIDATOR_MINLENGTH,
   VALIDATOR_REQUIRE,
 } from "../../utility/validators";
-import { AuthContext } from "../../context/auth-context";
-import Input from "../Input";
+import { AuthContext } from "../../context/auth-context"
+import Input from "../../components/Input"
 import useForm from "../../hooks/form-hook";
 
-export default function Login({ navigation }) {
-  const { user, signin } = useContext(AuthContext);
+export default function Signup({ navigation }) {
+  const { signup, resend, confirmation, user } = useContext(AuthContext);
+  const [showModal, setShowModal] = useState(false);
+  const [confirmationText, setConfirmationText] = useState("");
   const [formState, inputHandler] = useForm(
     {
       email: {
@@ -32,26 +37,68 @@ export default function Login({ navigation }) {
     false
   );
 
-  const handleSignin = async () => {
-    const response = await signin(
+  const handleSignup = async () => {
+    setShowModal(!showModal);
+    const result = signup(
       formState.inputs.email.value,
       formState.inputs.password.value
     );
-    if (!response) {
-      return;
-    } else {
-      console.log("res", response);
-      navigation.navigate("Clients");
-    }
+    console.log("signup", result);
+  };
+
+  const handleConfirmation = async () => {
+    const result = confirmation(formState.inputs.email.value, confirmationText);
+    console.log("confirmation", result);
+  };
+
+  const handleResend = async () => {
+    const result = resend(formState.inputs.email.value);
+    console.log("resend", result);
   };
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
-        <Text style={styles.title}>Welcome Back</Text>
+        <Text style={styles.title}>Sign Up</Text>
         <Text style={{ fontWeight: "500", marginBottom: 20 }}>
-          Sign in to your account
+          Welcome! Please enter your details
         </Text>
+        <Modal
+          animationType="slide"
+          visible={showModal}
+          transparent={false}
+          presentationStyle="pageSheet"
+        >
+          <View style={styles.container}>
+            <Text style={styles.title}>Verify Your Email</Text>
+            <Text
+              style={{ marginTop: 10, marginBottom: 10, textAlign: "center" }}
+            >
+              Please enter the confirmation code sent to{" "}
+              <Text style={{ fontWeight: "600" }}>
+                {formState.inputs.email.value}
+              </Text>
+            </Text>
+            <TextInput
+              style={styles.confirmationInput}
+              keyboardType="numeric"
+              value={confirmationText}
+              onChangeText={(newText) => setConfirmationText(newText)}
+            />
+            <Text style={styles.resendHelper}>
+              Don't see the email? Check your spam folder
+            </Text>
+            <Text style={styles.resend} onPress={handleResend}>
+              Or resend email
+            </Text>
+            <Pressable style={styles.button}>
+              <Text style={styles.buttonText} onPress={handleConfirmation}>
+                Confirm
+              </Text>
+            </Pressable>
+            <Button title="Go back" onPress={() => setShowModal(!showModal)} />
+          </View>
+        </Modal>
         <Input
           nativeID="email"
           onInput={inputHandler}
@@ -73,7 +120,7 @@ export default function Login({ navigation }) {
               : { ...styles.button, ...styles.buttonDisabled }
           }
           disabled={!formState.isValid}
-          onPress={handleSignin}
+          onPress={handleSignup}
         >
           <Text
             style={
@@ -116,7 +163,7 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 20,
+    marginTop: 10,
     marginBottom: 10,
   },
   buttonText: {
