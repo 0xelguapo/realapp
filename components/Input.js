@@ -20,7 +20,7 @@ const inputReducer = (state, action) => {
 export default function Input(props) {
   const [inputState, dispatch] = useReducer(inputReducer, {
     value: "",
-    isValid: false,
+    isValid: props.initiallyValid,
     isTouched: false,
   });
 
@@ -48,6 +48,9 @@ export default function Input(props) {
         onChangeText={handleChange}
         style={styles.textInput}
         onBlur={handleTouch}
+        placeholder={props.placeholder}
+        keyboardType={props.keyboardType}
+        returnKeyType={props.returnKeyType}
       />
       {!inputState.isValid && inputState.isTouched && (
         <Text style={styles.error}>{props.errorText}</Text>
@@ -59,7 +62,7 @@ export default function Input(props) {
 const styles = StyleSheet.create({
   container: {
     paddingTop: 10,
-    paddingBottom: 10,
+    paddingBottom: 15,
   },
   textInput: {
     height: 40,
@@ -75,9 +78,12 @@ const styles = StyleSheet.create({
   },
   error: {
     color: "red",
+    position: "absolute",
+    bottom: -5
   },
 });
 
 Input.defaultProps = {
   validators: [],
+  initiallyValid: false,
 };
