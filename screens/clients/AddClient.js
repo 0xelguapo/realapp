@@ -1,11 +1,13 @@
 import { StyleSheet, Text, View, Alert } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import Input from "../../components/Input";
-import useForm from "../../hooks/form-hook";
-import CustomPressable from "../../components/CustomPressable";
+import { DataStore } from "aws-amplify";
+import { Client } from '../../src/models'
 import { VALIDATOR_REQUIRE } from "../../utility/validators";
+import useForm from "../../hooks/form-hook";
+import Input from "../../components/Input";
+import CustomPressable from "../../components/CustomPressable";
 
-export default function AddClient() {
+export default function AddClient({ navigation }) {
   const [formState, inputHandler] = useForm(
     {
       name: {
@@ -29,17 +31,29 @@ export default function AddClient() {
   );
 
   const handleSubmit = async () => {
-    if(!formState.inputs.name.value) {
-      Alert.alert('Required Field Empty', 'Please add a name')
+    if (!formState.inputs.name.value) {
+      Alert.alert("Required Field Empty", "Please add a name");
     } else {
-      
+      let response;
+      try {
+        response = await DataStore.save(
+          new Client({
+            name: "this is a name",
+            company: "testing company",
+            phone: "3210214",
+            email: "theemail@gmail.com",
+          })
+        );
+      } catch (err) {
+        console.log('error',err);
+      }
+      console.log(response);
     }
-
   };
 
   return (
     <View style={styles.container}>
-      <AntDesign name="left" size={25} />
+      <AntDesign name="left" size={25} onPress={() => navigation.goBack()}/>
       <Text style={styles.title}>Add a Client</Text>
       <View style={styles.inputsContainer}>
         <Input
@@ -98,7 +112,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
   buttonContainer: {
-    width: '100%',
+    width: "100%",
     bottom: 0,
-  }
+  },
 });
