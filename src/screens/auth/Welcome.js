@@ -14,7 +14,7 @@ export default function Welcome({ navigation }) {
         autoPlay
         loop
         style={{ width: 250, height: 250 }}
-        source={require("../../assets/welcome.json")}
+        source={require("../../../assets/welcome.json")}
       />
       <Text style={styles.title}>#1 CRM for Agents</Text>
       <Text style={styles.subText}>The client management tool made by agents, for agents</Text>

@@ -1,19 +1,23 @@
 {
   "dev": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-realapp-dev-120919-authRole",
-      "UnauthRoleArn": "arn:aws:iam::512520082405:role/amplify-realapp-dev-120919-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::512520082405:role/amplify-realapp-dev-120919-authRole",
+      "AuthRoleName": "amplify-realapp-dev-142224-authRole",
+      "UnauthRoleArn": "arn:aws:iam::512520082405:role/amplify-realapp-dev-142224-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::512520082405:role/amplify-realapp-dev-142224-authRole",
       "Region": "us-west-1",
-      "DeploymentBucketName": "amplify-realapp-dev-120919-deployment",
-      "UnauthRoleName": "amplify-realapp-dev-120919-unauthRole",
-      "StackName": "amplify-realapp-dev-120919",
-      "StackId": "arn:aws:cloudformation:us-west-1:512520082405:stack/amplify-realapp-dev-120919/2e633980-852d-11ec-b505-066c5758675d",
-      "AmplifyAppId": "d2udw8ntje5699"
+      "DeploymentBucketName": "amplify-realapp-dev-142224-deployment",
+      "UnauthRoleName": "amplify-realapp-dev-142224-unauthRole",
+      "StackName": "amplify-realapp-dev-142224",
+      "StackId": "arn:aws:cloudformation:us-west-1:512520082405:stack/amplify-realapp-dev-142224/a008fd00-892d-11ec-951f-025d34d4a3ff",
+      "AmplifyAppId": "d3m1z9i4a8u83m",
+      "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-realapp-dev-142224-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json"
     },
     "categories": {
       "auth": {
-        "realapp": {}
+        "realappe1ad7ead": {},
+        "realapp8e8e08f1": {
+          "googleClientId": "973695514664-mek3ctj1oppfglu3knj55snkt7lmj3m6.apps.googleusercontent.com"
+        }
       }
     }
   }

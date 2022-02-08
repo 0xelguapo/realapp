@@ -15,12 +15,12 @@ import {
   VALIDATOR_MINLENGTH,
   VALIDATOR_REQUIRE,
 } from "../../utility/validators";
-import { AuthContext } from "../../context/auth-context"
-import Input from "../../components/Input"
+import { AuthContext } from "../../context/auth-context";
+import Input from "../../components/Input";
 import useForm from "../../hooks/form-hook";
 
 export default function Signup({ navigation }) {
-  const { signup, resend, confirmation, user } = useContext(AuthContext);
+  const { signup, resend, confirmation, signin } = useContext(AuthContext);
   const [showModal, setShowModal] = useState(false);
   const [confirmationText, setConfirmationText] = useState("");
   const [formState, inputHandler] = useForm(
@@ -38,17 +38,23 @@ export default function Signup({ navigation }) {
   );
 
   const handleSignup = async () => {
-    setShowModal(!showModal);
-    const result = signup(
+    const result = await signup(
       formState.inputs.email.value,
       formState.inputs.password.value
     );
+    setShowModal(!showModal);
     console.log("signup", result);
   };
 
   const handleConfirmation = async () => {
-    const result = confirmation(formState.inputs.email.value, confirmationText);
-    console.log("confirmation", result);
+    let result;
+    result = await confirmation(formState.inputs.email.value, confirmationText);
+    console.log("confirmation result", result);
+    result = await signin(
+      formState.inputs.email.value,
+      formState.inputs.password.value
+    );
+    console.log('after confirmation', result)
   };
 
   const handleResend = async () => {

@@ -1,7 +1,6 @@
 import { StyleSheet, Text, View, Alert } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { DataStore } from "aws-amplify";
-import { Client } from '../../src/models'
 import { VALIDATOR_REQUIRE } from "../../utility/validators";
 import useForm from "../../hooks/form-hook";
 import Input from "../../components/Input";
@@ -40,7 +39,7 @@ export default function AddClient({ navigation }) {
           new Client({
             name: "this is a name",
             company: "testing company",
-            phone: "3210214",
+            phone: 3210214,
             email: "theemail@gmail.com",
           })
         );
