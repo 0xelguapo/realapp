@@ -1,6 +1,8 @@
+import {useCallback} from 'react';
 import { StyleSheet, Text, View, Alert } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import { DataStore } from "aws-amplify";
+import { API, graphqlOperation } from "aws-amplify";
+import * as mutations from "../../graphql/mutations";
 import { VALIDATOR_REQUIRE } from "../../utility/validators";
 import useForm from "../../hooks/form-hook";
 import Input from "../../components/Input";
@@ -29,30 +31,40 @@ export default function AddClient({ navigation }) {
     false
   );
 
+  const clientDetails = {
+    name: formState.inputs.name.value,
+    company: formState.inputs.company.value,
+    phone: formState.inputs.phone.value,
+    email: formState.inputs.email.value,
+  };
+
   const handleSubmit = async () => {
+    let response;
     if (!formState.inputs.name.value) {
       Alert.alert("Required Field Empty", "Please add a name");
     } else {
-      let response;
       try {
-        response = await DataStore.save(
-          new Client({
-            name: "this is a name",
-            company: "testing company",
-            phone: 3210214,
-            email: "theemail@gmail.com",
-          })
+        response = await API.graphql(
+          graphqlOperation(mutations.createClient, { input: clientDetails })
         );
       } catch (err) {
-        console.log('error',err);
+        console.log("error creating client", err);
       }
-      console.log(response);
     }
+    if (response) {
+      navigation.goBack();
+    } else {
+      Alert.alert(
+        "Error",
+        "Error creating, please check your inputs and again"
+      );
+    }
+    console.log(response);
   };
 
   return (
     <View style={styles.container}>
-      <AntDesign name="left" size={25} onPress={() => navigation.goBack()}/>
+      <AntDesign name="left" size={25} onPress={() => navigation.goBack()} />
       <Text style={styles.title}>Add a Client</Text>
       <View style={styles.inputsContainer}>
         <Input

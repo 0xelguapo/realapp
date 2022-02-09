@@ -7,7 +7,7 @@ type Client @model @auth(rules: [{ allow: owner }]) {
   id: ID!
   name: String!
   company: String
-  phone: Int
+  phone: String
   email: String
   properties: [Property] @hasMany
   tasks: [Task] @hasMany
