@@ -1,9 +1,10 @@
 import { View, Text, StyleSheet } from "react-native";
 
-export default function ClientDetails({id}) {
+export default function ClientDetails(props) {
+    console.log('props', props.route.params.clientId)
   return (
     <View style={styles.container}>
-      <Text>{id}</Text>
+      <Text></Text>
     </View>
   );
 }

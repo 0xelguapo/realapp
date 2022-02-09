@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { StyleSheet, View, Text, Pressable } from "react-native";
 
 export default function EachClient({ name, phone, company, email, onPress }) {

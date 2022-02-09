@@ -98,9 +98,13 @@ export default function Clients({ navigation }) {
   //   getAllClients();
   // }, []);
 
+  const viewClientHandler = (id) => {
+    navigation.navigate("ClientDetails", { clientId: id });
+  };
+
   const renderClient = ({ item }) => (
     <EachClient
-      onPress={() => navigation.navigate("ClientDetails").bind(item.id)}
+      onPress={() => viewClientHandler(item)}
       name={item.name}
       phone={item.phone}
       company={item.company}
