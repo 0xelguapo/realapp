@@ -5,20 +5,9 @@ import Tasks from "../screens/pages/Tasks";
 import Settings from "../screens/settings/index";
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Feather } from '@expo/vector-icons';
+import { Feather } from "@expo/vector-icons";
 
 const Tab = createBottomTabNavigator();
-
-const styles = {
-  padding: 3,
-  shadowColor: "rgba(34, 34, 34, 0.58)",
-  shadowOffset: {
-    width: 1,
-    height: 3,
-  },
-  shadowRadius: 4,
-  shadowOpacity: 0.7,
-};
 
 export default function AppNavigator() {
   return (
@@ -38,6 +27,17 @@ export default function AppNavigator() {
   );
 }
 
+const styles = {
+  padding: 3,
+  shadowColor: "rgba(34, 34, 34, 0.58)",
+  shadowOffset: {
+    width: 1,
+    height: 3,
+  },
+  shadowRadius: 4,
+  shadowOpacity: 0.7,
+};
+
 const optionsHandler = ({ route }) => {
   switch (route.name) {
     case "Clients":
@@ -56,6 +56,7 @@ const optionsHandler = ({ route }) => {
           ) : (
             <Ionicons name="people" size={28} color="#878787" />
           ),
+        headerShown: false,
       };
     case "Tasks":
       return {
@@ -75,8 +76,13 @@ const optionsHandler = ({ route }) => {
               color="black"
             />
           ) : (
-            <MaterialCommunityIcons name="clipboard-list-outline" size={28} color="#878787" />
+            <MaterialCommunityIcons
+              name="clipboard-list-outline"
+              size={28}
+              color="#878787"
+            />
           ),
+        headerShown: false,
       };
     case "Settings":
       return {
@@ -94,6 +100,7 @@ const optionsHandler = ({ route }) => {
           ) : (
             <Feather name="settings" size={28} color="#878787" />
           ),
+        headerShown: false,
       };
   }
 };

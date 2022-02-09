@@ -2,6 +2,7 @@ import { StyleSheet } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Clients from "./Clients";
 import AddClient from "./AddClient";
+import ClientDetails from "./ClientDetails";
 
 export default function ClientsNavigator({ navigation }) {
   const Stack = createNativeStackNavigator();
@@ -10,13 +11,18 @@ export default function ClientsNavigator({ navigation }) {
     <Stack.Navigator>
       <Stack.Screen
         options={{ headerShown: false }}
-        name="Clients"
+        name="AllClients"
         component={Clients}
       />
       <Stack.Screen
         options={{ presentation: "modal", headerShown: false }}
         name="AddClient"
         component={AddClient}
+      />
+      <Stack.Screen
+        options={{ presentation: "modal", headerShown: false }}
+        name="ClientDetails"
+        component={ClientDetails}
       />
     </Stack.Navigator>
   );

@@ -13,69 +13,70 @@ import {
 import { API, graphqlOperation } from "aws-amplify";
 import * as queries from "../../graphql/queries";
 import EachClient from "../../components/EachClient";
+import { Ionicons } from "@expo/vector-icons";
 
 const DATA = [
   {
-    name: 'Harrison Owen',
-    company: 'Dark Skins United',
-    phone: '13109221824',
+    name: "Harrison Owen",
+    company: "Dark Skins United",
+    phone: "13109221824",
   },
   {
-    name: 'Jackson Trinidad',
-    company: 'Michael Skins United',
-    phone: '3109221824',
+    name: "Jackson Trinidad",
+    company: "Michael Skins United",
+    phone: "3109221824",
   },
   {
-    name: 'MoneyMan Krabs',
-    company: 'Crab Skins United',
-    phone: '3109221824',
+    name: "MoneyMan Krabs",
+    company: "Crab Skins United",
+    phone: "3109221824",
   },
   {
-    name: 'Harrison Owen',
-    company: 'Dark Skins United',
-    phone: '3109221824',
+    name: "Harrison Owen",
+    company: "Dark Skins United",
+    phone: "3109221824",
   },
   {
-    name: 'Jackson Trinidad',
-    company: 'Michael Skins United',
-    phone: '3109221824',
+    name: "Jackson Trinidad",
+    company: "Michael Skins United",
+    phone: "3109221824",
   },
   {
-    name: 'MoneyMan Krabs',
-    company: 'Crab Skins United',
-    phone: '3109221824',
+    name: "MoneyMan Krabs",
+    company: "Crab Skins United",
+    phone: "3109221824",
   },
   {
-    name: 'Harrison Owen',
-    company: 'Dark Skins United',
-    phone: '3109221824',
+    name: "Harrison Owen",
+    company: "Dark Skins United",
+    phone: "3109221824",
   },
   {
-    name: 'Jackson Trinidad',
-    company: 'Michael Skins United',
-    phone: '3109221824',
+    name: "Jackson Trinidad",
+    company: "Michael Skins United",
+    phone: "3109221824",
   },
   {
-    name: 'MoneyMan Krabs',
-    company: 'Crab Skins United',
-    phone: '3109221824',
+    name: "MoneyMan Krabs",
+    company: "Crab Skins United",
+    phone: "3109221824",
   },
   {
-    name: 'Harrison Owen',
-    company: 'Dark Skins United',
-    phone: '3109221824',
+    name: "Harrison Owen",
+    company: "Dark Skins United",
+    phone: "3109221824",
   },
   {
-    name: 'Jackson Trinidad',
-    company: 'Michael Skins United',
-    phone: '3109221824',
+    name: "Jackson Trinidad",
+    company: "Michael Skins United",
+    phone: "3109221824",
   },
   {
-    name: 'MoneyMan Krabs',
-    company: 'Crab Skins United',
-    phone: '3109221824',
+    name: "MoneyMan Krabs",
+    company: "Crab Skins United",
+    phone: "3109221824",
   },
-]
+];
 
 export default function Clients({ navigation }) {
   const [clientsArray, setClientsArray] = useState([]);
@@ -98,7 +99,12 @@ export default function Clients({ navigation }) {
   // }, []);
 
   const renderClient = ({ item }) => (
-    <EachClient name={item.name} phone={item.phone} company={item.company} />
+    <EachClient
+      onPress={() => navigation.navigate("ClientDetails").bind(item.id)}
+      name={item.name}
+      phone={item.phone}
+      company={item.company}
+    />
   );
 
   if (isLoading) {
@@ -111,26 +117,56 @@ export default function Clients({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Button
-        title="Add Client"
-        onPress={() => navigation.navigate("AddClient")}
-      />
-      <FlatList
-        data={DATA}
-        renderItem={renderClient}
-        keyExtractor={(c) => c.id}
-      />
+      <View style={styles.header}>
+        <Text style={styles.headerText}>Clients</Text>
+        <Ionicons
+          style={styles.add}
+          name="person-add-outline"
+          size={23}
+          color="black"
+          onPress={() => navigation.navigate("AddClient")}
+        />
+      </View>
+      <View style={styles.list}>
+        <FlatList
+          data={DATA}
+          renderItem={renderClient}
+          keyExtractor={(c) => c.id}
+        />
+      </View>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: '9%',
-    backgroundColor: 'white'
+    flex: 1,
+    flexDirection: "column",
+    backgroundColor: "white",
   },
   loadingContainer: {
     flex: 1,
     justifyContent: "center",
+  },
+  header: {
+    flex: 0.0,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "white",
+    padding: 12,
+    borderBottomWidth: 0.5,
+    borderBottomColor: "#c9c9c9",
+  },
+  headerText: {
+    fontSize: 20,
+    fontWeight: "600",
+  },
+  add: {
+    position: "absolute",
+    right: 20,
+  },
+  list: {
+    flex: 1,
   },
 });

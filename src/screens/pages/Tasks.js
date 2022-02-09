@@ -1,7 +1,7 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, SafeAreaView } from "react-native";
 
 export default function Tasks() {
 return (
-    <View><Text>Tasks</Text></View>
+    <SafeAreaView><Text>Tasks</Text></SafeAreaView>
 )
 }
