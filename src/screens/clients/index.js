@@ -1,11 +1,11 @@
-import { StyleSheet } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Clients from "./Clients";
 import AddClient from "./AddClient";
 import ClientDetails from "./ClientDetails";
 
-export default function ClientsNavigator({ navigation }) {
-  const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator();
+
+export default function ClientsNavigator() {
 
   return (
     <Stack.Navigator>
@@ -27,9 +27,3 @@ export default function ClientsNavigator({ navigation }) {
     </Stack.Navigator>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 5,
-  },
-});

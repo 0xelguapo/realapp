@@ -20,7 +20,7 @@ export declare class Client {
   readonly id: string;
   readonly name: string;
   readonly company?: string;
-  readonly phone?: number;
+  readonly phone?: string;
   readonly email?: string;
   readonly properties?: (Property | null)[];
   readonly tasks?: (Task | null)[];

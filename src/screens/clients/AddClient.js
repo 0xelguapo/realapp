@@ -1,5 +1,5 @@
-import {useCallback} from 'react';
-import { StyleSheet, Text, View, Alert } from "react-native";
+import { useState, useRef } from "react";
+import { StyleSheet, Text, View, Alert, Animated, Button } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { API, graphqlOperation } from "aws-amplify";
 import * as mutations from "../../graphql/mutations";
@@ -9,6 +9,7 @@ import Input from "../../components/Input";
 import CustomPressable from "../../components/CustomPressable";
 
 export default function AddClient({ navigation }) {
+  const fadeAnim = useRef(new Animated.Value(0)).current;
   const [formState, inputHandler] = useForm(
     {
       name: {
@@ -53,13 +54,23 @@ export default function AddClient({ navigation }) {
     }
     if (response) {
       navigation.goBack();
-    } else {
-      Alert.alert(
-        "Error",
-        "Error creating, please check your inputs and again"
-      );
-    }
+    } 
     console.log(response);
+  };
+
+  const onSuccess = () => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
+    setTimeout(() => {
+      Animated.timing(fadeAnim, {
+        toValue: 0,
+        duration: 500,
+        useNativeDriver: true,
+      }).start();
+    }, 4000);
   };
 
   return (
@@ -70,33 +81,34 @@ export default function AddClient({ navigation }) {
         <Input
           nativeID="name"
           onInput={inputHandler}
-          helperText={"Name"}
-          placeholder={"Required"}
-          errorText={"A name is required!"}
+          helperText="Name"
+          placeholder="Required"
+          errorText="A name is required!"
           returnKeyType="done"
           validators={[VALIDATOR_REQUIRE()]}
+          autoCapitalize="words"
         />
         <Input
           nativeID="company"
-          helperText={"Company"}
-          placeholder={"Optional"}
+          helperText="Company"
+          placeholder="Optional"
           onInput={inputHandler}
           returnKeyType="done"
           initiallyValid="true"
         />
         <Input
           nativeID="phone"
-          helperText={"Phone Number"}
-          placeholder={"Optional"}
-          keyboardType={"number-pad"}
+          helperText="Phone Number"
+          placeholder="Optional"
+          keyboardType="number-pad"
           onInput={inputHandler}
           returnKeyType="done"
           initiallyValid="true"
         />
         <Input
           nativeID="email"
-          helperText={"Email"}
-          placeholder={"Optional"}
+          helperText="Email"
+          placeholder="Optional"
           onInput={inputHandler}
           returnKeyType="done"
           initiallyValid="true"
@@ -105,6 +117,9 @@ export default function AddClient({ navigation }) {
       <View style={styles.buttonContainer}>
         <CustomPressable onPress={handleSubmit}>Save Client</CustomPressable>
       </View>
+      <Animated.View style={[styles.fadingContainer, { opacity: fadeAnim }]}>
+          <Text style={styles.successText}>Contact created successfully</Text>
+      </Animated.View>
     </View>
   );
 }
@@ -126,4 +141,17 @@ const styles = StyleSheet.create({
     width: "100%",
     bottom: 0,
   },
+  fadingContainer: {
+    padding: 10,
+    backgroundColor: "#026bff",
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: "#4e97ff",
+    width: '100%',
+  },
+  successText: {
+    color: 'white',
+    fontWeight: '500',
+    fontSize: 15
+  }
 });

@@ -27,7 +27,7 @@ export const schema = {
                 "phone": {
                     "name": "phone",
                     "isArray": false,
-                    "type": "Int",
+                    "type": "String",
                     "isRequired": false,
                     "attributes": []
                 },
@@ -285,5 +285,5 @@ export const schema = {
     },
     "enums": {},
     "nonModels": {},
-    "version": "2a897a4bd23752399945ea6d2616cb1e"
+    "version": "517cc72bcd3643def28f0c0f10cab4cb"
 };

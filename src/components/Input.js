@@ -1,4 +1,4 @@
-import { useReducer, useEffect } from "react";
+import { useReducer, useEffect, useState } from "react";
 import { validate } from "../utility/validators";
 import { StyleSheet, Text, View, TextInput } from "react-native";
 
@@ -43,14 +43,15 @@ export default function Input(props) {
     <View style={styles.container}>
       <Text style={styles.helperText}>{props.helperText}</Text>
       <TextInput
+        style={styles.textInput}
         nativeID={props.nativeID}
         value={inputState.value}
         onChangeText={handleChange}
-        style={styles.textInput}
         onBlur={handleTouch}
         placeholder={props.placeholder}
         keyboardType={props.keyboardType}
         returnKeyType={props.returnKeyType}
+        autoCapitalize={props.autoCapitalize}
       />
       {!inputState.isValid && inputState.isTouched && (
         <Text style={styles.error}>{props.errorText}</Text>

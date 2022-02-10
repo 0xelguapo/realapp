@@ -1,5 +1,11 @@
-import { useEffect } from "react";
-import { StyleSheet, View, Text, Pressable } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  Pressable,
+  TouchableHighlight,
+} from "react-native";
+import { SimpleLineIcons } from "@expo/vector-icons";
 
 export default function EachClient({ name, phone, company, email, onPress }) {
   const formattedPhone =
@@ -11,12 +17,17 @@ export default function EachClient({ name, phone, company, email, onPress }) {
         )}-${phone.slice(7, 11)}`;
 
   return (
-    <Pressable onPress={onPress}>
-      <View style={styles.container}>
-        <Text style={styles.name}>{name}</Text>
-        <Text style={styles.company}>{company}</Text>
-        <Text style={styles.phone}>{formattedPhone}</Text>
-      </View>
+    <Pressable>
+      <TouchableHighlight onPress={onPress} underlayColor="#f1f1f1">
+        <View style={styles.container}>
+          <Text style={styles.name}>{name}</Text>
+          {/* {company && <Text style={styles.company}>{company}</Text>} */}
+          <Text style={styles.phone}>{formattedPhone}</Text>
+          <View style={styles.goContainer}>
+            <SimpleLineIcons name="options" size={24} color="#dddddf" />
+          </View>
+        </View>
+      </TouchableHighlight>
     </Pressable>
   );
 }
@@ -24,9 +35,10 @@ export default function EachClient({ name, phone, company, email, onPress }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "space-between",
-    padding: 20,
-    height: 100,
+    justifyContent: "space-evenly",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    height: 80,
     borderBottomWidth: 0.5,
     borderBottomColor: "#e6e6e6",
   },
@@ -34,5 +46,15 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontSize: 19,
   },
-  company: {},
+  company: {
+    color: "#7b7b7c",
+  },
+  phone: {
+    color: "#7b7b7c",
+  },
+  goContainer: {
+    position: "absolute",
+    right: 25,
+    top: 25,
+  },
 });
