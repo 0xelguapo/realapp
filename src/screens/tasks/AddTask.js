@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -11,12 +11,13 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { AntDesign } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
+import CustomPressable from "../../components/CustomPressable";
 
 export default function AddTask({ navigation }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [searchInput, setSearchInput] = useState("");
   const [pickerVisible, setPickerVisible] = useState(false);
-  const [mode, setMode] = useState("date");
   const [date, setDate] = useState(new Date());
 
   const onChange = (e, selectedDate) => {
@@ -28,6 +29,11 @@ export default function AddTask({ navigation }) {
   const showPickers = () => {
     setPickerVisible(!pickerVisible);
   };
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => console.log("im searching"), 500);
+    return () => clearTimeout(timeoutId);
+  }, [searchInput]);
 
   return (
     <View style={styles.container}>
@@ -42,7 +48,7 @@ export default function AddTask({ navigation }) {
           placeholder="Title"
         />
         <TextInput
-          onChangetext={(newText) => setTitle(newText)}
+          onChangetext={(newText) => setDescription(newText)}
           style={styles.descriptionInput}
           placeholder="Add a note"
           multiline={true}
@@ -70,7 +76,14 @@ export default function AddTask({ navigation }) {
           )}
         </View>
         <View style={styles.secondContainer}>
-            
+          <TextInput
+            style={styles.search}
+            placeholder="Associate with Contact"
+            onChangeText={(newText) => setSearchInput(newText)}
+          />
+        </View>
+        <View style={styles.save}>
+          <CustomPressable>Save Task</CustomPressable>
         </View>
       </View>
     </View>
@@ -125,5 +138,8 @@ const styles = StyleSheet.create({
     paddingLeft: 7,
     fontSize: 15,
     color: "#cacacb",
+  },
+  save: {
+    marginTop: 10,
   },
 });

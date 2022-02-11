@@ -6,7 +6,6 @@ import ClientDetails from "./ClientDetails";
 const Stack = createNativeStackNavigator();
 
 export default function ClientsNavigator() {
-
   return (
     <Stack.Navigator>
       <Stack.Screen
