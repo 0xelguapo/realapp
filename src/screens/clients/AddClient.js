@@ -1,15 +1,14 @@
-import { useState, useRef } from "react";
-import { StyleSheet, Text, View, Alert, Animated, Button } from "react-native";
+import { useContext } from "react";
+import { StyleSheet, Text, View } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import { API, graphqlOperation } from "aws-amplify";
-import * as mutations from "../../graphql/mutations";
+import { ClientsContext } from "../../context/client-context";
 import { VALIDATOR_REQUIRE } from "../../utility/validators";
 import useForm from "../../hooks/form-hook";
 import Input from "../../components/Input";
 import CustomPressable from "../../components/CustomPressable";
 
 export default function AddClient({ navigation }) {
-  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const { addClient } = useContext(ClientsContext);
   const [formState, inputHandler] = useForm(
     {
       name: {
@@ -39,39 +38,16 @@ export default function AddClient({ navigation }) {
     email: formState.inputs.email.value,
   };
 
-  const handleSubmit = async () => {
+  const handleAddClient = async () => {
     let response;
-    if (!formState.inputs.name.value) {
-      Alert.alert("Required Field Empty", "Please add a name");
+    response = await addClient(formState, clientDetails);
+    if(response) {
+      console.log('success')
+      navigation.goBack()
     } else {
-      try {
-        response = await API.graphql(
-          graphqlOperation(mutations.createClient, { input: clientDetails })
-        );
-      } catch (err) {
-        console.log("error creating client", err);
-      }
+      console.log('cannot add!');
     }
-    if (response) {
-      navigation.goBack();
-    } 
-    console.log(response);
-  };
-
-  const onSuccess = () => {
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 500,
-      useNativeDriver: true,
-    }).start();
-    setTimeout(() => {
-      Animated.timing(fadeAnim, {
-        toValue: 0,
-        duration: 500,
-        useNativeDriver: true,
-      }).start();
-    }, 4000);
-  };
+  }
 
   return (
     <View style={styles.container}>
@@ -115,11 +91,8 @@ export default function AddClient({ navigation }) {
         />
       </View>
       <View style={styles.buttonContainer}>
-        <CustomPressable onPress={handleSubmit}>Save Client</CustomPressable>
+        <CustomPressable onPress={handleAddClient}>Save Client</CustomPressable>
       </View>
-      <Animated.View style={[styles.fadingContainer, { opacity: fadeAnim }]}>
-          <Text style={styles.successText}>Contact created successfully</Text>
-      </Animated.View>
     </View>
   );
 }
@@ -140,18 +113,5 @@ const styles = StyleSheet.create({
   buttonContainer: {
     width: "100%",
     bottom: 0,
-  },
-  fadingContainer: {
-    padding: 10,
-    backgroundColor: "#026bff",
-    borderRadius: 10,
-    borderWidth: 2,
-    borderColor: "#4e97ff",
-    width: '100%',
-  },
-  successText: {
-    color: 'white',
-    fontWeight: '500',
-    fontSize: 15
   }
 });

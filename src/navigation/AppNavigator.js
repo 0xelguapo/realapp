@@ -1,8 +1,8 @@
 import { Text } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { ClientContextProvider } from "../context/client-context";
 import ClientsNavigator from "../screens/clients/index";
 import TasksNavigator from "../screens/tasks";
-import Tasks from "../screens/tasks/Tasks";
 import Settings from "../screens/settings/index";
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -12,23 +12,25 @@ const Tab = createBottomTabNavigator();
 
 export default function AppNavigator() {
   return (
-    <Tab.Navigator screenOptions={{ tabBarStyle: styles }}>
-      <Tab.Screen
-        name="Clients"
-        component={ClientsNavigator}
-        options={optionsHandler}
-      />
-      <Tab.Screen
-        name="Tasks"
-        component={TasksNavigator}
-        options={optionsHandler}
-      />
-      <Tab.Screen
-        name="Settings"
-        component={Settings}
-        options={optionsHandler}
-      />
-    </Tab.Navigator>
+    <ClientContextProvider>
+      <Tab.Navigator screenOptions={{ tabBarStyle: styles }}>
+        <Tab.Screen
+          name="Clients"
+          component={ClientsNavigator}
+          options={optionsHandler}
+        />
+        <Tab.Screen
+          name="Tasks"
+          component={TasksNavigator}
+          options={optionsHandler}
+        />
+        <Tab.Screen
+          name="Settings"
+          component={Settings}
+          options={optionsHandler}
+        />
+      </Tab.Navigator>
+    </ClientContextProvider>
   );
 }
 

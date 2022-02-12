@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext, useCallback } from "react";
 import {
   View,
   Text,
@@ -6,19 +6,28 @@ import {
   TextInput,
   Pressable,
   Button,
+  FlatList,
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import EachClient from "../../components/EachClient";
+import { ClientsContext } from "../../context/client-context";
+import { API } from "aws-amplify";
 import { AntDesign } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import CustomPressable from "../../components/CustomPressable";
+import { listClients } from "../../graphql/queries";
 
 export default function AddTask({ navigation }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [searchInput, setSearchInput] = useState("");
   const [pickerVisible, setPickerVisible] = useState(false);
   const [date, setDate] = useState(new Date());
+  const { clientsArray } = useContext(ClientsContext);
+  const [showClients, setShowClients] = useState(false);
+  const [searchInput, setSearchInput] = useState("");
+  const [filteredData, setFilteredData] = useState([]);
+  const [masterData, setMasterData] = useState(clientsArray);
 
   const onChange = (e, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -30,10 +39,66 @@ export default function AddTask({ navigation }) {
     setPickerVisible(!pickerVisible);
   };
 
+  let filter = {
+    name: {
+      contains: searchInput,
+    },
+  };
+
+  const renderClient = useCallback(
+    ({ item }) => (
+      <EachClient
+        onPress={() => setSearchInput(item.name)}
+        taskMode={true}
+        name={item.name}
+        phone={item.phone}
+        company={item.company}
+      />
+    ),
+    []
+  );
+
+  const handleChooseClient = (client) => {
+    setShowClients(false);
+    
+  };
+
+  const handleSearch = (text) => {
+    if (text) {
+      const selectedData = masterData.filter((c) => {
+        const clientData = c.name ? c.name.toUpperCase() : "".toUpperCase();
+        const textData = text.toUpperCase();
+        return clientData.indexOf(textData) > -1;
+      });
+      setFilteredData(selectedData);
+      setSearchInput(text);
+    } else {
+      setFilteredData(masterData);
+      setSearchInput(text);
+    }
+  };
+
+  // we have clientsarray
+  // pass in a string, check to see if any items in clientsarray match string
+
   useEffect(() => {
     const timeoutId = setTimeout(() => console.log("im searching"), 500);
     return () => clearTimeout(timeoutId);
   }, [searchInput]);
+
+  const fetchData = async () => {
+    let response;
+    try {
+      response = await API.graphql({
+        query: listClients,
+        variables: { filter: filter },
+      });
+      console.log(searchInput);
+      console.log(response);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -46,12 +111,14 @@ export default function AddTask({ navigation }) {
           onChangeText={(newText) => setTitle(newText)}
           style={styles.titleInput}
           placeholder="Title"
+          value={title}
         />
         <TextInput
-          onChangetext={(newText) => setDescription(newText)}
+          onChangeText={(newText) => setDescription(newText)}
           style={styles.descriptionInput}
           placeholder="Add a note"
           multiline={true}
+          value={description}
         />
         <View style={styles.secondContainer}>
           <Pressable onPress={showPickers}>
@@ -75,14 +142,25 @@ export default function AddTask({ navigation }) {
             />
           )}
         </View>
-        <View style={styles.secondContainer}>
+        <View style={styles.contactContainer}>
           <TextInput
             style={styles.search}
             placeholder="Associate with Contact"
-            onChangeText={(newText) => setSearchInput(newText)}
+            value={searchInput}
+            onChangeText={handleSearch}
           />
+          <View><Text>{searchInput}</Text></View>
+          <View style={styles.listViewContainer}>
+            <FlatList
+              style={styles.clientList}
+              data={filteredData}
+              renderItem={renderClient}
+              keyExtractor={(c) => c.id}
+            />
+          </View>
         </View>
         <View style={styles.save}>
+          <Button title="test" onPress={fetchData} />
           <CustomPressable>Save Task</CustomPressable>
         </View>
       </View>
@@ -138,6 +216,21 @@ const styles = StyleSheet.create({
     paddingLeft: 7,
     fontSize: 15,
     color: "#cacacb",
+  },
+  contactContainer: {
+    flex: 0.5,
+    borderBottomWidth: 0.3,
+  },
+  search: {
+    flex: 0.1,
+    paddingVertical: 5,
+  },
+  listViewContainer: {
+    flex: 1,
+  },
+  selectedClient: {
+      width: '30%',
+      backgroundColor: "blue",
   },
   save: {
     marginTop: 10,

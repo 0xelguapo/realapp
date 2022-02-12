@@ -19,6 +19,7 @@ function AuthProvider({ children }) {
 
   useEffect(() => {
     checkUser();
+    console.log('checking user...')
   }, []);
 
   const signup = useCallback(async (username, password) => {

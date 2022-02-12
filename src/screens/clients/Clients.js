@@ -1,57 +1,64 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useCallback, useContext, useRef } from "react";
 import {
   StyleSheet,
   Text,
   View,
   FlatList,
-  SafeAreaView,
-  Pressable,
-  Alert,
-  Button,
   ActivityIndicator,
   TextInput,
+  Animated,
 } from "react-native";
-import { API, graphqlOperation } from "aws-amplify";
-import * as queries from "../../graphql/queries";
+import { ClientsContext } from "../../context/client-context";
 import EachClient from "../../components/EachClient";
 import { Ionicons } from "@expo/vector-icons";
 
-export default function Clients({ navigation, id }) {
-  const [clientsArray, setClientsArray] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  
-  const getAllClients = useCallback(async () => {
-    setIsLoading(true);
-    let response;
-    try {
-      response = await API.graphql(graphqlOperation(queries.listClients));
-    } catch (err) {
-      console.log("error getting clients", err);
-    }
-    setClientsArray(response.data.listClients.items);
-    setIsLoading(false);
-  }, []);
-
-  useEffect(() => {
-    getAllClients();
-    console.log("gettingAllClients");
-  }, []);
+export default function Clients({ navigation }) {
+  const { clientsArray, isLoading, getAllClients, successStatus } =
+    useContext(ClientsContext);
+  const fadeAnim = useRef(new Animated.Value(0)).current;
 
   const viewClientHandler = useCallback((client) => {
     navigation.navigate("ClientDetails", { client: client });
   }, []);
 
-  const renderClient = useCallback(({ item }) => (
-    <EachClient
-      onPress={() => viewClientHandler(item)}
-      name={item.name}
-      phone={item.phone}
-      company={item.company}
-    />
-  ), []);
+  const renderClient = useCallback(
+    ({ item }) => (
+      <EachClient
+        onPress={() => viewClientHandler(item)}
+        name={item.name}
+        phone={item.phone}
+        company={item.company}
+      />
+    ),
+    []
+  );
+
+  useEffect(() => {
+    onSuccess();
+  }, [successStatus]);
+
+  const onSuccess = () => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
+    setTimeout(() => {
+      Animated.timing(fadeAnim, {
+        toValue: 0,
+        duration: 500,
+        useNativeDriver: true,
+      }).start();
+    }, 3500);
+  };
 
   return (
     <View style={styles.container}>
+      {successStatus && (
+        <Animated.View style={[styles.fadingContainer, { opacity: fadeAnim }]}>
+          <Text style={styles.successText}>Contact created successfully</Text>
+        </Animated.View>
+      )}
       <View style={styles.headerContainer}>
         <Text style={styles.headerText}>Clients</Text>
         <View style={styles.addIconContainer}>
@@ -146,5 +153,21 @@ const styles = StyleSheet.create({
   },
   list: {
     flex: 1,
+  },
+  fadingContainer: {
+    position: "absolute",
+    zIndex: 2,
+    bottom: 10,
+    padding: 10,
+    backgroundColor: "#026bff",
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: "#4e97ff",
+    width: "100%",
+  },
+  successText: {
+    color: "white",
+    fontWeight: "500",
+    fontSize: 15,
   },
 });
