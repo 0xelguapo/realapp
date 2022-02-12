@@ -6,6 +6,7 @@ import {
   TouchableHighlight,
 } from "react-native";
 import { SimpleLineIcons } from "@expo/vector-icons";
+import { Ionicons } from '@expo/vector-icons';
 
 export default function EachClient({
   name,
@@ -89,4 +90,5 @@ const styles = StyleSheet.create({
 
 EachClient.defaultProps = {
   taskMode: false,
+  checked: false,
 };

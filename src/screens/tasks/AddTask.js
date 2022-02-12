@@ -5,7 +5,8 @@ import {
   StyleSheet,
   TextInput,
   Pressable,
-  Button,
+  TouchableWithoutFeedback,
+  Keyboard,
   FlatList,
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -24,10 +25,11 @@ export default function AddTask({ navigation }) {
   const [pickerVisible, setPickerVisible] = useState(false);
   const [date, setDate] = useState(new Date());
   const { clientsArray } = useContext(ClientsContext);
-  const [showClients, setShowClients] = useState(false);
+  const [clientsVisible, setClientsVisible] = useState(false);
   const [searchInput, setSearchInput] = useState("");
-  const [filteredData, setFilteredData] = useState([]);
+  const [filteredData, setFilteredData] = useState(clientsArray);
   const [masterData, setMasterData] = useState(clientsArray);
+  const [selectedClient, setSelectedClient] = useState({});
 
   const onChange = (e, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -39,16 +41,25 @@ export default function AddTask({ navigation }) {
     setPickerVisible(!pickerVisible);
   };
 
-  let filter = {
-    name: {
-      contains: searchInput,
-    },
+  const showClients = () => {
+    setClientsVisible(!clientsVisible);
+    if (clientsVisible) {
+      setSearchInput("");
+      setSelectedClient({});
+    }
+    Keyboard.dismiss()
   };
+
+  //   let filter = {
+  //     name: {
+  //       contains: searchInput,
+  //     },
+  //   };
 
   const renderClient = useCallback(
     ({ item }) => (
       <EachClient
-        onPress={() => setSearchInput(item.name)}
+        onPress={() => handleChooseClient(item)}
         taskMode={true}
         name={item.name}
         phone={item.phone}
@@ -59,8 +70,9 @@ export default function AddTask({ navigation }) {
   );
 
   const handleChooseClient = (client) => {
-    setShowClients(false);
-    
+    setSelectedClient(client);
+    setSearchInput(client.name);
+    console.log(client);
   };
 
   const handleSearch = (text) => {
@@ -78,40 +90,45 @@ export default function AddTask({ navigation }) {
     }
   };
 
-  // we have clientsarray
-  // pass in a string, check to see if any items in clientsarray match string
+  //   useEffect(() => {
+  //     const timeoutId = setTimeout(() => console.log("im searching"), 500);
+  //     return () => clearTimeout(timeoutId);
+  //   }, [searchInput]);
 
-  useEffect(() => {
-    const timeoutId = setTimeout(() => console.log("im searching"), 500);
-    return () => clearTimeout(timeoutId);
-  }, [searchInput]);
-
-  const fetchData = async () => {
-    let response;
-    try {
-      response = await API.graphql({
-        query: listClients,
-        variables: { filter: filter },
-      });
-      console.log(searchInput);
-      console.log(response);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  //   const fetchData = async () => {
+  //     let response;
+  //     try {
+  //       response = await API.graphql({
+  //         query: listClients,
+  //         variables: { filter: filter },
+  //       });
+  //       console.log(searchInput);
+  //       console.log(response);
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   };
 
   return (
     <View style={styles.container}>
-      <View style={styles.headingContainer}>
-        <AntDesign name="left" size={25} onPress={() => navigation.goBack()} />
-        <Text style={styles.title}>New Task</Text>
-      </View>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.headingContainer}>
+          <AntDesign
+            name="left"
+            size={25}
+            onPress={() => navigation.goBack()}
+            style={{ width: "50%" }}
+          />
+          <Text style={styles.title}>New Task</Text>
+        </View>
+      </TouchableWithoutFeedback>
       <View style={styles.formContainer}>
         <TextInput
           onChangeText={(newText) => setTitle(newText)}
           style={styles.titleInput}
           placeholder="Title"
           value={title}
+          autoFocus={true}
         />
         <TextInput
           onChangeText={(newText) => setDescription(newText)}
@@ -123,10 +140,10 @@ export default function AddTask({ navigation }) {
         <View style={styles.secondContainer}>
           <Pressable onPress={showPickers}>
             {pickerVisible ? (
-              <FontAwesome name="calendar-times-o" size={20} color="#ff6b66" />
+              <FontAwesome name="calendar-times-o" size={24} color="#ff6b66" />
             ) : (
               <View style={styles.addDateContainer}>
-                <FontAwesome5 name="calendar-check" size={20} color="#0064e5" />
+                <FontAwesome5 name="calendar-check" size={24} color="#0064e5" />
                 <Text style={styles.addDateText}>Add Date</Text>
               </View>
             )}
@@ -142,25 +159,45 @@ export default function AddTask({ navigation }) {
             />
           )}
         </View>
-        <View style={styles.contactContainer}>
-          <TextInput
-            style={styles.search}
-            placeholder="Associate with Contact"
-            value={searchInput}
-            onChangeText={handleSearch}
-          />
-          <View><Text>{searchInput}</Text></View>
-          <View style={styles.listViewContainer}>
-            <FlatList
-              style={styles.clientList}
-              data={filteredData}
-              renderItem={renderClient}
-              keyExtractor={(c) => c.id}
+        <Pressable style={styles.pressableAddClient} onPress={showClients}>
+          {clientsVisible ? (
+            <View style={styles.closeClients}>
+              <FontAwesome name="remove" size={24} color="#ff6b66" />
+              {selectedClient.name && (
+                <View style={styles.selectedClientContainer}>
+                  <Text style={styles.selectedClientText}>
+                    {selectedClient.name}
+                  </Text>
+                </View>
+              )}
+            </View>
+          ) : (
+            <View style={styles.addClientContainer}>
+              <FontAwesome name="address-book-o" size={24} color="#0064e5" />
+              <Text style={styles.addDateText}>Associate Client</Text>
+            </View>
+          )}
+        </Pressable>
+        {clientsVisible && (
+          <View style={styles.contactContainer}>
+            <TextInput
+              style={styles.search}
+              placeholder="Search..."
+              value={searchInput}
+              onChangeText={handleSearch}
+              returnKeyType="done"
             />
+            <View style={styles.listViewContainer}>
+              <FlatList
+                style={styles.clientList}
+                data={filteredData}
+                renderItem={renderClient}
+                keyExtractor={(c) => c.id}
+              />
+            </View>
           </View>
-        </View>
+        )}
         <View style={styles.save}>
-          <Button title="test" onPress={fetchData} />
           <CustomPressable>Save Task</CustomPressable>
         </View>
       </View>
@@ -210,27 +247,48 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     alignItems: "center",
+    width: 350,
   },
   addDateText: {
     fontWeight: "500",
-    paddingLeft: 7,
-    fontSize: 15,
+    paddingLeft: 10,
+    fontSize: 16,
     color: "#cacacb",
+  },
+  addClientContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  pressableAddClient: {
+    flex: 0.1,
+    justifyContent: "center",
+  },
+  closeClients: {
+    flexDirection: "row",
+    alignItems: "center",
   },
   contactContainer: {
     flex: 0.5,
     borderBottomWidth: 0.3,
   },
   search: {
+    fontSize: 16,
     flex: 0.1,
     paddingVertical: 5,
   },
   listViewContainer: {
     flex: 1,
   },
-  selectedClient: {
-      width: '30%',
-      backgroundColor: "blue",
+  selectedClientContainer: {
+    marginLeft: 5,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 10,
+    backgroundColor: "#0064e5",
+  },
+  selectedClientText: {
+    color: "white",
+    fontWeight: "500",
   },
   save: {
     marginTop: 10,
