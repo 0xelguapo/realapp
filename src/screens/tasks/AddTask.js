@@ -12,21 +12,22 @@ import {
 import DateTimePicker from "@react-native-community/datetimepicker";
 import EachClient from "../../components/EachClient";
 import { ClientsContext } from "../../context/client-context";
-import { API } from "aws-amplify";
-import * as mutations from "../../graphql/mutations";
+
 import { AntDesign } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import CustomPressable from "../../components/CustomPressable";
+import { TaskContext } from "../../context/task-context";
 
 export default function AddTask({ navigation }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [pickerVisible, setPickerVisible] = useState(false);
-  const [date, setDate] = useState(new Date());
-  const { clientsArray } = useContext(ClientsContext);
-  const [clientsVisible, setClientsVisible] = useState(false);
   const [searchInput, setSearchInput] = useState("");
+  const [date, setDate] = useState(new Date());
+  const [pickerVisible, setPickerVisible] = useState(false);
+  const [clientsVisible, setClientsVisible] = useState(false);
+  const { clientsArray } = useContext(ClientsContext);
+  const { addTask } = useContext(TaskContext);
   const [filteredData, setFilteredData] = useState(clientsArray);
   const [masterData, setMasterData] = useState(clientsArray);
   const [selectedClient, setSelectedClient] = useState({});
@@ -49,12 +50,6 @@ export default function AddTask({ navigation }) {
     }
     Keyboard.dismiss();
   };
-
-  //   let filter = {
-  //     name: {
-  //       contains: searchInput,
-  //     },
-  //   };
 
   const renderClient = useCallback(
     ({ item }) => (
@@ -95,28 +90,18 @@ export default function AddTask({ navigation }) {
         title: title,
         content: description,
         date: date,
-        clientId: selectedClient.id
+        clientId: selectedClient.id,
       }
     : { title: title, content: description, date: date };
 
-  console.log(taskDetails);
-
-  const handleSubmit = async () => {
-    let response;
-    try {
-      response = await API.graphql({
-        query: mutations.createTask,
-        variables: {input: taskDetails}
-      });
-    } catch (err) {
-      console.log(err);
-    }
-    if(response) {
-      console.log('success', response);
+  const handleAddTask = async () => {
+    let response = await addTask(taskDetails);
+    if (response) {
       navigation.goBack();
+    } else {
+      console.log("cannot add task");
     }
   };
-
   //   const fetchData = async () => {
   //     let response;
   //     try {
@@ -220,7 +205,7 @@ export default function AddTask({ navigation }) {
           </View>
         )}
         <View style={styles.save}>
-          <CustomPressable onPress={handleSubmit}>Save Task</CustomPressable>
+          <CustomPressable onPress={handleAddTask}>Save Task</CustomPressable>
         </View>
       </View>
     </View>

@@ -1,6 +1,7 @@
 import { Text } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { ClientContextProvider } from "../context/client-context";
+import { TaskContextProvider } from "../context/task-context";
 import ClientsNavigator from "../screens/clients/index";
 import TasksNavigator from "../screens/tasks";
 import Settings from "../screens/settings/index";
@@ -13,6 +14,7 @@ const Tab = createBottomTabNavigator();
 export default function AppNavigator() {
   return (
     <ClientContextProvider>
+      <TaskContextProvider>
       <Tab.Navigator screenOptions={{ tabBarStyle: styles }}>
         <Tab.Screen
           name="Clients"
@@ -30,6 +32,7 @@ export default function AppNavigator() {
           options={optionsHandler}
         />
       </Tab.Navigator>
+      </TaskContextProvider>
     </ClientContextProvider>
   );
 }

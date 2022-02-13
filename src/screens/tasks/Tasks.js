@@ -1,29 +1,16 @@
-import { useState, useEffect, useCallback } from "react";
+import { useCallback, useContext } from "react";
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
-import { API } from "aws-amplify";
-import * as queries from "../../graphql/queries";
+import { TaskContext } from "../../context/task-context";
 import { Ionicons } from "@expo/vector-icons";
 import EachTask from "../../components/EachTask";
 
 export default function Tasks({ navigation }) {
-  const [tasksArray, setTasksArray] = useState([]);
+  const { tasksArray } = useContext(TaskContext);
 
-  const fetchTasks = async () => {
-    let response;
-    try {
-      response = await API.graphql({ query: queries.listTasks });
-    } catch (err) {
-      console.log("error fetching tasks", err);
-    }
-    console.log(response.data.listTasks.items);
-    setTasksArray(response.data.listTasks.items);
-  };
-
-  useEffect(() => {
-    fetchTasks();
-  }, []);
-
-  const renderTask = useCallback(({ item }) => <EachTask title={item.title} content={item.content} />, []);
+  const renderTask = useCallback(
+    ({ item }) => <EachTask title={item.title} content={item.content} />,
+    []
+  );
 
   return (
     <View style={styles.container}>
