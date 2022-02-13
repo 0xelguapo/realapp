@@ -29,10 +29,12 @@ export const createClient = /* GraphQL */ `
       tasks {
         items {
           id
+          clientId
+          title
           content
+          date
           createdAt
           updatedAt
-          clientTasksId
           owner
         }
         nextToken
@@ -71,10 +73,12 @@ export const updateClient = /* GraphQL */ `
       tasks {
         items {
           id
+          clientId
+          title
           content
+          date
           createdAt
           updatedAt
-          clientTasksId
           owner
         }
         nextToken
@@ -113,10 +117,12 @@ export const deleteClient = /* GraphQL */ `
       tasks {
         items {
           id
+          clientId
+          title
           content
+          date
           createdAt
           updatedAt
-          clientTasksId
           owner
         }
         nextToken
@@ -236,7 +242,10 @@ export const createTask = /* GraphQL */ `
   ) {
     createTask(input: $input, condition: $condition) {
       id
+      clientId
+      title
       content
+      date
       client {
         id
         name
@@ -255,7 +264,6 @@ export const createTask = /* GraphQL */ `
       }
       createdAt
       updatedAt
-      clientTasksId
       owner
     }
   }
@@ -267,7 +275,10 @@ export const updateTask = /* GraphQL */ `
   ) {
     updateTask(input: $input, condition: $condition) {
       id
+      clientId
+      title
       content
+      date
       client {
         id
         name
@@ -286,7 +297,6 @@ export const updateTask = /* GraphQL */ `
       }
       createdAt
       updatedAt
-      clientTasksId
       owner
     }
   }
@@ -298,7 +308,10 @@ export const deleteTask = /* GraphQL */ `
   ) {
     deleteTask(input: $input, condition: $condition) {
       id
+      clientId
+      title
       content
+      date
       client {
         id
         name
@@ -317,7 +330,6 @@ export const deleteTask = /* GraphQL */ `
       }
       createdAt
       updatedAt
-      clientTasksId
       owner
     }
   }

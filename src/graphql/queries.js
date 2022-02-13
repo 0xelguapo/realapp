@@ -26,10 +26,12 @@ export const getClient = /* GraphQL */ `
       tasks {
         items {
           id
+          clientId
+          title
           content
+          date
           createdAt
           updatedAt
-          clientTasksId
           owner
         }
         nextToken
@@ -134,7 +136,10 @@ export const getTask = /* GraphQL */ `
   query GetTask($id: ID!) {
     getTask(id: $id) {
       id
+      clientId
+      title
       content
+      date
       client {
         id
         name
@@ -153,7 +158,6 @@ export const getTask = /* GraphQL */ `
       }
       createdAt
       updatedAt
-      clientTasksId
       owner
     }
   }
@@ -167,7 +171,10 @@ export const listTasks = /* GraphQL */ `
     listTasks(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
+        clientId
+        title
         content
+        date
         client {
           id
           name
@@ -180,7 +187,6 @@ export const listTasks = /* GraphQL */ `
         }
         createdAt
         updatedAt
-        clientTasksId
         owner
       }
       nextToken

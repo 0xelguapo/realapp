@@ -63,7 +63,7 @@ export const schema = {
                     "isArrayNullable": true,
                     "association": {
                         "connectionType": "HAS_MANY",
-                        "associatedWith": "clientTasksId"
+                        "associatedWith": "client"
                     }
                 },
                 "createdAt": {
@@ -217,11 +217,25 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
+                "title": {
+                    "name": "title",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
                 "content": {
                     "name": "content",
                     "isArray": false,
                     "type": "String",
-                    "isRequired": true,
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "date": {
+                    "name": "date",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
                     "attributes": []
                 },
                 "client": {
@@ -234,7 +248,7 @@ export const schema = {
                     "attributes": [],
                     "association": {
                         "connectionType": "BELONGS_TO",
-                        "targetName": "clientTasksId"
+                        "targetName": "clientId"
                     }
                 },
                 "createdAt": {
@@ -262,6 +276,16 @@ export const schema = {
                     "properties": {}
                 },
                 {
+                    "type": "key",
+                    "properties": {
+                        "name": "byClient",
+                        "fields": [
+                            "clientId",
+                            "title"
+                        ]
+                    }
+                },
+                {
                     "type": "auth",
                     "properties": {
                         "rules": [
@@ -285,5 +309,5 @@ export const schema = {
     },
     "enums": {},
     "nonModels": {},
-    "version": "517cc72bcd3643def28f0c0f10cab4cb"
+    "version": "b5aceb111d6e1aad127752442e74ac9e"
 };

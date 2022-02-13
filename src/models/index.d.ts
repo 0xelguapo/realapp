@@ -45,7 +45,9 @@ export declare class Property {
 
 export declare class Task {
   readonly id: string;
-  readonly content: string;
+  readonly title: string;
+  readonly content?: string;
+  readonly date?: string;
   readonly client?: Client;
   readonly createdAt?: string;
   readonly updatedAt?: string;

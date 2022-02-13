@@ -26,10 +26,12 @@ export const onCreateClient = /* GraphQL */ `
       tasks {
         items {
           id
+          clientId
+          title
           content
+          date
           createdAt
           updatedAt
-          clientTasksId
           owner
         }
         nextToken
@@ -65,10 +67,12 @@ export const onUpdateClient = /* GraphQL */ `
       tasks {
         items {
           id
+          clientId
+          title
           content
+          date
           createdAt
           updatedAt
-          clientTasksId
           owner
         }
         nextToken
@@ -104,10 +108,12 @@ export const onDeleteClient = /* GraphQL */ `
       tasks {
         items {
           id
+          clientId
+          title
           content
+          date
           createdAt
           updatedAt
-          clientTasksId
           owner
         }
         nextToken
@@ -215,7 +221,10 @@ export const onCreateTask = /* GraphQL */ `
   subscription OnCreateTask($owner: String) {
     onCreateTask(owner: $owner) {
       id
+      clientId
+      title
       content
+      date
       client {
         id
         name
@@ -234,7 +243,6 @@ export const onCreateTask = /* GraphQL */ `
       }
       createdAt
       updatedAt
-      clientTasksId
       owner
     }
   }
@@ -243,7 +251,10 @@ export const onUpdateTask = /* GraphQL */ `
   subscription OnUpdateTask($owner: String) {
     onUpdateTask(owner: $owner) {
       id
+      clientId
+      title
       content
+      date
       client {
         id
         name
@@ -262,7 +273,6 @@ export const onUpdateTask = /* GraphQL */ `
       }
       createdAt
       updatedAt
-      clientTasksId
       owner
     }
   }
@@ -271,7 +281,10 @@ export const onDeleteTask = /* GraphQL */ `
   subscription OnDeleteTask($owner: String) {
     onDeleteTask(owner: $owner) {
       id
+      clientId
+      title
       content
+      date
       client {
         id
         name
@@ -290,7 +303,6 @@ export const onDeleteTask = /* GraphQL */ `
       }
       createdAt
       updatedAt
-      clientTasksId
       owner
     }
   }

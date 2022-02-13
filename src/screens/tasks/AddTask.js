@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext, useCallback } from "react";
+import { useState, useContext, useCallback } from "react";
 import {
   View,
   Text,
@@ -13,11 +13,11 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import EachClient from "../../components/EachClient";
 import { ClientsContext } from "../../context/client-context";
 import { API } from "aws-amplify";
+import * as mutations from "../../graphql/mutations";
 import { AntDesign } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import CustomPressable from "../../components/CustomPressable";
-import { listClients } from "../../graphql/queries";
 
 export default function AddTask({ navigation }) {
   const [title, setTitle] = useState("");
@@ -47,7 +47,7 @@ export default function AddTask({ navigation }) {
       setSearchInput("");
       setSelectedClient({});
     }
-    Keyboard.dismiss()
+    Keyboard.dismiss();
   };
 
   //   let filter = {
@@ -90,10 +90,32 @@ export default function AddTask({ navigation }) {
     }
   };
 
-  //   useEffect(() => {
-  //     const timeoutId = setTimeout(() => console.log("im searching"), 500);
-  //     return () => clearTimeout(timeoutId);
-  //   }, [searchInput]);
+  let taskDetails = selectedClient.id
+    ? {
+        title: title,
+        content: description,
+        date: date,
+        clientId: selectedClient.id
+      }
+    : { title: title, content: description, date: date };
+
+  console.log(taskDetails);
+
+  const handleSubmit = async () => {
+    let response;
+    try {
+      response = await API.graphql({
+        query: mutations.createTask,
+        variables: {input: taskDetails}
+      });
+    } catch (err) {
+      console.log(err);
+    }
+    if(response) {
+      console.log('success', response);
+      navigation.goBack();
+    }
+  };
 
   //   const fetchData = async () => {
   //     let response;
@@ -198,7 +220,7 @@ export default function AddTask({ navigation }) {
           </View>
         )}
         <View style={styles.save}>
-          <CustomPressable>Save Task</CustomPressable>
+          <CustomPressable onPress={handleSubmit}>Save Task</CustomPressable>
         </View>
       </View>
     </View>

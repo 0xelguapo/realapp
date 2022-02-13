@@ -19,7 +19,9 @@ function ClientContextProvider({ children }) {
     } catch (err) {
       console.log("error getting clients", err);
     }
-    setClientsArray(response.data.listClients.items);
+    if(response) {
+      setClientsArray(response.data.listClients.items);
+    } 
     setIsLoading(false);
   }, []);
 

@@ -1,7 +1,30 @@
-import { StyleSheet, Text, View } from "react-native";
+import { useState, useEffect, useCallback } from "react";
+import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
+import { API } from "aws-amplify";
+import * as queries from "../../graphql/queries";
 import { Ionicons } from "@expo/vector-icons";
+import EachTask from "../../components/EachTask";
 
 export default function Tasks({ navigation }) {
+  const [tasksArray, setTasksArray] = useState([]);
+
+  const fetchTasks = async () => {
+    let response;
+    try {
+      response = await API.graphql({ query: queries.listTasks });
+    } catch (err) {
+      console.log("error fetching tasks", err);
+    }
+    console.log(response.data.listTasks.items);
+    setTasksArray(response.data.listTasks.items);
+  };
+
+  useEffect(() => {
+    fetchTasks();
+  }, []);
+
+  const renderTask = useCallback(({ item }) => <EachTask title={item.title} content={item.content} />, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
@@ -18,6 +41,11 @@ export default function Tasks({ navigation }) {
           />
         </View>
       </View>
+      <FlatList
+        data={tasksArray}
+        renderItem={renderTask}
+        keyExtractor={(t) => t.id}
+      />
     </View>
   );
 }
@@ -28,7 +56,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#f6f6f6",
   },
   headerContainer: {
-    flex: 0.1,
+    flex: 0.15,
     paddingTop: 55,
     alignItems: "center",
     justifyContent: "space-between",

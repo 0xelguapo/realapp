@@ -10,7 +10,7 @@ type Client @model @auth(rules: [{ allow: owner }]) {
   phone: String
   email: String
   properties: [Property] @hasMany
-  tasks: [Task] @hasMany
+  tasks: [Task] @hasMany(indexName: "byClient", fields: ["id"])
 }
 
 type Property @model @auth(rules: [{ allow: owner }]) {
@@ -24,6 +24,9 @@ type Property @model @auth(rules: [{ allow: owner }]) {
 
 type Task @model @auth(rules: [{ allow: owner }]) {
   id: ID!
-  content: String!
-  client: Client @belongsTo
+  clientId: ID @index(name: "byClient", sortKeyFields: ["title"])
+  title: String!
+  content: String
+  date: String
+  client: Client @belongsTo(fields: ["clientId"])
 }
