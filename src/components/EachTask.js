@@ -5,20 +5,52 @@ import {
   Pressable,
   TouchableHighlight,
 } from "react-native";
-import { SimpleLineIcons } from "@expo/vector-icons";
+import { useContext, useState } from "react";
+import { TaskContext } from "../context/task-context";
+import { AntDesign } from "@expo/vector-icons";
 
 export default function EachTask({
-  title, content, date, client
+  title,
+  content,
+  date,
+  client,
+  id,
+  completed,
 }) {
+  const { completeTask } = useContext(TaskContext);
+  const [checked, setChecked] = useState(false);
+
+  const taskDetails = {
+    id: id,
+    title: title,
+    date: date,
+    client: client,
+    completed: true,
+  };
+
+  const handleCompleted = async () => {
+    let response = await completeTask(taskDetails);
+    if (response) {
+      setChecked(true);
+    }
+  };
 
   return (
     <Pressable>
       <TouchableHighlight underlayColor="#f1f1f1">
         <View style={styles.container}>
-          <Text style={styles.title}>{title}</Text>
-          <Text style={styles.content}>{content}</Text>
+          <Text style={!checked ? styles.title : styles.checkedTitle}>{title}</Text>
+          <Text style={!checked ? styles.content : styles.checkedContent}>{content}</Text>
           <View style={styles.goContainer}>
-            <SimpleLineIcons name="options" size={24} color="#dddddf" />
+            <Pressable onPress={handleCompleted} disabled={checked}>
+              {!checked ? (
+                <View style={styles.circle}></View>
+              ) : (
+                <View style={styles.checkedCircle}>
+                  <AntDesign name="checkcircle" size={24} color="#7b7b7c" />
+                </View>
+              )}
+            </Pressable>
           </View>
         </View>
       </TouchableHighlight>
@@ -40,8 +72,17 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontSize: 19,
   },
+  checkedTitle: {
+    fontWeight: "600",
+    fontSize: 19,
+    textDecorationLine: "line-through"
+  }, 
   content: {
     color: "#7b7b7c",
+  },
+  checkedContent: {
+    color: "#7b7b7c",
+    textDecorationLine: "line-through"
   },
   goContainer: {
     position: "absolute",
@@ -55,6 +96,13 @@ const styles = StyleSheet.create({
     height: 60,
     borderBottomWidth: 0.5,
     borderBottomColor: "#e6e6e6",
+  },
+  circle: {
+    width: 24,
+    height: 24,
+    borderWidth: 0.8,
+    borderRadius: 50,
+    borderColor: "#7b7b7c",
   },
 });
 

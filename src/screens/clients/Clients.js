@@ -163,11 +163,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 2,
     borderColor: "#4e97ff",
-    width: "100%",
+    width: "95%",
+    alignSelf: "center"
   },
   successText: {
     color: "white",
-    fontWeight: "500",
+    fontWeight: "600",
     fontSize: 15,
   },
 });

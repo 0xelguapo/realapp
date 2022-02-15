@@ -8,10 +8,19 @@ const TaskContext = createContext();
 function TaskContextProvider({ children }) {
   const [tasksArray, setTasksArray] = useState([]);
 
+  let completedFilter = {
+    completed: {
+      eq: false,
+    },
+  };
+
   const fetchTasks = async () => {
     let response;
     try {
-      response = await API.graphql({ query: queries.listTasks });
+      response = await API.graphql({
+        query: queries.listTasks,
+        variables: { filter: completedFilter },
+      });
     } catch (err) {
       console.log("error fetching tasks", err);
     }
@@ -36,12 +45,28 @@ function TaskContextProvider({ children }) {
     }
   };
 
+  const completeTask = async (taskDetails) => {
+    let response;
+    try {
+      response = await API.graphql({
+        query: mutations.updateTask,
+        variables: { input: taskDetails },
+      });
+    } catch (err) {
+      console.log(err);
+    }
+    if (response) {
+      console.log("successfully updated task", response);
+      return response;
+    }
+  };
+
   useEffect(() => {
     fetchTasks();
   }, []);
 
   return (
-    <TaskContext.Provider value={{ tasksArray, addTask }}>
+    <TaskContext.Provider value={{ tasksArray, addTask, completeTask }}>
       {children}
     </TaskContext.Provider>
   );

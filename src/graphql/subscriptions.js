@@ -29,6 +29,7 @@ export const onCreateClient = /* GraphQL */ `
           clientId
           title
           content
+          completed
           date
           createdAt
           updatedAt
@@ -70,6 +71,7 @@ export const onUpdateClient = /* GraphQL */ `
           clientId
           title
           content
+          completed
           date
           createdAt
           updatedAt
@@ -111,6 +113,7 @@ export const onDeleteClient = /* GraphQL */ `
           clientId
           title
           content
+          completed
           date
           createdAt
           updatedAt
@@ -224,6 +227,7 @@ export const onCreateTask = /* GraphQL */ `
       clientId
       title
       content
+      completed
       date
       client {
         id
@@ -254,6 +258,7 @@ export const onUpdateTask = /* GraphQL */ `
       clientId
       title
       content
+      completed
       date
       client {
         id
@@ -284,6 +289,7 @@ export const onDeleteTask = /* GraphQL */ `
       clientId
       title
       content
+      completed
       date
       client {
         id

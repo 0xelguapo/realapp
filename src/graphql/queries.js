@@ -29,6 +29,7 @@ export const getClient = /* GraphQL */ `
           clientId
           title
           content
+          completed
           date
           createdAt
           updatedAt
@@ -139,6 +140,7 @@ export const getTask = /* GraphQL */ `
       clientId
       title
       content
+      completed
       date
       client {
         id
@@ -174,6 +176,7 @@ export const listTasks = /* GraphQL */ `
         clientId
         title
         content
+        completed
         date
         client {
           id

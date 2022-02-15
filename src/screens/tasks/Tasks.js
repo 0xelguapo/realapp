@@ -3,12 +3,13 @@ import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 import { TaskContext } from "../../context/task-context";
 import { Ionicons } from "@expo/vector-icons";
 import EachTask from "../../components/EachTask";
+import SuccessMessage from "../../components/SuccessMessage";
 
 export default function Tasks({ navigation }) {
   const { tasksArray } = useContext(TaskContext);
 
   const renderTask = useCallback(
-    ({ item }) => <EachTask title={item.title} content={item.content} />,
+    ({ item }) => <EachTask id={item.id} title={item.title} content={item.content} />,
     []
   );
 
@@ -28,11 +29,14 @@ export default function Tasks({ navigation }) {
           />
         </View>
       </View>
-      <FlatList
-        data={tasksArray}
-        renderItem={renderTask}
-        keyExtractor={(t) => t.id}
-      />
+      <SuccessMessage>Task Created</SuccessMessage>
+      <View style={styles.listContainer}>
+        <FlatList
+          data={tasksArray}
+          renderItem={renderTask}
+          keyExtractor={(t) => t.id}
+        />
+      </View>
     </View>
   );
 }
@@ -43,7 +47,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#f6f6f6",
   },
   headerContainer: {
-    flex: 0.15,
+    flex: 0.11,
     paddingTop: 55,
     alignItems: "center",
     justifyContent: "space-between",
@@ -64,5 +68,8 @@ const styles = StyleSheet.create({
     width: 30,
     borderRadius: 50,
     backgroundColor: "#e9e9e9",
+  },
+  listContainer: {
+    flex: 0.85
   },
 });

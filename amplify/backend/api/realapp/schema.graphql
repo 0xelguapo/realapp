@@ -27,6 +27,7 @@ type Task @model @auth(rules: [{ allow: owner }]) {
   clientId: ID @index(name: "byClient", sortKeyFields: ["title"])
   title: String!
   content: String
+  completed: Boolean
   date: String
   client: Client @belongsTo(fields: ["clientId"])
 }

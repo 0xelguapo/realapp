@@ -47,6 +47,7 @@ export declare class Task {
   readonly id: string;
   readonly title: string;
   readonly content?: string;
+  readonly completed?: boolean;
   readonly date?: string;
   readonly client?: Client;
   readonly createdAt?: string;

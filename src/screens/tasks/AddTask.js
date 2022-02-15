@@ -20,16 +20,16 @@ import CustomPressable from "../../components/CustomPressable";
 import { TaskContext } from "../../context/task-context";
 
 export default function AddTask({ navigation }) {
+  const { addTask } = useContext(TaskContext);
+  const { clientsArray } = useContext(ClientsContext);
+  const [filteredData, setFilteredData] = useState(clientsArray);
+  const [masterData, setMasterData] = useState(clientsArray);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [searchInput, setSearchInput] = useState("");
   const [date, setDate] = useState(new Date());
   const [pickerVisible, setPickerVisible] = useState(false);
   const [clientsVisible, setClientsVisible] = useState(false);
-  const { clientsArray } = useContext(ClientsContext);
-  const { addTask } = useContext(TaskContext);
-  const [filteredData, setFilteredData] = useState(clientsArray);
-  const [masterData, setMasterData] = useState(clientsArray);
   const [selectedClient, setSelectedClient] = useState({});
 
   const onChange = (e, selectedDate) => {
@@ -91,8 +91,9 @@ export default function AddTask({ navigation }) {
         content: description,
         date: date,
         clientId: selectedClient.id,
+        completed: false
       }
-    : { title: title, content: description, date: date };
+    : { title: title, content: description, date: date, completed: false };
 
   const handleAddTask = async () => {
     let response = await addTask(taskDetails);
