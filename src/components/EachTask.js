@@ -8,6 +8,7 @@ import {
 import { useContext, useState } from "react";
 import { TaskContext } from "../context/task-context";
 import { AntDesign } from "@expo/vector-icons";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function EachTask({
   title,
@@ -29,65 +30,74 @@ export default function EachTask({
   };
 
   const handleCompleted = async () => {
+    setChecked(true);
     let response = await completeTask(taskDetails);
-    if (response) {
-      setChecked(true);
+    if (!response) {
+      setChecked(false);
     }
   };
 
   return (
-    <Pressable>
-      <TouchableHighlight underlayColor="#f1f1f1">
-        <View style={styles.container}>
-          <Text style={!checked ? styles.title : styles.checkedTitle}>{title}</Text>
-          <Text style={!checked ? styles.content : styles.checkedContent}>{content}</Text>
-          <View style={styles.goContainer}>
-            <Pressable onPress={handleCompleted} disabled={checked}>
-              {!checked ? (
-                <View style={styles.circle}></View>
-              ) : (
-                <View style={styles.checkedCircle}>
-                  <AntDesign name="checkcircle" size={24} color="#7b7b7c" />
-                </View>
-              )}
-            </Pressable>
+    <GestureHandlerRootView>
+      <Pressable>
+        <TouchableHighlight underlayColor="#f1f1f1">
+          <View style={styles.container}>
+            <Text style={!checked ? styles.title : styles.checkedTitle}>
+              {title}
+            </Text>
+            <View style={styles.contentContainer}>
+              <Text style={!checked ? styles.content : styles.checkedContent}>
+                {content}
+              </Text>
+            </View>
+            <View style={styles.goContainer}>
+              <Pressable onPress={handleCompleted} disabled={checked}>
+                {!checked ? (
+                  <View style={styles.circle}></View>
+                ) : (
+                  <View style={styles.checkedCircle}>
+                    <AntDesign name="checkcircle" size={24} color="#7b7b7c" />
+                  </View>
+                )}
+              </Pressable>
+            </View>
           </View>
-        </View>
-      </TouchableHighlight>
-    </Pressable>
+        </TouchableHighlight>
+      </Pressable>
+    </GestureHandlerRootView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "space-evenly",
+    justifyContent: "center",
     paddingVertical: 10,
     paddingHorizontal: 20,
-    height: 80,
+    height: 60,
     borderBottomWidth: 0.5,
     borderBottomColor: "#e6e6e6",
   },
   title: {
     fontWeight: "600",
-    fontSize: 19,
+    fontSize: 18,
   },
   checkedTitle: {
     fontWeight: "600",
-    fontSize: 19,
-    textDecorationLine: "line-through"
-  }, 
+    fontSize: 18,
+    textDecorationLine: "line-through",
+  },
   content: {
     color: "#7b7b7c",
   },
   checkedContent: {
     color: "#7b7b7c",
-    textDecorationLine: "line-through"
+    textDecorationLine: "line-through",
   },
   goContainer: {
     position: "absolute",
-    right: 25,
-    top: 25,
+    right: 30,
+    top: 15,
   },
   taskModeContainer: {
     flex: 1,

@@ -7,6 +7,8 @@ const TaskContext = createContext();
 
 function TaskContextProvider({ children }) {
   const [tasksArray, setTasksArray] = useState([]);
+  const [successStatus, setSuccessStatus] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   let completedFilter = {
     completed: {
@@ -14,8 +16,16 @@ function TaskContextProvider({ children }) {
     },
   };
 
+  const onSuccess = () => {
+    setSuccessStatus(true);
+    setTimeout(() => {
+      setSuccessStatus(false);
+    }, 3500);
+  };
+
   const fetchTasks = async () => {
     let response;
+    setIsLoading(true);
     try {
       response = await API.graphql({
         query: queries.listTasks,
@@ -24,6 +34,7 @@ function TaskContextProvider({ children }) {
     } catch (err) {
       console.log("error fetching tasks", err);
     }
+    setIsLoading(false);
     setTasksArray(response.data.listTasks.items);
   };
 
@@ -41,6 +52,7 @@ function TaskContextProvider({ children }) {
       console.log("success", response.data.createTask);
       let updatedTasksArray = [response.data.createTask, ...tasksArray];
       setTasksArray(updatedTasksArray);
+      onSuccess();
       return response;
     }
   };
@@ -66,7 +78,16 @@ function TaskContextProvider({ children }) {
   }, []);
 
   return (
-    <TaskContext.Provider value={{ tasksArray, addTask, completeTask }}>
+    <TaskContext.Provider
+      value={{
+        tasksArray,
+        successStatus,
+        isLoading,
+        addTask,
+        completeTask,
+        fetchTasks,
+      }}
+    >
       {children}
     </TaskContext.Provider>
   );

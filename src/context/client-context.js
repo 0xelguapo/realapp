@@ -9,7 +9,7 @@ const ClientsContext = createContext();
 function ClientContextProvider({ children }) {
   const [clientsArray, setClientsArray] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [successStatus, setSuccessStatus] = useState(false)
+  const [successStatus, setSuccessStatus] = useState(false);
 
   const getAllClients = useCallback(async () => {
     setIsLoading(true);
@@ -19,9 +19,9 @@ function ClientContextProvider({ children }) {
     } catch (err) {
       console.log("error getting clients", err);
     }
-    if(response) {
+    if (response) {
       setClientsArray(response.data.listClients.items);
-    } 
+    }
     setIsLoading(false);
   }, []);
 
@@ -31,11 +31,11 @@ function ClientContextProvider({ children }) {
   }, []);
 
   const onSuccess = () => {
-      setSuccessStatus(true);
-      setTimeout(() => {
-          setSuccessStatus(false)
-      }, 4000)
-  }
+    setSuccessStatus(true);
+    setTimeout(() => {
+      setSuccessStatus(false);
+    }, 4000);
+  };
 
   const addClient = async (formState, clientDetails) => {
     let response;
@@ -62,7 +62,13 @@ function ClientContextProvider({ children }) {
 
   return (
     <ClientsContext.Provider
-      value={{ clientsArray, isLoading, successStatus, getAllClients, addClient }}
+      value={{
+        clientsArray,
+        isLoading,
+        successStatus,
+        getAllClients,
+        addClient,
+      }}
     >
       {children}
     </ClientsContext.Provider>

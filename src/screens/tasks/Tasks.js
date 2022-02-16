@@ -1,15 +1,18 @@
 import { useCallback, useContext } from "react";
-import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
+import { FlatList, Pressable, StyleSheet, Text, View, ActivityIndicator } from "react-native";
 import { TaskContext } from "../../context/task-context";
 import { Ionicons } from "@expo/vector-icons";
 import EachTask from "../../components/EachTask";
 import SuccessMessage from "../../components/SuccessMessage";
 
 export default function Tasks({ navigation }) {
-  const { tasksArray } = useContext(TaskContext);
+  const { isLoading, tasksArray, successStatus, fetchTasks} = useContext(TaskContext);
+  
 
   const renderTask = useCallback(
-    ({ item }) => <EachTask id={item.id} title={item.title} content={item.content} />,
+    ({ item }) => (
+      <EachTask id={item.id} title={item.title} content={item.content} />
+    ),
     []
   );
 
@@ -29,13 +32,20 @@ export default function Tasks({ navigation }) {
           />
         </View>
       </View>
-      <SuccessMessage>Task Created</SuccessMessage>
+      {successStatus && <SuccessMessage>Task Created</SuccessMessage>}
       <View style={styles.listContainer}>
-        <FlatList
-          data={tasksArray}
-          renderItem={renderTask}
-          keyExtractor={(t) => t.id}
-        />
+        {isLoading ? (<View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" />
+          </View>) : (
+ <FlatList
+ data={tasksArray}
+ renderItem={renderTask}
+ keyExtractor={(t) => t.id}
+ onRefresh={fetchTasks}
+ refreshing={isLoading}
+/>
+        )}
+       
       </View>
     </View>
   );
@@ -70,6 +80,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#e9e9e9",
   },
   listContainer: {
-    flex: 0.85
+    flex: 0.85,
   },
 });
