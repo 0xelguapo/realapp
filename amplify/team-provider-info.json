@@ -18,6 +18,27 @@
         "realapp8e8e08f1": {
           "googleClientId": "973695514664-mek3ctj1oppfglu3knj55snkt7lmj3m6.apps.googleusercontent.com"
         }
+      },
+      "hosting": {}
+    }
+  },
+  "web": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-realapp-web-153508-authRole",
+      "UnauthRoleArn": "arn:aws:iam::512520082405:role/amplify-realapp-web-153508-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::512520082405:role/amplify-realapp-web-153508-authRole",
+      "Region": "us-west-1",
+      "DeploymentBucketName": "amplify-realapp-web-153508-deployment",
+      "UnauthRoleName": "amplify-realapp-web-153508-unauthRole",
+      "StackName": "amplify-realapp-web-153508",
+      "StackId": "arn:aws:cloudformation:us-west-1:512520082405:stack/amplify-realapp-web-153508/149672c0-8f81-11ec-a2b1-0202e49d42ad",
+      "AmplifyAppId": "d3m1z9i4a8u83m"
+    },
+    "categories": {
+      "auth": {
+        "realapp8e8e08f1": {
+          "googleClientId": "973695514664-mek3ctj1oppfglu3knj55snkt7lmj3m6.apps.googleusercontent.com"
+        }
       }
     }
   }
