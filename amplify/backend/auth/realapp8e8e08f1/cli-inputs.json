@@ -63,7 +63,9 @@
     "dependsOn": [],
     "permissions": [],
     "thirdPartyAuth": true,
-    "authProviders": [],
+    "authProviders": [
+      "accounts.google.com"
+    ],
     "userPoolGroups": false,
     "adminQueries": false,
     "parentStack": {

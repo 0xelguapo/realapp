@@ -58,7 +58,7 @@ export default function Signup({ navigation }) {
   };
 
   const handleResend = async () => {
-    const result = resend(formState.inputs.email.value);
+    const result = await resend(formState.inputs.email.value);
     console.log("resend", result);
   };
 
