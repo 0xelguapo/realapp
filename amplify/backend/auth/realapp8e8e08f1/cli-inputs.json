@@ -17,14 +17,14 @@
     "emailVerificationSubject": "Your verification code",
     "emailVerificationMessage": "Your verification code is {####}",
     "defaultPasswordPolicy": true,
-    "passwordPolicyMinLength": "8",
+    "passwordPolicyMinLength": 8,
     "passwordPolicyCharacters": [],
     "requiredAttributes": [
       "email"
     ],
     "aliasAttributes": [],
     "userpoolClientGenerateSecret": false,
-    "userpoolClientRefreshTokenValidity": "3650",
+    "userpoolClientRefreshTokenValidity": 30,
     "userpoolClientWriteAttributes": [
       "email"
     ],
@@ -32,7 +32,7 @@
       "email"
     ],
     "userpoolClientLambdaRole": "realap8e8e08f1_userpoolclient_lambda_role",
-    "userpoolClientSetAttributes": true,
+    "userpoolClientSetAttributes": false,
     "sharedId": "8e8e08f1",
     "resourceName": "realapp8e8e08f1",
     "authSelections": "identityPoolAndUserPool",
@@ -62,14 +62,14 @@
     "breakCircularDependency": true,
     "dependsOn": [],
     "permissions": [],
-    "thirdPartyAuth": true,
-    "authProviders": [
-      "accounts.google.com"
-    ],
     "userPoolGroups": false,
     "adminQueries": false,
     "parentStack": {
       "Ref": "AWS::StackId"
-    }
+    },
+    "authProviders": [
+      "accounts.google.com"
+    ],
+    "thirdPartyAuth": true
   }
 }

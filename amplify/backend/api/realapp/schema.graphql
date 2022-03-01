@@ -31,3 +31,7 @@ type Task @model @auth(rules: [{ allow: owner }]) {
   date: String
   client: Client @belongsTo(fields: ["clientId"])
 }
+
+type Mutation {
+  batchDelete(ids: [ID]): [Client]
+}

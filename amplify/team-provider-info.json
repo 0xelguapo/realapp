@@ -15,7 +15,9 @@
     "categories": {
       "auth": {
         "realapp9a7ac49c": {},
-        "realapp8e8e08f1": {}
+        "realapp8e8e08f1": {
+          "googleClientId": "973695514664-mek3ctj1oppfglu3knj55snkt7lmj3m6.apps.googleusercontent.com"
+        }
       }
     }
   }
