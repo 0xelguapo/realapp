@@ -6,20 +6,20 @@ import {
   Pressable,
   Keyboard,
   TouchableWithoutFeedback,
-  ActivityIndicator
+  ActivityIndicator,
 } from "react-native";
 import {
   VALIDATOR_EMAIL,
   VALIDATOR_MINLENGTH,
   VALIDATOR_REQUIRE,
 } from "../../utility/validators";
-import { AuthContext } from "../../context/auth-context"
-import Input from "../../components/Input"
+import { AuthContext } from "../../context/auth-context";
+import Input from "../../components/Input";
 import useForm from "../../hooks/form-hook";
 
 export default function Login({ navigation }) {
   const { signin } = useContext(AuthContext);
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
   const [formState, inputHandler] = useForm(
     {
       email: {
@@ -35,7 +35,7 @@ export default function Login({ navigation }) {
   );
 
   const handleSignin = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     const response = await signin(
       formState.inputs.email.value,
       formState.inputs.password.value
@@ -45,17 +45,15 @@ export default function Login({ navigation }) {
     } else {
       console.log("res", response);
     }
-    setIsLoading(false)
+    setIsLoading(false);
   };
 
-  if(isLoading) {
-    if (isLoading) {
-      return (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" />
-        </View>
-      );
-    }
+  if (isLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
   }
 
   return (
