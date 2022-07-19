@@ -42,14 +42,6 @@ export default function EachTask({
       <Pressable>
         <TouchableHighlight underlayColor="#f1f1f1">
           <View style={styles.container}>
-            <Text style={!checked ? styles.title : styles.checkedTitle}>
-              {title}
-            </Text>
-            <View style={styles.contentContainer}>
-              <Text style={!checked ? styles.content : styles.checkedContent}>
-                {content}
-              </Text>
-            </View>
             <View style={styles.goContainer}>
               <Pressable onPress={handleCompleted} disabled={checked}>
                 {!checked ? (
@@ -61,6 +53,16 @@ export default function EachTask({
                 )}
               </Pressable>
             </View>
+            <View style={styles.textContainer}>
+              <Text style={!checked ? styles.title : styles.checkedTitle}>
+                {title}
+              </Text>
+              <View style={styles.contentContainer}>
+                <Text style={!checked ? styles.content : styles.checkedContent}>
+                  {content}
+                </Text>
+              </View>
+            </View>
           </View>
         </TouchableHighlight>
       </Pressable>
@@ -70,8 +72,8 @@ export default function EachTask({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: "center",
+    display: "flex",
+    flexDirection: "row",
     paddingVertical: 10,
     paddingHorizontal: 20,
     height: 60,
@@ -81,6 +83,7 @@ const styles = StyleSheet.create({
   title: {
     fontWeight: "600",
     fontSize: 18,
+    color: "#454545",
   },
   checkedTitle: {
     fontWeight: "600",
@@ -88,28 +91,20 @@ const styles = StyleSheet.create({
     textDecorationLine: "line-through",
   },
   content: {
-    color: "#7b7b7c",
+    color: "#6c6c6c",
   },
   checkedContent: {
     color: "#7b7b7c",
     textDecorationLine: "line-through",
   },
   goContainer: {
-    position: "absolute",
-    right: 30,
-    top: 15,
-  },
-  taskModeContainer: {
-    flex: 1,
-    justifyContent: "space-evenly",
-    paddingVertical: 10,
-    height: 60,
-    borderBottomWidth: 0.5,
-    borderBottomColor: "#e6e6e6",
+    display: "flex",
+    justifyContent: "center",
+    marginRight: 14,
   },
   circle: {
-    width: 24,
-    height: 24,
+    width: 21,
+    height: 21,
     borderWidth: 0.8,
     borderRadius: 50,
     borderColor: "#7b7b7c",
