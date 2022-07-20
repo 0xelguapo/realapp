@@ -1,13 +1,11 @@
 import { useContext } from "react";
-import { View, Text, StyleSheet, ImageBackground } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { TaskContext } from "../../context/task-context";
-import { ClientsContext } from "../../context/client-context";
+import EachTask from "../../components/EachTask";
 
 export default function Home() {
   const { tasksArray } = useContext(TaskContext);
-  const { clientsArray } = useContext(ClientsContext);
 
-  console.log(tasksArray)
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
@@ -16,6 +14,9 @@ export default function Home() {
       <View style={styles.bodyContainer}>
         <View style={styles.taskTitleContainer}>
           <Text style={styles.headerTasks}>TASKS</Text>
+        </View>
+        <View style={styles.tasksContainer}>
+          {tasksArray.map(task => <EachTask key={task.id} title={task.title} content={task.content} />)}
         </View>
       </View>
     </View>
@@ -28,7 +29,7 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     flex: 0.08,
-    paddingTop: 55,
+    paddingTop: 40,
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
@@ -42,7 +43,7 @@ const styles = StyleSheet.create({
   bodyContainer: {
     flex: 1,
     paddingHorizontal: 20,
-    paddingVertical: 20,
+    paddingVertical: 10,
   },
   taskTitleContainer: {
     borderBottomColor: '#ababab',
@@ -50,9 +51,9 @@ const styles = StyleSheet.create({
     paddingBottom: 5
   },
   headerTasks: {
-    fontSize: 15,
+    fontSize: 12,
     fontWeight: "300",
     color: "#ababab",
-    letterSpacing: "1.2rem",
+    letterSpacing: 2
   },
 });

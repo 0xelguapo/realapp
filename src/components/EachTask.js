@@ -16,7 +16,8 @@ export default function EachTask({
   date,
   client,
   id,
-  completed,
+  completed = false,
+  taskMode = false,
 }) {
   const { completeTask } = useContext(TaskContext);
   const [checked, setChecked] = useState(false);
@@ -57,11 +58,15 @@ export default function EachTask({
               <Text style={!checked ? styles.title : styles.checkedTitle}>
                 {title}
               </Text>
-              <View style={styles.contentContainer}>
-                <Text style={!checked ? styles.content : styles.checkedContent}>
-                  {content}
-                </Text>
-              </View>
+              {content?.length !== 0 && (
+                <View style={styles.contentContainer}>
+                  <Text
+                    style={!checked ? styles.content : styles.checkedContent}
+                  >
+                    {content}
+                  </Text>
+                </View>
+              )}
             </View>
           </View>
         </TouchableHighlight>
@@ -74,20 +79,20 @@ const styles = StyleSheet.create({
   container: {
     display: "flex",
     flexDirection: "row",
+    alignItems: 'center',
     paddingVertical: 10,
-    paddingHorizontal: 20,
     height: 60,
-    borderBottomWidth: 0.5,
-    borderBottomColor: "#e6e6e6",
+    // borderBottomWidth: 0.5,
+    // borderBottomColor: "#e6e6e6",
   },
   title: {
-    fontWeight: "600",
-    fontSize: 18,
+    fontWeight: "700",
+    fontSize: 16,
     color: "#454545",
   },
   checkedTitle: {
     fontWeight: "600",
-    fontSize: 18,
+    fontSize: 16,
     textDecorationLine: "line-through",
   },
   content: {
@@ -103,15 +108,10 @@ const styles = StyleSheet.create({
     marginRight: 14,
   },
   circle: {
-    width: 21,
-    height: 21,
+    width: 18,
+    height: 18,
     borderWidth: 0.8,
     borderRadius: 50,
     borderColor: "#7b7b7c",
   },
 });
-
-EachTask.defaultProps = {
-  taskMode: false,
-  checked: false,
-};

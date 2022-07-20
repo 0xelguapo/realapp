@@ -1,4 +1,12 @@
-import { View, Text, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  TouchableHighlight,
+} from "react-native";
+import { AntDesign } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 
 export default function ClientDetails(props) {
   console.log("props", props.route.params.client);
@@ -15,15 +23,46 @@ export default function ClientDetails(props) {
 
   return (
     <View style={styles.container}>
+      <View style={styles.rectangleContainer}>
+        <View style={styles.rectangle}></View>
+      </View>
       <View style={styles.header}>
         <Text style={styles.name}>{name}</Text>
         <Text style={styles.company}>{company}</Text>
-        <View style={styles.headerBottom}>
-          <Text style={styles.phone}>{formattedPhone}</Text>
-          <Text style={styles.email}>{email}</Text>
+        <View style={styles.optionsContainer}>
+          <Pressable>
+            <TouchableHighlight underlayColor="#f1f1f1">
+              <View style={styles.optionIconContainer}>
+                <AntDesign name="staro" size={24} color="#535353" />
+                <Text style={styles.optionText}>FAVORITE</Text>
+              </View>
+            </TouchableHighlight>
+          </Pressable>
+          <Pressable>
+            <TouchableHighlight underlayColor="#f1f1f1">
+              <View style={styles.optionIconContainer}>
+                <AntDesign name="contacts" size={24} color="#535353" />
+                <Text style={styles.optionText}>CONTACT</Text>
+              </View>
+            </TouchableHighlight>
+          </Pressable>
+          <Pressable>
+            <TouchableHighlight underlayColor="#f1f1f1">
+              <View style={styles.optionIconContainer}>
+                <Feather name="edit-2" size={24} color="#535353" />
+                <Text style={styles.optionText}>EDIT</Text>
+              </View>
+            </TouchableHighlight>
+          </Pressable>
         </View>
       </View>
-      <View style={styles.body}></View>
+      <View style={styles.body}>
+        <View style={styles.detailsContainer}>
+          <View style={styles.blockHeadingContainer}>
+            <Text style={styles.blockHeadingText}>Notes</Text>
+          </View>
+        </View>
+      </View>
     </View>
   );
 }
@@ -31,31 +70,67 @@ export default function ClientDetails(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: "#f4f4f4",
+    paddingHorizontal: 30,
+  },
+  rectangleContainer: {
+    display: "flex",
+    alignItems: "center",
+  },
+  rectangle: {
+    top: 10,
+    justifyContent: "center",
+    width: 75,
+    height: 7,
+    borderRadius: 10,
+    backgroundColor: "#c7c7c7",
   },
   header: {
     flex: 0.15,
     paddingTop: 40,
-    paddingHorizontal: 40,
-    backgroundColor: "rgba(235, 240, 250, 1)",
   },
   headerBottom: {
     marginTop: 10,
-    width: "100%",
     justifyContent: "space-around",
   },
   name: {
-    fontSize: 30,
+    fontSize: 20,
     fontWeight: "700",
-    color: "#212121",
+    color: "#454545",
   },
-  phone: {
-    fontWeight: "400",
-    color: "#4d4d4d",
+  company: {
+    color: "#6c6c6c",
   },
-  email: {
-    marginTop: 2,
-    fontWeight: "400",
-    color: "#4d4d4d",
+  optionsContainer: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingVertical: 25,
+  },
+  optionIconContainer: {
+    display: "flex",
+    alignItems: "center",
+    width: "100%",
+    maxWidth: 65,
+  },
+  optionText: {
+    fontSize: 10,
+    letterSpacing: 2,
+    marginTop: 5,
+    color: "#535353",
+  },
+  body: {
+    display: "flex",
+    marginTop: 30,
+  },
+  blockHeadingText: {
+    color: "#ababab",
+    paddingBottom: 5,
+    letterSpacing: 2,
+    fontSize: 12,
+  },
+  blockHeadingContainer: {
+    borderBottomWidth: 0.2,
+    borderBottomColor: "#ababab",
   },
 });
