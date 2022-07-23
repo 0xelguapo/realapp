@@ -64,7 +64,7 @@ export default function Clients({ navigation }) {
         <View style={styles.addIconContainer}>
           <Ionicons
             name="ios-person-add"
-            size={22}
+            size={17}
             color="white"
             onPress={() => navigation.navigate("AddClient")}
           />
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
   },
   headerText: {
-    fontSize: 35,
+    fontSize: 25,
     fontWeight: "700",
     color: "#e9e9e9",
   },
@@ -121,8 +121,8 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 25,
     top: 68,
-    height: 45,
-    width: 45,
+    height: 35,
+    width: 35,
     borderRadius: 50,
     backgroundColor: "#0064e5",
     shadowRadius: 4,
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    height: 40,
+    height: 35,
     paddingLeft: 10,
   },
   list: {

@@ -25,6 +25,16 @@ function ClientContextProvider({ children }) {
     setIsLoading(false);
   }, []);
 
+  const getOneClient = useCallback(async (clientId) => {
+    let response;
+    try {
+      response = await API.graphql(graphqlOperation(queries.getClient, {id: clientId}))
+    } catch (err) {
+      console.error(err)
+    }
+    return response;
+  }, [])
+
   useEffect(() => {
     getAllClients();
     console.log("gettingAllClients");
@@ -60,6 +70,16 @@ function ClientContextProvider({ children }) {
     console.log(response);
   };
 
+  const handleFavorite = async (details) => {
+    let response;
+    try {
+      response = await API.graphql(graphqlOperation(mutations.updateClient, { input: details }));
+    } catch(err) {
+      console.error('error adding favorite', err)
+    }
+    return response
+  }
+
   return (
     <ClientsContext.Provider
       value={{
@@ -67,7 +87,9 @@ function ClientContextProvider({ children }) {
         isLoading,
         successStatus,
         getAllClients,
+        getOneClient,
         addClient,
+        handleFavorite
       }}
     >
       {children}

@@ -9,6 +9,30 @@ export const batchDelete = /* GraphQL */ `
       company
       phone
       email
+      notes
+      favorite
+      connectionHistory {
+        items {
+          id
+          title
+          createdAt
+          updatedAt
+          clientConnectionHistoryId
+          owner
+        }
+        nextToken
+      }
+      clientGroup {
+        items {
+          id
+          title
+          createdAt
+          updatedAt
+          clientClientGroupId
+          owner
+        }
+        nextToken
+      }
       properties {
         items {
           id
@@ -54,6 +78,30 @@ export const createClient = /* GraphQL */ `
       company
       phone
       email
+      notes
+      favorite
+      connectionHistory {
+        items {
+          id
+          title
+          createdAt
+          updatedAt
+          clientConnectionHistoryId
+          owner
+        }
+        nextToken
+      }
+      clientGroup {
+        items {
+          id
+          title
+          createdAt
+          updatedAt
+          clientClientGroupId
+          owner
+        }
+        nextToken
+      }
       properties {
         items {
           id
@@ -99,6 +147,30 @@ export const updateClient = /* GraphQL */ `
       company
       phone
       email
+      notes
+      favorite
+      connectionHistory {
+        items {
+          id
+          title
+          createdAt
+          updatedAt
+          clientConnectionHistoryId
+          owner
+        }
+        nextToken
+      }
+      clientGroup {
+        items {
+          id
+          title
+          createdAt
+          updatedAt
+          clientClientGroupId
+          owner
+        }
+        nextToken
+      }
       properties {
         items {
           id
@@ -144,6 +216,30 @@ export const deleteClient = /* GraphQL */ `
       company
       phone
       email
+      notes
+      favorite
+      connectionHistory {
+        items {
+          id
+          title
+          createdAt
+          updatedAt
+          clientConnectionHistoryId
+          owner
+        }
+        nextToken
+      }
+      clientGroup {
+        items {
+          id
+          title
+          createdAt
+          updatedAt
+          clientClientGroupId
+          owner
+        }
+        nextToken
+      }
       properties {
         items {
           id
@@ -178,6 +274,96 @@ export const deleteClient = /* GraphQL */ `
     }
   }
 `;
+export const createConnectionHistory = /* GraphQL */ `
+  mutation CreateConnectionHistory(
+    $input: CreateConnectionHistoryInput!
+    $condition: ModelConnectionHistoryConditionInput
+  ) {
+    createConnectionHistory(input: $input, condition: $condition) {
+      id
+      title
+      createdAt
+      updatedAt
+      clientConnectionHistoryId
+      owner
+    }
+  }
+`;
+export const updateConnectionHistory = /* GraphQL */ `
+  mutation UpdateConnectionHistory(
+    $input: UpdateConnectionHistoryInput!
+    $condition: ModelConnectionHistoryConditionInput
+  ) {
+    updateConnectionHistory(input: $input, condition: $condition) {
+      id
+      title
+      createdAt
+      updatedAt
+      clientConnectionHistoryId
+      owner
+    }
+  }
+`;
+export const deleteConnectionHistory = /* GraphQL */ `
+  mutation DeleteConnectionHistory(
+    $input: DeleteConnectionHistoryInput!
+    $condition: ModelConnectionHistoryConditionInput
+  ) {
+    deleteConnectionHistory(input: $input, condition: $condition) {
+      id
+      title
+      createdAt
+      updatedAt
+      clientConnectionHistoryId
+      owner
+    }
+  }
+`;
+export const createClientGroup = /* GraphQL */ `
+  mutation CreateClientGroup(
+    $input: CreateClientGroupInput!
+    $condition: ModelClientGroupConditionInput
+  ) {
+    createClientGroup(input: $input, condition: $condition) {
+      id
+      title
+      createdAt
+      updatedAt
+      clientClientGroupId
+      owner
+    }
+  }
+`;
+export const updateClientGroup = /* GraphQL */ `
+  mutation UpdateClientGroup(
+    $input: UpdateClientGroupInput!
+    $condition: ModelClientGroupConditionInput
+  ) {
+    updateClientGroup(input: $input, condition: $condition) {
+      id
+      title
+      createdAt
+      updatedAt
+      clientClientGroupId
+      owner
+    }
+  }
+`;
+export const deleteClientGroup = /* GraphQL */ `
+  mutation DeleteClientGroup(
+    $input: DeleteClientGroupInput!
+    $condition: ModelClientGroupConditionInput
+  ) {
+    deleteClientGroup(input: $input, condition: $condition) {
+      id
+      title
+      createdAt
+      updatedAt
+      clientClientGroupId
+      owner
+    }
+  }
+`;
 export const createProperty = /* GraphQL */ `
   mutation CreateProperty(
     $input: CreatePropertyInput!
@@ -195,6 +381,14 @@ export const createProperty = /* GraphQL */ `
         company
         phone
         email
+        notes
+        favorite
+        connectionHistory {
+          nextToken
+        }
+        clientGroup {
+          nextToken
+        }
         properties {
           nextToken
         }
@@ -229,6 +423,14 @@ export const updateProperty = /* GraphQL */ `
         company
         phone
         email
+        notes
+        favorite
+        connectionHistory {
+          nextToken
+        }
+        clientGroup {
+          nextToken
+        }
         properties {
           nextToken
         }
@@ -263,6 +465,14 @@ export const deleteProperty = /* GraphQL */ `
         company
         phone
         email
+        notes
+        favorite
+        connectionHistory {
+          nextToken
+        }
+        clientGroup {
+          nextToken
+        }
         properties {
           nextToken
         }
@@ -298,6 +508,14 @@ export const createTask = /* GraphQL */ `
         company
         phone
         email
+        notes
+        favorite
+        connectionHistory {
+          nextToken
+        }
+        clientGroup {
+          nextToken
+        }
         properties {
           nextToken
         }
@@ -332,6 +550,14 @@ export const updateTask = /* GraphQL */ `
         company
         phone
         email
+        notes
+        favorite
+        connectionHistory {
+          nextToken
+        }
+        clientGroup {
+          nextToken
+        }
         properties {
           nextToken
         }
@@ -366,6 +592,14 @@ export const deleteTask = /* GraphQL */ `
         company
         phone
         email
+        notes
+        favorite
+        connectionHistory {
+          nextToken
+        }
+        clientGroup {
+          nextToken
+        }
         properties {
           nextToken
         }

@@ -5,12 +5,26 @@
 
 type Client @model @auth(rules: [{ allow: owner }]) {
   id: ID!
-  name: String!
+  name: String! @index(name: "byName", queryField: "clientByName")
   company: String
   phone: String
   email: String
-  properties: [Property] @hasMany
+  notes: String
+  favorite: Boolean @default(value: "false")
+  connectionHistory: [ConnectionHistory] @hasMany
+  clientGroup: [ClientGroup] @hasMany
+  properties: [Property] @hasMany(indexName: "")
   tasks: [Task] @hasMany(indexName: "byClient", fields: ["id"])
+}
+
+type ConnectionHistory @model @auth(rules: [{ allow: owner }]) {
+  id: ID!
+  title: String
+}
+
+type ClientGroup @model @auth(rules: [{ allow: owner }]) {
+  id: ID!
+  title: String @index(name: "byTitle", queryField: "groupByTitle")
 }
 
 type Property @model @auth(rules: [{ allow: owner }]) {

@@ -1,3 +1,4 @@
+import { useContext, useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -5,13 +6,45 @@ import {
   Pressable,
   TouchableHighlight,
 } from "react-native";
+import { ClientsContext } from "../../context/client-context";
 import { AntDesign } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 
 export default function ClientDetails(props) {
-  console.log("props", props.route.params.client);
-  const { name, company, email, phone, properties, tasks, updatedAt } =
-    props.route.params.client;
+  const {
+    id,
+    name,
+    company,
+    email,
+    phone,
+    properties,
+    tasks,
+    updatedAt,
+    notes,
+  } = props.route.params.client;
+  const [clientDetailsState, setClientDetailsState] = useState({});
+  const { handleFavorite, getOneClient } = useContext(ClientsContext);
+  // console.log("props", props.route.params.client);
+
+  const favoriteHandler = async () => {
+    await handleFavorite({ id: id, favorite: !clientDetailsState.favorite });
+    setClientDetailsState({
+      ...clientDetailsState,
+      favorite: !clientDetailsState.favorite,
+    });
+  };
+
+  const getClientDetails = async () => {
+    const response = await getOneClient(id);
+    if (response) {
+      setClientDetailsState(response.data.getClient);
+      // console.log(clientDetailsState)
+    }
+  };
+
+  useEffect(() => {
+    getClientDetails();
+  }, []);
 
   const formattedPhone =
     phone.length <= 10
@@ -28,18 +61,29 @@ export default function ClientDetails(props) {
       </View>
       <View style={styles.header}>
         <Text style={styles.name}>{name}</Text>
-        <Text style={styles.company}>{company}</Text>
+        <Text style={styles.company}>{clientDetailsState.company}</Text>
         <View style={styles.optionsContainer}>
           <Pressable>
-            <TouchableHighlight underlayColor="#f1f1f1">
+            <TouchableHighlight
+              underlayColor="#e8e8e8"
+              onPress={favoriteHandler}
+              style={styles.touchableHighlightStyle}
+            >
               <View style={styles.optionIconContainer}>
-                <AntDesign name="staro" size={24} color="#535353" />
+                {clientDetailsState.favorite ? (
+                  <AntDesign name="star" size={24} />
+                ) : (
+                  <AntDesign name="staro" size={24} color="#535353" />
+                )}
                 <Text style={styles.optionText}>FAVORITE</Text>
               </View>
             </TouchableHighlight>
           </Pressable>
           <Pressable>
-            <TouchableHighlight underlayColor="#f1f1f1">
+            <TouchableHighlight
+              underlayColor="#e8e8e8"
+              style={styles.touchableHighlightStyle}
+            >
               <View style={styles.optionIconContainer}>
                 <AntDesign name="contacts" size={24} color="#535353" />
                 <Text style={styles.optionText}>CONTACT</Text>
@@ -47,7 +91,10 @@ export default function ClientDetails(props) {
             </TouchableHighlight>
           </Pressable>
           <Pressable>
-            <TouchableHighlight underlayColor="#f1f1f1">
+            <TouchableHighlight
+              underlayColor="#e8e8e8"
+              style={styles.touchableHighlightStyle}
+            >
               <View style={styles.optionIconContainer}>
                 <Feather name="edit-2" size={24} color="#535353" />
                 <Text style={styles.optionText}>EDIT</Text>
@@ -110,8 +157,11 @@ const styles = StyleSheet.create({
   optionIconContainer: {
     display: "flex",
     alignItems: "center",
-    width: "100%",
-    maxWidth: 65,
+    width: 60,
+  },
+  touchableHighlightStyle: {
+    borderRadius: 5,
+    padding: 5,
   },
   optionText: {
     fontSize: 10,
