@@ -7,23 +7,9 @@ import AddClientDetails from "./AddClientDetails";
 const Stack = createNativeStackNavigator();
 
 export default function ClientsNavigator() {
-  const stackArray = [
-    { name: "AllClients", component: AllClients },
-    { name: "AddClient", component: AddClient },
-    { name: "ClientDetails", component: ClientDetails },
-    { name: "AddClientDetails", component: AddClientDetails },
-  ];
-
   return (
     <Stack.Navigator>
-      {stackArray.map((stack) => (
-        <Stack.Screen
-          name={stack.name}
-          component={stack.component}
-          options={{ presentation: "modal", headerShown: false }}
-        />
-      ))}
-      {/* <Stack.Screen
+      <Stack.Screen
         options={{ headerShown: false }}
         name="AllClients"
         component={AllClients}
@@ -39,10 +25,14 @@ export default function ClientsNavigator() {
         component={ClientDetails}
       />
       <Stack.Screen
-        options={{ presentation: "modal", headerShown: false }}
+        options={{
+          presentation: "transparentModal",
+          headerShown: false,
+          cardOverlayEnabled: true,
+        }}
         name="AddClientDetails"
         component={AddClientDetails}
-      /> */}
+      />
     </Stack.Navigator>
   );
 }
