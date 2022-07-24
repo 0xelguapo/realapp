@@ -9,6 +9,7 @@ import {
 import { ClientsContext } from "../../context/client-context";
 import { AntDesign } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function ClientDetails(props) {
   const {
@@ -32,6 +33,10 @@ export default function ClientDetails(props) {
       ...clientDetailsState,
       favorite: !clientDetailsState.favorite,
     });
+  };
+
+  const viewConnectionHandler = () => {
+    props.navigation.navigate("AddClientDetails", { clientId: id });
   };
 
   const getClientDetails = async () => {
@@ -109,6 +114,19 @@ export default function ClientDetails(props) {
             <Text style={styles.blockHeadingText}>Notes</Text>
           </View>
         </View>
+        <View style={styles.detailsContainer}>
+          <View style={styles.blockHeadingContainer}>
+            <Text style={styles.blockHeadingText}>Connection History</Text>
+            <Pressable onPress={viewConnectionHandler}>
+              <Ionicons name="add-circle-outline" size={16} color="#ababab" />
+            </Pressable>
+          </View>
+        </View>
+        <View style={styles.detailsContainer}>
+          <View style={styles.blockHeadingContainer}>
+            <Text style={styles.blockHeadingText}>Tasks</Text>
+          </View>
+        </View>
       </View>
     </View>
   );
@@ -133,7 +151,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#c7c7c7",
   },
   header: {
-    flex: 0.15,
     paddingTop: 40,
   },
   headerBottom: {
@@ -171,7 +188,6 @@ const styles = StyleSheet.create({
   },
   body: {
     display: "flex",
-    marginTop: 30,
   },
   blockHeadingText: {
     color: "#ababab",
@@ -180,7 +196,14 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   blockHeadingContainer: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
     borderBottomWidth: 0.2,
     borderBottomColor: "#ababab",
+  },
+  detailsContainer: {
+    minHeight: 65,
+    borderColor: "#000000",
   },
 });

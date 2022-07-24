@@ -19,7 +19,8 @@ type Client @model @auth(rules: [{ allow: owner }]) {
 
 type ConnectionHistory @model @auth(rules: [{ allow: owner }]) {
   id: ID!
-  title: String
+  title: String!
+  description: String
 }
 
 type ClientGroup @model @auth(rules: [{ allow: owner }]) {
