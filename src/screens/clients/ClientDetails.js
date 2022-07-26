@@ -125,9 +125,15 @@ export default function ClientDetails(props) {
           <View style={styles.connectionHistoryContainer}>
             {clientDetailsState.connectionHistory?.items &&
               clientDetailsState.connectionHistory.items.map((el) => (
-                <View style={styles.connection}>
-                  <Text style={styles.connectionTitle} key={el.id}>{el.title}</Text>
-                  <Text style={styles.connectionDescription}>{el.description}</Text>
+                <View style={styles.connection} key={el.id}>
+                  <Text style={styles.connectionTitle}>
+                    {el.title}
+                  </Text>
+                  {el.date && (
+                    <Text style={styles.connectionDate}>
+                      {el.date.replace(",", " •")}
+                    </Text>
+                  )}
                 </View>
               ))}
           </View>
@@ -217,19 +223,19 @@ const styles = StyleSheet.create({
     borderColor: "#000000",
   },
   connectionHistoryContainer: {
-    display: 'flex',
-    paddingVertical: 3
+    display: "flex",
+    paddingVertical: 5,
   },
   connection: {
-    paddingVertical: 5
+    paddingVertical: 5,
   },
   connectionTitle: {
-    fontWeight: '500',
+    fontWeight: "500",
     fontSize: 15,
-    color: '#6c6c6c'
+    color: "#6c6c6c",
   },
-  connectionDescription: {
-    color: '#ababab',
-    fontSize: 14
+  connectionDate: {
+    color: "#ababab",
+    fontSize: 14,
   },
 });

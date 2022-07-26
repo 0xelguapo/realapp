@@ -10,6 +10,7 @@ import { useState, useRef, useEffect, useContext } from "react";
 import { ClientsContext } from "../../context/client-context";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { AntDesign } from "@expo/vector-icons";
+import AddSimple from "../../components/AddSimple";
 
 export default function AddClientDetails(props) {
   const [title, setTitle] = useState(null);
@@ -24,7 +25,7 @@ export default function AddClientDetails(props) {
     await addConnection({
       clientId: clientId,
       title: title,
-      date: date,
+      date: date.toLocaleString(),
     });
     props.navigation.goBack();
   };
@@ -34,53 +35,65 @@ export default function AddClientDetails(props) {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <Pressable onPress={props.navigation.goBack}>
-        <View style={styles.backdrop}></View>
-      </Pressable>
-      <View style={styles.modalContainer}>
-        <View style={styles.inputsContainer}>
-          <View style={styles.titleHeaderContainer}>
-            <Text style={styles.titleHeader}>LOG A CONNECTION</Text>
-            <TouchableOpacity onPress={props.navigation.goBack}>
-              <AntDesign name="close" size={24} color="#ababab" />
-            </TouchableOpacity>
-          </View>
-          <TextInput
-            style={styles.titleInput}
-            value={title}
-            onChangeText={setTitle}
-            ref={inputRef}
-            placeholder="Reached, Left Voicemail, Sent Email..."
-            placeholderTextColor="#d6d6d6"
-          />
-          <TextInput
-            style={styles.descriptionInput}
-            value={description}
-            onChangeText={setDescription}
-            multiline={true}
-            placeholder="Optional Description..."
-            placeholderTextColor="#d6d6d6"
-          />
-        </View>
-        <View style={styles.controlsContainer}>
-          <View style={styles.controlOptions}>
-            <DateTimePicker
-              mode="datetime"
-              value={date}
-              is24Hour={true}
-              onChange={(e, date) => setDate(date)}
-              style={{ minWidth: 190}}
-            />
-          </View>
-          <TouchableOpacity underlayColor="#e8e8e8" onPress={handlePress}>
-            <View style={styles.submitContainer}>
-              <AntDesign name="checkcircleo" size={30} color="#6c6c6c" />
-            </View>
-          </TouchableOpacity>
-        </View>
-      </View>
-    </View>
+    <AddSimple goBack={props.navigation.goBack} title="LOG A CONNECTION">
+      <TextInput
+        style={styles.titleInput}
+        value={title}
+        onChangeText={setTitle}
+        ref={inputRef}
+        placeholder="Reached, Left Voicemail, Sent Email..."
+        placeholderTextColor="#d6d6d6"
+      />
+      <AddSimple.Actions handleSubmit={handlePress}>
+        <DateTimePicker
+          mode="datetime"
+          value={date}
+          is24Hour={true}
+          onChange={(e, date) => setDate(date)}
+          style={{ minWidth: 170, flex: 1 }}
+        />
+      </AddSimple.Actions>
+    </AddSimple>
+    // <View style={styles.container}>
+    //   <Pressable onPress={props.navigation.goBack}>
+    //     <View style={styles.backdrop}></View>
+    //   </Pressable>
+    //   <View style={styles.modalContainer}>
+    //     <View style={styles.inputsContainer}>
+    //       <View style={styles.titleHeaderContainer}>
+    //         <Text style={styles.titleHeader}>LOG A CONNECTION</Text>
+    //         <TouchableOpacity onPress={props.navigation.goBack}>
+    //           <AntDesign name="close" size={24} color="#ababab" />
+    //         </TouchableOpacity>
+    //       </View>
+    //       <TextInput
+    //         style={styles.titleInput}
+    //         value={title}
+    //         onChangeText={setTitle}
+    //         ref={inputRef}
+    //         placeholder="Reached, Left Voicemail, Sent Email..."
+    //         placeholderTextColor="#d6d6d6"
+    //       />
+    //     </View>
+    //     <View style={styles.controlsContainer}>
+    //       <View style={styles.controlOptions}>
+    //         <DateTimePicker
+    //           mode="datetime"
+    //           value={date}
+    //           is24Hour={true}
+    //           onChange={(e, date) => setDate(date)}
+    //           style={{ minWidth: 180 }}
+    //         />
+    //       </View>
+    //       <View style={{ flex: 1 }}></View>
+    //       <TouchableOpacity underlayColor="#e8e8e8" onPress={handlePress}>
+    //         <View style={styles.submitContainer}>
+    //           <AntDesign name="checkcircleo" size={30} color="#6c6c6c" />
+    //         </View>
+    //       </TouchableOpacity>
+    //     </View>
+    //   </View>
+    // </View>
   );
 }
 
@@ -91,7 +104,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, .3)",
   },
   backdrop: {
-    height: "36%",
+    height: "42%",
   },
   modalContainer: {
     backgroundColor: "white",
@@ -128,6 +141,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 25,
   },
-  controlOptions: {
-  },
+  controlOptions: {},
 });
