@@ -15,9 +15,10 @@ export const getClient = /* GraphQL */ `
         items {
           id
           title
+          date
+          clientId
           createdAt
           updatedAt
-          clientConnectionHistoryId
           owner
         }
         nextToken
@@ -107,9 +108,34 @@ export const getConnectionHistory = /* GraphQL */ `
     getConnectionHistory(id: $id) {
       id
       title
+      date
+      clientId
+      client {
+        id
+        name
+        company
+        phone
+        email
+        notes
+        favorite
+        connectionHistory {
+          nextToken
+        }
+        clientGroup {
+          nextToken
+        }
+        properties {
+          nextToken
+        }
+        tasks {
+          nextToken
+        }
+        createdAt
+        updatedAt
+        owner
+      }
       createdAt
       updatedAt
-      clientConnectionHistoryId
       owner
     }
   }
@@ -128,9 +154,22 @@ export const listConnectionHistories = /* GraphQL */ `
       items {
         id
         title
+        date
+        clientId
+        client {
+          id
+          name
+          company
+          phone
+          email
+          notes
+          favorite
+          createdAt
+          updatedAt
+          owner
+        }
         createdAt
         updatedAt
-        clientConnectionHistoryId
         owner
       }
       nextToken

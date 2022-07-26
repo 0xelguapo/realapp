@@ -15,9 +15,10 @@ export const batchDelete = /* GraphQL */ `
         items {
           id
           title
+          date
+          clientId
           createdAt
           updatedAt
-          clientConnectionHistoryId
           owner
         }
         nextToken
@@ -84,9 +85,10 @@ export const createClient = /* GraphQL */ `
         items {
           id
           title
+          date
+          clientId
           createdAt
           updatedAt
-          clientConnectionHistoryId
           owner
         }
         nextToken
@@ -153,9 +155,10 @@ export const updateClient = /* GraphQL */ `
         items {
           id
           title
+          date
+          clientId
           createdAt
           updatedAt
-          clientConnectionHistoryId
           owner
         }
         nextToken
@@ -222,9 +225,10 @@ export const deleteClient = /* GraphQL */ `
         items {
           id
           title
+          date
+          clientId
           createdAt
           updatedAt
-          clientConnectionHistoryId
           owner
         }
         nextToken
@@ -282,9 +286,34 @@ export const createConnectionHistory = /* GraphQL */ `
     createConnectionHistory(input: $input, condition: $condition) {
       id
       title
+      date
+      clientId
+      client {
+        id
+        name
+        company
+        phone
+        email
+        notes
+        favorite
+        connectionHistory {
+          nextToken
+        }
+        clientGroup {
+          nextToken
+        }
+        properties {
+          nextToken
+        }
+        tasks {
+          nextToken
+        }
+        createdAt
+        updatedAt
+        owner
+      }
       createdAt
       updatedAt
-      clientConnectionHistoryId
       owner
     }
   }
@@ -297,9 +326,34 @@ export const updateConnectionHistory = /* GraphQL */ `
     updateConnectionHistory(input: $input, condition: $condition) {
       id
       title
+      date
+      clientId
+      client {
+        id
+        name
+        company
+        phone
+        email
+        notes
+        favorite
+        connectionHistory {
+          nextToken
+        }
+        clientGroup {
+          nextToken
+        }
+        properties {
+          nextToken
+        }
+        tasks {
+          nextToken
+        }
+        createdAt
+        updatedAt
+        owner
+      }
       createdAt
       updatedAt
-      clientConnectionHistoryId
       owner
     }
   }
@@ -312,9 +366,34 @@ export const deleteConnectionHistory = /* GraphQL */ `
     deleteConnectionHistory(input: $input, condition: $condition) {
       id
       title
+      date
+      clientId
+      client {
+        id
+        name
+        company
+        phone
+        email
+        notes
+        favorite
+        connectionHistory {
+          nextToken
+        }
+        clientGroup {
+          nextToken
+        }
+        properties {
+          nextToken
+        }
+        tasks {
+          nextToken
+        }
+        createdAt
+        updatedAt
+        owner
+      }
       createdAt
       updatedAt
-      clientConnectionHistoryId
       owner
     }
   }

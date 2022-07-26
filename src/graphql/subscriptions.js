@@ -15,9 +15,10 @@ export const onCreateClient = /* GraphQL */ `
         items {
           id
           title
+          date
+          clientId
           createdAt
           updatedAt
-          clientConnectionHistoryId
           owner
         }
         nextToken
@@ -81,9 +82,10 @@ export const onUpdateClient = /* GraphQL */ `
         items {
           id
           title
+          date
+          clientId
           createdAt
           updatedAt
-          clientConnectionHistoryId
           owner
         }
         nextToken
@@ -147,9 +149,10 @@ export const onDeleteClient = /* GraphQL */ `
         items {
           id
           title
+          date
+          clientId
           createdAt
           updatedAt
-          clientConnectionHistoryId
           owner
         }
         nextToken
@@ -204,9 +207,34 @@ export const onCreateConnectionHistory = /* GraphQL */ `
     onCreateConnectionHistory(owner: $owner) {
       id
       title
+      date
+      clientId
+      client {
+        id
+        name
+        company
+        phone
+        email
+        notes
+        favorite
+        connectionHistory {
+          nextToken
+        }
+        clientGroup {
+          nextToken
+        }
+        properties {
+          nextToken
+        }
+        tasks {
+          nextToken
+        }
+        createdAt
+        updatedAt
+        owner
+      }
       createdAt
       updatedAt
-      clientConnectionHistoryId
       owner
     }
   }
@@ -216,9 +244,34 @@ export const onUpdateConnectionHistory = /* GraphQL */ `
     onUpdateConnectionHistory(owner: $owner) {
       id
       title
+      date
+      clientId
+      client {
+        id
+        name
+        company
+        phone
+        email
+        notes
+        favorite
+        connectionHistory {
+          nextToken
+        }
+        clientGroup {
+          nextToken
+        }
+        properties {
+          nextToken
+        }
+        tasks {
+          nextToken
+        }
+        createdAt
+        updatedAt
+        owner
+      }
       createdAt
       updatedAt
-      clientConnectionHistoryId
       owner
     }
   }
@@ -228,9 +281,34 @@ export const onDeleteConnectionHistory = /* GraphQL */ `
     onDeleteConnectionHistory(owner: $owner) {
       id
       title
+      date
+      clientId
+      client {
+        id
+        name
+        company
+        phone
+        email
+        notes
+        favorite
+        connectionHistory {
+          nextToken
+        }
+        clientGroup {
+          nextToken
+        }
+        properties {
+          nextToken
+        }
+        tasks {
+          nextToken
+        }
+        createdAt
+        updatedAt
+        owner
+      }
       createdAt
       updatedAt
-      clientConnectionHistoryId
       owner
     }
   }

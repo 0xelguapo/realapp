@@ -2,41 +2,49 @@ import {
   StyleSheet,
   View,
   Text,
-  Animated,
   Pressable,
-  Button,
   TextInput,
+  TouchableOpacity,
 } from "react-native";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
+import { ClientsContext } from "../../context/client-context";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import { AntDesign } from "@expo/vector-icons";
 
 export default function AddClientDetails(props) {
   const [title, setTitle] = useState(null);
   const [description, setDescription] = useState(null);
-  const backdropAnimation = useRef(new Animated.Value(0)).current
+  const [date, setDate] = useState(new Date());
+  const { addConnection } = useContext(ClientsContext);
+  const { clientId } = props.route.params;
+
   const inputRef = useRef(null);
+
+  const handlePress = async () => {
+    await addConnection({
+      clientId: clientId,
+      title: title,
+      date: date,
+    });
+    props.navigation.goBack();
+  };
 
   useEffect(() => {
     inputRef.current.focus();
   }, []);
 
-  useEffect(() => {
-    Animated.timing(backdropAnimation, {
-      toValue: 1,
-      duration: 1000
-    }).start()
-  }, [backdropAnimation])
-
   return (
-    <Animated.View style={styles.container} >
-      <View style={styles.backdrop}></View>
+    <View style={styles.container}>
+      <Pressable onPress={props.navigation.goBack}>
+        <View style={styles.backdrop}></View>
+      </Pressable>
       <View style={styles.modalContainer}>
         <View style={styles.inputsContainer}>
           <View style={styles.titleHeaderContainer}>
             <Text style={styles.titleHeader}>LOG A CONNECTION</Text>
-            <Pressable onPress={props.navigation.goBack}>
+            <TouchableOpacity onPress={props.navigation.goBack}>
               <AntDesign name="close" size={24} color="#ababab" />
-            </Pressable>
+            </TouchableOpacity>
           </View>
           <TextInput
             style={styles.titleInput}
@@ -50,12 +58,29 @@ export default function AddClientDetails(props) {
             style={styles.descriptionInput}
             value={description}
             onChangeText={setDescription}
+            multiline={true}
             placeholder="Optional Description..."
             placeholderTextColor="#d6d6d6"
           />
         </View>
+        <View style={styles.controlsContainer}>
+          <View style={styles.controlOptions}>
+            <DateTimePicker
+              mode="datetime"
+              value={date}
+              is24Hour={true}
+              onChange={(e, date) => setDate(date)}
+              style={{ minWidth: 190}}
+            />
+          </View>
+          <TouchableOpacity underlayColor="#e8e8e8" onPress={handlePress}>
+            <View style={styles.submitContainer}>
+              <AntDesign name="checkcircleo" size={30} color="#6c6c6c" />
+            </View>
+          </TouchableOpacity>
+        </View>
       </View>
-    </Animated.View>
+    </View>
   );
 }
 
@@ -66,12 +91,12 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, .3)",
   },
   backdrop: {
-    height: "40%",
+    height: "36%",
   },
   modalContainer: {
     backgroundColor: "white",
-    height: "60%",
-    paddingHorizontal: 15,
+    height: "100%",
+    paddingHorizontal: 18,
     paddingTop: 15,
     borderRadius: 18,
     zIndex: 3,
@@ -93,7 +118,16 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   descriptionInput: {
-    height: 40,
+    height: 50,
     fontSize: 15,
+  },
+  controlsContainer: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: 25,
+  },
+  controlOptions: {
   },
 });

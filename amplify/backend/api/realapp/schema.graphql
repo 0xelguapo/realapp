@@ -11,7 +11,7 @@ type Client @model @auth(rules: [{ allow: owner }]) {
   email: String
   notes: String
   favorite: Boolean @default(value: "false")
-  connectionHistory: [ConnectionHistory] @hasMany
+  connectionHistory: [ConnectionHistory] @hasMany(indexName: "byConnectionHistory", fields: ["id"])
   clientGroup: [ClientGroup] @hasMany
   properties: [Property] @hasMany(indexName: "")
   tasks: [Task] @hasMany(indexName: "byClient", fields: ["id"])
@@ -20,7 +20,9 @@ type Client @model @auth(rules: [{ allow: owner }]) {
 type ConnectionHistory @model @auth(rules: [{ allow: owner }]) {
   id: ID!
   title: String!
-  description: String
+  date: String
+  clientId: ID! @index(name: "byConnectionHistory", sortKeyFields: ["title"])
+  client: Client @belongsTo(fields: ["clientId"])
 }
 
 type ClientGroup @model @auth(rules: [{ allow: owner }]) {

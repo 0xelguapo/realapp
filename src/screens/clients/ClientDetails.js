@@ -10,6 +10,7 @@ import { ClientsContext } from "../../context/client-context";
 import { AntDesign } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
+import { API } from "aws-amplify";
 
 export default function ClientDetails(props) {
   const {
@@ -43,7 +44,7 @@ export default function ClientDetails(props) {
     const response = await getOneClient(id);
     if (response) {
       setClientDetailsState(response.data.getClient);
-      // console.log(clientDetailsState)
+      console.log(response.data.getClient);
     }
   };
 
@@ -118,8 +119,17 @@ export default function ClientDetails(props) {
           <View style={styles.blockHeadingContainer}>
             <Text style={styles.blockHeadingText}>Connection History</Text>
             <Pressable onPress={viewConnectionHandler}>
-              <Ionicons name="add-circle-outline" size={16} color="#ababab" />
+              <Ionicons name="add-circle-outline" size={20} color="#ababab" />
             </Pressable>
+          </View>
+          <View style={styles.connectionHistoryContainer}>
+            {clientDetailsState.connectionHistory?.items &&
+              clientDetailsState.connectionHistory.items.map((el) => (
+                <View style={styles.connection}>
+                  <Text style={styles.connectionTitle} key={el.id}>{el.title}</Text>
+                  <Text style={styles.connectionDescription}>{el.description}</Text>
+                </View>
+              ))}
           </View>
         </View>
         <View style={styles.detailsContainer}>
@@ -205,5 +215,21 @@ const styles = StyleSheet.create({
   detailsContainer: {
     minHeight: 65,
     borderColor: "#000000",
+  },
+  connectionHistoryContainer: {
+    display: 'flex',
+    paddingVertical: 3
+  },
+  connection: {
+    paddingVertical: 5
+  },
+  connectionTitle: {
+    fontWeight: '500',
+    fontSize: 15,
+    color: '#6c6c6c'
+  },
+  connectionDescription: {
+    color: '#ababab',
+    fontSize: 14
   },
 });

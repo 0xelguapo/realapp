@@ -79,6 +79,18 @@ function ClientContextProvider({ children }) {
     }
     return response
   }
+  
+  const addConnection = async (inputDetails) => {
+    let response;
+    try {
+      response = await API.graphql(graphqlOperation(mutations.createConnectionHistory, {input: inputDetails}))
+    } catch (err) {
+      console.error('error adding connection', err)
+    }
+    console.log(response)
+    return response;
+  }
+
 
   return (
     <ClientsContext.Provider
@@ -89,7 +101,8 @@ function ClientContextProvider({ children }) {
         getAllClients,
         getOneClient,
         addClient,
-        handleFavorite
+        handleFavorite,
+        addConnection
       }}
     >
       {children}
