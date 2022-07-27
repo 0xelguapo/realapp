@@ -40,6 +40,10 @@ export default function ClientDetails(props) {
     props.navigation.navigate("AddClientDetails", { clientId: id });
   };
 
+  const viewNoteHandler = () => {
+    props.navigation.navigate("AddEditNote", { clientId: id });
+  };
+
   const getClientDetails = async () => {
     const response = await getOneClient(id);
     if (response) {
@@ -126,9 +130,7 @@ export default function ClientDetails(props) {
             {clientDetailsState.connectionHistory?.items &&
               clientDetailsState.connectionHistory.items.map((el) => (
                 <View style={styles.connection} key={el.id}>
-                  <Text style={styles.connectionTitle}>
-                    {el.title}
-                  </Text>
+                  <Text style={styles.connectionTitle}>{el.title}</Text>
                   {el.date && (
                     <Text style={styles.connectionDate}>
                       {el.date.replace(",", " •")}

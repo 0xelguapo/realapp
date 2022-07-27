@@ -14,7 +14,6 @@ import AddSimple from "../../components/AddSimple";
 
 export default function AddClientDetails(props) {
   const [title, setTitle] = useState(null);
-  const [description, setDescription] = useState(null);
   const [date, setDate] = useState(new Date());
   const { addConnection } = useContext(ClientsContext);
   const { clientId } = props.route.params;
