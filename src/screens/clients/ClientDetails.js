@@ -6,6 +6,7 @@ import {
   Pressable,
   TouchableHighlight,
 } from "react-native";
+import useClient from "../../hooks/client-hook";
 import { ClientsContext } from "../../context/client-context";
 import { AntDesign } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
@@ -25,11 +26,12 @@ export default function ClientDetails(props) {
     notes,
   } = props.route.params.client;
   const [clientDetailsState, setClientDetailsState] = useState({});
-  const { handleFavorite, getOneClient } = useContext(ClientsContext);
+  const { getOneClient } = useContext(ClientsContext);
+  const { updateFavorite } = useClient();
   // console.log("props", props.route.params.client);
 
   const favoriteHandler = async () => {
-    await handleFavorite({ id: id, favorite: !clientDetailsState.favorite });
+    await updateFavorite(id, !clientDetailsState.favorite);
     setClientDetailsState({
       ...clientDetailsState,
       favorite: !clientDetailsState.favorite,
@@ -117,6 +119,9 @@ export default function ClientDetails(props) {
         <View style={styles.detailsContainer}>
           <View style={styles.blockHeadingContainer}>
             <Text style={styles.blockHeadingText}>Notes</Text>
+            <Pressable onPress={viewNoteHandler}>
+              <Ionicons name="add-circle-outline" size={20} color="#ababab" />
+            </Pressable>
           </View>
         </View>
         <View style={styles.detailsContainer}>

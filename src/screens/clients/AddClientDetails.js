@@ -1,21 +1,16 @@
 import {
   StyleSheet,
-  View,
-  Text,
-  Pressable,
   TextInput,
-  TouchableOpacity,
 } from "react-native";
-import { useState, useRef, useEffect, useContext } from "react";
-import { ClientsContext } from "../../context/client-context";
+import { useState, useRef, useEffect } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { AntDesign } from "@expo/vector-icons";
 import AddSimple from "../../components/AddSimple";
+import useClient from "../../hooks/client-hook";
 
 export default function AddClientDetails(props) {
   const [title, setTitle] = useState(null);
   const [date, setDate] = useState(new Date());
-  const { addConnection } = useContext(ClientsContext);
+  const { addConnection } = useClient();
   const { clientId } = props.route.params;
 
   const inputRef = useRef(null);

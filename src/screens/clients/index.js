@@ -3,6 +3,7 @@ import AllClients from "./AllClients";
 import AddClient from "./AddClient";
 import ClientDetails from "./ClientDetails";
 import AddClientDetails from "./AddClientDetails";
+import AddEditNote from "./AddEditNote.js";
 
 const Stack = createNativeStackNavigator();
 
@@ -32,6 +33,15 @@ export default function ClientsNavigator() {
         }}
         name="AddClientDetails"
         component={AddClientDetails}
+      />
+      <Stack.Screen
+        options={{
+          presentation: "transparentModal",
+          headerShown: false,
+          cardOverlayEnabled: true,
+        }}
+        name="AddEditNote"
+        component={AddEditNote}
       />
     </Stack.Navigator>
   );
