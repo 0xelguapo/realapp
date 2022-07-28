@@ -1,10 +1,9 @@
-import { useCallback } from "react";
 import { API, graphqlOperation } from "aws-amplify";
 import * as queries from "../graphql/queries";
 import * as mutations from "../graphql/mutations";
 
 function useClient() {
-  const updateFavorite = useCallback(async (id, favorite) => {
+  const updateFavorite = async (id, favorite) => {
     let response;
     try {
       response = await API.graphql(
@@ -16,9 +15,9 @@ function useClient() {
       console.error("error adding favorite", err);
     }
     return response;
-  }, []);
+  };
 
-  const updateClient = useCallback(async (details) => {
+  const updateClient = async (details) => {
     let response;
     try {
       response = await API.graphql(
@@ -27,9 +26,9 @@ function useClient() {
     } catch (err) {
       console.error("error adding favorite", err);
     }
-  }, []);
+  };
 
-  const addConnection = useCallback(async (inputDetails) => {
+  const addConnection = async (inputDetails) => {
     let response;
     try {
       response = await API.graphql(
@@ -42,9 +41,26 @@ function useClient() {
     }
     console.log(response);
     return response;
-  }, []);
+  };
 
-  return { updateFavorite, updateClient, addConnection };
+  const addEditNote = async (id, notes) => {
+    let response;
+    try {
+      response = await API.graphql(
+        graphqlOperation(mutations.updateClient, {
+          input: {
+            id: id,
+            notes: notes,
+          },
+        })
+      );
+    } catch (err) {
+      console.error("error adding or editing note", err);
+    }
+    return response;
+  };
+
+  return { updateFavorite, updateClient, addConnection, addEditNote };
 }
 
 export default useClient;

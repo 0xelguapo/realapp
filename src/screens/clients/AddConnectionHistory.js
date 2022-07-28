@@ -1,13 +1,10 @@
-import {
-  StyleSheet,
-  TextInput,
-} from "react-native";
+import { StyleSheet, TextInput } from "react-native";
 import { useState, useRef, useEffect } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import AddSimple from "../../components/AddSimple";
 import useClient from "../../hooks/client-hook";
 
-export default function AddClientDetails(props) {
+export default function AddConnectionHistory(props) {
   const [title, setTitle] = useState(null);
   const [date, setDate] = useState(new Date());
   const { addConnection } = useClient();
@@ -16,12 +13,22 @@ export default function AddClientDetails(props) {
   const inputRef = useRef(null);
 
   const handlePress = async () => {
-    await addConnection({
+    if (!title) {
+      props.navigation.goBack();
+      return;
+    }
+
+    const connection = await addConnection({
       clientId: clientId,
       title: title,
       date: date.toLocaleString(),
     });
-    props.navigation.goBack();
+
+    props.navigation.navigate({
+      name: "ClientDetails",
+      params: { id: clientId },
+      merge: true,
+    });
   };
 
   useEffect(() => {
@@ -48,46 +55,6 @@ export default function AddClientDetails(props) {
         />
       </AddSimple.Actions>
     </AddSimple>
-    // <View style={styles.container}>
-    //   <Pressable onPress={props.navigation.goBack}>
-    //     <View style={styles.backdrop}></View>
-    //   </Pressable>
-    //   <View style={styles.modalContainer}>
-    //     <View style={styles.inputsContainer}>
-    //       <View style={styles.titleHeaderContainer}>
-    //         <Text style={styles.titleHeader}>LOG A CONNECTION</Text>
-    //         <TouchableOpacity onPress={props.navigation.goBack}>
-    //           <AntDesign name="close" size={24} color="#ababab" />
-    //         </TouchableOpacity>
-    //       </View>
-    //       <TextInput
-    //         style={styles.titleInput}
-    //         value={title}
-    //         onChangeText={setTitle}
-    //         ref={inputRef}
-    //         placeholder="Reached, Left Voicemail, Sent Email..."
-    //         placeholderTextColor="#d6d6d6"
-    //       />
-    //     </View>
-    //     <View style={styles.controlsContainer}>
-    //       <View style={styles.controlOptions}>
-    //         <DateTimePicker
-    //           mode="datetime"
-    //           value={date}
-    //           is24Hour={true}
-    //           onChange={(e, date) => setDate(date)}
-    //           style={{ minWidth: 180 }}
-    //         />
-    //       </View>
-    //       <View style={{ flex: 1 }}></View>
-    //       <TouchableOpacity underlayColor="#e8e8e8" onPress={handlePress}>
-    //         <View style={styles.submitContainer}>
-    //           <AntDesign name="checkcircleo" size={30} color="#6c6c6c" />
-    //         </View>
-    //       </TouchableOpacity>
-    //     </View>
-    //   </View>
-    // </View>
   );
 }
 

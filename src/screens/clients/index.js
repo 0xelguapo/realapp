@@ -2,7 +2,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AllClients from "./AllClients";
 import AddClient from "./AddClient";
 import ClientDetails from "./ClientDetails";
-import AddClientDetails from "./AddClientDetails";
+import AddConnectionHistory from "./AddConnectionHistory";
 import AddEditNote from "./AddEditNote.js";
 
 const Stack = createNativeStackNavigator();
@@ -31,8 +31,8 @@ export default function ClientsNavigator() {
           headerShown: false,
           cardOverlayEnabled: true,
         }}
-        name="AddClientDetails"
-        component={AddClientDetails}
+        name="AddConnectionHistory"
+        component={AddConnectionHistory}
       />
       <Stack.Screen
         options={{

@@ -16,7 +16,9 @@ export default function Home() {
           <Text style={styles.headerTasks}>TASKS</Text>
         </View>
         <View style={styles.tasksContainer}>
-          {tasksArray.map(task => <EachTask key={task.id} title={task.title} content={task.content} />)}
+          {tasksArray.map((task) => (
+            <EachTask key={task.id} title={task.title} content={task.content} />
+          ))}
         </View>
       </View>
     </View>
@@ -46,14 +48,14 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   taskTitleContainer: {
-    borderBottomColor: '#ababab',
-    borderBottomWidth: .2,
-    paddingBottom: 5
+    borderBottomColor: "#ababab",
+    borderBottomWidth: 0.2,
+    paddingBottom: 5,
   },
   headerTasks: {
     fontSize: 12,
     fontWeight: "300",
     color: "#ababab",
-    letterSpacing: 2
+    letterSpacing: 2,
   },
 });

@@ -5,13 +5,13 @@ import {
   StyleSheet,
   Pressable,
   TouchableHighlight,
+  ScrollView,
 } from "react-native";
 import useClient from "../../hooks/client-hook";
 import { ClientsContext } from "../../context/client-context";
 import { AntDesign } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
-import { API } from "aws-amplify";
 
 export default function ClientDetails(props) {
   const {
@@ -30,6 +30,14 @@ export default function ClientDetails(props) {
   const { updateFavorite } = useClient();
   // console.log("props", props.route.params.client);
 
+  const getClientDetails = async () => {
+    const response = await getOneClient(id);
+    if (response) {
+      setClientDetailsState(response.data.getClient);
+      console.log(response.data.getClient);
+    }
+  };
+
   const favoriteHandler = async () => {
     await updateFavorite(id, !clientDetailsState.favorite);
     setClientDetailsState({
@@ -39,24 +47,23 @@ export default function ClientDetails(props) {
   };
 
   const viewConnectionHandler = () => {
-    props.navigation.navigate("AddClientDetails", { clientId: id });
+    props.navigation.navigate("AddConnectionHistory", { clientId: id });
   };
 
   const viewNoteHandler = () => {
-    props.navigation.navigate("AddEditNote", { clientId: id });
-  };
-
-  const getClientDetails = async () => {
-    const response = await getOneClient(id);
-    if (response) {
-      setClientDetailsState(response.data.getClient);
-      console.log(response.data.getClient);
-    }
+    props.navigation.navigate("AddEditNote", {
+      clientId: id,
+      notes: clientDetailsState.notes,
+    });
   };
 
   useEffect(() => {
     getClientDetails();
   }, []);
+
+  useEffect(() => {
+    if (props.route.params) getClientDetails();
+  }, [props.route.params]);
 
   const formattedPhone =
     phone.length <= 10
@@ -67,71 +74,74 @@ export default function ClientDetails(props) {
         )}-${phone.slice(7, 11)}`;
 
   return (
-    <View style={styles.container}>
-      <View style={styles.rectangleContainer}>
-        <View style={styles.rectangle}></View>
-      </View>
+    <ScrollView style={styles.scrollContainer} stickyHeaderIndices={[0]}>
       <View style={styles.header}>
+        <View style={styles.rectangleContainer}>
+          <View style={styles.rectangle}></View>
+        </View>
         <Text style={styles.name}>{name}</Text>
         <Text style={styles.company}>{clientDetailsState.company}</Text>
-        <View style={styles.optionsContainer}>
-          <Pressable>
-            <TouchableHighlight
-              underlayColor="#e8e8e8"
-              onPress={favoriteHandler}
-              style={styles.touchableHighlightStyle}
-            >
-              <View style={styles.optionIconContainer}>
-                {clientDetailsState.favorite ? (
-                  <AntDesign name="star" size={24} />
-                ) : (
-                  <AntDesign name="staro" size={24} color="#535353" />
-                )}
-                <Text style={styles.optionText}>FAVORITE</Text>
-              </View>
-            </TouchableHighlight>
-          </Pressable>
-          <Pressable>
-            <TouchableHighlight
-              underlayColor="#e8e8e8"
-              style={styles.touchableHighlightStyle}
-            >
-              <View style={styles.optionIconContainer}>
-                <AntDesign name="contacts" size={24} color="#535353" />
-                <Text style={styles.optionText}>CONTACT</Text>
-              </View>
-            </TouchableHighlight>
-          </Pressable>
-          <Pressable>
-            <TouchableHighlight
-              underlayColor="#e8e8e8"
-              style={styles.touchableHighlightStyle}
-            >
-              <View style={styles.optionIconContainer}>
-                <Feather name="edit-2" size={24} color="#535353" />
-                <Text style={styles.optionText}>EDIT</Text>
-              </View>
-            </TouchableHighlight>
-          </Pressable>
-        </View>
+      </View>
+      <View style={styles.optionsContainer}>
+        <Pressable>
+          <TouchableHighlight
+            underlayColor="#e8e8e8"
+            onPress={favoriteHandler}
+            style={styles.touchableHighlightStyle}
+          >
+            <View style={styles.optionIconContainer}>
+              {clientDetailsState.favorite ? (
+                <AntDesign name="star" size={24} />
+              ) : (
+                <AntDesign name="staro" size={24} color="#535353" />
+              )}
+              <Text style={styles.optionText}>FAVORITE</Text>
+            </View>
+          </TouchableHighlight>
+        </Pressable>
+        <Pressable>
+          <TouchableHighlight
+            underlayColor="#e8e8e8"
+            style={styles.touchableHighlightStyle}
+          >
+            <View style={styles.optionIconContainer}>
+              <AntDesign name="contacts" size={24} color="#535353" />
+              <Text style={styles.optionText}>CONTACT</Text>
+            </View>
+          </TouchableHighlight>
+        </Pressable>
+        <Pressable>
+          <TouchableHighlight
+            underlayColor="#e8e8e8"
+            style={styles.touchableHighlightStyle}
+          >
+            <View style={styles.optionIconContainer}>
+              <Feather name="edit-2" size={24} color="#535353" />
+              <Text style={styles.optionText}>EDIT</Text>
+            </View>
+          </TouchableHighlight>
+        </Pressable>
       </View>
       <View style={styles.body}>
         <View style={styles.detailsContainer}>
           <View style={styles.blockHeadingContainer}>
-            <Text style={styles.blockHeadingText}>Notes</Text>
+            <Text style={styles.blockHeadingText}>NOTES</Text>
             <Pressable onPress={viewNoteHandler}>
               <Ionicons name="add-circle-outline" size={20} color="#ababab" />
             </Pressable>
           </View>
+          <View style={styles.detailContainer}>
+            <Text style={styles.notesText}>{clientDetailsState.notes}</Text>
+          </View>
         </View>
         <View style={styles.detailsContainer}>
           <View style={styles.blockHeadingContainer}>
-            <Text style={styles.blockHeadingText}>Connection History</Text>
+            <Text style={styles.blockHeadingText}>CONNECTION HISTORY</Text>
             <Pressable onPress={viewConnectionHandler}>
               <Ionicons name="add-circle-outline" size={20} color="#ababab" />
             </Pressable>
           </View>
-          <View style={styles.connectionHistoryContainer}>
+          <View style={styles.detailContainer}>
             {clientDetailsState.connectionHistory?.items &&
               clientDetailsState.connectionHistory.items.map((el) => (
                 <View style={styles.connection} key={el.id}>
@@ -147,26 +157,30 @@ export default function ClientDetails(props) {
         </View>
         <View style={styles.detailsContainer}>
           <View style={styles.blockHeadingContainer}>
-            <Text style={styles.blockHeadingText}>Tasks</Text>
+            <Text style={styles.blockHeadingText}>TASKS</Text>
           </View>
         </View>
       </View>
-    </View>
+      <View style={{ height: 100 }}></View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#f4f4f4",
+  scrollContainer: {
+    display: "flex",
     paddingHorizontal: 30,
+    backgroundColor: "#f4f4f4",
   },
   rectangleContainer: {
     display: "flex",
+    position: "",
     alignItems: "center",
+    height: 25,
+    width: "100%",
+    marginBottom: 15,
   },
   rectangle: {
-    top: 10,
     justifyContent: "center",
     width: 75,
     height: 7,
@@ -174,7 +188,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#c7c7c7",
   },
   header: {
-    paddingTop: 40,
+    paddingVertical: 20,
+    backgroundColor: "#f4f4f4",
   },
   headerBottom: {
     marginTop: 10,
@@ -214,9 +229,9 @@ const styles = StyleSheet.create({
   },
   blockHeadingText: {
     color: "#ababab",
-    paddingBottom: 5,
     letterSpacing: 2,
     fontSize: 12,
+    paddingVertical: 5,
   },
   blockHeadingContainer: {
     display: "flex",
@@ -226,12 +241,19 @@ const styles = StyleSheet.create({
     borderBottomColor: "#ababab",
   },
   detailsContainer: {
-    minHeight: 65,
-    borderColor: "#000000",
-  },
-  connectionHistoryContainer: {
-    display: "flex",
     paddingVertical: 5,
+    borderColor: "#000000",
+    minHeight: 75,
+  },
+  notesContainer: {
+    paddingVertical: 5,
+  },
+  notesText: {
+    color: "#6c6c6c",
+  },
+  detailContainer: {
+    display: "flex",
+    paddingVertical: 3,
   },
   connection: {
     paddingVertical: 5,
