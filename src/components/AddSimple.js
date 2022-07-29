@@ -8,33 +8,30 @@ import {
   TextInput,
   TouchableHighlight,
   TouchableOpacity,
+  KeyboardAvoidingView,
 } from "react-native";
 import { useState, useRef, useEffect, useContext } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { AntDesign } from "@expo/vector-icons";
 
-function AddSimple({title, goBack, children}) {
+function AddSimple({ title, goBack, children, withDescription = false }) {
   return (
     <View style={styles.container}>
-      <Pressable onPress={goBack}>
-        <View style={styles.backdrop}></View>
-      </Pressable>
+      <Pressable onPress={goBack} style={styles.backdrop}></Pressable>
       <View style={styles.modalContainer}>
-        <View style={styles.inputsContainer}>
-          <View style={styles.titleHeaderContainer}>
-            <Text style={styles.titleHeader}>{title}</Text>
-            <TouchableOpacity onPress={goBack}>
-              <AntDesign name="close" size={24} color="#ababab" />
-            </TouchableOpacity>
-          </View>
-          {children}
+        <View style={styles.titleHeaderContainer}>
+          <Text style={styles.titleHeader}>{title}</Text>
+          <TouchableOpacity onPress={goBack}>
+            <AntDesign name="close" size={24} color="#ababab" />
+          </TouchableOpacity>
         </View>
+        {children}
       </View>
     </View>
   );
 }
 
-AddSimple.Actions = ({handleSubmit, children}) => (
+AddSimple.Actions = ({ handleSubmit, children }) => (
   <View style={styles.controlsContainer}>
     <View style={styles.controlOptions}>{children}</View>
     <TouchableOpacity underlayColor="#e8e8e8" onPress={handleSubmit}>
@@ -54,15 +51,15 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, .3)",
   },
   backdrop: {
-    height: "42%",
+    flex: 1,
   },
   modalContainer: {
+    display: "flex",
+    flexGrow: 1,
     backgroundColor: "white",
-    height: "100%",
     paddingHorizontal: 18,
-    paddingTop: 15,
+    paddingVertical: 15,
     borderRadius: 18,
-    zIndex: 3,
   },
   titleHeaderContainer: {
     display: "flex",
@@ -87,8 +84,7 @@ const styles = StyleSheet.create({
   controlsContainer: {
     display: "flex",
     flexDirection: "row",
-    marginTop: 25,
-    justifyContent: "space-between"
+    justifyContent: "space-between",
+    width: '100%',
   },
-
 });

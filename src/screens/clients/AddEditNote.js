@@ -43,5 +43,6 @@ const styles = StyleSheet.create({
   titleInput: {
     height: 50,
     fontSize: 15,
+    marginBottom: 35
   },
 });

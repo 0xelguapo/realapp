@@ -1,4 +1,4 @@
-import { StyleSheet, TextInput, View } from "react-native";
+import { StyleSheet, TextInput } from "react-native";
 import { useState, useRef, useEffect } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import AddSimple from "../../components/AddSimple";
@@ -6,8 +6,9 @@ import useClient from "../../hooks/client-hook";
 
 export default function AddConnectionHistory(props) {
   const [title, setTitle] = useState(null);
+  const [description, setDescription] = useState(null);
   const [date, setDate] = useState(new Date());
-  const { addConnection } = useClient();
+  const { addTask } = useClient();
   const { clientId } = props.route.params;
 
   const inputRef = useRef(null);
@@ -18,9 +19,11 @@ export default function AddConnectionHistory(props) {
       return;
     }
 
-    const connection = await addConnection({
+    const task = await addTask({
       clientId: clientId,
       title: title,
+      description: description,
+      completed: false,
       date: date.toLocaleString(),
     });
 
@@ -29,6 +32,8 @@ export default function AddConnectionHistory(props) {
       params: { id: clientId },
       merge: true,
     });
+
+    if (task) console.log(task);
   };
 
   useEffect(() => {
@@ -36,26 +41,31 @@ export default function AddConnectionHistory(props) {
   }, []);
 
   return (
-    <AddSimple goBack={props.navigation.goBack} title="LOG A CONNECTION">
+    <AddSimple goBack={props.navigation.goBack} withDescription={true} title="CREATE A TASK">
       <TextInput
         style={styles.titleInput}
         value={title}
         onChangeText={setTitle}
         ref={inputRef}
-        placeholder="Reached, Left Voicemail, Sent Email..."
+        placeholder="Send contract, follow up..."
         placeholderTextColor="#d6d6d6"
       />
-      <View style={{ marginTop: 50 }}>
-        <AddSimple.Actions handleSubmit={handlePress}>
-          <DateTimePicker
-            mode="datetime"
-            value={date}
-            is24Hour={true}
-            onChange={(e, date) => setDate(date)}
-            style={{ minWidth: 175, flex: 1 }}
-          />
-        </AddSimple.Actions>
-      </View>
+      <TextInput
+        style={styles.descriptionInput}
+        multiline={true}
+        onChangeText={setDescription}
+        placeholder="Optional description..."
+        placeholderTextColor="#d6d6d6"
+      />
+      <AddSimple.Actions handleSubmit={handlePress}>
+        <DateTimePicker
+          mode="datetime"
+          value={date}
+          is24Hour={true}
+          onChange={(e, date) => setDate(date)}
+          style={{ minWidth: 170, flex: 1 }}
+        />
+      </AddSimple.Actions>
     </AddSimple>
   );
 }
@@ -96,7 +106,6 @@ const styles = StyleSheet.create({
   descriptionInput: {
     height: 50,
     fontSize: 15,
+    marginBottom: 5
   },
-  controlsContainer: {},
-  controlOptions: {},
 });

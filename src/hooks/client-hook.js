@@ -60,7 +60,23 @@ function useClient() {
     return response;
   };
 
-  return { updateFavorite, updateClient, addConnection, addEditNote };
+  const addTask = async (taskDetails) => {
+    let response;
+    try {
+      response = await API.graphql({
+        query: mutations.createTask,
+        variables: { input: taskDetails },
+      });
+    } catch (err) {
+      console.error(err);
+    }
+    if (response) {
+      console.log("success", response.data.createTask);
+      return response;
+    }
+  };
+
+  return { updateFavorite, updateClient, addConnection, addEditNote, addTask };
 }
 
 export default useClient;

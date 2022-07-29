@@ -57,6 +57,12 @@ export default function ClientDetails(props) {
     });
   };
 
+  const viewTaskHandler = () => {
+    props.navigation.navigate("AddClientTask", {
+      clientId: id,
+    });
+  };
+
   useEffect(() => {
     getClientDetails();
   }, []);
@@ -158,6 +164,18 @@ export default function ClientDetails(props) {
         <View style={styles.detailsContainer}>
           <View style={styles.blockHeadingContainer}>
             <Text style={styles.blockHeadingText}>TASKS</Text>
+            <Pressable onPress={viewTaskHandler}>
+              <Ionicons name="add-circle-outline" size={20} color="#ababab" />
+            </Pressable>
+          </View>
+          <View style={styles.detailContainer}>
+            {clientDetailsState.tasks?.items &&
+              clientDetailsState.tasks.items.map((el) => (
+                <View style={styles.taskContainer} key={el.id}>
+                  <Text style={styles.connectionTitle}>{el.title}</Text>
+                  <Text style={styles.connectionDate}>{el.description}</Text>
+                </View>
+              ))}
           </View>
         </View>
       </View>
@@ -212,7 +230,7 @@ const styles = StyleSheet.create({
   optionIconContainer: {
     display: "flex",
     alignItems: "center",
-    width: 60,
+    minWidth: 60,
   },
   touchableHighlightStyle: {
     borderRadius: 5,
