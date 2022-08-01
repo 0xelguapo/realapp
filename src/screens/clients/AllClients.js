@@ -7,14 +7,20 @@ import {
   ActivityIndicator,
   TextInput,
   Animated,
+  ScrollView,
 } from "react-native";
 import { ClientsContext } from "../../context/client-context";
 import EachClient from "../../components/EachClient";
 import { Ionicons } from "@expo/vector-icons";
 
 export default function Clients({ navigation }) {
-  const { clientsArray, isLoading, getAllClients, successStatus } =
-    useContext(ClientsContext);
+  const {
+    clientsArray,
+    isLoading,
+    getAllClients,
+    successStatus,
+    favoriteClients,
+  } = useContext(ClientsContext);
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
   const viewClientHandler = useCallback((client) => {
@@ -60,19 +66,32 @@ export default function Clients({ navigation }) {
         </Animated.View>
       )}
       <View style={styles.headerContainer}>
-        <Text style={styles.headerText}>Clients</Text>
-        <View style={styles.addIconContainer}>
+        <Text style={styles.headerText}>Contacts</Text>
+        {/* <View style={styles.addIconContainer}>
           <Ionicons
             name="ios-person-add"
             size={17}
             color="white"
             onPress={() => navigation.navigate("AddClient")}
           />
-        </View>
+        </View> */}
         <View style={styles.inputContainer}>
           <Ionicons name="ios-search" size={20} color="black" />
-          <TextInput style={styles.input} />
+          <TextInput
+            style={styles.input}
+            placeholder="Search for a name, category..."
+          />
         </View>
+        <ScrollView style={styles.favorites} horizontal={true} showsHorizontalScrollIndicator={false}>
+          {favoriteClients.map((fave) => (
+            <View style={styles.favoriteClient}>
+              <Text style={styles.favoriteFirstLetter}>
+                {fave.name[0].toUpperCase()}
+              </Text>
+              <Text className={styles.favoriteName}>{fave.name}</Text>
+            </View>
+          ))}
+        </ScrollView>
       </View>
       <View style={styles.list}>
         {isLoading ? (
@@ -97,23 +116,20 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "column",
-    backgroundColor: "#f9f9f9",
+    backgroundColor: "#f5f5f5",
   },
   loadingContainer: {
     flex: 1,
     justifyContent: "center",
   },
   headerContainer: {
-    flex: 0.15,
-    backgroundColor: "#212121",
-    paddingHorizontal: 25,
+    paddingHorizontal: 20,
     paddingTop: 70,
-    paddingBottom: 40,
   },
   headerText: {
     fontSize: 25,
     fontWeight: "700",
-    color: "#e9e9e9",
+    color: "#454545",
   },
   addIconContainer: {
     alignItems: "center",
@@ -134,16 +150,18 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     alignItems: "center",
-    marginTop: 25,
+    marginTop: 15,
     flexDirection: "row",
     paddingHorizontal: 8,
-    backgroundColor: "#e9e9e9",
-    borderRadius: 10,
-    shadowRadius: 4,
-    shadowColor: "rgba(34, 34, 34, 0.4)",
-    shadowOpacity: 0.2,
+    borderColor: "#e9e9e9",
+    backgroundColor: "#f7f7f7",
+    borderWidth: 1,
+    borderRadius: 5,
+    shadowRadius: 2,
+    shadowColor: "rgba(34, 34, 34, 0.2)",
+    shadowOpacity: 0.1,
     shadowOffset: {
-      height: 4,
+      height: 2,
     },
   },
   input: {
@@ -151,6 +169,22 @@ const styles = StyleSheet.create({
     height: 35,
     paddingLeft: 10,
   },
+  favorites: {
+    paddingVertical: 20,
+  },
+  favoriteClient: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderRadius: 5,
+    height: 50,
+    width: 70,
+    flex: 1,
+    marginRight: 20
+  },
+  favoriteFirstLetter: {},
+  favoriteName: {},
   list: {
     flex: 1,
   },
@@ -164,7 +198,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "#4e97ff",
     width: "95%",
-    alignSelf: "center"
+    alignSelf: "center",
   },
   successText: {
     color: "white",

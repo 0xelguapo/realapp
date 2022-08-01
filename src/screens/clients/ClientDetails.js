@@ -14,21 +14,10 @@ import { Feather } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 
 export default function ClientDetails(props) {
-  const {
-    id,
-    name,
-    company,
-    email,
-    phone,
-    properties,
-    tasks,
-    updatedAt,
-    notes,
-  } = props.route.params.client;
+  const { id, name, phone } = props.route.params.client;
   const [clientDetailsState, setClientDetailsState] = useState({});
   const { getOneClient } = useContext(ClientsContext);
   const { updateFavorite } = useClient();
-  // console.log("props", props.route.params.client);
 
   const getClientDetails = async () => {
     const response = await getOneClient(id);
@@ -63,6 +52,10 @@ export default function ClientDetails(props) {
     });
   };
 
+  const viewEditClientHandler = () => {
+    props.navigation.navigate("EditClient"), { clientId: id };
+  };
+
   useEffect(() => {
     getClientDetails();
   }, []);
@@ -89,44 +82,39 @@ export default function ClientDetails(props) {
         <Text style={styles.company}>{clientDetailsState.company}</Text>
       </View>
       <View style={styles.optionsContainer}>
-        <Pressable>
-          <TouchableHighlight
-            underlayColor="#e8e8e8"
-            onPress={favoriteHandler}
-            style={styles.touchableHighlightStyle}
-          >
-            <View style={styles.optionIconContainer}>
-              {clientDetailsState.favorite ? (
-                <AntDesign name="star" size={24} />
-              ) : (
-                <AntDesign name="staro" size={24} color="#535353" />
-              )}
-              <Text style={styles.optionText}>FAVORITE</Text>
-            </View>
-          </TouchableHighlight>
-        </Pressable>
-        <Pressable>
-          <TouchableHighlight
-            underlayColor="#e8e8e8"
-            style={styles.touchableHighlightStyle}
-          >
-            <View style={styles.optionIconContainer}>
-              <AntDesign name="contacts" size={24} color="#535353" />
-              <Text style={styles.optionText}>CONTACT</Text>
-            </View>
-          </TouchableHighlight>
-        </Pressable>
-        <Pressable>
-          <TouchableHighlight
-            underlayColor="#e8e8e8"
-            style={styles.touchableHighlightStyle}
-          >
-            <View style={styles.optionIconContainer}>
-              <Feather name="edit-2" size={24} color="#535353" />
-              <Text style={styles.optionText}>EDIT</Text>
-            </View>
-          </TouchableHighlight>
-        </Pressable>
+        <TouchableHighlight
+          underlayColor="#e8e8e8"
+          onPress={favoriteHandler}
+          style={styles.touchableHighlightStyle}
+        >
+          <View style={styles.optionIconContainer}>
+            {clientDetailsState.favorite ? (
+              <AntDesign name="star" size={24} />
+            ) : (
+              <AntDesign name="staro" size={24} color="#535353" />
+            )}
+            <Text style={styles.optionText}>FAVORITE</Text>
+          </View>
+        </TouchableHighlight>
+        <TouchableHighlight
+          underlayColor="#e8e8e8"
+          style={styles.touchableHighlightStyle}
+        >
+          <View style={styles.optionIconContainer}>
+            <AntDesign name="contacts" size={24} color="#535353" />
+            <Text style={styles.optionText}>CONTACT</Text>
+          </View>
+        </TouchableHighlight>
+        <TouchableHighlight
+          underlayColor="#e8e8e8"
+          style={styles.touchableHighlightStyle}
+          onPress={viewEditClientHandler}
+        >
+          <View style={styles.optionIconContainer}>
+            <Feather name="edit-2" size={24} color="#535353" />
+            <Text style={styles.optionText}>EDIT</Text>
+          </View>
+        </TouchableHighlight>
       </View>
       <View style={styles.body}>
         <View style={styles.detailsContainer}>

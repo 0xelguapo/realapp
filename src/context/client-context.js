@@ -8,6 +8,7 @@ const ClientsContext = createContext();
 
 function ClientContextProvider({ children }) {
   const [clientsArray, setClientsArray] = useState([]);
+  const [favoriteClients, setFavoriteClients] = useState([])
   const [isLoading, setIsLoading] = useState(false);
   const [successStatus, setSuccessStatus] = useState(false);
 
@@ -42,6 +43,11 @@ function ClientContextProvider({ children }) {
     console.log("gettingAllClients");
   }, []);
 
+  useEffect(() => {
+    console.log('gettingfavorites')
+    getFavoriteClients();
+  }, [])
+
   const onSuccess = () => {
     setSuccessStatus(true);
     setTimeout(() => {
@@ -72,10 +78,33 @@ function ClientContextProvider({ children }) {
     console.log(response);
   };
 
+  const getFavoriteClients = async () => {
+    let response;
+    let filter = {
+      favorite: {
+        eq: true,
+      },
+    };
+
+    try {
+      response = await API.graphql({
+        query: queries.listClients,
+        variables: { filter: filter },
+      });
+    } catch (err) {
+      console.error(err);
+    }
+    if(response.data.listClients.items) {
+      setFavoriteClients(response.data.listClients.items);
+    }
+    return response;
+  };
+
   return (
     <ClientsContext.Provider
       value={{
         clientsArray,
+        favoriteClients,
         isLoading,
         successStatus,
         getAllClients,
