@@ -4,7 +4,7 @@ import {View, StyleSheet, Text} from 'react-native';
 export default function EditClient() {
 return (
   <View style={styles.container}>
-
+    
   </View>
 )
 }

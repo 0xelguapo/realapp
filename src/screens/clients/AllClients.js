@@ -8,6 +8,7 @@ import {
   TextInput,
   Animated,
   ScrollView,
+  SafeAreaView,
 } from "react-native";
 import { ClientsContext } from "../../context/client-context";
 import EachClient from "../../components/EachClient";
@@ -22,6 +23,13 @@ export default function Clients({ navigation }) {
     favoriteClients,
   } = useContext(ClientsContext);
   const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  const scrollOffsetY = useRef(new Animated.Value(0)).current;
+  const headerScrollHeight = scrollOffsetY.interpolate({
+    inputRange: [0, 50],
+    outputRange: [0, -80],
+    extrapolate: "clamp",
+  });
 
   const viewClientHandler = useCallback((client) => {
     navigation.navigate("ClientDetails", { client: client });
@@ -59,15 +67,18 @@ export default function Clients({ navigation }) {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       {successStatus && (
         <Animated.View style={[styles.fadingContainer, { opacity: fadeAnim }]}>
           <Text style={styles.successText}>Contact created successfully</Text>
         </Animated.View>
       )}
       <View style={styles.headerContainer}>
-        <Text style={styles.headerText}>Contacts</Text>
-        {/* <View style={styles.addIconContainer}>
+        <View
+          style={{ backgroundColor: "#f5f5f5", zIndex: 1, paddingBottom: 10 }}
+        >
+          <Text style={styles.headerText}>Contacts</Text>
+          {/* <View style={styles.addIconContainer}>
           <Ionicons
             name="ios-person-add"
             size={17}
@@ -75,23 +86,37 @@ export default function Clients({ navigation }) {
             onPress={() => navigation.navigate("AddClient")}
           />
         </View> */}
-        <View style={styles.inputContainer}>
-          <Ionicons name="ios-search" size={20} color="black" />
-          <TextInput
-            style={styles.input}
-            placeholder="Search for a name, category..."
-          />
+          <View style={styles.inputContainer}>
+            <Ionicons name="ios-search" size={20} color="black" />
+            <TextInput
+              style={styles.input}
+              placeholder="Search for a name, category..."
+            />
+          </View>
         </View>
-        <ScrollView style={styles.favorites} horizontal={true} showsHorizontalScrollIndicator={false}>
-          {favoriteClients.map((fave) => (
-            <View style={styles.favoriteClient}>
-              <Text style={styles.favoriteFirstLetter}>
-                {fave.name[0].toUpperCase()}
-              </Text>
-              <Text className={styles.favoriteName}>{fave.name}</Text>
-            </View>
-          ))}
-        </ScrollView>
+        <View>
+          <Animated.ScrollView
+            showsHorizontalScrollIndicator={false}
+            horizontal={true}
+            style={[
+              {
+                transform: [{ translateY: headerScrollHeight }],
+                position: "absolute",
+                top: 0,
+                width: "100%",
+              },
+            ]}
+          >
+            {favoriteClients.map((fave) => (
+              <View style={styles.favoriteClient} key={fave.id}>
+                <Text style={styles.favoriteFirstLetter}>
+                  {fave.name[0].toUpperCase()}
+                </Text>
+                <Text style={styles.favoriteName}>{fave.name}</Text>
+              </View>
+            ))}
+          </Animated.ScrollView>
+        </View>
       </View>
       <View style={styles.list}>
         {isLoading ? (
@@ -99,16 +124,22 @@ export default function Clients({ navigation }) {
             <ActivityIndicator size="large" />
           </View>
         ) : (
-          <FlatList
+          <Animated.FlatList
             data={clientsArray}
             renderItem={renderClient}
             keyExtractor={(c) => c.id}
             onRefresh={getAllClients}
             refreshing={isLoading}
+            onScroll={Animated.event(
+              [{ nativeEvent: { contentOffset: { y: scrollOffsetY } } }],
+              { useNativeDriver: true }
+            )}
+            scrollEventThrottle={16}
+            style={{ paddingTop: 50 }}
           />
         )}
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -121,10 +152,14 @@ const styles = StyleSheet.create({
   loadingContainer: {
     flex: 1,
     justifyContent: "center",
+    alignItems: "center",
   },
   headerContainer: {
+    display: "flex",
     paddingHorizontal: 20,
-    paddingTop: 70,
+    paddingBottom: 10,
+    zIndex: 2,
+    paddingTop: 20,
   },
   headerText: {
     fontSize: 25,
@@ -163,28 +198,33 @@ const styles = StyleSheet.create({
     shadowOffset: {
       height: 2,
     },
+    zIndex: 2,
   },
   input: {
     flex: 1,
     height: 35,
     paddingLeft: 10,
   },
-  favorites: {
-    paddingVertical: 20,
-  },
+  favorites: {},
   favoriteClient: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
     borderWidth: 1,
     borderRadius: 5,
-    height: 50,
+    height: 60,
     width: 70,
     flex: 1,
-    marginRight: 20
+    marginRight: 20,
   },
-  favoriteFirstLetter: {},
-  favoriteName: {},
+  favoriteFirstLetter: {
+    fontSize: 25,
+    fontWeight: "600",
+  },
+  favoriteName: {
+    fontSize: 10,
+    fontWeight: "300",
+  },
   list: {
     flex: 1,
   },
