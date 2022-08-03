@@ -13,6 +13,7 @@ import { AntDesign } from "@expo/vector-icons";
 
 export default function EditClient(props) {
   const { clientId } = props.route.params;
+  
 
   return (
     <View style={styles.container}>

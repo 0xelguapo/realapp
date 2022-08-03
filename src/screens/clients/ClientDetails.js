@@ -24,7 +24,7 @@ export default function ClientDetails(props) {
     const response = await getOneClient(id);
     if (response) {
       setClientDetailsState(response.data.getClient);
-      console.log(response.data.getClient);
+      // console.log(response.data.getClient);
     }
   };
 
@@ -167,10 +167,6 @@ const styles = StyleSheet.create({
   header: {
     paddingVertical: 20,
     backgroundColor: "#f4f4f4",
-  },
-  headerBottom: {
-    marginTop: 10,
-    justifyContent: "space-around",
   },
   name: {
     fontSize: 20,
