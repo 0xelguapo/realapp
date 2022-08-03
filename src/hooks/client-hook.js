@@ -1,8 +1,12 @@
+import { useContext } from "react";
+import { ClientsContext } from "../context/client-context";
 import { API, graphqlOperation } from "aws-amplify";
 import * as queries from "../graphql/queries";
 import * as mutations from "../graphql/mutations";
 
 function useClient() {
+  const { getFavoriteClients } = useContext(ClientsContext);
+
   const updateFavorite = async (id, favorite) => {
     let response;
     try {
@@ -11,6 +15,7 @@ function useClient() {
           input: { id: id, favorite: favorite },
         })
       );
+      if(response) await getFavoriteClients()
     } catch (err) {
       console.error("error adding favorite", err);
     }

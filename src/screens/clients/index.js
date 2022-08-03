@@ -55,7 +55,7 @@ export default function ClientsNavigator() {
         component={AddClientTask}
       />
       <Stack.Screen
-        options={{ presentation: "modal", headerShown: false }}
+        options={{ presentation: "modal", headerShown: false  }}
         name="EditClient"
         component={EditClient}
       />

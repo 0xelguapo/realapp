@@ -53,7 +53,7 @@ export default function ClientDetails(props) {
   };
 
   const viewEditClientHandler = () => {
-    props.navigation.navigate("EditClient"), { clientId: id };
+    props.navigation.navigate("EditClient", { clientId: id });
   };
 
   useEffect(() => {

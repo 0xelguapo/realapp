@@ -110,6 +110,7 @@ function ClientContextProvider({ children }) {
         getAllClients,
         getOneClient,
         addClient,
+        getFavoriteClients
       }}
     >
       {children}
