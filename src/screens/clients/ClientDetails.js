@@ -9,8 +9,6 @@ import {
 } from "react-native";
 import useClient from "../../hooks/client-hook";
 import { ClientsContext } from "../../context/client-context";
-import { AntDesign } from "@expo/vector-icons";
-import { Feather } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import ClientOptions from "../../components/ClientOptions";
 
@@ -54,7 +52,7 @@ export default function ClientDetails(props) {
   };
 
   const viewEditClientHandler = () => {
-    props.navigation.navigate("EditClient", { clientId: id });
+    props.navigation.navigate("EditClient", { clientId: id, clientDetailsState: clientDetailsState });
   };
 
   useEffect(() => {

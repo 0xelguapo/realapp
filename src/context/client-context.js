@@ -8,7 +8,7 @@ const ClientsContext = createContext();
 
 function ClientContextProvider({ children }) {
   const [clientsArray, setClientsArray] = useState([]);
-  const [favoriteClients, setFavoriteClients] = useState([])
+  const [favoriteClients, setFavoriteClients] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [successStatus, setSuccessStatus] = useState(false);
 
@@ -38,15 +38,6 @@ function ClientContextProvider({ children }) {
     return response;
   }, []);
 
-  useEffect(() => {
-    getAllClients();
-    console.log("gettingAllClients");
-  }, []);
-
-  useEffect(() => {
-    console.log('gettingfavorites')
-    getFavoriteClients();
-  }, [])
 
   const onSuccess = () => {
     setSuccessStatus(true);
@@ -94,7 +85,7 @@ function ClientContextProvider({ children }) {
     } catch (err) {
       console.error(err);
     }
-    if(response.data.listClients.items) {
+    if (response.data.listClients.items) {
       setFavoriteClients(response.data.listClients.items);
     }
     return response;
@@ -110,7 +101,7 @@ function ClientContextProvider({ children }) {
         getAllClients,
         getOneClient,
         addClient,
-        getFavoriteClients
+        getFavoriteClients,
       }}
     >
       {children}

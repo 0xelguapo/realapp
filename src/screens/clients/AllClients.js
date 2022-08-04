@@ -21,6 +21,7 @@ export default function Clients({ navigation }) {
     getAllClients,
     successStatus,
     favoriteClients,
+    getFavoriteClients
   } = useContext(ClientsContext);
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
@@ -50,6 +51,16 @@ export default function Clients({ navigation }) {
   useEffect(() => {
     onSuccess();
   }, [successStatus]);
+
+  useEffect(() => {
+    getAllClients();
+    console.log("gettingAllClients");
+  }, []);
+
+  useEffect(() => {
+    console.log("gettingfavorites");
+    getFavoriteClients();
+  }, []);
 
   const onSuccess = () => {
     Animated.timing(fadeAnim, {

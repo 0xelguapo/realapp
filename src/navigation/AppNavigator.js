@@ -9,37 +9,37 @@ import Home from "../screens/home/Home";
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
+import store from "../redux/index";
+import { Provider } from "react-redux";
 
 const Tab = createBottomTabNavigator();
 
 export default function AppNavigator() {
   return (
-    <ClientContextProvider>
-      <TaskContextProvider>
-        <Tab.Navigator screenOptions={{ tabBarStyle: styles }}>
-          <Tab.Screen 
-            name="Home" 
-            component={Home} 
-            options={optionsHandler} 
-          />
-          <Tab.Screen
-            name="Clients"
-            component={ClientsNavigator}
-            options={optionsHandler}
-          />
-          <Tab.Screen
-            name="Tasks"
-            component={TasksNavigator}
-            options={optionsHandler}
-          />
-          <Tab.Screen
-            name="Settings"
-            component={Settings}
-            options={optionsHandler}
-          />
-        </Tab.Navigator>
-      </TaskContextProvider>
-    </ClientContextProvider>
+    <Provider store={store}>
+      <ClientContextProvider>
+        <TaskContextProvider>
+          <Tab.Navigator screenOptions={{ tabBarStyle: styles }}>
+            <Tab.Screen name="Home" component={Home} options={optionsHandler} />
+            <Tab.Screen
+              name="Clients"
+              component={ClientsNavigator}
+              options={optionsHandler}
+            />
+            <Tab.Screen
+              name="Tasks"
+              component={TasksNavigator}
+              options={optionsHandler}
+            />
+            <Tab.Screen
+              name="Settings"
+              component={Settings}
+              options={optionsHandler}
+            />
+          </Tab.Navigator>
+        </TaskContextProvider>
+      </ClientContextProvider>
+    </Provider>
   );
 }
 

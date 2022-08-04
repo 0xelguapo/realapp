@@ -6,14 +6,38 @@ import {
   TextInput,
   ScrollView,
   KeyboardAvoidingView,
+  TouchableHighlight,
 } from "react-native";
-import { useState } from 'react'
+import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
+import useClient from "../../hooks/client-hook";
 
 export default function EditClient(props) {
-  const { clientId } = props.route.params;
+  const { clientId, clientDetailsState } = props.route.params;
+  const [fullName, setFullName] = useState(clientDetailsState.name);
+  const [company, setCompany] = useState(clientDetailsState.company);
+  const [phone, setPhone] = useState(clientDetailsState.phone);
+  const [email, setEmail] = useState(clientDetailsState.email);
+  const [notes, setNotes] = useState(clientDetailsState.notes);
+  const { updateClient } = useClient();
   
+  const handleSubmit = async () => {
+    const connection = await updateClient({
+      id: clientId,
+      name: fullName,
+      company: company,
+      phone: phone,
+      email: email,
+      notes: notes,
+    });
+
+    props.navigation.navigate({
+      name: "ClientDetails",
+      params: {id: clientId},
+      merge: true
+    })
+  };
 
   return (
     <View style={styles.container}>
@@ -22,7 +46,9 @@ export default function EditClient(props) {
           <Ionicons name="chevron-back" size={30} color="#6c6c6c" />
         </Pressable>
         <Text style={styles.editClientHeadingText}>Edit Client</Text>
-        <AntDesign name="check" size={28} color="#6c6c6c" />
+        <TouchableHighlight onPress={handleSubmit} underlayColor="#e8e8e8">
+          <AntDesign name="check" size={28} color="#6c6c6c" />
+        </TouchableHighlight>
       </View>
       <KeyboardAvoidingView
         style={styles.keyboardAvoiding}
@@ -35,23 +61,41 @@ export default function EditClient(props) {
           </View>
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldTitle}>FULL NAME</Text>
-            <TextInput style={styles.fieldInput} />
+            <TextInput
+              style={styles.fieldInput}
+              value={fullName}
+              onChangeText={setFullName}
+            />
           </View>
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldTitle}>COMPANY</Text>
-            <TextInput style={styles.fieldInput} />
+            <TextInput
+              style={styles.fieldInput}
+              value={company}
+              onChangeText={setCompany}
+            />
           </View>
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldTitle}>PHONE</Text>
-            <TextInput style={styles.fieldInput} />
+            <TextInput
+              style={styles.fieldInput}
+              value={phone}
+              onChangeText={setPhone}
+            />
           </View>
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldTitle}>EMAIL</Text>
-            <TextInput style={styles.fieldInput} />
+            <TextInput
+              style={styles.fieldInput}
+              value={email}
+              onChangeText={setEmail}
+            />
           </View>
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldTitle}>NOTES</Text>
             <TextInput
+              value={notes}
+              onChangeText={setNotes}
               style={[styles.fieldInput, { height: 75 }]}
               multiline={true}
             />
@@ -117,5 +161,6 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     fontSize: 16,
     color: "#454545",
+    fontWeight: "300",
   },
 });

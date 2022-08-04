@@ -59,7 +59,7 @@ export default function ClientOptions({
         // onPress={viewEditClientHandler}
       >
         <View style={styles.optionIconContainer}>
-          <Ionicons name="people-outline" size={24} color="535353" />
+          <Ionicons name="people-outline" size={24} color="#535353" />
           <Text style={styles.optionText}>GROUP</Text>
         </View>
       </TouchableHighlight>
