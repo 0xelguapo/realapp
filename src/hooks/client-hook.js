@@ -5,7 +5,8 @@ import * as queries from "../graphql/queries";
 import * as mutations from "../graphql/mutations";
 
 function useClient() {
-  const { getFavoriteClients } = useContext(ClientsContext);
+  const { getFavoriteClients, mutateClientsArrayByIndex } =
+    useContext(ClientsContext);
 
   const updateFavorite = async (id, favorite) => {
     let response;
@@ -15,14 +16,14 @@ function useClient() {
           input: { id: id, favorite: favorite },
         })
       );
-      if(response) await getFavoriteClients()
+      if (response) await getFavoriteClients();
     } catch (err) {
       console.error("error adding favorite", err);
     }
     return response;
   };
 
-  const updateClient = async (details) => {
+  const updateClient = async (details, index) => {
     let response;
     try {
       response = await API.graphql(
@@ -31,6 +32,10 @@ function useClient() {
     } catch (err) {
       console.error("error adding favorite", err);
     }
+    if (response.data) {
+      mutateClientsArrayByIndex(response.data.updateClient, index);
+    }
+    return response;
   };
 
   const addConnection = async (inputDetails) => {

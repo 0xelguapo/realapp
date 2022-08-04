@@ -14,6 +14,7 @@ import ClientOptions from "../../components/ClientOptions";
 
 export default function ClientDetails(props) {
   const { id, name, phone } = props.route.params.client;
+  const { index } = props.route.params
   const [clientDetailsState, setClientDetailsState] = useState({});
   const { getOneClient } = useContext(ClientsContext);
   const { updateFavorite } = useClient();
@@ -52,16 +53,18 @@ export default function ClientDetails(props) {
   };
 
   const viewEditClientHandler = () => {
-    props.navigation.navigate("EditClient", { clientId: id, clientDetailsState: clientDetailsState });
+    props.navigation.navigate("EditClient", {
+      clientId: id,
+      clientDetailsState: clientDetailsState,
+      index: index
+    });
   };
 
   useEffect(() => {
     getClientDetails();
-  }, []);
-
-  useEffect(() => {
     if (props.route.params) getClientDetails();
   }, [props.route.params]);
+
 
   const formattedPhone =
     phone.length <= 10
@@ -77,7 +80,7 @@ export default function ClientDetails(props) {
         <View style={styles.rectangleContainer}>
           <View style={styles.rectangle}></View>
         </View>
-        <Text style={styles.name}>{name}</Text>
+        <Text style={styles.name}>{clientDetailsState.name}</Text>
         <Text style={styles.company}>{clientDetailsState.company}</Text>
       </View>
       <ClientOptions

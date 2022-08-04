@@ -38,6 +38,11 @@ function ClientContextProvider({ children }) {
     return response;
   }, []);
 
+  const mutateClientsArrayByIndex = (modifiedClient, index) => {
+    let newClientsArray = [...clientsArray];
+    newClientsArray[index] = modifiedClient;
+    setClientsArray(newClientsArray);
+  };
 
   const onSuccess = () => {
     setSuccessStatus(true);
@@ -102,6 +107,7 @@ function ClientContextProvider({ children }) {
         getOneClient,
         addClient,
         getFavoriteClients,
+        mutateClientsArrayByIndex
       }}
     >
       {children}

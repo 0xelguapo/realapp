@@ -15,13 +15,14 @@ import useClient from "../../hooks/client-hook";
 
 export default function EditClient(props) {
   const { clientId, clientDetailsState } = props.route.params;
+  const { index } = props.route.params
   const [fullName, setFullName] = useState(clientDetailsState.name);
   const [company, setCompany] = useState(clientDetailsState.company);
   const [phone, setPhone] = useState(clientDetailsState.phone);
   const [email, setEmail] = useState(clientDetailsState.email);
   const [notes, setNotes] = useState(clientDetailsState.notes);
   const { updateClient } = useClient();
-  
+
   const handleSubmit = async () => {
     const connection = await updateClient({
       id: clientId,
@@ -30,13 +31,14 @@ export default function EditClient(props) {
       phone: phone,
       email: email,
       notes: notes,
-    });
+    }, index);
 
     props.navigation.navigate({
       name: "ClientDetails",
-      params: {id: clientId},
-      merge: true
-    })
+      params: { id: clientId },
+      merge: true,
+    });
+    console.log(connection)
   };
 
   return (

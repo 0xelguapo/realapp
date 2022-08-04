@@ -14,6 +14,7 @@ export default function EachClient({
   email,
   onPress,
   taskMode,
+  index
 }) {
   const formattedPhone =
     phone.length <= 10
@@ -36,7 +37,7 @@ export default function EachClient({
       </Pressable>
     );
   }
-
+  
   return (
     <Pressable>
       <TouchableHighlight onPress={onPress} underlayColor="#f1f1f1">

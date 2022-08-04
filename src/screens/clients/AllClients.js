@@ -32,14 +32,15 @@ export default function Clients({ navigation }) {
     extrapolate: "clamp",
   });
 
-  const viewClientHandler = useCallback((client) => {
-    navigation.navigate("ClientDetails", { client: client });
+  const viewClientHandler = useCallback((client, index) => {
+    navigation.navigate("ClientDetails", { client: client, index: index });
   }, []);
 
   const renderClient = useCallback(
-    ({ item }) => (
+    ({ item, index }) => (
       <EachClient
-        onPress={() => viewClientHandler(item)}
+        onPress={() => viewClientHandler(item, index)}
+        index={index}
         name={item.name}
         phone={item.phone}
         company={item.company}
