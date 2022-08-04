@@ -12,6 +12,7 @@ import { Ionicons } from "@expo/vector-icons";
 export default function ClientOptions({
   favoriteHandler,
   viewEditClientHandler,
+  removeClientHandler,
   clientDetailsState,
 }) {
   return (
@@ -63,6 +64,16 @@ export default function ClientOptions({
           <Text style={styles.optionText}>GROUP</Text>
         </View>
       </TouchableHighlight>
+      <TouchableHighlight
+        underlayColor="#e8e8e8"
+        style={styles.touchableHighlightStyle}
+        onPress={removeClientHandler}
+      >
+        <View style={styles.optionIconContainer}>
+          <Ionicons name="remove-circle-outline" size={24} color="#535353" />
+          <Text style={styles.optionText}>REMOVE</Text>
+        </View>
+      </TouchableHighlight>
     </ScrollView>
   );
 }
@@ -79,8 +90,8 @@ const styles = StyleSheet.create({
   optionIconContainer: {
     display: "flex",
     alignItems: "center",
-    width: 65,
-    marginRight: 10,
+    width: 69,
+    marginRight: 15,
   },
   touchableHighlightStyle: {
     borderRadius: 5,

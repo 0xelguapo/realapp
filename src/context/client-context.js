@@ -44,6 +44,12 @@ function ClientContextProvider({ children }) {
     setClientsArray(newClientsArray);
   };
 
+  const removeClientFromArrayByIndex = (index) => {
+    let newClientsArray = [...clientsArray];
+    newClientsArray.splice(index, 1);
+    setClientsArray(newClientsArray);
+  }
+
   const onSuccess = () => {
     setSuccessStatus(true);
     setTimeout(() => {
@@ -107,7 +113,8 @@ function ClientContextProvider({ children }) {
         getOneClient,
         addClient,
         getFavoriteClients,
-        mutateClientsArrayByIndex
+        mutateClientsArrayByIndex,
+        removeClientFromArrayByIndex,
       }}
     >
       {children}

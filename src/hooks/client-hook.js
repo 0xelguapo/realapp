@@ -5,8 +5,11 @@ import * as queries from "../graphql/queries";
 import * as mutations from "../graphql/mutations";
 
 function useClient() {
-  const { getFavoriteClients, mutateClientsArrayByIndex } =
-    useContext(ClientsContext);
+  const {
+    getFavoriteClients,
+    mutateClientsArrayByIndex,
+    removeClientFromArrayByIndex,
+  } = useContext(ClientsContext);
 
   const updateFavorite = async (id, favorite) => {
     let response;
@@ -86,7 +89,27 @@ function useClient() {
     }
   };
 
-  return { updateFavorite, updateClient, addConnection, addEditNote, addTask };
+  const removeClient = async (clientId, index) => {
+    let response;
+    try {
+      response = await API.graphql(
+        graphqlOperation(mutations.deleteClient, { input: { id: clientId } })
+      );
+    } catch (err) {
+      console.error(err);
+    }
+    removeClientFromArrayByIndex(index);
+    return response;
+  };
+
+  return {
+    updateFavorite,
+    updateClient,
+    addConnection,
+    addEditNote,
+    addTask,
+    removeClient,
+  };
 }
 
 export default useClient;

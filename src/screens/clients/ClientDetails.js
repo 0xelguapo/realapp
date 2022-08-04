@@ -6,6 +6,7 @@ import {
   Pressable,
   TouchableHighlight,
   ScrollView,
+  Alert,
 } from "react-native";
 import useClient from "../../hooks/client-hook";
 import { ClientsContext } from "../../context/client-context";
@@ -14,10 +15,10 @@ import ClientOptions from "../../components/ClientOptions";
 
 export default function ClientDetails(props) {
   const { id, name, phone } = props.route.params.client;
-  const { index } = props.route.params
+  const { index } = props.route.params;
   const [clientDetailsState, setClientDetailsState] = useState({});
   const { getOneClient } = useContext(ClientsContext);
-  const { updateFavorite } = useClient();
+  const { updateFavorite, removeClient } = useClient();
 
   const getClientDetails = async () => {
     const response = await getOneClient(id);
@@ -56,15 +57,28 @@ export default function ClientDetails(props) {
     props.navigation.navigate("EditClient", {
       clientId: id,
       clientDetailsState: clientDetailsState,
-      index: index
+      index: index,
     });
+  };
+
+  const removeClientHandler = () => {
+    Alert.alert("Are you sure you want to delete this client?", null, [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Delete",
+        onPress: async () => {
+          await removeClient(id, index);
+          props.navigation.goBack();
+        },
+        style: "destructive",
+      },
+    ]);
   };
 
   useEffect(() => {
     getClientDetails();
     if (props.route.params) getClientDetails();
   }, [props.route.params]);
-
 
   const formattedPhone =
     phone.length <= 10
@@ -85,8 +99,11 @@ export default function ClientDetails(props) {
       </View>
       <ClientOptions
         clientDetailsState={clientDetailsState}
+        clientId={id}
+        index={index}
         favoriteHandler={favoriteHandler}
         viewEditClientHandler={viewEditClientHandler}
+        removeClientHandler={removeClientHandler}
       />
       <View style={styles.body}>
         <View style={styles.detailsContainer}>
