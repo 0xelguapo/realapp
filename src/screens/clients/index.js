@@ -6,6 +6,7 @@ import AddConnectionHistory from "./AddConnectionHistory";
 import AddEditNote from "./AddEditNote.js";
 import AddClientTask from "./AddClientTask.js";
 import EditClient from "./EditClient";
+import AddEditGroup from "./AddEditGroup";
 
 const Stack = createNativeStackNavigator();
 
@@ -55,9 +56,14 @@ export default function ClientsNavigator() {
         component={AddClientTask}
       />
       <Stack.Screen
-        options={{ presentation: "modal", headerShown: false  }}
+        options={{ presentation: "modal", headerShown: false }}
         name="EditClient"
         component={EditClient}
+      />
+      <Stack.Screen
+        options={{ presentation: "modal", headerShown: false }}
+        name="AddEditGroup"
+        component={AddEditGroup}
       />
     </Stack.Navigator>
   );

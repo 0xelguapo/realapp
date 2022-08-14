@@ -1,13 +1,21 @@
 import { useCallback, useContext } from "react";
-import { FlatList, Pressable, StyleSheet, Text, View, ActivityIndicator } from "react-native";
+import {
+  FlatList,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  ActivityIndicator,
+  SafeAreaView
+} from "react-native";
 import { TaskContext } from "../../context/task-context";
 import { Ionicons } from "@expo/vector-icons";
 import EachTask from "../../components/EachTask";
 import SuccessMessage from "../../components/SuccessMessage";
 
 export default function Tasks({ navigation }) {
-  const { isLoading, tasksArray, successStatus, fetchTasks} = useContext(TaskContext);
-  
+  const { isLoading, tasksArray, successStatus, fetchTasks } =
+    useContext(TaskContext);
 
   const renderTask = useCallback(
     ({ item }) => (
@@ -17,16 +25,14 @@ export default function Tasks({ navigation }) {
   );
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.headerContainer}>
-        <View style={styles.headerTitleContainer}>
-          <Text style={styles.headerTitle}>Tasks</Text>
-        </View>
+        <Text style={styles.headerTitle}>Tasks</Text>
         <View style={styles.addIconContainer}>
           <View style={styles.addIconBackground}></View>
           <Ionicons
             name="md-add-circle"
-            size={50}
+            size={40}
             color="#0064e5"
             onPress={() => navigation.navigate("AddTask")}
           />
@@ -34,20 +40,21 @@ export default function Tasks({ navigation }) {
       </View>
       {successStatus && <SuccessMessage>Task Created</SuccessMessage>}
       <View style={styles.listContainer}>
-        {isLoading ? (<View style={styles.loadingContainer}>
+        {isLoading ? (
+          <View style={styles.loadingContainer}>
             <ActivityIndicator size="large" />
-          </View>) : (
- <FlatList
- data={tasksArray}
- renderItem={renderTask}
- keyExtractor={(t) => t.id}
- onRefresh={fetchTasks}
- refreshing={isLoading}
-/>
+          </View>
+        ) : (
+          <FlatList
+            data={tasksArray}
+            renderItem={renderTask}
+            keyExtractor={(t) => t.id}
+            onRefresh={fetchTasks}
+            refreshing={isLoading}
+          />
         )}
-       
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -57,30 +64,29 @@ const styles = StyleSheet.create({
     backgroundColor: "#f6f6f6",
   },
   headerContainer: {
-    flex: 0.11,
-    paddingTop: 55,
-    alignItems: "center",
-    justifyContent: "space-between",
-    flexDirection: "row",
+    display: "flex",
     paddingHorizontal: 20,
-    backgroundColor: "#212121",
+    paddingBottom: 10,
+    paddingTop: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   headerTitle: {
-    fontSize: 30,
+    fontSize: 25,
     fontWeight: "700",
-    color: "#e9e9e9",
+    color: "#454545",
   },
   addIconBackground: {
     position: "absolute",
     top: 15,
     right: 15,
-    height: 30,
-    width: 30,
+    height: 20,
+    width: 20,
     borderRadius: 50,
     backgroundColor: "#e9e9e9",
   },
   listContainer: {
     flex: 0.85,
-    paddingHorizontal: 15
+    paddingHorizontal: 15,
   },
 });

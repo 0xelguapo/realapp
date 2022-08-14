@@ -11,7 +11,7 @@ function useClient() {
     removeClientFromArrayByIndex,
   } = useContext(ClientsContext);
 
-  const updateFavorite = async (id, favorite) => {
+  const updateFavorite = async (id, favorite, index) => {
     let response;
     try {
       response = await API.graphql(
@@ -19,7 +19,9 @@ function useClient() {
           input: { id: id, favorite: favorite },
         })
       );
-      if (response) await getFavoriteClients();
+      if (response) {
+        mutateClientsArrayByIndex(response.data.updateClient, index)
+      }
     } catch (err) {
       console.error("error adding favorite", err);
     }

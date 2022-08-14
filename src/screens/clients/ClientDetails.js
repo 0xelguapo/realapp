@@ -29,7 +29,7 @@ export default function ClientDetails(props) {
   };
 
   const favoriteHandler = async () => {
-    await updateFavorite(id, !clientDetailsState.favorite);
+    await updateFavorite(id, !clientDetailsState.favorite, index);
     setClientDetailsState({
       ...clientDetailsState,
       favorite: !clientDetailsState.favorite,
@@ -61,6 +61,13 @@ export default function ClientDetails(props) {
     });
   };
 
+  const viewEditGroupHandler = () => {
+    props.navigation.navigate("AddEditGroup", {
+      clientId: id,
+      index: index,
+    });
+  };
+
   const removeClientHandler = () => {
     Alert.alert("Are you sure you want to delete this client?", null, [
       { text: "Cancel", style: "cancel" },
@@ -76,8 +83,9 @@ export default function ClientDetails(props) {
   };
 
   useEffect(() => {
-    getClientDetails();
-    if (props.route.params) getClientDetails();
+    let isMounted = true;
+    if (isMounted || props.route.params) getClientDetails();
+    return () => (isMounted = false);
   }, [props.route.params]);
 
   const formattedPhone =
@@ -104,6 +112,7 @@ export default function ClientDetails(props) {
         favoriteHandler={favoriteHandler}
         viewEditClientHandler={viewEditClientHandler}
         removeClientHandler={removeClientHandler}
+        viewEditGroupHandler={viewEditGroupHandler}
       />
       <View style={styles.body}>
         <View style={styles.detailsContainer}>
@@ -114,7 +123,11 @@ export default function ClientDetails(props) {
             </Pressable>
           </View>
           <View style={styles.detailContainer}>
-            <Text style={styles.notesText}>{clientDetailsState.notes}</Text>
+            {clientDetailsState.notes ? (
+              <Text style={styles.notesText}>{clientDetailsState.notes}</Text>
+            ) : (
+              <Text style={styles.emptyPlaceholder}>Add a note here...</Text>
+            )}
           </View>
         </View>
         <View style={styles.detailsContainer}>
@@ -236,5 +249,8 @@ const styles = StyleSheet.create({
   connectionDate: {
     color: "#ababab",
     fontSize: 14,
+  },
+  emptyPlaceholder: {
+    color: "#ababab",
   },
 });

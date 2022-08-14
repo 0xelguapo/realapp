@@ -102,6 +102,7 @@ function ClientContextProvider({ children }) {
     return response;
   };
 
+
   return (
     <ClientsContext.Provider
       value={{

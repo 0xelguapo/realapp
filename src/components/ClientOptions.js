@@ -14,6 +14,7 @@ export default function ClientOptions({
   viewEditClientHandler,
   removeClientHandler,
   clientDetailsState,
+  viewEditGroupHandler
 }) {
   return (
     <ScrollView
@@ -47,21 +48,21 @@ export default function ClientOptions({
       <TouchableHighlight
         underlayColor="#e8e8e8"
         style={styles.touchableHighlightStyle}
-        onPress={viewEditClientHandler}
+        onPress={viewEditGroupHandler}
       >
         <View style={styles.optionIconContainer}>
-          <Feather name="edit-2" size={24} color="#535353" />
-          <Text style={styles.optionText}>EDIT</Text>
+          <Ionicons name="people-outline" size={24} color="#535353" />
+          <Text style={styles.optionText}>GROUP</Text>
         </View>
       </TouchableHighlight>
       <TouchableHighlight
         underlayColor="#e8e8e8"
         style={styles.touchableHighlightStyle}
-        // onPress={viewEditClientHandler}
+        onPress={viewEditClientHandler}
       >
         <View style={styles.optionIconContainer}>
-          <Ionicons name="people-outline" size={24} color="#535353" />
-          <Text style={styles.optionText}>GROUP</Text>
+          <Feather name="edit-2" size={24} color="#535353" />
+          <Text style={styles.optionText}>EDIT</Text>
         </View>
       </TouchableHighlight>
       <TouchableHighlight

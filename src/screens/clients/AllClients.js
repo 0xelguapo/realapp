@@ -9,6 +9,7 @@ import {
   Animated,
   ScrollView,
   SafeAreaView,
+  Pressable,
 } from "react-native";
 import { ClientsContext } from "../../context/client-context";
 import EachClient from "../../components/EachClient";
@@ -21,10 +22,9 @@ export default function Clients({ navigation }) {
     getAllClients,
     successStatus,
     favoriteClients,
-    getFavoriteClients
-  } = useContext(ClientsContext);
+    getFavoriteClients,
+  } = useContext(ClientsContext) ;
   const fadeAnim = useRef(new Animated.Value(0)).current;
-
   const scrollOffsetY = useRef(new Animated.Value(0)).current;
   const headerScrollHeight = scrollOffsetY.interpolate({
     inputRange: [0, 50],
@@ -119,14 +119,33 @@ export default function Clients({ navigation }) {
               },
             ]}
           >
-            {favoriteClients.map((fave) => (
-              <View style={styles.favoriteClient} key={fave.id}>
+            {clientsArray.map((fave, index) => {
+              if (fave.favorite) {
+                return (
+                  <Pressable
+                    style={styles.favoriteClient}
+                    key={fave.id}
+                    onPress={() => viewClientHandler(fave, index)}
+                  >
+                    <Text style={styles.favoriteFirstLetter}>
+                      {fave.name[0].toUpperCase()}
+                    </Text>
+                    <Text style={styles.favoriteName}>{fave.name}</Text>
+                  </Pressable>
+                );
+              }
+            })}
+            {/* {favoriteClients.map((fave) => (
+              <Pressable
+                style={styles.favoriteClient}
+                key={fave.id}
+              >
                 <Text style={styles.favoriteFirstLetter}>
                   {fave.name[0].toUpperCase()}
                 </Text>
                 <Text style={styles.favoriteName}>{fave.name}</Text>
-              </View>
-            ))}
+              </Pressable>
+            ))} */}
           </Animated.ScrollView>
         </View>
       </View>
@@ -158,7 +177,6 @@ export default function Clients({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: "column",
     backgroundColor: "#f5f5f5",
   },
   loadingContainer: {
