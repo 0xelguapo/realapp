@@ -2,16 +2,9 @@ import {
   StyleSheet,
   View,
   Text,
-  Animated,
   Pressable,
-  Button,
-  TextInput,
-  TouchableHighlight,
   TouchableOpacity,
-  KeyboardAvoidingView,
 } from "react-native";
-import { useState, useRef, useEffect, useContext } from "react";
-import DateTimePicker from "@react-native-community/datetimepicker";
 import { AntDesign } from "@expo/vector-icons";
 
 function AddSimple({ title, goBack, children, withDescription = false }) {

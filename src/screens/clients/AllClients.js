@@ -23,12 +23,12 @@ export default function Clients({ navigation }) {
     successStatus,
     favoriteClients,
     getFavoriteClients,
-  } = useContext(ClientsContext) ;
+  } = useContext(ClientsContext);
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const scrollOffsetY = useRef(new Animated.Value(0)).current;
   const headerScrollHeight = scrollOffsetY.interpolate({
     inputRange: [0, 50],
-    outputRange: [0, -80],
+    outputRange: [0, -90],
     extrapolate: "clamp",
   });
 
@@ -79,7 +79,7 @@ export default function Clients({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       {successStatus && (
         <Animated.View style={[styles.fadingContainer, { opacity: fadeAnim }]}>
           <Text style={styles.successText}>Contact created successfully</Text>
@@ -106,6 +106,11 @@ export default function Clients({ navigation }) {
             />
           </View>
         </View>
+        <Animated.View
+          style={[{ transform: [{ translateY: headerScrollHeight }] }]}
+        >
+          <Text style={{fontWeight: '700'}}>Favorites</Text>
+        </Animated.View>
         <View>
           <Animated.ScrollView
             showsHorizontalScrollIndicator={false}
@@ -114,7 +119,7 @@ export default function Clients({ navigation }) {
               {
                 transform: [{ translateY: headerScrollHeight }],
                 position: "absolute",
-                top: 0,
+                top: 10,
                 width: "100%",
               },
             ]}
@@ -166,11 +171,12 @@ export default function Clients({ navigation }) {
               { useNativeDriver: true }
             )}
             scrollEventThrottle={16}
-            style={{ paddingTop: 50 }}
+            style={{ paddingVertical: 50 }}
+            contentContainerStyle={{ paddingBottom: 50}}
           />
         )}
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -178,6 +184,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f5f5f5",
+    paddingTop: 30
   },
   loadingContainer: {
     flex: 1,
@@ -187,7 +194,7 @@ const styles = StyleSheet.create({
   headerContainer: {
     display: "flex",
     paddingHorizontal: 20,
-    paddingBottom: 10,
+    paddingBottom: 15,
     zIndex: 2,
     paddingTop: 20,
   },
