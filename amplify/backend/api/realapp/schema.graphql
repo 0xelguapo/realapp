@@ -12,9 +12,15 @@ type Client @model @auth(rules: [{ allow: owner }]) {
   notes: String
   favorite: Boolean @default(value: "false")
   connectionHistory: [ConnectionHistory] @hasMany(indexName: "byConnectionHistory", fields: ["id"])
-  clientGroup: [ClientGroup] @hasMany
   properties: [Property] @hasMany(indexName: "")
   tasks: [Task] @hasMany(indexName: "byClient", fields: ["id"])
+  group: [ClientGroup] @manyToMany(relationName: "GroupsClients")
+}
+
+type ClientGroup @model @auth(rules: [{ allow: owner }]) {
+  id: ID!
+  title: String!
+  clients: [Client] @manyToMany(relationName: "GroupsClients")
 }
 
 type ConnectionHistory @model @auth(rules: [{ allow: owner }]) {
@@ -23,11 +29,6 @@ type ConnectionHistory @model @auth(rules: [{ allow: owner }]) {
   date: String
   clientId: ID! @index(name: "byConnectionHistory", sortKeyFields: ["title"])
   client: Client @belongsTo(fields: ["clientId"])
-}
-
-type ClientGroup @model @auth(rules: [{ allow: owner }]) {
-  id: ID!
-  title: String @index(name: "byTitle", queryField: "groupByTitle")
 }
 
 type Property @model @auth(rules: [{ allow: owner }]) {
@@ -47,8 +48,4 @@ type Task @model @auth(rules: [{ allow: owner }]) {
   completed: Boolean
   date: String
   client: Client @belongsTo(fields: ["clientId"])
-}
-
-type Mutation {
-  batchDelete(ids: [ID]): [Client]
 }

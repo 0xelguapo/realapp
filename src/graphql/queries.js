@@ -23,17 +23,6 @@ export const getClient = /* GraphQL */ `
         }
         nextToken
       }
-      clientGroup {
-        items {
-          id
-          title
-          createdAt
-          updatedAt
-          clientClientGroupId
-          owner
-        }
-        nextToken
-      }
       properties {
         items {
           id
@@ -56,6 +45,17 @@ export const getClient = /* GraphQL */ `
           content
           completed
           date
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      group {
+        items {
+          id
+          clientID
+          clientGroupID
           createdAt
           updatedAt
           owner
@@ -86,13 +86,56 @@ export const listClients = /* GraphQL */ `
         connectionHistory {
           nextToken
         }
-        clientGroup {
-          nextToken
-        }
         properties {
           nextToken
         }
         tasks {
+          nextToken
+        }
+        group {
+          nextToken
+        }
+        createdAt
+        updatedAt
+        owner
+      }
+      nextToken
+    }
+  }
+`;
+export const getClientGroup = /* GraphQL */ `
+  query GetClientGroup($id: ID!) {
+    getClientGroup(id: $id) {
+      id
+      title
+      clients {
+        items {
+          id
+          clientID
+          clientGroupID
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const listClientGroups = /* GraphQL */ `
+  query ListClientGroups(
+    $filter: ModelClientGroupFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listClientGroups(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        title
+        clients {
           nextToken
         }
         createdAt
@@ -121,13 +164,13 @@ export const getConnectionHistory = /* GraphQL */ `
         connectionHistory {
           nextToken
         }
-        clientGroup {
-          nextToken
-        }
         properties {
           nextToken
         }
         tasks {
+          nextToken
+        }
+        group {
           nextToken
         }
         createdAt
@@ -176,37 +219,6 @@ export const listConnectionHistories = /* GraphQL */ `
     }
   }
 `;
-export const getClientGroup = /* GraphQL */ `
-  query GetClientGroup($id: ID!) {
-    getClientGroup(id: $id) {
-      id
-      title
-      createdAt
-      updatedAt
-      clientClientGroupId
-      owner
-    }
-  }
-`;
-export const listClientGroups = /* GraphQL */ `
-  query ListClientGroups(
-    $filter: ModelClientGroupFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listClientGroups(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        title
-        createdAt
-        updatedAt
-        clientClientGroupId
-        owner
-      }
-      nextToken
-    }
-  }
-`;
 export const getProperty = /* GraphQL */ `
   query GetProperty($id: ID!) {
     getProperty(id: $id) {
@@ -226,13 +238,13 @@ export const getProperty = /* GraphQL */ `
         connectionHistory {
           nextToken
         }
-        clientGroup {
-          nextToken
-        }
         properties {
           nextToken
         }
         tasks {
+          nextToken
+        }
+        group {
           nextToken
         }
         createdAt
@@ -300,13 +312,13 @@ export const getTask = /* GraphQL */ `
         connectionHistory {
           nextToken
         }
-        clientGroup {
-          nextToken
-        }
         properties {
           nextToken
         }
         tasks {
+          nextToken
+        }
+        group {
           nextToken
         }
         createdAt
@@ -353,6 +365,90 @@ export const listTasks = /* GraphQL */ `
     }
   }
 `;
+export const getGroupsClients = /* GraphQL */ `
+  query GetGroupsClients($id: ID!) {
+    getGroupsClients(id: $id) {
+      id
+      clientID
+      clientGroupID
+      client {
+        id
+        name
+        company
+        phone
+        email
+        notes
+        favorite
+        connectionHistory {
+          nextToken
+        }
+        properties {
+          nextToken
+        }
+        tasks {
+          nextToken
+        }
+        group {
+          nextToken
+        }
+        createdAt
+        updatedAt
+        owner
+      }
+      clientGroup {
+        id
+        title
+        clients {
+          nextToken
+        }
+        createdAt
+        updatedAt
+        owner
+      }
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const listGroupsClients = /* GraphQL */ `
+  query ListGroupsClients(
+    $filter: ModelGroupsClientsFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listGroupsClients(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        clientID
+        clientGroupID
+        client {
+          id
+          name
+          company
+          phone
+          email
+          notes
+          favorite
+          createdAt
+          updatedAt
+          owner
+        }
+        clientGroup {
+          id
+          title
+          createdAt
+          updatedAt
+          owner
+        }
+        createdAt
+        updatedAt
+        owner
+      }
+      nextToken
+    }
+  }
+`;
 export const clientByName = /* GraphQL */ `
   query ClientByName(
     $name: String!
@@ -379,44 +475,17 @@ export const clientByName = /* GraphQL */ `
         connectionHistory {
           nextToken
         }
-        clientGroup {
-          nextToken
-        }
         properties {
           nextToken
         }
         tasks {
           nextToken
         }
+        group {
+          nextToken
+        }
         createdAt
         updatedAt
-        owner
-      }
-      nextToken
-    }
-  }
-`;
-export const groupByTitle = /* GraphQL */ `
-  query GroupByTitle(
-    $title: String!
-    $sortDirection: ModelSortDirection
-    $filter: ModelClientGroupFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    groupByTitle(
-      title: $title
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        title
-        createdAt
-        updatedAt
-        clientClientGroupId
         owner
       }
       nextToken

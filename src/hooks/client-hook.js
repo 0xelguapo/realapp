@@ -20,7 +20,7 @@ function useClient() {
         })
       );
       if (response) {
-        mutateClientsArrayByIndex(response.data.updateClient, index)
+        mutateClientsArrayByIndex(response.data.updateClient, index);
       }
     } catch (err) {
       console.error("error adding favorite", err);
@@ -104,6 +104,31 @@ function useClient() {
     return response;
   };
 
+  const getAllGroups = async () => {
+    let response;
+    try { 
+      response = await API.graphql(graphqlOperation(queries.listClientGroups))
+    } catch (err) {
+      console.error(err)
+    }
+    return response
+  }
+
+  const addGroupAndClient = async (title, clientId) => {
+    let response;
+    try {
+      response = await API.graphql(
+        graphqlOperation(mutations.createClientGroup, {
+          input: { title: title },
+          clients: {clientId}
+        })
+      );
+    } catch (err) {
+      console.error(err);
+    }
+    return response;
+  };
+
   return {
     updateFavorite,
     updateClient,
@@ -111,6 +136,8 @@ function useClient() {
     addEditNote,
     addTask,
     removeClient,
+    addGroupAndClient,
+    getAllGroups,
   };
 }
 

@@ -23,17 +23,6 @@ export const onCreateClient = /* GraphQL */ `
         }
         nextToken
       }
-      clientGroup {
-        items {
-          id
-          title
-          createdAt
-          updatedAt
-          clientClientGroupId
-          owner
-        }
-        nextToken
-      }
       properties {
         items {
           id
@@ -56,6 +45,17 @@ export const onCreateClient = /* GraphQL */ `
           content
           completed
           date
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      group {
+        items {
+          id
+          clientID
+          clientGroupID
           createdAt
           updatedAt
           owner
@@ -90,17 +90,6 @@ export const onUpdateClient = /* GraphQL */ `
         }
         nextToken
       }
-      clientGroup {
-        items {
-          id
-          title
-          createdAt
-          updatedAt
-          clientClientGroupId
-          owner
-        }
-        nextToken
-      }
       properties {
         items {
           id
@@ -123,6 +112,17 @@ export const onUpdateClient = /* GraphQL */ `
           content
           completed
           date
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      group {
+        items {
+          id
+          clientID
+          clientGroupID
           createdAt
           updatedAt
           owner
@@ -157,17 +157,6 @@ export const onDeleteClient = /* GraphQL */ `
         }
         nextToken
       }
-      clientGroup {
-        items {
-          id
-          title
-          createdAt
-          updatedAt
-          clientClientGroupId
-          owner
-        }
-        nextToken
-      }
       properties {
         items {
           id
@@ -190,6 +179,83 @@ export const onDeleteClient = /* GraphQL */ `
           content
           completed
           date
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      group {
+        items {
+          id
+          clientID
+          clientGroupID
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onCreateClientGroup = /* GraphQL */ `
+  subscription OnCreateClientGroup($owner: String) {
+    onCreateClientGroup(owner: $owner) {
+      id
+      title
+      clients {
+        items {
+          id
+          clientID
+          clientGroupID
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onUpdateClientGroup = /* GraphQL */ `
+  subscription OnUpdateClientGroup($owner: String) {
+    onUpdateClientGroup(owner: $owner) {
+      id
+      title
+      clients {
+        items {
+          id
+          clientID
+          clientGroupID
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onDeleteClientGroup = /* GraphQL */ `
+  subscription OnDeleteClientGroup($owner: String) {
+    onDeleteClientGroup(owner: $owner) {
+      id
+      title
+      clients {
+        items {
+          id
+          clientID
+          clientGroupID
           createdAt
           updatedAt
           owner
@@ -220,13 +286,13 @@ export const onCreateConnectionHistory = /* GraphQL */ `
         connectionHistory {
           nextToken
         }
-        clientGroup {
-          nextToken
-        }
         properties {
           nextToken
         }
         tasks {
+          nextToken
+        }
+        group {
           nextToken
         }
         createdAt
@@ -257,13 +323,13 @@ export const onUpdateConnectionHistory = /* GraphQL */ `
         connectionHistory {
           nextToken
         }
-        clientGroup {
-          nextToken
-        }
         properties {
           nextToken
         }
         tasks {
+          nextToken
+        }
+        group {
           nextToken
         }
         createdAt
@@ -294,13 +360,13 @@ export const onDeleteConnectionHistory = /* GraphQL */ `
         connectionHistory {
           nextToken
         }
-        clientGroup {
-          nextToken
-        }
         properties {
           nextToken
         }
         tasks {
+          nextToken
+        }
+        group {
           nextToken
         }
         createdAt
@@ -309,42 +375,6 @@ export const onDeleteConnectionHistory = /* GraphQL */ `
       }
       createdAt
       updatedAt
-      owner
-    }
-  }
-`;
-export const onCreateClientGroup = /* GraphQL */ `
-  subscription OnCreateClientGroup($owner: String) {
-    onCreateClientGroup(owner: $owner) {
-      id
-      title
-      createdAt
-      updatedAt
-      clientClientGroupId
-      owner
-    }
-  }
-`;
-export const onUpdateClientGroup = /* GraphQL */ `
-  subscription OnUpdateClientGroup($owner: String) {
-    onUpdateClientGroup(owner: $owner) {
-      id
-      title
-      createdAt
-      updatedAt
-      clientClientGroupId
-      owner
-    }
-  }
-`;
-export const onDeleteClientGroup = /* GraphQL */ `
-  subscription OnDeleteClientGroup($owner: String) {
-    onDeleteClientGroup(owner: $owner) {
-      id
-      title
-      createdAt
-      updatedAt
-      clientClientGroupId
       owner
     }
   }
@@ -368,13 +398,13 @@ export const onCreateProperty = /* GraphQL */ `
         connectionHistory {
           nextToken
         }
-        clientGroup {
-          nextToken
-        }
         properties {
           nextToken
         }
         tasks {
+          nextToken
+        }
+        group {
           nextToken
         }
         createdAt
@@ -407,13 +437,13 @@ export const onUpdateProperty = /* GraphQL */ `
         connectionHistory {
           nextToken
         }
-        clientGroup {
-          nextToken
-        }
         properties {
           nextToken
         }
         tasks {
+          nextToken
+        }
+        group {
           nextToken
         }
         createdAt
@@ -446,13 +476,13 @@ export const onDeleteProperty = /* GraphQL */ `
         connectionHistory {
           nextToken
         }
-        clientGroup {
-          nextToken
-        }
         properties {
           nextToken
         }
         tasks {
+          nextToken
+        }
+        group {
           nextToken
         }
         createdAt
@@ -486,13 +516,13 @@ export const onCreateTask = /* GraphQL */ `
         connectionHistory {
           nextToken
         }
-        clientGroup {
-          nextToken
-        }
         properties {
           nextToken
         }
         tasks {
+          nextToken
+        }
+        group {
           nextToken
         }
         createdAt
@@ -525,13 +555,13 @@ export const onUpdateTask = /* GraphQL */ `
         connectionHistory {
           nextToken
         }
-        clientGroup {
-          nextToken
-        }
         properties {
           nextToken
         }
         tasks {
+          nextToken
+        }
+        group {
           nextToken
         }
         createdAt
@@ -564,13 +594,151 @@ export const onDeleteTask = /* GraphQL */ `
         connectionHistory {
           nextToken
         }
-        clientGroup {
+        properties {
+          nextToken
+        }
+        tasks {
+          nextToken
+        }
+        group {
+          nextToken
+        }
+        createdAt
+        updatedAt
+        owner
+      }
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onCreateGroupsClients = /* GraphQL */ `
+  subscription OnCreateGroupsClients($owner: String) {
+    onCreateGroupsClients(owner: $owner) {
+      id
+      clientID
+      clientGroupID
+      client {
+        id
+        name
+        company
+        phone
+        email
+        notes
+        favorite
+        connectionHistory {
           nextToken
         }
         properties {
           nextToken
         }
         tasks {
+          nextToken
+        }
+        group {
+          nextToken
+        }
+        createdAt
+        updatedAt
+        owner
+      }
+      clientGroup {
+        id
+        title
+        clients {
+          nextToken
+        }
+        createdAt
+        updatedAt
+        owner
+      }
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onUpdateGroupsClients = /* GraphQL */ `
+  subscription OnUpdateGroupsClients($owner: String) {
+    onUpdateGroupsClients(owner: $owner) {
+      id
+      clientID
+      clientGroupID
+      client {
+        id
+        name
+        company
+        phone
+        email
+        notes
+        favorite
+        connectionHistory {
+          nextToken
+        }
+        properties {
+          nextToken
+        }
+        tasks {
+          nextToken
+        }
+        group {
+          nextToken
+        }
+        createdAt
+        updatedAt
+        owner
+      }
+      clientGroup {
+        id
+        title
+        clients {
+          nextToken
+        }
+        createdAt
+        updatedAt
+        owner
+      }
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onDeleteGroupsClients = /* GraphQL */ `
+  subscription OnDeleteGroupsClients($owner: String) {
+    onDeleteGroupsClients(owner: $owner) {
+      id
+      clientID
+      clientGroupID
+      client {
+        id
+        name
+        company
+        phone
+        email
+        notes
+        favorite
+        connectionHistory {
+          nextToken
+        }
+        properties {
+          nextToken
+        }
+        tasks {
+          nextToken
+        }
+        group {
+          nextToken
+        }
+        createdAt
+        updatedAt
+        owner
+      }
+      clientGroup {
+        id
+        title
+        clients {
           nextToken
         }
         createdAt
