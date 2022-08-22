@@ -9,33 +9,88 @@ import {
 import { AntDesign } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import useClient from "../../hooks/client-hook";
+import ClientGroup from "../../components/ClientGroup";
 
 export default function AddEditGroup(props) {
   const { clientId, index } = props.route.params;
   const [showInput, setShowInput] = useState(false);
   const [title, setTitle] = useState("");
   const [clientGroups, setClientGroups] = useState([]);
-  const { addGroupAndClient, getAllGroups } = useClient();
+  const [groupsWithClients, setGroupsWithClients] = useState([])
+  const inputRef = useRef(null);
+  const { addGroup, getAllGroups, listGroupedClients } = useClient();
 
   const getClientGroups = async () => {
     const response = await getAllGroups();
     let clientGroupsArray = response.data.listClientGroups.items;
     setClientGroups(clientGroupsArray);
+    console.log(clientGroupsArray);
   };
+
+  const getGroupsWithClients = async () => {
+    let response = await listGroupedClients();
+    if(response) {
+      setGroupsWithClients(response.data.listGroupsClients.items)
+      // console.log(groupsWithClients)
+    }
+  };
+
+
+  //get all client groups
+  //get all groups with clients
+  //iterate through the client groups, check where the id of client groups matches the id of groups clients
+  //if it matches, update the group
+
+  const updateGroups = () => {
+    const allGroupsCopy = clientGroups.slice(0);
+    const groupsWithClientsCopy = groupsWithClients.slice(0)
+    // get the all groups array as a parameter
+    // get the array of groups with clients as a parameter
+    // go through the array of groupsWithClients, check if ID matches the id of groups array
+    // if it does, replace the item in all groups array with this new item
+    // once replaced, move onto next item in groupsWithClients
+    // when done, set the updated array to a state
+    // map this state out in UI
+    for(let i = 0; i < groupsWithClientsCopy.length; i++) {
+      for(let j = 0; j < allGroupsCopy.length; j++) {
+        if(groupsWithClientsCopy[i].clientGroupID === allGroupsCopy[j].id) {
+          allGroupsCopy[j] = groupsWithClientsCopy[i]
+          continue;
+        }
+      }
+    }
+    // console.log('--------copy-----')
+    // console.log(allGroupsCopy)
+    // setClientGroups(allGroupsCopy)
+  };
+
+ 
+  useEffect(() => {
+    getGroupsWithClients();
+  }, []);
 
   useEffect(() => {
     getClientGroups();
   }, []);
 
+  useEffect(() => {
+    updateGroups()
+  }, [])
+
+  useEffect(() => {
+    if (showInput) inputRef.current.focus();
+  }, [showInput]);
+
   const handleSubmit = async () => {
-    const response = await addGroupAndClient(title, clientId);
+    const response = await addGroup(title);
     console.log(response);
     if (response) {
       await getClientGroups();
+      setTitle("");
+      setShowInput(false);
     }
   };
 
-  console.log(clientGroups)
   return (
     <View style={styles.container}>
       <View style={styles.headingContainer}>
@@ -50,7 +105,11 @@ export default function AddEditGroup(props) {
           onPress={() => setShowInput(!showInput)}
         >
           <Text style={styles.createButtonText}>Create a New Group</Text>
-          <Ionicons name="add" size={24} color="black" />
+          {showInput ? (
+            <AntDesign name="minus" size={24} color="black" />
+          ) : (
+            <Ionicons name="add" size={24} color="black" />
+          )}
         </TouchableOpacity>
         {showInput && (
           <View style={styles.inputContainer}>
@@ -58,15 +117,15 @@ export default function AddEditGroup(props) {
               style={styles.input}
               returnKeyType="done"
               onChangeText={setTitle}
-              onEndEditing={handleSubmit}
+              onSubmitEditing={handleSubmit}
+              ref={inputRef}
+              value={title}
             />
           </View>
         )}
         <View style={styles.clientGroupsContainer}>
           {clientGroups.map((el) => (
-            <View style={styles.clientGroup} key={el.id}>
-              <Text style={styles.clientGroupTitle}>{el.title}</Text>
-            </View>
+            <ClientGroup key={el.id} el={el} clientId={clientId} />
           ))}
         </View>
       </View>
@@ -118,17 +177,5 @@ const styles = StyleSheet.create({
   },
   clientGroupsContainer: {
     paddingVertical: 10,
-  },
-  clientGroup: {
-    paddingHorizontal: 15,
-    borderWidth: 0.8,
-    height: 45,
-    display: "flex",
-    justifyContent: "center",
-    borderRadius: 5,
-    marginBottom: 10,
-  },
-  clientGroupTitle: {
-    fontWeight: "600",
   },
 });

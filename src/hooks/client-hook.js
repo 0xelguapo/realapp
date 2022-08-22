@@ -104,23 +104,63 @@ function useClient() {
     return response;
   };
 
+  // retrieves all groups
   const getAllGroups = async () => {
     let response;
-    try { 
-      response = await API.graphql(graphqlOperation(queries.listClientGroups))
+    try {
+      response = await API.graphql(graphqlOperation(queries.listClientGroups));
     } catch (err) {
-      console.error(err)
+      console.error(err);
     }
-    return response
-  }
+    return response;
+  };
 
-  const addGroupAndClient = async (title, clientId) => {
+  const addGroup = async (title, clientId) => {
     let response;
     try {
       response = await API.graphql(
         graphqlOperation(mutations.createClientGroup, {
           input: { title: title },
-          clients: {clientId}
+          clients: { clientId },
+        })
+      );
+    } catch (err) {
+      console.error(err);
+    }
+    return response;
+  };
+
+  const addClientToGroup = async (clientId, clientGroupID) => {
+    let response;
+    try {
+      response = await API.graphql(
+        graphqlOperation(mutations.createGroupsClients, {
+          input: { clientID: clientId, clientGroupID: clientGroupID },
+        })
+      );
+    } catch (err) {
+      console.error(err);
+    }
+    return response;
+  };
+
+  //retrieves all groups with clients already added (join Table)
+  const listGroupedClients = async () => {
+    let response;
+    try {
+      response = await API.graphql(graphqlOperation(queries.listGroupsClients));
+    } catch (err) {
+      console.error(err);
+    }
+    return response;
+  };
+
+  const getClientGroupDetails = async (groupID) => {
+    let response;
+    try {
+      response = await API.graphql(
+        graphqlOperation(queries.getClientGroup, {
+          input: { id: groupID },
         })
       );
     } catch (err) {
@@ -136,8 +176,11 @@ function useClient() {
     addEditNote,
     addTask,
     removeClient,
-    addGroupAndClient,
+    addGroup,
     getAllGroups,
+    addClientToGroup,
+    listGroupedClients,
+    getClientGroupDetails
   };
 }
 

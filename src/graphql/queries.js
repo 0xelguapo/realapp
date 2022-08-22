@@ -136,6 +136,9 @@ export const listClientGroups = /* GraphQL */ `
         id
         title
         clients {
+          items {
+            id
+          }
           nextToken
         }
         createdAt
