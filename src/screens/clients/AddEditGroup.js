@@ -20,32 +20,22 @@ export default function AddEditGroup(props) {
   const inputRef = useRef(null);
   const { addGroup, getAllGroups, getClientGroups } = useClient();
 
-  //fetch all groups
-
-  // const getGroups = async () => {
-  //   const response = await getAllGroups();
-  //   let allGroupsArray = response.data.listClientGroups.items;
-  //   setAllGroups(allGroupsArray);
-  // };
-
-  // const getThisClientsGroups = async () => {
-  //   const response = await getClientGroups(clientId);
-  //   if (response) {
-  //     // console.log(response.data.getClient.group.items)
-  //     setThisClientsGroups(response.data.getClient.group.items);
-  //   }
-  // };
-
   const updateClientGroups = (allGroups, clientsGroups) => {
     let allGroupsCopy = allGroups.slice(0);
     for (let i = 0; i < allGroupsCopy.length; i++) {
       const allGroupsId = allGroupsCopy[i].id;
       for (let j = 0; j < clientsGroups.length; j++) {
+        console.log(clientsGroups)
         if (allGroupsId === clientsGroups[j].clientGroupID) {
-          allGroupsCopy[i] = { ...allGroupsCopy[i], inGroup: true };
+          allGroupsCopy[i] = {
+            ...allGroupsCopy[i],
+            inGroup: true,
+            clientGroupID: clientsGroups[j].id
+          };
         }
       }
     }
+    console.log(allGroupsCopy)
     return allGroupsCopy;
   };
 
@@ -118,7 +108,7 @@ export default function AddEditGroup(props) {
         )}
         <View style={styles.clientGroupsContainer}>
           {allGroups.map((el) => (
-            <ClientGroup key={el.id} el={el} clientId={clientId} />
+            <ClientGroup key={el.id} el={el} clientId={clientId} clientGroupID={el.clientGroupID} />
           ))}
         </View>
       </View>

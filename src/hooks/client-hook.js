@@ -157,6 +157,22 @@ function useClient() {
     return response;
   };
 
+  const removeClientFromGroup = async (clientGroupID) => {
+    let response;
+    try {
+      response = await API.graphql(
+        graphqlOperation(mutations.deleteGroupsClients, {
+          input: {
+            id: clientGroupID,
+          },
+        })
+      );
+    } catch (err) {
+      console.error(err);
+    }
+    return response;
+  };
+
   const getClientGroupDetails = async (groupID) => {
     let response;
     try {
@@ -182,6 +198,7 @@ function useClient() {
     addGroup,
     getAllGroups,
     addClientToGroup,
+    removeClientFromGroup,
     getClientGroupDetails,
   };
 }
