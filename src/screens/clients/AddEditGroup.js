@@ -15,67 +15,60 @@ export default function AddEditGroup(props) {
   const { clientId, index } = props.route.params;
   const [showInput, setShowInput] = useState(false);
   const [title, setTitle] = useState("");
-  const [clientGroups, setClientGroups] = useState([]);
-  const [groupsWithClients, setGroupsWithClients] = useState([])
+  const [allGroups, setAllGroups] = useState([]);
+  const [thisClientsGroups, setThisClientsGroups] = useState([]);
   const inputRef = useRef(null);
-  const { addGroup, getAllGroups, listGroupedClients } = useClient();
+  const { addGroup, getAllGroups, getClientGroups } = useClient();
 
-  const getClientGroups = async () => {
-    const response = await getAllGroups();
-    let clientGroupsArray = response.data.listClientGroups.items;
-    setClientGroups(clientGroupsArray);
-    console.log(clientGroupsArray);
-  };
+  //fetch all groups
 
-  const getGroupsWithClients = async () => {
-    let response = await listGroupedClients();
-    if(response) {
-      setGroupsWithClients(response.data.listGroupsClients.items)
-      // console.log(groupsWithClients)
-    }
-  };
+  // const getGroups = async () => {
+  //   const response = await getAllGroups();
+  //   let allGroupsArray = response.data.listClientGroups.items;
+  //   setAllGroups(allGroupsArray);
+  // };
 
+  // const getThisClientsGroups = async () => {
+  //   const response = await getClientGroups(clientId);
+  //   if (response) {
+  //     // console.log(response.data.getClient.group.items)
+  //     setThisClientsGroups(response.data.getClient.group.items);
+  //   }
+  // };
 
-  //get all client groups
-  //get all groups with clients
-  //iterate through the client groups, check where the id of client groups matches the id of groups clients
-  //if it matches, update the group
-
-  const updateGroups = () => {
-    const allGroupsCopy = clientGroups.slice(0);
-    const groupsWithClientsCopy = groupsWithClients.slice(0)
-    // get the all groups array as a parameter
-    // get the array of groups with clients as a parameter
-    // go through the array of groupsWithClients, check if ID matches the id of groups array
-    // if it does, replace the item in all groups array with this new item
-    // once replaced, move onto next item in groupsWithClients
-    // when done, set the updated array to a state
-    // map this state out in UI
-    for(let i = 0; i < groupsWithClientsCopy.length; i++) {
-      for(let j = 0; j < allGroupsCopy.length; j++) {
-        if(groupsWithClientsCopy[i].clientGroupID === allGroupsCopy[j].id) {
-          allGroupsCopy[j] = groupsWithClientsCopy[i]
-          continue;
+  const updateClientGroups = (allGroups, clientsGroups) => {
+    let allGroupsCopy = allGroups.slice(0);
+    for (let i = 0; i < allGroupsCopy.length; i++) {
+      const allGroupsId = allGroupsCopy[i].id;
+      for (let j = 0; j < clientsGroups.length; j++) {
+        if (allGroupsId === clientsGroups[j].clientGroupID) {
+          allGroupsCopy[i] = { ...allGroupsCopy[i], inGroup: true };
         }
       }
     }
-    // console.log('--------copy-----')
-    // console.log(allGroupsCopy)
-    // setClientGroups(allGroupsCopy)
+    return allGroupsCopy;
   };
 
- 
+  const getAllGroupsAndUpdate = async () => {
+    const allGroupsResponse = await getAllGroups();
+    let allGroupsArray = allGroupsResponse.data.listClientGroups.items;
+    const clientsGroupsResponse = await getClientGroups(clientId);
+    let clientsGroupsArray = clientsGroupsResponse.data.getClient.group.items;
+    if (allGroupsArray && clientsGroupsArray) {
+      let finalArray = updateClientGroups(allGroupsArray, clientsGroupsArray);
+      setAllGroups(finalArray);
+    }
+  };
+
   useEffect(() => {
-    getGroupsWithClients();
+    getAllGroupsAndUpdate();
   }, []);
 
   useEffect(() => {
-    getClientGroups();
+    if (allGroups.length !== 0 && thisClientsGroups.length !== 0) {
+      updateClientGroups(allGroups, thisClientsGroups);
+    }
   }, []);
-
-  useEffect(() => {
-    updateGroups()
-  }, [])
 
   useEffect(() => {
     if (showInput) inputRef.current.focus();
@@ -85,7 +78,7 @@ export default function AddEditGroup(props) {
     const response = await addGroup(title);
     console.log(response);
     if (response) {
-      await getClientGroups();
+      await getGroups();
       setTitle("");
       setShowInput(false);
     }
@@ -124,7 +117,7 @@ export default function AddEditGroup(props) {
           </View>
         )}
         <View style={styles.clientGroupsContainer}>
-          {clientGroups.map((el) => (
+          {allGroups.map((el) => (
             <ClientGroup key={el.id} el={el} clientId={clientId} />
           ))}
         </View>

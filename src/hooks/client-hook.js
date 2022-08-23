@@ -1,8 +1,9 @@
 import { useContext } from "react";
 import { ClientsContext } from "../context/client-context";
-import { API, graphqlOperation } from "aws-amplify";
+import { API, AWSPinpointProvider, graphqlOperation } from "aws-amplify";
 import * as queries from "../graphql/queries";
 import * as mutations from "../graphql/mutations";
+import * as customQueries from "../graphql/customQueries";
 
 function useClient() {
   const {
@@ -10,6 +11,18 @@ function useClient() {
     mutateClientsArrayByIndex,
     removeClientFromArrayByIndex,
   } = useContext(ClientsContext);
+
+  const getClientGroups = async (id) => {
+    let response;
+    try {
+      response = await API.graphql(
+        graphqlOperation(customQueries.getClientGroups, { id: id })
+      );
+    } catch (err) {
+      console.error(err);
+    }
+    return response;
+  };
 
   const updateFavorite = async (id, favorite, index) => {
     let response;
@@ -144,17 +157,6 @@ function useClient() {
     return response;
   };
 
-  //retrieves all groups with clients already added (join Table)
-  const listGroupedClients = async () => {
-    let response;
-    try {
-      response = await API.graphql(graphqlOperation(queries.listGroupsClients));
-    } catch (err) {
-      console.error(err);
-    }
-    return response;
-  };
-
   const getClientGroupDetails = async (groupID) => {
     let response;
     try {
@@ -170,6 +172,7 @@ function useClient() {
   };
 
   return {
+    getClientGroups,
     updateFavorite,
     updateClient,
     addConnection,
@@ -179,8 +182,7 @@ function useClient() {
     addGroup,
     getAllGroups,
     addClientToGroup,
-    listGroupedClients,
-    getClientGroupDetails
+    getClientGroupDetails,
   };
 }
 
