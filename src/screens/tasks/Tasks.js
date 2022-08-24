@@ -6,10 +6,11 @@ import {
   Text,
   View,
   ActivityIndicator,
-  SafeAreaView
+  SafeAreaView,
 } from "react-native";
 import { TaskContext } from "../../context/task-context";
 import { Ionicons } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
 import EachTask from "../../components/EachTask";
 import SuccessMessage from "../../components/SuccessMessage";
 
@@ -28,15 +29,6 @@ export default function Tasks({ navigation }) {
     <SafeAreaView style={styles.container}>
       <View style={styles.headerContainer}>
         <Text style={styles.headerTitle}>Tasks</Text>
-        <View style={styles.addIconContainer}>
-          <View style={styles.addIconBackground}></View>
-          <Ionicons
-            name="md-add-circle"
-            size={40}
-            color="#0064e5"
-            onPress={() => navigation.navigate("AddTask")}
-          />
-        </View>
       </View>
       {successStatus && <SuccessMessage>Task Created</SuccessMessage>}
       <View style={styles.listContainer}>
@@ -54,6 +46,12 @@ export default function Tasks({ navigation }) {
           />
         )}
       </View>
+      <Pressable
+        style={styles.addIconContainer}
+        onPress={() => navigation.navigate("AddTask")}
+      >
+        <Entypo name="add-to-list" size={28} color="white" />
+      </Pressable>
     </SafeAreaView>
   );
 }
@@ -68,22 +66,30 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingBottom: 10,
     paddingTop: 20,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   headerTitle: {
     fontSize: 25,
     fontWeight: "700",
     color: "#454545",
   },
-  addIconBackground: {
+  addIconContainer: {
+    alignItems: "center",
+    justifyContent: "center",
     position: "absolute",
-    top: 15,
-    right: 15,
-    height: 20,
-    width: 20,
+    right: 20,
+    bottom: 30,
+    height: 55,
+    width: 55,
     borderRadius: 50,
-    backgroundColor: "#e9e9e9",
+    backgroundColor: "#0064e5",
+    shadowRadius: 4,
+    shadowColor: "rgba(34, 34, 34, 0.58)",
+    shadowOpacity: 0.5,
+    shadowOffset: {
+      height: 4,
+    },
   },
   listContainer: {
     flex: 0.85,

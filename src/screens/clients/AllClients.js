@@ -90,14 +90,6 @@ export default function Clients({ navigation }) {
           style={{ backgroundColor: "#f5f5f5", zIndex: 1, paddingBottom: 10 }}
         >
           <Text style={styles.headerText}>Contacts</Text>
-          {/* <View style={styles.addIconContainer}>
-          <Ionicons
-            name="ios-person-add"
-            size={17}
-            color="white"
-            onPress={() => navigation.navigate("AddClient")}
-          />
-        </View> */}
           <View style={styles.inputContainer}>
             <Ionicons name="ios-search" size={20} color="black" />
             <TextInput
@@ -109,7 +101,7 @@ export default function Clients({ navigation }) {
         <Animated.View
           style={[{ transform: [{ translateY: headerScrollHeight }] }]}
         >
-          <Text style={{fontWeight: '700'}}>Favorites</Text>
+          <Text style={{ fontWeight: "700" }}>Favorites</Text>
         </Animated.View>
         <View>
           <Animated.ScrollView
@@ -172,9 +164,17 @@ export default function Clients({ navigation }) {
             )}
             scrollEventThrottle={16}
             style={{ paddingVertical: 50 }}
-            contentContainerStyle={{ paddingBottom: 50}}
+            contentContainerStyle={{ paddingBottom: 50 }}
           />
         )}
+      </View>
+      <View style={styles.addIconContainer}>
+        <Ionicons
+          name="ios-person-add"
+          size={25}
+          color="white"
+          onPress={() => navigation.navigate("AddClient")}
+        />
       </View>
     </View>
   );
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f5f5f5",
-    paddingTop: 30
+    paddingTop: 30,
   },
   loadingContainer: {
     flex: 1,
@@ -207,10 +207,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     position: "absolute",
-    right: 25,
-    top: 68,
-    height: 35,
-    width: 35,
+    right: 20,
+    bottom: 30,
+    height: 55,
+    width: 55,
     borderRadius: 50,
     backgroundColor: "#0064e5",
     shadowRadius: 4,

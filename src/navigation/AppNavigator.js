@@ -6,6 +6,7 @@ import ClientsNavigator from "../screens/clients";
 import TasksNavigator from "../screens/tasks";
 import Settings from "../screens/settings";
 import Home from "../screens/home/Home";
+import AddNavigator from "../screens/add";
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
@@ -26,6 +27,12 @@ export default function AppNavigator() {
               component={ClientsNavigator}
               options={optionsHandler}
             />
+            {/* <Tab.Screen
+              name="Add"
+              component={AddNavigator}
+              options={optionsHandler}
+              tabBarVisible='false'
+            /> */}
             <Tab.Screen
               name="Tasks"
               component={TasksNavigator}
@@ -45,13 +52,14 @@ export default function AppNavigator() {
 
 const styles = {
   paddingVertical: 5,
-  shadowColor: "rgba(34, 34, 34, 0.3)",
+  shadowColor: "rgba(34, 34, 34, 0.2)",
   shadowOffset: {
     width: 1,
     height: 3,
   },
   shadowRadius: 5,
   shadowOpacity: 0.4,
+  backgroundColor: "#f0f0f0",
 };
 
 const optionsHandler = ({ route }) => {
@@ -92,6 +100,24 @@ const optionsHandler = ({ route }) => {
           ),
         headerShown: false,
       };
+    // case "Add":
+    //   return {
+    //     tabBarLabel: ({ focused }) =>
+    //       focused ? (
+    //         <Text style={{ fontSize: 11, color: "#0064e5", fontWeight: "600" }}>
+    //           {route.name}
+    //         </Text>
+    //       ) : (
+    //         <Text style={{ fontSize: 11, color: "#878787" }}>{route.name}</Text>
+    //       ),
+    //     tabBarIcon: ({ focused }) =>
+    //       focused ? (
+    //         <Ionicons name="add" size={30} color="#0064e5" />
+    //       ) : (
+    //         <Ionicons name="add" size={30} color="#878787" />
+    //       ),
+    //     headerShown: false,
+    //   };
     case "Tasks":
       return {
         tabBarLabel: ({ focused }) =>
