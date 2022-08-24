@@ -173,6 +173,7 @@ function useClient() {
     return response;
   };
 
+  
   const getClientGroupDetails = async (groupID) => {
     let response;
     try {

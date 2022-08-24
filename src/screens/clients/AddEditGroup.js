@@ -68,7 +68,7 @@ export default function AddEditGroup(props) {
     const response = await addGroup(title);
     console.log(response);
     if (response) {
-      await getGroups();
+      await getAllGroupsAndUpdate();
       setTitle("");
       setShowInput(false);
     }
