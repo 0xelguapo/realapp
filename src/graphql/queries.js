@@ -62,8 +62,32 @@ export const getClient = /* GraphQL */ `
         }
         nextToken
       }
+      reminder {
+        id
+        date
+        recurring
+        recurDate
+        clientId
+        client {
+          id
+          name
+          company
+          phone
+          email
+          notes
+          favorite
+          createdAt
+          updatedAt
+          clientReminderId
+          owner
+        }
+        createdAt
+        updatedAt
+        owner
+      }
       createdAt
       updatedAt
+      clientReminderId
       owner
     }
   }
@@ -94,6 +118,100 @@ export const listClients = /* GraphQL */ `
         }
         group {
           nextToken
+        }
+        reminder {
+          id
+          date
+          recurring
+          recurDate
+          clientId
+          createdAt
+          updatedAt
+          owner
+        }
+        createdAt
+        updatedAt
+        clientReminderId
+        owner
+      }
+      nextToken
+    }
+  }
+`;
+export const getReminder = /* GraphQL */ `
+  query GetReminder($id: ID!) {
+    getReminder(id: $id) {
+      id
+      date
+      recurring
+      recurDate
+      clientId
+      client {
+        id
+        name
+        company
+        phone
+        email
+        notes
+        favorite
+        connectionHistory {
+          nextToken
+        }
+        properties {
+          nextToken
+        }
+        tasks {
+          nextToken
+        }
+        group {
+          nextToken
+        }
+        reminder {
+          id
+          date
+          recurring
+          recurDate
+          clientId
+          createdAt
+          updatedAt
+          owner
+        }
+        createdAt
+        updatedAt
+        clientReminderId
+        owner
+      }
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const listReminders = /* GraphQL */ `
+  query ListReminders(
+    $filter: ModelReminderFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listReminders(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        date
+        recurring
+        recurDate
+        clientId
+        client {
+          id
+          name
+          company
+          phone
+          email
+          notes
+          favorite
+          createdAt
+          updatedAt
+          clientReminderId
+          owner
         }
         createdAt
         updatedAt
@@ -176,8 +294,19 @@ export const getConnectionHistory = /* GraphQL */ `
         group {
           nextToken
         }
+        reminder {
+          id
+          date
+          recurring
+          recurDate
+          clientId
+          createdAt
+          updatedAt
+          owner
+        }
         createdAt
         updatedAt
+        clientReminderId
         owner
       }
       createdAt
@@ -212,6 +341,7 @@ export const listConnectionHistories = /* GraphQL */ `
           favorite
           createdAt
           updatedAt
+          clientReminderId
           owner
         }
         createdAt
@@ -250,8 +380,19 @@ export const getProperty = /* GraphQL */ `
         group {
           nextToken
         }
+        reminder {
+          id
+          date
+          recurring
+          recurDate
+          clientId
+          createdAt
+          updatedAt
+          owner
+        }
         createdAt
         updatedAt
+        clientReminderId
         owner
       }
       createdAt
@@ -284,6 +425,7 @@ export const listProperties = /* GraphQL */ `
           favorite
           createdAt
           updatedAt
+          clientReminderId
           owner
         }
         createdAt
@@ -324,8 +466,19 @@ export const getTask = /* GraphQL */ `
         group {
           nextToken
         }
+        reminder {
+          id
+          date
+          recurring
+          recurDate
+          clientId
+          createdAt
+          updatedAt
+          owner
+        }
         createdAt
         updatedAt
+        clientReminderId
         owner
       }
       createdAt
@@ -358,6 +511,7 @@ export const listTasks = /* GraphQL */ `
           favorite
           createdAt
           updatedAt
+          clientReminderId
           owner
         }
         createdAt
@@ -394,8 +548,19 @@ export const getGroupsClients = /* GraphQL */ `
         group {
           nextToken
         }
+        reminder {
+          id
+          date
+          recurring
+          recurDate
+          clientId
+          createdAt
+          updatedAt
+          owner
+        }
         createdAt
         updatedAt
+        clientReminderId
         owner
       }
       clientGroup {
@@ -435,6 +600,7 @@ export const listGroupsClients = /* GraphQL */ `
           favorite
           createdAt
           updatedAt
+          clientReminderId
           owner
         }
         clientGroup {
@@ -487,8 +653,19 @@ export const clientByName = /* GraphQL */ `
         group {
           nextToken
         }
+        reminder {
+          id
+          date
+          recurring
+          recurDate
+          clientId
+          createdAt
+          updatedAt
+          owner
+        }
         createdAt
         updatedAt
+        clientReminderId
         owner
       }
       nextToken

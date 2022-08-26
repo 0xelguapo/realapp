@@ -121,7 +121,7 @@ function useClient() {
   const getAllGroups = async () => {
     let response;
     try {
-      response = await API.graphql(graphqlOperation(queries.listClientGroups));
+      response = await API.graphql(graphqlOperation(customQueries.listClientGroupsWithClients));
     } catch (err) {
       console.error(err);
     }

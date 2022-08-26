@@ -17,7 +17,7 @@ export default function Home() {
         </View>
         <View style={styles.tasksContainer}>
           {tasksArray.map((task) => (
-            <EachTask key={task.id} title={task.title} content={task.content} />
+            <EachTask key={task.id} id={task.id} title={task.title} content={task.content} />
           ))}
         </View>
       </View>

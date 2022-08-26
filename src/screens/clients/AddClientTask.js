@@ -22,7 +22,7 @@ export default function AddConnectionHistory(props) {
     const task = await addTask({
       clientId: clientId,
       title: title,
-      description: description,
+      content: description,
       completed: false,
       date: date.toLocaleString(),
     });

@@ -9,6 +9,7 @@ export default function ClientGroup({ el, clientId, clientGroupID }) {
   const [groupID, setGroupID] = useState(clientGroupID);
   const { addClientToGroup, removeClientFromGroup } = useClient();
 
+
   const addToGroup = async () => {
     const response = await addClientToGroup(clientId, el.id);
     if (response) {

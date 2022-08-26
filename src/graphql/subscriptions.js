@@ -62,8 +62,32 @@ export const onCreateClient = /* GraphQL */ `
         }
         nextToken
       }
+      reminder {
+        id
+        date
+        recurring
+        recurDate
+        clientId
+        client {
+          id
+          name
+          company
+          phone
+          email
+          notes
+          favorite
+          createdAt
+          updatedAt
+          clientReminderId
+          owner
+        }
+        createdAt
+        updatedAt
+        owner
+      }
       createdAt
       updatedAt
+      clientReminderId
       owner
     }
   }
@@ -129,8 +153,32 @@ export const onUpdateClient = /* GraphQL */ `
         }
         nextToken
       }
+      reminder {
+        id
+        date
+        recurring
+        recurDate
+        clientId
+        client {
+          id
+          name
+          company
+          phone
+          email
+          notes
+          favorite
+          createdAt
+          updatedAt
+          clientReminderId
+          owner
+        }
+        createdAt
+        updatedAt
+        owner
+      }
       createdAt
       updatedAt
+      clientReminderId
       owner
     }
   }
@@ -195,6 +243,177 @@ export const onDeleteClient = /* GraphQL */ `
           owner
         }
         nextToken
+      }
+      reminder {
+        id
+        date
+        recurring
+        recurDate
+        clientId
+        client {
+          id
+          name
+          company
+          phone
+          email
+          notes
+          favorite
+          createdAt
+          updatedAt
+          clientReminderId
+          owner
+        }
+        createdAt
+        updatedAt
+        owner
+      }
+      createdAt
+      updatedAt
+      clientReminderId
+      owner
+    }
+  }
+`;
+export const onCreateReminder = /* GraphQL */ `
+  subscription OnCreateReminder($owner: String) {
+    onCreateReminder(owner: $owner) {
+      id
+      date
+      recurring
+      recurDate
+      clientId
+      client {
+        id
+        name
+        company
+        phone
+        email
+        notes
+        favorite
+        connectionHistory {
+          nextToken
+        }
+        properties {
+          nextToken
+        }
+        tasks {
+          nextToken
+        }
+        group {
+          nextToken
+        }
+        reminder {
+          id
+          date
+          recurring
+          recurDate
+          clientId
+          createdAt
+          updatedAt
+          owner
+        }
+        createdAt
+        updatedAt
+        clientReminderId
+        owner
+      }
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onUpdateReminder = /* GraphQL */ `
+  subscription OnUpdateReminder($owner: String) {
+    onUpdateReminder(owner: $owner) {
+      id
+      date
+      recurring
+      recurDate
+      clientId
+      client {
+        id
+        name
+        company
+        phone
+        email
+        notes
+        favorite
+        connectionHistory {
+          nextToken
+        }
+        properties {
+          nextToken
+        }
+        tasks {
+          nextToken
+        }
+        group {
+          nextToken
+        }
+        reminder {
+          id
+          date
+          recurring
+          recurDate
+          clientId
+          createdAt
+          updatedAt
+          owner
+        }
+        createdAt
+        updatedAt
+        clientReminderId
+        owner
+      }
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onDeleteReminder = /* GraphQL */ `
+  subscription OnDeleteReminder($owner: String) {
+    onDeleteReminder(owner: $owner) {
+      id
+      date
+      recurring
+      recurDate
+      clientId
+      client {
+        id
+        name
+        company
+        phone
+        email
+        notes
+        favorite
+        connectionHistory {
+          nextToken
+        }
+        properties {
+          nextToken
+        }
+        tasks {
+          nextToken
+        }
+        group {
+          nextToken
+        }
+        reminder {
+          id
+          date
+          recurring
+          recurDate
+          clientId
+          createdAt
+          updatedAt
+          owner
+        }
+        createdAt
+        updatedAt
+        clientReminderId
+        owner
       }
       createdAt
       updatedAt
@@ -295,8 +514,19 @@ export const onCreateConnectionHistory = /* GraphQL */ `
         group {
           nextToken
         }
+        reminder {
+          id
+          date
+          recurring
+          recurDate
+          clientId
+          createdAt
+          updatedAt
+          owner
+        }
         createdAt
         updatedAt
+        clientReminderId
         owner
       }
       createdAt
@@ -332,8 +562,19 @@ export const onUpdateConnectionHistory = /* GraphQL */ `
         group {
           nextToken
         }
+        reminder {
+          id
+          date
+          recurring
+          recurDate
+          clientId
+          createdAt
+          updatedAt
+          owner
+        }
         createdAt
         updatedAt
+        clientReminderId
         owner
       }
       createdAt
@@ -369,8 +610,19 @@ export const onDeleteConnectionHistory = /* GraphQL */ `
         group {
           nextToken
         }
+        reminder {
+          id
+          date
+          recurring
+          recurDate
+          clientId
+          createdAt
+          updatedAt
+          owner
+        }
         createdAt
         updatedAt
+        clientReminderId
         owner
       }
       createdAt
@@ -407,8 +659,19 @@ export const onCreateProperty = /* GraphQL */ `
         group {
           nextToken
         }
+        reminder {
+          id
+          date
+          recurring
+          recurDate
+          clientId
+          createdAt
+          updatedAt
+          owner
+        }
         createdAt
         updatedAt
+        clientReminderId
         owner
       }
       createdAt
@@ -446,8 +709,19 @@ export const onUpdateProperty = /* GraphQL */ `
         group {
           nextToken
         }
+        reminder {
+          id
+          date
+          recurring
+          recurDate
+          clientId
+          createdAt
+          updatedAt
+          owner
+        }
         createdAt
         updatedAt
+        clientReminderId
         owner
       }
       createdAt
@@ -485,8 +759,19 @@ export const onDeleteProperty = /* GraphQL */ `
         group {
           nextToken
         }
+        reminder {
+          id
+          date
+          recurring
+          recurDate
+          clientId
+          createdAt
+          updatedAt
+          owner
+        }
         createdAt
         updatedAt
+        clientReminderId
         owner
       }
       createdAt
@@ -525,8 +810,19 @@ export const onCreateTask = /* GraphQL */ `
         group {
           nextToken
         }
+        reminder {
+          id
+          date
+          recurring
+          recurDate
+          clientId
+          createdAt
+          updatedAt
+          owner
+        }
         createdAt
         updatedAt
+        clientReminderId
         owner
       }
       createdAt
@@ -564,8 +860,19 @@ export const onUpdateTask = /* GraphQL */ `
         group {
           nextToken
         }
+        reminder {
+          id
+          date
+          recurring
+          recurDate
+          clientId
+          createdAt
+          updatedAt
+          owner
+        }
         createdAt
         updatedAt
+        clientReminderId
         owner
       }
       createdAt
@@ -603,8 +910,19 @@ export const onDeleteTask = /* GraphQL */ `
         group {
           nextToken
         }
+        reminder {
+          id
+          date
+          recurring
+          recurDate
+          clientId
+          createdAt
+          updatedAt
+          owner
+        }
         createdAt
         updatedAt
+        clientReminderId
         owner
       }
       createdAt
@@ -639,8 +957,19 @@ export const onCreateGroupsClients = /* GraphQL */ `
         group {
           nextToken
         }
+        reminder {
+          id
+          date
+          recurring
+          recurDate
+          clientId
+          createdAt
+          updatedAt
+          owner
+        }
         createdAt
         updatedAt
+        clientReminderId
         owner
       }
       clientGroup {
@@ -685,8 +1014,19 @@ export const onUpdateGroupsClients = /* GraphQL */ `
         group {
           nextToken
         }
+        reminder {
+          id
+          date
+          recurring
+          recurDate
+          clientId
+          createdAt
+          updatedAt
+          owner
+        }
         createdAt
         updatedAt
+        clientReminderId
         owner
       }
       clientGroup {
@@ -731,8 +1071,19 @@ export const onDeleteGroupsClients = /* GraphQL */ `
         group {
           nextToken
         }
+        reminder {
+          id
+          date
+          recurring
+          recurDate
+          clientId
+          createdAt
+          updatedAt
+          owner
+        }
         createdAt
         updatedAt
+        clientReminderId
         owner
       }
       clientGroup {

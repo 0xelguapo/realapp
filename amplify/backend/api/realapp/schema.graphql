@@ -15,6 +15,16 @@ type Client @model @auth(rules: [{ allow: owner }]) {
   properties: [Property] @hasMany(indexName: "")
   tasks: [Task] @hasMany(indexName: "byClient", fields: ["id"])
   group: [ClientGroup] @manyToMany(relationName: "GroupsClients")
+  reminder: Reminder @hasOne
+}
+
+type Reminder @model @auth(rules: [{ allow: owner }]) {
+  id: ID!
+  date: String!
+  recurring: Boolean @default(value: "false")
+  recurDate: String
+  clientId: ID! @index(name: "byReminder", sortKeyFields: ["recurDate"])
+  client: Client @belongsTo(fields: ["clientId"])
 }
 
 type ClientGroup @model @auth(rules: [{ allow: owner }]) {

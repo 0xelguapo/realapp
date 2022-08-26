@@ -68,6 +68,12 @@ export default function ClientDetails(props) {
     });
   };
 
+  const viewEditReminder = () => {
+    props.navigation.navigate("EditReminder", {
+      clientId: id,
+    });
+  };
+
   const removeClientHandler = () => {
     Alert.alert("Are you sure you want to delete this client?", null, [
       { text: "Cancel", style: "cancel" },
@@ -113,6 +119,7 @@ export default function ClientDetails(props) {
         viewEditClientHandler={viewEditClientHandler}
         removeClientHandler={removeClientHandler}
         viewEditGroupHandler={viewEditGroupHandler}
+        viewEditReminder={viewEditReminder}
       />
       <View style={styles.body}>
         <View style={styles.detailsContainer}>

@@ -65,12 +65,9 @@ function TaskContextProvider({ children }) {
         variables: { input: taskDetails },
       });
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
-    if (response) {
-      console.log("successfully updated task", response);
-      return response;
-    }
+    return response;
   };
 
   useEffect(() => {

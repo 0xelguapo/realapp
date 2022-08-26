@@ -42,7 +42,6 @@ export default function AddClient({ navigation }) {
     let response;
     response = await addClient(formState, clientDetails);
     if(response) {
-      console.log('success')
       navigation.goBack()
     } else {
       console.log('cannot add!');

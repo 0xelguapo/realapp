@@ -31,10 +31,9 @@ export default function EachTask({
   };
 
   const handleCompleted = async () => {
-    setChecked(true);
     let response = await completeTask(taskDetails);
-    if (!response) {
-      setChecked(false);
+    if (response.data) {
+      setChecked(true)
     }
   };
 

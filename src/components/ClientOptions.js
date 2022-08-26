@@ -14,7 +14,8 @@ export default function ClientOptions({
   viewEditClientHandler,
   removeClientHandler,
   clientDetailsState,
-  viewEditGroupHandler
+  viewEditGroupHandler,
+  viewEditReminder
 }) {
   return (
     <ScrollView
@@ -43,6 +44,16 @@ export default function ClientOptions({
         <View style={styles.optionIconContainer}>
           <AntDesign name="contacts" size={24} color="#535353" />
           <Text style={styles.optionText}>CONTACT</Text>
+        </View>
+      </TouchableHighlight>
+      <TouchableHighlight
+        underlayColor="#e8e8e8"
+        style={styles.touchableHighlightStyle}
+        onPress={viewEditReminder}
+      >
+        <View style={styles.optionIconContainer}>
+          <Feather name="bell" size={24} color="#535353" />
+          <Text style={styles.optionText}>REMIND</Text>
         </View>
       </TouchableHighlight>
       <TouchableHighlight

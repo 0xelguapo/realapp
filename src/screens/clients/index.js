@@ -7,6 +7,7 @@ import AddEditNote from "./AddEditNote.js";
 import AddClientTask from "./AddClientTask.js";
 import EditClient from "./EditClient";
 import AddEditGroup from "./AddEditGroup";
+import EditReminder from "./EditReminder";
 
 const Stack = createNativeStackNavigator();
 
@@ -64,6 +65,10 @@ export default function ClientsNavigator() {
         options={{ presentation: "modal", headerShown: false }}
         name="AddEditGroup"
         component={AddEditGroup}
+      />
+      <Stack.Screen options={{ presentation: "transparentModal", headerShown: false, cardOverlayEnabled: true }}
+        name="EditReminder"
+        component={EditReminder}
       />
     </Stack.Navigator>
   );
