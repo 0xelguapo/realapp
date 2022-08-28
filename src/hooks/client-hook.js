@@ -188,6 +188,10 @@ function useClient() {
     return response;
   };
 
+  const createReminder = async (details, clientId) => {
+
+  }
+
   return {
     getClientGroups,
     updateFavorite,

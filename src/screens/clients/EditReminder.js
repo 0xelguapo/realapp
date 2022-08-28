@@ -10,7 +10,6 @@ import { AntDesign } from "@expo/vector-icons";
 export default function EditReminder(props) {
   const { goBack } = props.navigation;
 
-  
   return (
     <View style={styles.container}>
       <Pressable onPress={goBack} style={styles.backdrop}></Pressable>
@@ -19,26 +18,26 @@ export default function EditReminder(props) {
           <Text style={styles.titleHeader}>Set a Reconnect Reminder</Text>
         </View>
         <View style={styles.optionsContainer}>
-          <View style={styles.option}>
-            <Text style={styles.optionText}>Once</Text>
-            <Text style={styles.optionSubtext}>ONE TIME</Text>
-          </View>
-          <View style={styles.option}>
-            <Text style={styles.optionText}>Weekly</Text>
-            <Text style={styles.optionSubtext}>EVERY WEEK</Text>
-          </View>
-          <View style={styles.option}>
-            <Text style={styles.optionText}>Monthly</Text>
-            <Text style={styles.optionSubtext}>EVERY MONTH</Text>
-          </View>
-          <View style={styles.option}>
-            <Text style={styles.optionText}>Quarterly</Text>
-            <Text style={styles.optionSubtext}>EVERY 3 MONTHS</Text>
-          </View>
-          <View style={{ ...styles.option, borderBottomWidth: 0 }}>
-            <Text style={styles.optionText}>Yearly</Text>
-            <Text style={styles.optionSubtext}>EVERY YEAR</Text>
-          </View>
+          <Pressable style={styles.option}>
+            <Text style={styles.optionText}>Week</Text>
+            <Text style={styles.optionSubtext}>ONE WEEK FROM NOW</Text>
+          </Pressable>
+          <Pressable style={styles.option}>
+            <Text style={styles.optionText}>Month</Text>
+            <Text style={styles.optionSubtext}>ONE MONTH FROM NOW</Text>
+          </Pressable>
+          <Pressable style={styles.option}>
+            <Text style={styles.optionText}>Quarter</Text>
+            <Text style={styles.optionSubtext}>THREE MONTHS FROM NOW</Text>
+          </Pressable>
+          <Pressable style={styles.option}>
+            <Text style={styles.optionText}>Year</Text>
+            <Text style={styles.optionSubtext}>ONE YEAR FROM NOW</Text>
+          </Pressable>
+          <Pressable style={{ ...styles.option, borderBottomWidth: 0 }}>
+            <Text style={styles.optionText}>Custom</Text>
+            <Text style={styles.optionSubtext}>SET A CUSTOM DATE</Text>
+          </Pressable>
         </View>
       </View>
       <Pressable style={styles.cancelContainer} onPress={goBack}>
@@ -54,7 +53,7 @@ const styles = StyleSheet.create({
     height: "100%",
     backgroundColor: "rgba(0, 0, 0, .3)",
     alignItems: "center",
-    paddingBottom: 90,
+    paddingBottom: 50,
     justifyContent: "flex-end",
   },
   backdrop: {
@@ -97,8 +96,8 @@ const styles = StyleSheet.create({
   },
   optionText: {
     fontSize: 15,
-    color: '#454545',
-    fontWeight: '400'
+    color: "#454545",
+    fontWeight: "400",
   },
   optionSubtext: {
     color: "#ababab",
