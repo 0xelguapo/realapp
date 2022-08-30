@@ -121,7 +121,9 @@ function useClient() {
   const getAllGroups = async () => {
     let response;
     try {
-      response = await API.graphql(graphqlOperation(customQueries.listClientGroupsWithClients));
+      response = await API.graphql(
+        graphqlOperation(customQueries.listClientGroupsWithClients)
+      );
     } catch (err) {
       console.error(err);
     }
@@ -173,7 +175,6 @@ function useClient() {
     return response;
   };
 
-  
   const getClientGroupDetails = async (groupID) => {
     let response;
     try {
@@ -188,9 +189,17 @@ function useClient() {
     return response;
   };
 
-  const createReminder = async (details, clientId) => {
-
-  }
+  const createReminder = async (details) => {
+    let response;
+    try {
+      response = await API.graphql(
+        graphqlOperation(customQueries.createReminder, { input: details })
+      );
+    } catch (err) {
+      console.error(err);
+    }
+    return response;
+  };
 
   return {
     getClientGroups,
@@ -205,6 +214,7 @@ function useClient() {
     addClientToGroup,
     removeClientFromGroup,
     getClientGroupDetails,
+    createReminder
   };
 }
 

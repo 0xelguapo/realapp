@@ -39,3 +39,39 @@ export const listClientGroupsWithClients = /* GraphQL */ `
     }
   }
 `;
+
+export const createReminder = /* GraphQL */ `
+  mutation CreateReminder(
+    $input: CreateReminderInput!
+    $condition: ModelReminderConditionInput
+  ) {
+    createReminder(input: $input, condition: $condition) {
+      id
+      date
+      recurring
+      recurDate
+      clientId
+      client {
+        id
+        name
+        reminder {
+          id
+          date
+          recurring
+          recurDate
+          clientId
+          createdAt
+          updatedAt
+          owner
+        }
+        createdAt
+        updatedAt
+        clientReminderId
+        owner
+      }
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;

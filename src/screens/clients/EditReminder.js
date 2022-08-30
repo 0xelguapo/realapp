@@ -5,10 +5,40 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
+import { useState } from "react";
+import useClient from "../../hooks/client-hook";
 
 export default function EditReminder(props) {
   const { goBack } = props.navigation;
+  const { clientId } = props.route.params;
+  const { createReminder } = useClient();
+  new Date(new Date().setDate(new Date().getDate() + 7));
+
+  const handleCreateReminder = async (length) => {
+    let date = new Date();
+    switch (length) {
+      case "oneWeek":
+        date.setDate(date.getDate() + 7);
+        break;
+      case "oneMonth":
+        date.setDate(date.getDate() + 30);
+        break;
+      case "quarter":
+        date.setDate(date.getDate() + 90);
+        break;
+      case "year":
+        date.setDate(date.getDate() + 365);
+        break;
+    }
+    const response = await createReminder({
+      date: date,
+      clientId: clientId,
+    });
+    console.log(response);
+    if (response) {
+      goBack();
+    };
+  };
 
   return (
     <View style={styles.container}>
@@ -18,31 +48,43 @@ export default function EditReminder(props) {
           <Text style={styles.titleHeader}>Set a Reconnect Reminder</Text>
         </View>
         <View style={styles.optionsContainer}>
-          <Pressable style={styles.option}>
+          <TouchableOpacity
+            style={styles.option}
+            onPress={() => handleCreateReminder("oneWeek")}
+          >
             <Text style={styles.optionText}>Week</Text>
             <Text style={styles.optionSubtext}>ONE WEEK FROM NOW</Text>
-          </Pressable>
-          <Pressable style={styles.option}>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.option}
+            onPress={() => handleCreateReminder("oneMonth")}
+          >
             <Text style={styles.optionText}>Month</Text>
             <Text style={styles.optionSubtext}>ONE MONTH FROM NOW</Text>
-          </Pressable>
-          <Pressable style={styles.option}>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.option}
+            onPress={() => handleCreateReminder("quarter")}
+          >
             <Text style={styles.optionText}>Quarter</Text>
             <Text style={styles.optionSubtext}>THREE MONTHS FROM NOW</Text>
-          </Pressable>
-          <Pressable style={styles.option}>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.option}
+            onPress={() => handleCreateReminder("year")}
+          >
             <Text style={styles.optionText}>Year</Text>
             <Text style={styles.optionSubtext}>ONE YEAR FROM NOW</Text>
-          </Pressable>
-          <Pressable style={{ ...styles.option, borderBottomWidth: 0 }}>
+          </TouchableOpacity>
+          <TouchableOpacity style={{ ...styles.option, borderBottomWidth: 0 }}>
             <Text style={styles.optionText}>Custom</Text>
             <Text style={styles.optionSubtext}>SET A CUSTOM DATE</Text>
-          </Pressable>
+          </TouchableOpacity>
         </View>
       </View>
-      <Pressable style={styles.cancelContainer} onPress={goBack}>
+      <TouchableOpacity style={styles.cancelContainer} onPress={goBack}>
         <Text style={styles.cancelText}>Cancel</Text>
-      </Pressable>
+      </TouchableOpacity>
     </View>
   );
 }
