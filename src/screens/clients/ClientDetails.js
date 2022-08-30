@@ -12,11 +12,14 @@ import useClient from "../../hooks/client-hook";
 import { ClientsContext } from "../../context/client-context";
 import { Ionicons } from "@expo/vector-icons";
 import ClientOptions from "../../components/ClientOptions";
+import { format, parseISO } from "date-fns";
 
 export default function ClientDetails(props) {
   const { id, name, phone } = props.route.params.client;
   const { index } = props.route.params;
-  const [clientDetailsState, setClientDetailsState] = useState({});
+  const [clientDetailsState, setClientDetailsState] = useState({
+    reminder: { items: 0 },
+  });
   const { getOneClient } = useContext(ClientsContext);
   const { updateFavorite, removeClient } = useClient();
 
@@ -24,7 +27,6 @@ export default function ClientDetails(props) {
     const response = await getOneClient(id);
     if (response) {
       setClientDetailsState(response.data.getClient);
-      // console.log(response.data.getClient);
     }
   };
 
@@ -122,6 +124,28 @@ export default function ClientDetails(props) {
         viewEditReminder={viewEditReminder}
       />
       <View style={styles.body}>
+        <View style={styles.blockHeadingContainer}>
+          <Text style={styles.blockHeadingText}>REMINDERS</Text>
+        </View>
+        <ScrollView
+          style={styles.remindersContainer}
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+        >
+          {clientDetailsState.reminder.items.length ? (
+            clientDetailsState.reminder.items.map((item) => (
+              <View key={item.id} style={styles.reminder}>
+                <Text style={styles.reminderDate}>
+                  {format(parseISO(item.date), "MM/dd/yy")}
+                </Text>
+              </View>
+            ))
+          ) : (
+            <View>
+              <Text style={styles.emptyPlaceholder}>Create a reminder...</Text>
+            </View>
+          )}
+        </ScrollView>
         <View style={styles.detailsContainer}>
           <View style={styles.blockHeadingContainer}>
             <Text style={styles.blockHeadingText}>NOTES</Text>
@@ -234,6 +258,23 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     borderColor: "#000000",
     minHeight: 75,
+  },
+  remindersContainer: {
+    height: 35,
+    paddingVertical: 5,
+  },
+  reminder: {
+    marginRight: 10,
+    borderRadius: 5,
+    paddingHorizontal: 5,
+    paddingVertical: 2,
+    backgroundColor: "#e4e4e4",
+    justifyContent: "center",
+  },
+  reminderDate: {
+    display: "flex",
+    color: "#545454",
+    fontWeight: "500",
   },
   notesContainer: {
     paddingVertical: 5,

@@ -63,31 +63,20 @@ export const getClient = /* GraphQL */ `
         nextToken
       }
       reminder {
-        id
-        date
-        recurring
-        recurDate
-        clientId
-        client {
+        items {
           id
-          name
-          company
-          phone
-          email
-          notes
-          favorite
+          date
+          recurring
+          recurDate
+          clientId
           createdAt
           updatedAt
-          clientReminderId
           owner
         }
-        createdAt
-        updatedAt
-        owner
+        nextToken
       }
       createdAt
       updatedAt
-      clientReminderId
       owner
     }
   }
@@ -120,18 +109,10 @@ export const listClients = /* GraphQL */ `
           nextToken
         }
         reminder {
-          id
-          date
-          recurring
-          recurDate
-          clientId
-          createdAt
-          updatedAt
-          owner
+          nextToken
         }
         createdAt
         updatedAt
-        clientReminderId
         owner
       }
       nextToken
@@ -167,18 +148,10 @@ export const getReminder = /* GraphQL */ `
           nextToken
         }
         reminder {
-          id
-          date
-          recurring
-          recurDate
-          clientId
-          createdAt
-          updatedAt
-          owner
+          nextToken
         }
         createdAt
         updatedAt
-        clientReminderId
         owner
       }
       createdAt
@@ -210,7 +183,6 @@ export const listReminders = /* GraphQL */ `
           favorite
           createdAt
           updatedAt
-          clientReminderId
           owner
         }
         createdAt
@@ -254,9 +226,6 @@ export const listClientGroups = /* GraphQL */ `
         id
         title
         clients {
-          items {
-            id
-          }
           nextToken
         }
         createdAt
@@ -295,18 +264,10 @@ export const getConnectionHistory = /* GraphQL */ `
           nextToken
         }
         reminder {
-          id
-          date
-          recurring
-          recurDate
-          clientId
-          createdAt
-          updatedAt
-          owner
+          nextToken
         }
         createdAt
         updatedAt
-        clientReminderId
         owner
       }
       createdAt
@@ -341,7 +302,6 @@ export const listConnectionHistories = /* GraphQL */ `
           favorite
           createdAt
           updatedAt
-          clientReminderId
           owner
         }
         createdAt
@@ -381,18 +341,10 @@ export const getProperty = /* GraphQL */ `
           nextToken
         }
         reminder {
-          id
-          date
-          recurring
-          recurDate
-          clientId
-          createdAt
-          updatedAt
-          owner
+          nextToken
         }
         createdAt
         updatedAt
-        clientReminderId
         owner
       }
       createdAt
@@ -425,7 +377,6 @@ export const listProperties = /* GraphQL */ `
           favorite
           createdAt
           updatedAt
-          clientReminderId
           owner
         }
         createdAt
@@ -467,18 +418,10 @@ export const getTask = /* GraphQL */ `
           nextToken
         }
         reminder {
-          id
-          date
-          recurring
-          recurDate
-          clientId
-          createdAt
-          updatedAt
-          owner
+          nextToken
         }
         createdAt
         updatedAt
-        clientReminderId
         owner
       }
       createdAt
@@ -511,7 +454,6 @@ export const listTasks = /* GraphQL */ `
           favorite
           createdAt
           updatedAt
-          clientReminderId
           owner
         }
         createdAt
@@ -549,18 +491,10 @@ export const getGroupsClients = /* GraphQL */ `
           nextToken
         }
         reminder {
-          id
-          date
-          recurring
-          recurDate
-          clientId
-          createdAt
-          updatedAt
-          owner
+          nextToken
         }
         createdAt
         updatedAt
-        clientReminderId
         owner
       }
       clientGroup {
@@ -600,7 +534,6 @@ export const listGroupsClients = /* GraphQL */ `
           favorite
           createdAt
           updatedAt
-          clientReminderId
           owner
         }
         clientGroup {
@@ -654,18 +587,10 @@ export const clientByName = /* GraphQL */ `
           nextToken
         }
         reminder {
-          id
-          date
-          recurring
-          recurDate
-          clientId
-          createdAt
-          updatedAt
-          owner
+          nextToken
         }
         createdAt
         updatedAt
-        clientReminderId
         owner
       }
       nextToken

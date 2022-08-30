@@ -3,13 +3,11 @@ import {
   StyleSheet,
   Text,
   View,
-  FlatList,
   ActivityIndicator,
   TextInput,
   Animated,
-  ScrollView,
-  SafeAreaView,
   Pressable,
+  TouchableOpacity,
 } from "react-native";
 import { ClientsContext } from "../../context/client-context";
 import EachClient from "../../components/EachClient";
@@ -168,14 +166,12 @@ export default function Clients({ navigation }) {
           />
         )}
       </View>
-      <View style={styles.addIconContainer}>
-        <Ionicons
-          name="ios-person-add"
-          size={25}
-          color="white"
-          onPress={() => navigation.navigate("AddClient")}
-        />
-      </View>
+      <TouchableOpacity
+        style={styles.addIconContainer}
+        onPress={() => navigation.navigate("AddClient")}
+      >
+        <Ionicons name="ios-person-add" size={25} color="white" />
+      </TouchableOpacity>
     </View>
   );
 }

@@ -75,3 +75,29 @@ export const createReminder = /* GraphQL */ `
     }
   }
 `;
+
+export const listReminders = /* GraphQL */ `
+  query ListReminders(
+    $filter: ModelReminderFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listReminders(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        date
+        recurring
+        recurDate
+        clientId
+        client {
+          id
+          name
+          company
+        }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;

@@ -12,7 +12,6 @@ export default function EditReminder(props) {
   const { goBack } = props.navigation;
   const { clientId } = props.route.params;
   const { createReminder } = useClient();
-  new Date(new Date().setDate(new Date().getDate() + 7));
 
   const handleCreateReminder = async (length) => {
     let date = new Date();
@@ -34,10 +33,13 @@ export default function EditReminder(props) {
       date: date,
       clientId: clientId,
     });
-    console.log(response);
     if (response) {
-      goBack();
-    };
+      props.navigation.navigate({
+        name: "ClientDetails",
+        params: { id: clientId },
+        merge: true,
+      });
+    }
   };
 
   return (

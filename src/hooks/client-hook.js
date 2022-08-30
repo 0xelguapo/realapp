@@ -193,12 +193,22 @@ function useClient() {
     let response;
     try {
       response = await API.graphql(
-        graphqlOperation(customQueries.createReminder, { input: details })
+        graphqlOperation(mutations.createReminder, { input: details })
       );
     } catch (err) {
       console.error(err);
     }
     return response;
+  };
+
+  const getAllReminders = async () => {
+    let response;
+    try {
+      response = await API.graphql(graphqlOperation(customQueries.listReminders));
+    } catch (err) {
+      console.error(err);
+    }
+    return response
   };
 
   return {
@@ -214,7 +224,8 @@ function useClient() {
     addClientToGroup,
     removeClientFromGroup,
     getClientGroupDetails,
-    createReminder
+    createReminder,
+    getAllReminders
   };
 }
 
