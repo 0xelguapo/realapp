@@ -1,22 +1,51 @@
 import { useContext, useEffect, useState } from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  Pressable,
+} from "react-native";
 import { TaskContext } from "../../context/task-context";
 import EachTask from "../../components/EachTask";
 import useClient from "../../hooks/client-hook";
-import { parseISO, format, formatDistanceToNowStrict } from "date-fns";
+import {
+  parseISO,
+  format,
+  formatDistanceToNowStrict,
+  differenceInCalendarDays,
+} from "date-fns";
+import { MaterialIcons } from "@expo/vector-icons";
 
 export default function Home() {
   const [reminders, setReminders] = useState([]);
+  const [refreshVisible, setRefreshVisible] = useState(true);
   const { tasksArray } = useContext(TaskContext);
   const { getAllReminders } = useClient();
 
   const getReminders = async () => {
     let response = await getAllReminders();
+    let dateHelper = new Date();
     if (response) {
       let newResponse = response.data.listReminders.items;
-      const sortedResponse = newResponse.sort((a, b) => a.date - b.date);
+      let filteredResponse = newResponse.filter((el) => {
+        const result = differenceInCalendarDays(parseISO(el.date), dateHelper);
+        if (result <= 3) return true;
+        else return false;
+      });
+      const sortedResponse = filteredResponse.sort((a, b) => a.date - b.date);
       setReminders(sortedResponse);
     }
+    console.log('gettingReminders')
+  };
+
+  const handleManualRefresh = () => {
+    setRefreshVisible(false);
+    setTimeout(() => {
+      setRefreshVisible(true);
+    }, 2000);
+    getReminders();
   };
 
   useEffect(() => {
@@ -25,6 +54,14 @@ export default function Home() {
 
   return (
     <View style={styles.container}>
+      {refreshVisible && (
+        <TouchableOpacity
+          style={styles.refreshContainer}
+          onPress={handleManualRefresh}
+        >
+          <MaterialIcons name="refresh" size={20} color="#454545" />
+        </TouchableOpacity>
+      )}
       <View style={styles.headerContainer}>
         <Text style={styles.headerTitle}>Your Focus</Text>
       </View>
@@ -44,7 +81,7 @@ export default function Home() {
         </View>
         <View style={styles.remindersContainer}>
           <View style={styles.titleContainer}>
-            <Text style={styles.titleHeader}>REMINDERS</Text>
+            <Text style={styles.titleHeader}>UPCOMING REMINDERS</Text>
           </View>
           <ScrollView styles={styles.remindersScrollContainer}>
             {reminders.map((item) => (
@@ -52,10 +89,7 @@ export default function Home() {
                 <Text style={styles.reminderClientName}>
                   {item.client.name}
                 </Text>
-                <Text style={styles.reminderClientCompany}>
-                  {item.client.company}
-                </Text>
-                <Text>
+                <Text style={styles.reminderDate}>
                   {formatDistanceToNowStrict(parseISO(item.date), {
                     addSuffix: true,
                   })}
@@ -87,6 +121,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: "#454545",
   },
+  refreshContainer: {
+    position: "absolute",
+    right: 30,
+    top: 55,
+    zIndex: 3,
+  },
   bodyContainer: {
     flex: 1,
     paddingHorizontal: 20,
@@ -114,7 +154,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#454545",
   },
-  reminderClientCompany: {
+  reminderDate: {
     fontSize: 12,
     color: "#ababab",
   },
