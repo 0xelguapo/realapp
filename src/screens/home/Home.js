@@ -7,18 +7,14 @@ import {
   TouchableOpacity,
   Pressable,
 } from "react-native";
+import { parseISO, differenceInCalendarDays } from "date-fns";
+import { MaterialIcons } from "@expo/vector-icons";
 import { TaskContext } from "../../context/task-context";
 import EachTask from "../../components/EachTask";
 import useClient from "../../hooks/client-hook";
-import {
-  parseISO,
-  format,
-  formatDistanceToNowStrict,
-  differenceInCalendarDays,
-} from "date-fns";
-import { MaterialIcons } from "@expo/vector-icons";
+import Reminder from "../../components/Reminder";
 
-export default function Home() {
+export default function Home(props) {
   const [reminders, setReminders] = useState([]);
   const [refreshVisible, setRefreshVisible] = useState(true);
   const { tasksArray } = useContext(TaskContext);
@@ -31,13 +27,13 @@ export default function Home() {
       let newResponse = response.data.listReminders.items;
       let filteredResponse = newResponse.filter((el) => {
         const result = differenceInCalendarDays(parseISO(el.date), dateHelper);
-        if (result <= 3) return true;
+        if (result <= 5) return true;
         else return false;
       });
       const sortedResponse = filteredResponse.sort((a, b) => a.date - b.date);
       setReminders(sortedResponse);
     }
-    console.log('gettingReminders')
+    console.log("gettingReminders");
   };
 
   const handleManualRefresh = () => {
@@ -66,6 +62,27 @@ export default function Home() {
         <Text style={styles.headerTitle}>Your Focus</Text>
       </View>
       <View style={styles.bodyContainer}>
+        <View style={styles.remindersContainer}>
+          <View style={styles.titleContainer}>
+            <Text style={styles.titleHeader}>UPCOMING REMINDERS</Text>
+          </View>
+          <ScrollView styles={styles.remindersScrollContainer}>
+            {reminders.length > 0 ? (
+              reminders.map((item) => (
+                <Reminder
+                  key={item.id}
+                  id={item.id}
+                  name={item.client.name}
+                  date={item.date}
+                />
+              ))
+            ) : (
+              <Text style={styles.placeholder}>
+                Reminders less than 3 days will show here
+              </Text>
+            )}
+          </ScrollView>
+        </View>
         <View style={styles.tasksContainer}>
           <View style={styles.titleContainer}>
             <Text style={styles.titleHeader}>TASKS</Text>
@@ -78,25 +95,6 @@ export default function Home() {
               content={task.content}
             />
           ))}
-        </View>
-        <View style={styles.remindersContainer}>
-          <View style={styles.titleContainer}>
-            <Text style={styles.titleHeader}>UPCOMING REMINDERS</Text>
-          </View>
-          <ScrollView styles={styles.remindersScrollContainer}>
-            {reminders.map((item) => (
-              <View style={styles.reminder} key={item.id}>
-                <Text style={styles.reminderClientName}>
-                  {item.client.name}
-                </Text>
-                <Text style={styles.reminderDate}>
-                  {formatDistanceToNowStrict(parseISO(item.date), {
-                    addSuffix: true,
-                  })}
-                </Text>
-              </View>
-            ))}
-          </ScrollView>
         </View>
       </View>
     </View>
@@ -144,18 +142,12 @@ const styles = StyleSheet.create({
     letterSpacing: 2,
   },
   tasksContainer: { marginBottom: 10 },
-  remindersContainer: {},
-  reminder: {
+  remindersContainer: {
+    marginBottom: 10,
     paddingVertical: 5,
-    justifyContent: "center",
   },
-  reminderClientName: {
-    fontWeight: "500",
-    fontSize: 16,
-    color: "#454545",
-  },
-  reminderDate: {
-    fontSize: 12,
+  placeholder: {
     color: "#ababab",
+    paddingVertical: 5,
   },
 });

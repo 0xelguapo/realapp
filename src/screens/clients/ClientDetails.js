@@ -13,6 +13,7 @@ import { ClientsContext } from "../../context/client-context";
 import { Ionicons } from "@expo/vector-icons";
 import ClientOptions from "../../components/ClientOptions";
 import { format, parseISO } from "date-fns";
+import { Feather } from '@expo/vector-icons'
 
 export default function ClientDetails(props) {
   const { id, name, phone } = props.route.params.client;
@@ -124,28 +125,32 @@ export default function ClientDetails(props) {
         viewEditReminder={viewEditReminder}
       />
       <View style={styles.body}>
-        <View style={styles.blockHeadingContainer}>
-          <Text style={styles.blockHeadingText}>REMINDERS</Text>
-        </View>
-        <ScrollView
-          style={styles.remindersContainer}
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-        >
-          {clientDetailsState.reminder.items.length ? (
-            clientDetailsState.reminder.items.map((item) => (
-              <View key={item.id} style={styles.reminder}>
-                <Text style={styles.reminderDate}>
-                  {format(parseISO(item.date), "MM/dd/yy")}
+        <View style={styles.remindersContainer}>
+          <View style={styles.bellIcon}>
+            <Feather name="bell" size={15} color="#535353" />
+          </View>
+          <ScrollView
+            style={styles.reminders}
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+          >
+            {clientDetailsState.reminder.items.length ? (
+              clientDetailsState.reminder.items.map((item) => (
+                <View key={item.id} style={styles.reminder}>
+                  <Text style={styles.reminderDate}>
+                    {format(parseISO(item.date), "MM/dd/yy")}
+                  </Text>
+                </View>
+              ))
+            ) : (
+              <View style={styles.emptyPlaceholderContainer}>
+                <Text style={styles.emptyPlaceholder}>
+                  No reminders set up...
                 </Text>
               </View>
-            ))
-          ) : (
-            <View>
-              <Text style={styles.emptyPlaceholder}>Create a reminder...</Text>
-            </View>
-          )}
-        </ScrollView>
+            )}
+          </ScrollView>
+        </View>
         <View style={styles.detailsContainer}>
           <View style={styles.blockHeadingContainer}>
             <Text style={styles.blockHeadingText}>NOTES</Text>
@@ -259,7 +264,14 @@ const styles = StyleSheet.create({
     borderColor: "#000000",
     minHeight: 75,
   },
+  bellIcon: { marginRight: 5},
+
   remindersContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  reminders: {
     height: 35,
     paddingVertical: 5,
   },
@@ -298,7 +310,12 @@ const styles = StyleSheet.create({
     color: "#ababab",
     fontSize: 14,
   },
+  emptyPlaceholderContainer: {
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   emptyPlaceholder: {
     color: "#ababab",
   },
+
 });

@@ -48,7 +48,7 @@ export default function EachTask({
                   <View style={styles.circle}></View>
                 ) : (
                   <View style={styles.checkedCircle}>
-                    <AntDesign name="checkcircle" size={24} color="#7b7b7c" />
+                    <AntDesign name="checkcircle" size={15} color="#7b7b7c" />
                   </View>
                 )}
               </Pressable>
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
   checkedTitle: {
     fontWeight: "600",
     fontSize: 16,
-    textDecorationLine: "line-through",
+    color: "#d3d3d3"
   },
   content: {
     color: "#6c6c6c",
@@ -100,15 +100,16 @@ const styles = StyleSheet.create({
   checkedContent: {
     color: "#7b7b7c",
     textDecorationLine: "line-through",
+    color: "#d3d3d3"
   },
   goContainer: {
     display: "flex",
     justifyContent: "center",
-    marginRight: 14,
+    marginRight: 10,
   },
   circle: {
-    width: 18,
-    height: 18,
+    width: 15,
+    height: 15,
     borderWidth: 0.8,
     borderRadius: 50,
     borderColor: "#7b7b7c",

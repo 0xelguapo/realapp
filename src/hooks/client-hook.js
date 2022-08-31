@@ -204,7 +204,23 @@ function useClient() {
   const getAllReminders = async () => {
     let response;
     try {
-      response = await API.graphql(graphqlOperation(customQueries.listReminders));
+      response = await API.graphql(
+        graphqlOperation(customQueries.listReminders)
+      );
+    } catch (err) {
+      console.error(err);
+    }
+    return response;
+  };
+
+  const deleteReminder = async (reminderId) => {
+    let response;
+    try {
+      response = await API.graphql(
+        graphqlOperation(mutations.deleteReminder, {
+          input: { id: reminderId },
+        })
+      );
     } catch (err) {
       console.error(err);
     }
@@ -225,7 +241,8 @@ function useClient() {
     removeClientFromGroup,
     getClientGroupDetails,
     createReminder,
-    getAllReminders
+    getAllReminders,
+    deleteReminder
   };
 }
 

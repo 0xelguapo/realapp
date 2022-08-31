@@ -16,6 +16,9 @@ export default function EditReminder(props) {
   const handleCreateReminder = async (length) => {
     let date = new Date();
     switch (length) {
+      case "oneDay":
+        date.setDate(date.getDate() + 1);
+        break;
       case "oneWeek":
         date.setDate(date.getDate() + 7);
         break;
@@ -50,6 +53,13 @@ export default function EditReminder(props) {
           <Text style={styles.titleHeader}>Set a Reconnect Reminder</Text>
         </View>
         <View style={styles.optionsContainer}>
+          <TouchableOpacity
+            style={styles.option}
+            onPress={() => handleCreateReminder("oneDay")}
+          >
+            <Text style={styles.optionText}>Tomorrow</Text>
+            <Text style={styles.optionSubtext}>ONE DAY FROM NOW</Text>
+          </TouchableOpacity>
           <TouchableOpacity
             style={styles.option}
             onPress={() => handleCreateReminder("oneWeek")}
