@@ -202,7 +202,6 @@ function useClient() {
     addClientToGroup,
     removeClientFromGroup,
     getClientGroupDetails,
-    createReminder,
   };
 }
 

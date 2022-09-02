@@ -1,4 +1,4 @@
-import { useState, createContext, useCallback, useEffect } from "react";
+import { useState, createContext, useCallback } from "react";
 import { API, graphqlOperation } from "aws-amplify";
 import * as queries from "../graphql/queries";
 import * as mutations from "../graphql/mutations";
@@ -36,6 +36,7 @@ function ClientContextProvider({ children }) {
     } catch (err) {
       console.error(err);
     }
+    console.log('gettingOneClient')
     return response;
   }, []);
 
@@ -99,6 +100,7 @@ function ClientContextProvider({ children }) {
     if (response.data.listClients.items) {
       setFavoriteClients(response.data.listClients.items);
     }
+    console.log('gettingFavoriteClients')
     return response;
   };
 

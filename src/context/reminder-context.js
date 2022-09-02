@@ -60,12 +60,21 @@ function RemindersContextProvider({ children }) {
     } catch (err) {
       console.error(err);
     }
+    if (response.data.createReminder) {
+      getReminders();
+    }
     return response;
   };
 
   return (
     <RemindersContext.Provider
-      value={{ remindersArray, deleteReminder, getReminders, getAllReminders }}
+      value={{
+        remindersArray,
+        deleteReminder,
+        getReminders,
+        getAllReminders,
+        createReminder,
+      }}
     >
       {children}
     </RemindersContext.Provider>

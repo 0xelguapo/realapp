@@ -5,37 +5,17 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Pressable,
 } from "react-native";
-import { parseISO, differenceInCalendarDays } from "date-fns";
 import { MaterialIcons } from "@expo/vector-icons";
 import { TaskContext } from "../../context/task-context";
 import EachTask from "../../components/EachTask";
-import useClient from "../../hooks/client-hook";
 import Reminder from "../../components/Reminder";
 import { RemindersContext } from "../../context/reminder-context";
 
 export default function Home(props) {
-  const [reminders, setReminders] = useState([]);
   const [refreshVisible, setRefreshVisible] = useState(true);
   const { tasksArray } = useContext(TaskContext);
   const { remindersArray, getReminders } = useContext(RemindersContext);
-
-  // const getReminders = async () => {
-  //   let response = await getAllReminders();
-  //   let dateHelper = new Date();
-  //   if (response) {
-  //     let newResponse = response.data.listReminders.items;
-  //     let filteredResponse = newResponse.filter((el) => {
-  //       const result = differenceInCalendarDays(parseISO(el.date), dateHelper);
-  //       if (result <= 5) return true;
-  //       else return false;
-  //     });
-  //     const sortedResponse = filteredResponse.sort((a, b) => a.date - b.date);
-  //     setReminders(sortedResponse);
-  //   }
-  //   console.log("gettingReminders");
-  // };
 
   const handleManualRefresh = () => {
     setRefreshVisible(false);

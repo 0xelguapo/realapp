@@ -5,13 +5,13 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import { useState } from "react";
-import useClient from "../../hooks/client-hook";
+import { useContext, useState } from "react";
+import { RemindersContext } from "../../context/reminder-context";
 
 export default function EditReminder(props) {
   const { goBack } = props.navigation;
   const { clientId } = props.route.params;
-  const { createReminder } = useClient();
+  const { createReminder } = useContext(RemindersContext);
 
   const handleCreateReminder = async (length) => {
     let date = new Date();

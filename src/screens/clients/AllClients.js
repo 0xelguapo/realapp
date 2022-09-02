@@ -53,11 +53,9 @@ export default function Clients({ navigation }) {
 
   useEffect(() => {
     getAllClients();
-    console.log("gettingAllClients");
   }, []);
 
   useEffect(() => {
-    console.log("gettingfavorites");
     getFavoriteClients();
   }, []);
 
