@@ -1,13 +1,12 @@
 import { View, Pressable, Text, StyleSheet } from "react-native";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import {
   formatDistanceToNowStrict,
-  formatDistanceToNow,
   parseISO,
 } from "date-fns";
 import { AntDesign } from "@expo/vector-icons";
-import useClient from "../hooks/client-hook";
 import { useEffect } from "react";
+import { RemindersContext } from "../context/reminder-context";
 
 export default function Reminder({ id, name, date }) {
   let formattedDate = formatDistanceToNowStrict(parseISO(date), {
@@ -17,7 +16,7 @@ export default function Reminder({ id, name, date }) {
   const [checked, setChecked] = useState(false);
   const [dateState, setDateState] = useState(formattedDate);
   const [pastDate, setPastDate] = useState(false);
-  const { deleteReminder } = useClient();
+  const { deleteReminder } = useContext(RemindersContext)
 
   const handleDeleteReminder = async () => {
     let response = await deleteReminder(id);

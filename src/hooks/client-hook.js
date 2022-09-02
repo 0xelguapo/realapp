@@ -189,44 +189,6 @@ function useClient() {
     return response;
   };
 
-  const createReminder = async (details) => {
-    let response;
-    try {
-      response = await API.graphql(
-        graphqlOperation(mutations.createReminder, { input: details })
-      );
-    } catch (err) {
-      console.error(err);
-    }
-    return response;
-  };
-
-  const getAllReminders = async () => {
-    let response;
-    try {
-      response = await API.graphql(
-        graphqlOperation(customQueries.listReminders)
-      );
-    } catch (err) {
-      console.error(err);
-    }
-    return response;
-  };
-
-  const deleteReminder = async (reminderId) => {
-    let response;
-    try {
-      response = await API.graphql(
-        graphqlOperation(mutations.deleteReminder, {
-          input: { id: reminderId },
-        })
-      );
-    } catch (err) {
-      console.error(err);
-    }
-    return response
-  };
-
   return {
     getClientGroups,
     updateFavorite,
@@ -241,8 +203,6 @@ function useClient() {
     removeClientFromGroup,
     getClientGroupDetails,
     createReminder,
-    getAllReminders,
-    deleteReminder
   };
 }
 

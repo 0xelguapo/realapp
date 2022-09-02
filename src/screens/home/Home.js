@@ -13,28 +13,29 @@ import { TaskContext } from "../../context/task-context";
 import EachTask from "../../components/EachTask";
 import useClient from "../../hooks/client-hook";
 import Reminder from "../../components/Reminder";
+import { RemindersContext } from "../../context/reminder-context";
 
 export default function Home(props) {
   const [reminders, setReminders] = useState([]);
   const [refreshVisible, setRefreshVisible] = useState(true);
   const { tasksArray } = useContext(TaskContext);
-  const { getAllReminders } = useClient();
+  const { remindersArray, getReminders } = useContext(RemindersContext);
 
-  const getReminders = async () => {
-    let response = await getAllReminders();
-    let dateHelper = new Date();
-    if (response) {
-      let newResponse = response.data.listReminders.items;
-      let filteredResponse = newResponse.filter((el) => {
-        const result = differenceInCalendarDays(parseISO(el.date), dateHelper);
-        if (result <= 5) return true;
-        else return false;
-      });
-      const sortedResponse = filteredResponse.sort((a, b) => a.date - b.date);
-      setReminders(sortedResponse);
-    }
-    console.log("gettingReminders");
-  };
+  // const getReminders = async () => {
+  //   let response = await getAllReminders();
+  //   let dateHelper = new Date();
+  //   if (response) {
+  //     let newResponse = response.data.listReminders.items;
+  //     let filteredResponse = newResponse.filter((el) => {
+  //       const result = differenceInCalendarDays(parseISO(el.date), dateHelper);
+  //       if (result <= 5) return true;
+  //       else return false;
+  //     });
+  //     const sortedResponse = filteredResponse.sort((a, b) => a.date - b.date);
+  //     setReminders(sortedResponse);
+  //   }
+  //   console.log("gettingReminders");
+  // };
 
   const handleManualRefresh = () => {
     setRefreshVisible(false);
@@ -67,8 +68,8 @@ export default function Home(props) {
             <Text style={styles.titleHeader}>UPCOMING REMINDERS</Text>
           </View>
           <ScrollView styles={styles.remindersScrollContainer}>
-            {reminders.length > 0 ? (
-              reminders.map((item) => (
+            {remindersArray.length > 0 ? (
+              remindersArray.map((item) => (
                 <Reminder
                   key={item.id}
                   id={item.id}
