@@ -12,6 +12,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import store from "../redux/index";
 import { Provider } from "react-redux";
+import { RemindersContextProvider } from "../context/reminder-context";
 
 const Tab = createBottomTabNavigator();
 
@@ -20,30 +21,36 @@ export default function AppNavigator() {
     <Provider store={store}>
       <ClientContextProvider>
         <TaskContextProvider>
-          <Tab.Navigator screenOptions={{ tabBarStyle: styles }}>
-            <Tab.Screen name="Home" component={Home} options={optionsHandler} />
-            <Tab.Screen
-              name="Clients"
-              component={ClientsNavigator}
-              options={optionsHandler}
-            />
-            {/* <Tab.Screen
+          <RemindersContextProvider>
+            <Tab.Navigator screenOptions={{ tabBarStyle: styles }}>
+              <Tab.Screen
+                name="Home"
+                component={Home}
+                options={optionsHandler}
+              />
+              <Tab.Screen
+                name="Clients"
+                component={ClientsNavigator}
+                options={optionsHandler}
+              />
+              {/* <Tab.Screen
               name="Add"
               component={AddNavigator}
               options={optionsHandler}
               tabBarVisible='false'
             /> */}
-            <Tab.Screen
-              name="Tasks"
-              component={TasksNavigator}
-              options={optionsHandler}
-            />
-            <Tab.Screen
-              name="Settings"
-              component={Settings}
-              options={optionsHandler}
-            />
-          </Tab.Navigator>
+              <Tab.Screen
+                name="Tasks"
+                component={TasksNavigator}
+                options={optionsHandler}
+              />
+              <Tab.Screen
+                name="Settings"
+                component={Settings}
+                options={optionsHandler}
+              />
+            </Tab.Navigator>
+          </RemindersContextProvider>
         </TaskContextProvider>
       </ClientContextProvider>
     </Provider>

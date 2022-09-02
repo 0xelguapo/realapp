@@ -80,22 +80,23 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: 'center',
     paddingVertical: 10,
-    height: 60,
+    height: 50,
     // borderBottomWidth: 0.5,
     // borderBottomColor: "#e6e6e6",
   },
   title: {
-    fontWeight: "700",
+    fontWeight: "500",
     fontSize: 16,
     color: "#454545",
   },
   checkedTitle: {
-    fontWeight: "600",
+    fontWeight: "500",
     fontSize: 16,
     color: "#d3d3d3"
   },
   content: {
-    color: "#6c6c6c",
+    fontSize: 12,
+    color: "#ababab",
   },
   checkedContent: {
     color: "#7b7b7c",

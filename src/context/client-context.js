@@ -24,6 +24,7 @@ function ClientContextProvider({ children }) {
       setClientsArray(response.data.listClients.items);
     }
     setIsLoading(false);
+    console.log('gettingAllClients')
   }, []);
 
   const getOneClient = useCallback(async (clientId) => {
@@ -87,7 +88,6 @@ function ClientContextProvider({ children }) {
         eq: true,
       },
     };
-
     try {
       response = await API.graphql({
         query: queries.listClients,

@@ -1,11 +1,22 @@
 import { View, Pressable, Text, StyleSheet } from "react-native";
 import { useState } from "react";
-import { formatDistanceToNowStrict, parseISO } from "date-fns";
+import {
+  formatDistanceToNowStrict,
+  formatDistanceToNow,
+  parseISO,
+} from "date-fns";
 import { AntDesign } from "@expo/vector-icons";
 import useClient from "../hooks/client-hook";
+import { useEffect } from "react";
 
 export default function Reminder({ id, name, date }) {
+  let formattedDate = formatDistanceToNowStrict(parseISO(date), {
+    addSuffix: true,
+    unit: "day",
+  });
   const [checked, setChecked] = useState(false);
+  const [dateState, setDateState] = useState(formattedDate);
+  const [pastDate, setPastDate] = useState(false);
   const { deleteReminder } = useClient();
 
   const handleDeleteReminder = async () => {
@@ -13,6 +24,17 @@ export default function Reminder({ id, name, date }) {
     console.log(response);
     setChecked(true);
   };
+
+  const handleDateFormat = () => {
+    if (formattedDate === "in 0 days") setDateState("today");
+    else if (formattedDate.split(" ").pop() === "ago") {
+      setPastDate(true);
+    }
+  };
+
+  useEffect(() => {
+    handleDateFormat();
+  }, []);
 
   return (
     <View style={styles.reminder} key={id}>
@@ -35,14 +57,12 @@ export default function Reminder({ id, name, date }) {
           {name}
         </Text>
         <Text
-          style={!checked ? styles.reminderDate : styles.checkedReminderDate}
+          style={[
+            !checked ? styles.reminderDate : styles.checkedReminderDate,
+            pastDate && styles.pastReminderDate,
+          ]}
         >
-          {"in 0 days"
-            ? "today"
-            : formatDistanceToNowStrict(parseISO(date), {
-                addSuffix: true,
-                unit: "day",
-              })}
+          {dateState}
         </Text>
       </Pressable>
     </View>
@@ -71,6 +91,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#ababab",
   },
+  pastReminderDate: { color: "red" },
   circle: {
     width: 15,
     height: 15,
