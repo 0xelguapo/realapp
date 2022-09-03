@@ -2,11 +2,11 @@ import { Text } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { ClientContextProvider } from "../context/client-context";
 import { TaskContextProvider } from "../context/task-context";
+import HomeNavigator from "../screens/home";
 import ClientsNavigator from "../screens/clients";
 import TasksNavigator from "../screens/tasks";
 import Settings from "../screens/settings";
 import Home from "../screens/home/Home";
-import AddNavigator from "../screens/add";
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
@@ -25,7 +25,7 @@ export default function AppNavigator() {
             <Tab.Navigator screenOptions={{ tabBarStyle: styles }}>
               <Tab.Screen
                 name="Home"
-                component={Home}
+                component={HomeNavigator}
                 options={optionsHandler}
               />
               <Tab.Screen
@@ -33,12 +33,6 @@ export default function AppNavigator() {
                 component={ClientsNavigator}
                 options={optionsHandler}
               />
-              {/* <Tab.Screen
-              name="Add"
-              component={AddNavigator}
-              options={optionsHandler}
-              tabBarVisible='false'
-            /> */}
               <Tab.Screen
                 name="Tasks"
                 component={TasksNavigator}
@@ -109,6 +103,7 @@ const optionsHandler = ({ route }) => {
       };
     // case "Add":
     //   return {
+    //     tabBarStyle: { display: "none " },
     //     tabBarLabel: ({ focused }) =>
     //       focused ? (
     //         <Text style={{ fontSize: 11, color: "#0064e5", fontWeight: "600" }}>

@@ -2,19 +2,25 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AddClient from "../clients/AddClient";
 import Add from "./Add.js";
 import AddTask from "../tasks/AddTask";
+import Home from "./Home";
 
 const Stack = createNativeStackNavigator();
 
-export default function AddNavigator() {
+export default function HomeNavigator() {
   return (
     <Stack.Navigator>
       <Stack.Screen
+        options={{ headerShown: false }}
+        name="HomeScreen"
+        component={Home}
+      />
+      <Stack.Screen
         options={{
           headerShown: false,
-          presentation: "modal",
+          presentation: "transparentModal",
           cardOverlayEnabled: true,
         }}
-        name="Add"
+        name="AddOptions"
         component={Add}
       />
       <Stack.Screen

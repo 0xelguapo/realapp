@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, Pressable } from "react-native";
+import { Text, View, StyleSheet, Pressable, Animated } from "react-native";
 
 export default function AddOptions(props) {
   const { goBack } = props.navigation;

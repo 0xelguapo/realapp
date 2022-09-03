@@ -11,6 +11,7 @@ import { TaskContext } from "../../context/task-context";
 import EachTask from "../../components/EachTask";
 import Reminder from "../../components/Reminder";
 import { RemindersContext } from "../../context/reminder-context";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function Home(props) {
   const [refreshVisible, setRefreshVisible] = useState(true);
@@ -29,6 +30,11 @@ export default function Home(props) {
     getReminders();
   }, []);
 
+  const handleAddOptions = () => {
+    console.log("click");
+    props.navigation.navigate("AddOptions");
+  };
+
   return (
     <View style={styles.container}>
       {refreshVisible && (
@@ -39,6 +45,12 @@ export default function Home(props) {
           <MaterialIcons name="refresh" size={20} color="#454545" />
         </TouchableOpacity>
       )}
+      <TouchableOpacity
+        style={styles.addIconContainer}
+        onPress={handleAddOptions}
+      >
+        <Ionicons name="add" size={40} color="white" />
+      </TouchableOpacity>
       <View style={styles.headerContainer}>
         <Text style={styles.headerTitle}>Your Focus</Text>
       </View>
@@ -86,6 +98,24 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f5f5f5",
+  },
+  addIconContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    position: "absolute",
+    right: 20,
+    bottom: 30,
+    height: 55,
+    width: 55,
+    borderRadius: 50,
+    backgroundColor: "#0064e5",
+    shadowRadius: 4,
+    shadowColor: "rgba(34, 34, 34, 0.58)",
+    shadowOpacity: 0.5,
+    shadowOffset: {
+      height: 4,
+    },
+    zIndex: 3,
   },
   headerContainer: {
     flex: 0.08,
