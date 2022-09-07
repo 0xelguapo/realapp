@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { ClientsContext } from "../../context/client-context";
 import { VALIDATOR_REQUIRE } from "../../utility/validators";
@@ -41,16 +41,18 @@ export default function AddClient({ navigation }) {
   const handleAddClient = async () => {
     let response;
     response = await addClient(formState, clientDetails);
-    if(response) {
-      navigation.goBack()
+    if (response) {
+      navigation.goBack();
     } else {
-      console.log('cannot add!');
+      console.log("cannot add!");
     }
-  }
+  };
 
   return (
     <View style={styles.container}>
-      <AntDesign name="left" size={25} onPress={() => navigation.goBack()} />
+      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.exitContainer}>
+        <AntDesign name="left" size={25} />
+      </TouchableOpacity>
       <Text style={styles.title}>Add a Client</Text>
       <View style={styles.inputsContainer}>
         <Input
@@ -112,5 +114,5 @@ const styles = StyleSheet.create({
   buttonContainer: {
     width: "100%",
     bottom: 0,
-  }
+  },
 });

@@ -6,7 +6,7 @@ import {
 } from "date-fns";
 import { AntDesign } from "@expo/vector-icons";
 import { useEffect } from "react";
-import { RemindersContext } from "../context/reminder-context";
+import { RemindersContext } from "../../context/reminder-context";
 
 export default function Reminder({ id, name, date }) {
   let formattedDate = formatDistanceToNowStrict(parseISO(date), {

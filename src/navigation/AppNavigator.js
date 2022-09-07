@@ -73,13 +73,13 @@ const optionsHandler = ({ route }) => {
               {route.name}
             </Text>
           ) : (
-            <Text style={{ fontSize: 11, color: "#878787" }}>{route.name}</Text>
+            <Text style={{ fontSize: 11, color: "#727272" }}>{route.name}</Text>
           ),
         tabBarIcon: ({ focused }) =>
           focused ? (
             <Feather name="home" size={25} color="#0064e5" />
           ) : (
-            <Feather name="home" size={25} color="#878787" />
+            <Feather name="home" size={25} color="#727272" />
           ),
         headerShown: false,
       };
@@ -91,35 +91,16 @@ const optionsHandler = ({ route }) => {
               {route.name}
             </Text>
           ) : (
-            <Text style={{ fontSize: 11, color: "#878787" }}>{route.name}</Text>
+            <Text style={{ fontSize: 11, color: "#727272" }}>{route.name}</Text>
           ),
         tabBarIcon: ({ focused }) =>
           focused ? (
             <Ionicons name="people" size={28} color="#0064e5" />
           ) : (
-            <Ionicons name="people" size={28} color="#878787" />
+            <Ionicons name="people" size={28} color="#727272" />
           ),
         headerShown: false,
-      };
-    // case "Add":
-    //   return {
-    //     tabBarStyle: { display: "none " },
-    //     tabBarLabel: ({ focused }) =>
-    //       focused ? (
-    //         <Text style={{ fontSize: 11, color: "#0064e5", fontWeight: "600" }}>
-    //           {route.name}
-    //         </Text>
-    //       ) : (
-    //         <Text style={{ fontSize: 11, color: "#878787" }}>{route.name}</Text>
-    //       ),
-    //     tabBarIcon: ({ focused }) =>
-    //       focused ? (
-    //         <Ionicons name="add" size={30} color="#0064e5" />
-    //       ) : (
-    //         <Ionicons name="add" size={30} color="#878787" />
-    //       ),
-    //     headerShown: false,
-    //   };
+      }; 
     case "Tasks":
       return {
         tabBarLabel: ({ focused }) =>
@@ -128,7 +109,7 @@ const optionsHandler = ({ route }) => {
               {route.name}
             </Text>
           ) : (
-            <Text style={{ fontSize: 11, color: "#878787" }}>{route.name}</Text>
+            <Text style={{ fontSize: 11, color: "#727272" }}>{route.name}</Text>
           ),
         tabBarIcon: ({ focused }) =>
           focused ? (
@@ -141,7 +122,7 @@ const optionsHandler = ({ route }) => {
             <MaterialCommunityIcons
               name="clipboard-list-outline"
               size={28}
-              color="#878787"
+              color="#727272"
             />
           ),
         headerShown: false,
@@ -154,13 +135,13 @@ const optionsHandler = ({ route }) => {
               {route.name}
             </Text>
           ) : (
-            <Text style={{ fontSize: 11, color: "#878787" }}>{route.name}</Text>
+            <Text style={{ fontSize: 11, color: "#727272" }}>{route.name}</Text>
           ),
         tabBarIcon: ({ focused }) =>
           focused ? (
             <Feather name="settings" size={28} color="#0064e5" />
           ) : (
-            <Feather name="settings" size={28} color="#878787" />
+            <Feather name="settings" size={28} color="#727272" />
           ),
         headerShown: false,
       };

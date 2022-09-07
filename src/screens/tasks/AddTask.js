@@ -12,7 +12,6 @@ import {
 import DateTimePicker from "@react-native-community/datetimepicker";
 import EachClient from "../../components/client/EachClient";
 import { ClientsContext } from "../../context/client-context";
-
 import { AntDesign } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";

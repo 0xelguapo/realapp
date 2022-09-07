@@ -128,17 +128,6 @@ export default function Clients({ navigation }) {
                 );
               }
             })}
-            {/* {favoriteClients.map((fave) => (
-              <Pressable
-                style={styles.favoriteClient}
-                key={fave.id}
-              >
-                <Text style={styles.favoriteFirstLetter}>
-                  {fave.name[0].toUpperCase()}
-                </Text>
-                <Text style={styles.favoriteName}>{fave.name}</Text>
-              </Pressable>
-            ))} */}
           </Animated.ScrollView>
         </View>
       </View>
@@ -203,8 +192,8 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 20,
     bottom: 30,
-    height: 55,
-    width: 55,
+    height: 60,
+    width: 60,
     borderRadius: 50,
     backgroundColor: "#0064e5",
     shadowRadius: 4,

@@ -7,10 +7,12 @@ import {
   Text,
 } from "react-native";
 import { useState, useEffect, useRef } from "react";
+import OptionIcon from "./OptionIcon";
+import { Entypo } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 
-export default function AddHome() {
+export default function AddHome(props) {
   const [visible, setVisible] = useState(false);
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -24,19 +26,28 @@ export default function AddHome() {
     }).start();
   }, [fadeAnim]);
 
+  const handleViewAddClient = () => {
+    props.navigation.navigate("AddClient");
+  };
+
+  const handleViewAddTask = () => {
+    props.navigation.navigate("AddTask");
+  };
+
   return (
     <>
       {visible && (
         <>
           <View style={styles.iconsContainer}>
-            <View style={styles.iconContainer}>
-              <View style={styles.iconTextContainer}>
-                <Text style={styles.iconText}>Add Client</Text>
-              </View>
-              <View style={styles.icon}>
-                <Ionicons name="ios-person-add" size={28} color="black" />
-              </View>
-            </View>
+            <OptionIcon onPress={handleViewAddClient} text={"Add Client"}>
+              <Ionicons name="ios-person-add" size={28} color="black" />
+            </OptionIcon>
+            <OptionIcon onPress={handleViewAddTask} text={"Add Task"}>
+              <Entypo name="add-to-list" size={28} color="black" />
+            </OptionIcon>
+            <OptionIcon text={"Add Reminder"}>
+              <Feather name="bell" size={28} color="black" />
+            </OptionIcon>
           </View>
           <TouchableWithoutFeedback onPress={() => setVisible(false)}>
             <View style={styles.backdrop}></View>
@@ -64,7 +75,7 @@ const styles = StyleSheet.create({
     height: "100%",
     width: "100%",
     backgroundColor: "rgba(0,0,0,.15)",
-    zIndex: 3,
+    zIndex: 1,
   },
   addIconContainer: {
     alignItems: "center",
@@ -82,25 +93,17 @@ const styles = StyleSheet.create({
     shadowOffset: {
       height: 4,
     },
-    zIndex: 3,
+    zIndex: 2,
   },
   iconsContainer: {
     display: "flex",
     alignItems: "flex-end",
     justifyContent: "center",
     position: "absolute",
-    borderWidth: 3,
     bottom: 100,
-    height: 200,
-    width: 150,
+    height: 250,
+    width: 200,
     right: 20,
-  },
-  icon: {
-    alignItems: "center",
-    justifyContent: "center",
-    width: 60,
-    height: 60,
-    backgroundColor: "white",
-    borderRadius: 50,
+    zIndex: 3,
   },
 });

@@ -6,12 +6,13 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons";
-import { TaskContext } from "../../context/task-context";
-import EachTask from "../../components/EachTask";
-import Reminder from "../../components/Reminder";
-import { RemindersContext } from "../../context/reminder-context";
 import AddHome from "../../components/home/AddHome";
+import EachTask from "../../components/EachTask";
+import Reminder from "../../components/client/Reminder";
+import { TaskContext } from "../../context/task-context";
+import { RemindersContext } from "../../context/reminder-context";
+import { MaterialIcons } from "@expo/vector-icons";
+
 
 export default function Home(props) {
   const [refreshVisible, setRefreshVisible] = useState(true);
@@ -30,11 +31,6 @@ export default function Home(props) {
     getReminders();
   }, []);
 
-  const handleAddOptions = () => {
-    console.log("click");
-    props.navigation.navigate("AddOptions");
-  };
-
   return (
     <View style={styles.container}>
       {refreshVisible && (
@@ -45,7 +41,7 @@ export default function Home(props) {
           <MaterialIcons name="refresh" size={20} color="#454545" />
         </TouchableOpacity>
       )}
-      <AddHome />
+      <AddHome navigation={props.navigation} />
       <View style={styles.headerContainer}>
         <Text style={styles.headerTitle}>Your Focus</Text>
       </View>
