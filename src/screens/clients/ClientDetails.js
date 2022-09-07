@@ -11,7 +11,7 @@ import {
 import useClient from "../../hooks/client-hook";
 import { ClientsContext } from "../../context/client-context";
 import { Ionicons } from "@expo/vector-icons";
-import ClientOptions from "../../components/ClientOptions";
+import ClientOptions from "../../components/client/ClientOptions";
 import { format, parseISO } from "date-fns";
 import { Feather } from '@expo/vector-icons'
 

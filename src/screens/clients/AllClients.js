@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { ClientsContext } from "../../context/client-context";
-import EachClient from "../../components/EachClient";
+import EachClient from "../../components/client/EachClient";
 import { Ionicons } from "@expo/vector-icons";
 
 export default function Clients({ navigation }) {

@@ -10,7 +10,7 @@ import {
   FlatList,
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import EachClient from "../../components/EachClient";
+import EachClient from "../../components/client/EachClient";
 import { ClientsContext } from "../../context/client-context";
 
 import { AntDesign } from "@expo/vector-icons";

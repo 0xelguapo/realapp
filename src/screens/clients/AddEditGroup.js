@@ -9,7 +9,7 @@ import {
 import { AntDesign } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import useClient from "../../hooks/client-hook";
-import ClientGroup from "../../components/ClientGroup";
+import ClientGroup from "../../components/client/ClientGroup";
 
 export default function AddEditGroup(props) {
   const { clientId, index } = props.route.params;

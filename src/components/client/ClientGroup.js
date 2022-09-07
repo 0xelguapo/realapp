@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { StyleSheet, View, Text, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import useClient from "../hooks/client-hook";
+import useClient from "../../hooks/client-hook";
 
 export default function ClientGroup({ el, clientId, clientGroupID }) {
   const [checked, setChecked] = useState(el.inGroup);
