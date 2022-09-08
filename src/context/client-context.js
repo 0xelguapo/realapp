@@ -24,7 +24,7 @@ function ClientContextProvider({ children }) {
       setClientsArray(response.data.listClients.items);
     }
     setIsLoading(false);
-    console.log('gettingAllClients')
+    return response
   }, []);
 
   const getOneClient = useCallback(async (clientId) => {

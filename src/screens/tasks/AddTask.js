@@ -22,7 +22,6 @@ export default function AddTask({ navigation }) {
   const { addTask } = useContext(TaskContext);
   const { clientsArray } = useContext(ClientsContext);
   const [filteredData, setFilteredData] = useState(clientsArray);
-  const [masterData, setMasterData] = useState(clientsArray);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [searchInput, setSearchInput] = useState("");
@@ -71,7 +70,7 @@ export default function AddTask({ navigation }) {
 
   const handleSearch = (text) => {
     if (text) {
-      const selectedData = masterData.filter((c) => {
+      const selectedData = clientsArray.filter((c) => {
         const clientData = c.name ? c.name.toUpperCase() : "".toUpperCase();
         const textData = text.toUpperCase();
         return clientData.indexOf(textData) > -1;
@@ -79,7 +78,7 @@ export default function AddTask({ navigation }) {
       setFilteredData(selectedData);
       setSearchInput(text);
     } else {
-      setFilteredData(masterData);
+      setFilteredData(clientsArray);
       setSearchInput(text);
     }
   };

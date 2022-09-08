@@ -10,7 +10,7 @@ import { RemindersContext } from "../../context/reminder-context";
 
 export default function EditReminder(props) {
   const { goBack } = props.navigation;
-  const { clientId } = props.route.params;
+  const { clientId, homeMode } = props.route.params;
   const { createReminder } = useContext(RemindersContext);
 
   const handleCreateReminder = async (length) => {
@@ -36,12 +36,15 @@ export default function EditReminder(props) {
       date: date,
       clientId: clientId,
     });
-    if (response) {
+    if (response && !homeMode) {
       props.navigation.navigate({
         name: "ClientDetails",
         params: { id: clientId },
         merge: true,
       });
+    }
+    if (homeMode) {
+      props.navigation.goBack();
     }
   };
 

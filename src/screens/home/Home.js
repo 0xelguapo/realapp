@@ -12,11 +12,13 @@ import Reminder from "../../components/client/Reminder";
 import { TaskContext } from "../../context/task-context";
 import { RemindersContext } from "../../context/reminder-context";
 import { MaterialIcons } from "@expo/vector-icons";
+import { ClientsContext } from "../../context/client-context";
 
 
 export default function Home(props) {
   const [refreshVisible, setRefreshVisible] = useState(true);
   const { tasksArray } = useContext(TaskContext);
+  const { getAllClients } = useContext(ClientsContext)
   const { remindersArray, getReminders } = useContext(RemindersContext);
 
   const handleManualRefresh = () => {
@@ -30,6 +32,10 @@ export default function Home(props) {
   useEffect(() => {
     getReminders();
   }, []);
+
+  useEffect(() => {
+    getAllClients()
+  }, [])
 
   return (
     <View style={styles.container}>

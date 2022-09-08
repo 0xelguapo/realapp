@@ -16,18 +16,11 @@ export default function AddReminder(props) {
   const { clientsArray, getAllClients, isLoading } = useContext(ClientsContext);
   const [filteredData, setFilteredData] = useState(clientsArray);
   const [searchInput, setSearchInput] = useState("");
-  const [selectedClientID, setSelectedClientID] = useState(null)
-
-  useEffect(() => {
-    if (clientsArray.length < 1) {
-      getAllClients();
-    }
-  }, []);
 
   const renderClient = useCallback(
     ({ item, index }) => (
       <EachClient
-        // onPress={() => viewClientHandler(item, index)}
+        onPress={() => handleSelectClient(item.id)}
         index={index}
         name={item.name}
         phone={item.phone}
@@ -39,23 +32,23 @@ export default function AddReminder(props) {
   );
 
   const handleSelectClient = (id) => {
-
-  }
+    props.navigation.navigate("EditReminder", { clientId: id, homeMode: true });
+  };
 
   const handleSearch = (text) => {
-    if(text) {
+    if (text) {
       const selectedData = clientsArray.filter((c) => {
-        const clientData = c.name ? c.name.toUpperCase() : "".toUpperCase()
+        const clientData = c.name ? c.name.toUpperCase() : "".toUpperCase();
         const textData = text.toUpperCase();
         return clientData.indexOf(textData) > -1;
-      })
-      setFilteredData(selectedData)
-      setSearchInput(text)
+      });
+      setFilteredData(selectedData);
+      setSearchInput(text);
     } else {
-      setFilteredData(clientsArray)
-      setSearchInput(text)
+      setFilteredData(clientsArray);
+      setSearchInput(text);
     }
-  }
+  };
 
   return (
     <View style={styles.container}>

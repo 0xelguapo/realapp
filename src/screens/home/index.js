@@ -3,6 +3,7 @@ import AddClient from "../clients/AddClient";
 import AddReminder from "./AddReminder";
 import AddTask from "../tasks/AddTask";
 import Home from "./Home";
+import EditReminder from "../clients/EditReminder";
 
 const Stack = createNativeStackNavigator();
 
@@ -32,6 +33,15 @@ export default function HomeNavigator() {
         }}
         name="AddReminder"
         component={AddReminder}
+      />
+      <Stack.Screen
+        options={{
+          presentation: "transparentModal",
+          headerShown: false,
+          cardOverlayEnabled: true,
+        }}
+        name="EditReminder"
+        component={EditReminder}
       />
     </Stack.Navigator>
   );
