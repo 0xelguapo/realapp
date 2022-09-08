@@ -6,14 +6,16 @@ import {
   TouchableWithoutFeedback,
   Text,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { useState, useEffect, useRef } from "react";
 import OptionIcon from "./OptionIcon";
 import { Entypo } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 
-export default function AddHome(props) {
+export default function AddHome() {
   const [visible, setVisible] = useState(false);
+  const navigation = useNavigation();
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
@@ -27,12 +29,20 @@ export default function AddHome(props) {
   }, [fadeAnim]);
 
   const handleViewAddClient = () => {
-    props.navigation.navigate("AddClient");
+    navigation.navigate("AddClient");
+    setVisible(false)
   };
 
   const handleViewAddTask = () => {
-    props.navigation.navigate("AddTask");
+    navigation.navigate("AddTask");
+    setVisible(false)
   };
+
+  const handleViewAddReminder = () => {
+    navigation.navigate("AddReminder");
+    setVisible(false)
+  }
+
 
   return (
     <>
@@ -45,7 +55,7 @@ export default function AddHome(props) {
             <OptionIcon onPress={handleViewAddTask} text={"Add Task"}>
               <Entypo name="add-to-list" size={28} color="black" />
             </OptionIcon>
-            <OptionIcon text={"Add Reminder"}>
+            <OptionIcon onPress={handleViewAddReminder} text={"Add Reminder"}>
               <Feather name="bell" size={28} color="black" />
             </OptionIcon>
           </View>

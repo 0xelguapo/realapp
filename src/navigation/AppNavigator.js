@@ -6,7 +6,6 @@ import HomeNavigator from "../screens/home";
 import ClientsNavigator from "../screens/clients";
 import TasksNavigator from "../screens/tasks";
 import Settings from "../screens/settings";
-import Home from "../screens/home/Home";
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";

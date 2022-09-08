@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AddClient from "../clients/AddClient";
-import Add from "./Add.js";
+import AddReminder from "./AddReminder";
 import AddTask from "../tasks/AddTask";
 import Home from "./Home";
 
@@ -15,15 +15,6 @@ export default function HomeNavigator() {
         component={Home}
       />
       <Stack.Screen
-        options={{
-          headerShown: false,
-          presentation: "transparentModal",
-          cardOverlayEnabled: true,
-        }}
-        name="AddOptions"
-        component={Add}
-      />
-      <Stack.Screen
         options={{ presentation: "modal", headerShown: false }}
         name="AddClient"
         component={AddClient}
@@ -32,6 +23,15 @@ export default function HomeNavigator() {
         options={{ presentation: "modal", headerShown: false }}
         name="AddTask"
         component={AddTask}
+      />
+      <Stack.Screen
+        options={{
+          presentation: "modal",
+          headerShown: false,
+          cardOverlayEnabled: true,
+        }}
+        name="AddReminder"
+        component={AddReminder}
       />
     </Stack.Navigator>
   );

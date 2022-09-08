@@ -43,7 +43,7 @@ export default function EachClient({
       <TouchableHighlight onPress={onPress} underlayColor="#f1f1f1">
         <View style={styles.container}>
           <Text style={styles.name}>{name}</Text>
-          <Text style={styles.phone}>{formattedPhone}</Text>
+          <Text style={styles.phone}>{company}</Text>
           <View style={styles.goContainer}>
             <SimpleLineIcons name="options" size={24} color="#dddddf" />
           </View>
