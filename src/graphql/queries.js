@@ -464,6 +464,37 @@ export const listTasks = /* GraphQL */ `
     }
   }
 `;
+export const getNote = /* GraphQL */ `
+  query GetNote($id: ID!) {
+    getNote(id: $id) {
+      id
+      title
+      content
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const listNotes = /* GraphQL */ `
+  query ListNotes(
+    $filter: ModelNoteFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listNotes(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        title
+        content
+        createdAt
+        updatedAt
+        owner
+      }
+      nextToken
+    }
+  }
+`;
 export const getGroupsClients = /* GraphQL */ `
   query GetGroupsClients($id: ID!) {
     getGroupsClients(id: $id) {

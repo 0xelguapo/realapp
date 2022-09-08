@@ -2,16 +2,17 @@ import { Text } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { ClientContextProvider } from "../context/client-context";
 import { TaskContextProvider } from "../context/task-context";
+import { RemindersContextProvider } from "../context/reminder-context";
 import HomeNavigator from "../screens/home";
 import ClientsNavigator from "../screens/clients";
 import TasksNavigator from "../screens/tasks";
-import Settings from "../screens/settings";
+import MoreNavigator from "../screens/more/more";
+import store from "../redux/index";
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
-import store from "../redux/index";
 import { Provider } from "react-redux";
-import { RemindersContextProvider } from "../context/reminder-context";
+import { AntDesign } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator();
 
@@ -38,8 +39,8 @@ export default function AppNavigator() {
                 options={optionsHandler}
               />
               <Tab.Screen
-                name="Settings"
-                component={Settings}
+                name="More"
+                component={MoreNavigator}
                 options={optionsHandler}
               />
             </Tab.Navigator>
@@ -126,7 +127,7 @@ const optionsHandler = ({ route }) => {
           ),
         headerShown: false,
       };
-    case "Settings":
+    case "More":
       return {
         tabBarLabel: ({ focused }) =>
           focused ? (
@@ -138,9 +139,9 @@ const optionsHandler = ({ route }) => {
           ),
         tabBarIcon: ({ focused }) =>
           focused ? (
-            <Feather name="settings" size={28} color="#0064e5" />
+            <AntDesign name="appstore-o" size={28} color="#0064e5" />
           ) : (
-            <Feather name="settings" size={28} color="#727272" />
+            <AntDesign name="appstore-o" size={28} color="#727272" />
           ),
         headerShown: false,
       };

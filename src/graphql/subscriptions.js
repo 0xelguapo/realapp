@@ -802,6 +802,42 @@ export const onDeleteTask = /* GraphQL */ `
     }
   }
 `;
+export const onCreateNote = /* GraphQL */ `
+  subscription OnCreateNote($owner: String) {
+    onCreateNote(owner: $owner) {
+      id
+      title
+      content
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onUpdateNote = /* GraphQL */ `
+  subscription OnUpdateNote($owner: String) {
+    onUpdateNote(owner: $owner) {
+      id
+      title
+      content
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onDeleteNote = /* GraphQL */ `
+  subscription OnDeleteNote($owner: String) {
+    onDeleteNote(owner: $owner) {
+      id
+      title
+      content
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
 export const onCreateGroupsClients = /* GraphQL */ `
   subscription OnCreateGroupsClients($owner: String) {
     onCreateGroupsClients(owner: $owner) {

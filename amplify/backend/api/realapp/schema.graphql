@@ -59,3 +59,9 @@ type Task @model @auth(rules: [{ allow: owner }]) {
   date: String
   client: Client @belongsTo(fields: ["clientId"])
 }
+
+type Note @model @auth(rules: [{ allow: owner }]) {
+  id: ID!
+  title: String
+  content: String
+}

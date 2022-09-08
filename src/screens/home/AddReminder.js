@@ -13,7 +13,7 @@ import { ClientsContext } from "../../context/client-context";
 import EachClient from "../../components/client/EachClient";
 
 export default function AddReminder(props) {
-  const { clientsArray, getAllClients, isLoading } = useContext(ClientsContext);
+  const { clientsArray, isLoading } = useContext(ClientsContext);
   const [filteredData, setFilteredData] = useState(clientsArray);
   const [searchInput, setSearchInput] = useState("");
 

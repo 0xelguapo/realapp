@@ -91,6 +91,8 @@ export default function Clients({ navigation }) {
             <TextInput
               style={styles.input}
               placeholder="Search for a name, category..."
+              returnKeyType="search"
+              
             />
           </View>
         </View>
