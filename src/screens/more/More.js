@@ -1,13 +1,39 @@
-import { useContext, useState } from "react";
-import { StyleSheet, Text, View, Button, TouchableOpacity } from "react-native";
-import { Auth } from "aws-amplify";
+import { useContext, useState, useEffect } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
+import { API, Auth, graphqlOperation } from "aws-amplify";
 import { AuthContext } from "../../context/auth-context";
 import { Feather, Ionicons } from "@expo/vector-icons";
-import * as mutations from '../../graphql/mutations'
+import * as queries from "../../graphql/queries";
+import Note from "../../components/Note";
 
-export default function More() {
-  const [notesArray, setNotesArray] = useState([])
+export default function More(props) {
+  const [notesArray, setNotesArray] = useState([]);
   const { signOut } = useContext(AuthContext);
+
+  const fetchNotes = async () => {
+    let response;
+    try {
+      response = await API.graphql(graphqlOperation(queries.listNotes));
+    } catch (err) {
+      console.error(err);
+    }
+    setNotesArray(response.data.listNotes.items);
+  };
+
+  useEffect(() => {
+    fetchNotes();
+  }, []);
+
+  const handleAddNote = () => {
+    props.navigation.navigate("AddNote");
+  };
 
   return (
     <View style={styles.container}>
@@ -25,9 +51,15 @@ export default function More() {
         </TouchableOpacity>
       </View>
       <View style={styles.headingContainer}>
-        <Text style={styles.headingText}>NOTES</Text>
+        <Text style={styles.headingText}>QUICK NOTES</Text>
+        <Ionicons name="add" size={28} color="black" onPress={handleAddNote} />
       </View>
-      <Button title="Sign Out" color="red" onPress={signOut} />
+      <ScrollView style={styles.notesContainer}>
+        {notesArray.map((note) => (
+          <Note title={note.title} content={note.content} key={note.id} />
+        ))}
+      </ScrollView>
+      {/* <Button title="Sign Out" color="red" onPress={signOut} /> */}
     </View>
   );
 }
@@ -40,10 +72,12 @@ const styles = StyleSheet.create({
   },
   headingContainer: {
     paddingVertical: 20,
-    flexDirection: 'row',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   headingText: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "500",
     letterSpacing: 2,
   },
@@ -64,5 +98,9 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     fontSize: 14,
     marginTop: 5,
+  },
+  notesContainer: {
+    display: "flex",
+    height: "60%",
   },
 });

@@ -6,7 +6,7 @@ import { RemindersContextProvider } from "../context/reminder-context";
 import HomeNavigator from "../screens/home";
 import ClientsNavigator from "../screens/clients";
 import TasksNavigator from "../screens/tasks";
-import MoreNavigator from "../screens/more/more";
+import MoreNavigator from "../screens/more";
 import store from "../redux/index";
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
