@@ -1,7 +1,22 @@
 import { View, StyleSheet, Text } from "react-native";
+import { API, graphqlOperation } from "aws-amplify";
+import { deleteNote } from "../../graphql/mutations";
 import { Ionicons } from "@expo/vector-icons";
 
 export default function Note(props) {
+  const handleDeleteNote = async () => {
+    let response;
+    try {
+      response = await API.graphql(
+        graphqlOperation(deleteNote, { input: { id: props.id } })
+      );
+    } catch (err) {
+      console.error(err);
+    }
+    props.deleteNoteFromNotesArray(props.index);
+    console.log(response);
+  };
+
   return (
     <View style={styles.noteContainer}>
       <View style={styles.noteInfo}>
@@ -11,7 +26,12 @@ export default function Note(props) {
         )}
       </View>
       <View style={styles.deleteContainer}>
-        <Ionicons name="remove-circle-outline" size={20} color="#535353" />
+        <Ionicons
+          name="remove-circle-outline"
+          size={20}
+          color="#535353"
+          onPress={handleDeleteNote}
+        />
       </View>
     </View>
   );
@@ -36,5 +56,5 @@ const styles = StyleSheet.create({
   noteContent: {
     fontSize: 14,
   },
-  deleteContainer: {}
+  deleteContainer: {},
 });

@@ -3,45 +3,18 @@ import { StyleSheet, View, Text, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import useClient from "../../hooks/client-hook";
 
-export default function ClientGroup({ el, clientId, clientGroupID }) {
-  const [checked, setChecked] = useState(el.inGroup);
-  const [groupLength, setGroupLength] = useState(el.clients.items.length);
-  const [groupID, setGroupID] = useState(clientGroupID);
-  const { addClientToGroup, removeClientFromGroup } = useClient();
-
-
-  const addToGroup = async () => {
-    const response = await addClientToGroup(clientId, el.id);
-    if (response) {
-      setGroupID(response.data.createGroupsClients.id);
-      setGroupLength((prevState) => prevState + 1);
-    }
-  };
-
-  const removeFromGroup = async () => {
-    const response = await removeClientFromGroup(groupID);
-    if (response) setGroupLength((prevState) => prevState - 1);
-  };
-
-  const handlePress = () => {
-    if (checked) {
-      removeFromGroup();
-      setChecked(false);
-    } else {
-      addToGroup();
-      setChecked(true);
-    }
-  };
+export default function ClientGroup({el}) {
+  
 
   return (
-    <Pressable style={styles.clientGroup} onPress={handlePress}>
+    <Pressable style={styles.clientGroup}>
       <View>
         <Text style={styles.clientGroupTitle}>{el.title}</Text>
         <View style={styles.clientGroupDetails}>
           <Text>
             {!el.clients?.length ? (
               <Text style={styles.clientsLength}>
-                {groupLength}
+                {el.clients.items.length}
               </Text>
             ) : (
               <Text style={styles.clientsLength}>0</Text>
@@ -49,9 +22,6 @@ export default function ClientGroup({ el, clientId, clientGroupID }) {
           </Text>
           <Ionicons name="ios-people-outline" size={12} color="#535353" />
         </View>
-      </View>
-      <View>
-        {checked && <Ionicons name="checkmark" size={20} color="#535353" />}
       </View>
     </Pressable>
   );
@@ -63,12 +33,11 @@ const styles = StyleSheet.create({
     borderWidth: 0.8,
     height: 60,
     display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
+    justifyContent: 'center',
     borderRadius: 5,
     marginBottom: 10,
     paddingVertical: 5,
-    flexDirection: "row",
+
   },
   clientGroupDetails: {
     display: "flex",

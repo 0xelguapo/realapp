@@ -2,6 +2,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AddReminder from "../home/AddReminder";
 import More from "./More";
 import AddNote from "./AddNote";
+import ViewGroups from "./ViewGroups";
 
 const Stack = createNativeStackNavigator();
 
@@ -14,7 +15,11 @@ export default function MoreNavigator() {
         component={More}
       />
       <Stack.Screen
-        options={{ presentation: "transparentModal", headerShown: false, cardOverlayEnabled: true }}
+        options={{
+          presentation: "transparentModal",
+          headerShown: false,
+          cardOverlayEnabled: true,
+        }}
         name="AddNote"
         component={AddNote}
       />
@@ -26,6 +31,11 @@ export default function MoreNavigator() {
         }}
         name="AddReminder"
         component={AddReminder}
+      />
+      <Stack.Screen
+        options={{ presentation: "modal", headerShown: false }}
+        name="ViewGroups"
+        component={ViewGroups}
       />
     </Stack.Navigator>
   );

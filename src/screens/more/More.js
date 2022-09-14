@@ -11,7 +11,7 @@ import { API, Auth, graphqlOperation } from "aws-amplify";
 import { AuthContext } from "../../context/auth-context";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import * as queries from "../../graphql/queries";
-import Note from "../../components/Note";
+import Note from "../../components/more/Note";
 
 export default function More(props) {
   const [notesArray, setNotesArray] = useState([]);
@@ -27,12 +27,22 @@ export default function More(props) {
     setNotesArray(response.data.listNotes.items);
   };
 
+  const deleteNoteFromNotesArray = (index) => {
+    let currentNotesArray = [...notesArray];
+    currentNotesArray.splice(index, 1);
+    setNotesArray(currentNotesArray);
+  };
+
   useEffect(() => {
     fetchNotes();
-  }, []);
+  }, [props.route.params]);
 
   const handleAddNote = () => {
     props.navigation.navigate("AddNote");
+  };
+
+  const handleViewGroups = () => {
+    props.navigation.navigate("ViewGroups");
   };
 
   return (
@@ -45,7 +55,7 @@ export default function More(props) {
           <Feather name="bell" size={24} color="#535353" />
           <Text style={styles.optionText}>Reminders</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.option}>
+        <TouchableOpacity style={styles.option} onPress={handleViewGroups}>
           <Ionicons name="people-outline" size={24} color="#535353" />
           <Text style={styles.optionText}>Groups</Text>
         </TouchableOpacity>
@@ -55,8 +65,15 @@ export default function More(props) {
         <Ionicons name="add" size={28} color="black" onPress={handleAddNote} />
       </View>
       <ScrollView style={styles.notesContainer}>
-        {notesArray.map((note) => (
-          <Note title={note.title} content={note.content} key={note.id} />
+        {notesArray.map((note, index) => (
+          <Note
+            title={note.title}
+            content={note.content}
+            key={note.id}
+            id={note.id}
+            index={index}
+            deleteNoteFromNotesArray={deleteNoteFromNotesArray}
+          />
         ))}
       </ScrollView>
       {/* <Button title="Sign Out" color="red" onPress={signOut} /> */}

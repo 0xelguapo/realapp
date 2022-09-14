@@ -48,7 +48,6 @@ function RemindersContextProvider({ children }) {
       const sortedResponse = filteredResponse.sort((a, b) => a.date - b.date);
       setRemindersArray(sortedResponse);
     }
-    console.log("gettingReminders");
   };
 
   const createReminder = async (details) => {
