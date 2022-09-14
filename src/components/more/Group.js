@@ -2,12 +2,20 @@ import { useState } from "react";
 import { StyleSheet, View, Text, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import useClient from "../../hooks/client-hook";
+import { useNavigation } from "@react-navigation/native";
 
-export default function ClientGroup({el}) {
-  
+export default function ClientGroup({ el }) {
+  const navigation = useNavigation();
+
+  const handleViewGroup = () => {
+    navigation.navigate("ViewOneGroup", {
+      groupID: el.id,
+      groupTitle: el.title,
+    });
+  };
 
   return (
-    <Pressable style={styles.clientGroup}>
+    <Pressable style={styles.clientGroup} onPress={handleViewGroup}>
       <View>
         <Text style={styles.clientGroupTitle}>{el.title}</Text>
         <View style={styles.clientGroupDetails}>
@@ -33,11 +41,10 @@ const styles = StyleSheet.create({
     borderWidth: 0.8,
     height: 60,
     display: "flex",
-    justifyContent: 'center',
+    justifyContent: "center",
     borderRadius: 5,
     marginBottom: 10,
     paddingVertical: 5,
-
   },
   clientGroupDetails: {
     display: "flex",
@@ -47,7 +54,7 @@ const styles = StyleSheet.create({
   },
   clientGroupTitle: {
     fontWeight: "600",
-    marginBottom: 3
+    marginBottom: 3,
   },
   clientsLength: {
     fontSize: 12,

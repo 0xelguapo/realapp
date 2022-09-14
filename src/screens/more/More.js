@@ -42,7 +42,7 @@ export default function More(props) {
   };
 
   const handleViewGroups = () => {
-    props.navigation.navigate("ViewGroups");
+    props.navigation.navigate("ViewAllGroups");
   };
 
   return (

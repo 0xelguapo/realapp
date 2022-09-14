@@ -2,7 +2,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AddReminder from "../home/AddReminder";
 import More from "./More";
 import AddNote from "./AddNote";
-import ViewGroups from "./ViewGroups";
+import ViewAllGroups from "./ViewAllGroups";
+import ViewOneGroup from "./ViewOneGroup";
 
 const Stack = createNativeStackNavigator();
 
@@ -34,8 +35,13 @@ export default function MoreNavigator() {
       />
       <Stack.Screen
         options={{ presentation: "modal", headerShown: false }}
-        name="ViewGroups"
-        component={ViewGroups}
+        name="ViewAllGroups"
+        component={ViewAllGroups}
+      />
+      <Stack.Screen
+        options={{ presentation: "modal", headerShown: false }}
+        name="ViewOneGroup"
+        component={ViewOneGroup}
       />
     </Stack.Navigator>
   );
