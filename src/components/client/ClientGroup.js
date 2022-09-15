@@ -6,20 +6,21 @@ import useClient from "../../hooks/client-hook";
 export default function ClientGroup({ el, clientId, clientGroupID }) {
   const [checked, setChecked] = useState(el.inGroup);
   const [groupLength, setGroupLength] = useState(el.clients.items.length);
-  const [groupID, setGroupID] = useState(clientGroupID);
+  const [clientGroupIDState, setClientGroupIDState] = useState(clientGroupID);
   const { addClientToGroup, removeClientFromGroup } = useClient();
 
 
   const addToGroup = async () => {
     const response = await addClientToGroup(clientId, el.id);
     if (response) {
-      setGroupID(response.data.createGroupsClients.id);
+      console.log(response.data)
+      setClientGroupIDState(response.data.createGroupsClients.id);
       setGroupLength((prevState) => prevState + 1);
     }
   };
 
   const removeFromGroup = async () => {
-    const response = await removeClientFromGroup(groupID);
+    const response = await removeClientFromGroup(clientGroupIDState);
     if (response) setGroupLength((prevState) => prevState - 1);
   };
 

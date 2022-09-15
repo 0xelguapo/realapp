@@ -28,6 +28,7 @@ export default function ClientDetails(props) {
     const response = await getOneClient(id);
     if (response) {
       setClientDetailsState(response.data.getClient);
+      console.log(response)
     }
   };
 

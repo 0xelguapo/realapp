@@ -40,6 +40,36 @@ export const listClientGroupsWithClients = /* GraphQL */ `
   }
 `;
 
+export const getClientGroupWithClientDetails = /* GraphQL */ `
+  query GetClientGroup($id: ID!) {
+    getClientGroup(id: $id) {
+      id
+      title
+      clients {
+        items {
+          id
+          clientID
+          clientGroupID
+          createdAt
+          updatedAt
+          owner
+            client {
+              id
+              name
+              phone
+              email
+              company
+            }
+        }
+        nextToken
+      }
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+
 export const createReminder = /* GraphQL */ `
   mutation CreateReminder(
     $input: CreateReminderInput!

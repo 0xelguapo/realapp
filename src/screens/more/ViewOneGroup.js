@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { API, graphqlOperation } from "aws-amplify";
-import { getClientGroup } from "../../graphql/queries";
+import { getClientGroupWithClientDetails } from "../../graphql/customQueries";
 import { Ionicons } from "@expo/vector-icons";
+import EachClient from "../../components/client/EachClient";
 
 export default function ViewOneGroup(props) {
   const [clients, setClients] = useState([]);
@@ -12,16 +13,24 @@ export default function ViewOneGroup(props) {
     let response;
     try {
       response = await API.graphql(
-        graphqlOperation(getClientGroup, {
+        graphqlOperation(getClientGroupWithClientDetails, {
           id: groupID,
         })
       );
     } catch (err) {
       console.error(err);
     }
-    const { items: clientsArray, updatedAt } = response.data.getClientGroup.clients;
+    console.log(response);
+    const { items: clientsArray } = response.data.getClientGroup.clients;
     setClients(clientsArray);
+    console.log(clientsArray);
     return response;
+  };
+
+  const handleViewClient = (client) => {
+    props.navigation.navigate("ClientDetails", {
+      client: client,
+    });
   };
 
   useEffect(() => {
@@ -47,6 +56,16 @@ export default function ViewOneGroup(props) {
         </View>
       </View>
       <ScrollView contentContainerStyle={styles.clientsContainer}>
+        {clients.map((client) => (
+          <EachClient
+            taskMode={true}
+            key={client.client.id}
+            phone={client.client.phone}
+            name={client.client.name}
+            company={client.client.company}
+            onPress={() => handleViewClient(client.client)}
+          />
+        ))}
       </ScrollView>
     </View>
   );
@@ -82,7 +101,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: "500",
     color: "#454545",
-    marginBottom: 5
+    marginBottom: 5,
   },
   clientGroupDetails: {
     display: "flex",
@@ -100,6 +119,6 @@ const styles = StyleSheet.create({
     color: "#535353",
   },
   clientsContainer: {
-    paddingHorizontal: 20
-  }
+    paddingHorizontal: 20,
+  },
 });

@@ -56,7 +56,7 @@ export default function EachClient({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "space-evenly",
+    justifyContent: "center",
     paddingVertical: 10,
     paddingHorizontal: 20,
     height: 80,
@@ -65,7 +65,8 @@ const styles = StyleSheet.create({
   },
   name: {
     fontWeight: "600",
-    fontSize: 19,
+    fontSize: 18,
+    marginBottom: 3
   },
   company: {
     color: "#7b7b7c",

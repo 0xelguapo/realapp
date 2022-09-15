@@ -10,6 +10,7 @@ function useClient() {
     getFavoriteClients,
     mutateClientsArrayByIndex,
     removeClientFromArrayByIndex,
+    getOneClient,
   } = useContext(ClientsContext);
 
   const getClientGroups = async (id) => {
@@ -105,7 +106,28 @@ function useClient() {
   };
 
   const removeClient = async (clientId, index) => {
+    //remove client from all groups first before deleting
     let response;
+    let deleteGroupClientResponse;
+    const client = await getOneClient(clientId);
+    const promises = client.data.getClient.group.items.map((group) => {
+      return API.graphql(
+        graphqlOperation(mutations.deleteGroupsClients, {
+          input: { id: group.id },
+        })
+      );
+    });
+
+    //delete associations to groups
+    try {
+      deleteGroupClientResponse = await Promise.all(promises);
+      console.log(deleteGroupClientResponse);
+    } catch (err) {
+      console.error(err);
+      return;
+    }
+
+    //delete client
     try {
       response = await API.graphql(
         graphqlOperation(mutations.deleteClient, { input: { id: clientId } })
@@ -113,7 +135,7 @@ function useClient() {
     } catch (err) {
       console.error(err);
     }
-    removeClientFromArrayByIndex(index);
+    if (index) removeClientFromArrayByIndex(index);
     return response;
   };
 
@@ -172,6 +194,7 @@ function useClient() {
     } catch (err) {
       console.error(err);
     }
+    console.log(response);
     return response;
   };
 

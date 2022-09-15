@@ -4,6 +4,7 @@ import More from "./More";
 import AddNote from "./AddNote";
 import ViewAllGroups from "./ViewAllGroups";
 import ViewOneGroup from "./ViewOneGroup";
+import ClientDetails from '../clients/ClientDetails'
 
 const Stack = createNativeStackNavigator();
 
@@ -42,6 +43,11 @@ export default function MoreNavigator() {
         options={{ presentation: "modal", headerShown: false }}
         name="ViewOneGroup"
         component={ViewOneGroup}
+      />
+      <Stack.Screen
+        options={{ presentation: "modal", headerShown: false }}
+        name="ClientDetails"
+        component={ClientDetails}
       />
     </Stack.Navigator>
   );
