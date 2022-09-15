@@ -16,7 +16,7 @@ import { format, parseISO } from "date-fns";
 import { Feather } from '@expo/vector-icons'
 
 export default function ClientDetails(props) {
-  const { id, name, phone } = props.route.params.client;
+  const { id, phone } = props.route.params.client;
   const { index } = props.route.params;
   const [clientDetailsState, setClientDetailsState] = useState({
     reminder: { items: 0 },

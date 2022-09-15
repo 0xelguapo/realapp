@@ -12,7 +12,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { Provider } from "react-redux";
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign } from "@expo/vector-icons";
+import { GroupsContextProvider } from "../context/group-context";
 
 const Tab = createBottomTabNavigator();
 
@@ -22,28 +23,30 @@ export default function AppNavigator() {
       <ClientContextProvider>
         <TaskContextProvider>
           <RemindersContextProvider>
-            <Tab.Navigator screenOptions={{ tabBarStyle: styles }}>
-              <Tab.Screen
-                name="Home"
-                component={HomeNavigator}
-                options={optionsHandler}
-              />
-              <Tab.Screen
-                name="Clients"
-                component={ClientsNavigator}
-                options={optionsHandler}
-              />
-              <Tab.Screen
-                name="Tasks"
-                component={TasksNavigator}
-                options={optionsHandler}
-              />
-              <Tab.Screen
-                name="More"
-                component={MoreNavigator}
-                options={optionsHandler}
-              />
-            </Tab.Navigator>
+            <GroupsContextProvider>
+              <Tab.Navigator screenOptions={{ tabBarStyle: styles }}>
+                <Tab.Screen
+                  name="Home"
+                  component={HomeNavigator}
+                  options={optionsHandler}
+                />
+                <Tab.Screen
+                  name="Clients"
+                  component={ClientsNavigator}
+                  options={optionsHandler}
+                />
+                <Tab.Screen
+                  name="Tasks"
+                  component={TasksNavigator}
+                  options={optionsHandler}
+                />
+                <Tab.Screen
+                  name="More"
+                  component={MoreNavigator}
+                  options={optionsHandler}
+                />
+              </Tab.Navigator>
+            </GroupsContextProvider>
           </RemindersContextProvider>
         </TaskContextProvider>
       </ClientContextProvider>
@@ -100,7 +103,7 @@ const optionsHandler = ({ route }) => {
             <Ionicons name="people" size={28} color="#727272" />
           ),
         headerShown: false,
-      }; 
+      };
     case "Tasks":
       return {
         tabBarLabel: ({ focused }) =>
