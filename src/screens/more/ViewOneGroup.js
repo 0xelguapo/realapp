@@ -1,40 +1,42 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { API, graphqlOperation } from "aws-amplify";
 import { getClientGroupWithClientDetails } from "../../graphql/customQueries";
 import { Ionicons } from "@expo/vector-icons";
 import EachClient from "../../components/client/EachClient";
+import { GroupsContext } from "../../context/group-context";
 
 export default function ViewOneGroup(props) {
-  const [clients, setClients] = useState([]);
+  const { clientsOfGroup, getClientsFromOneGroup } = useContext(GroupsContext)
   const { groupID, groupTitle } = props.route.params;
 
-  const getClientsFromGroup = async () => {
-    let response;
-    try {
-      response = await API.graphql(
-        graphqlOperation(getClientGroupWithClientDetails, {
-          id: groupID,
-        })
-      );
-    } catch (err) {
-      console.error(err);
-    }
-    console.log(response);
-    const { items: clientsArray } = response.data.getClientGroup.clients;
-    setClients(clientsArray);
-    console.log(clientsArray);
-    return response;
-  };
+  // const getClientsFromGroup = async () => {
+  //   let response;
+  //   try {
+  //     response = await API.graphql(
+  //       graphqlOperation(getClientGroupWithClientDetails, {
+  //         id: groupID,
+  //       })
+  //     );
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  //   console.log(response);
+  //   const { items: clientsArray } = response.data.getClientGroup.clients;
+  //   setClients(clientsArray);
+  //   console.log(clientsArray);
+  //   return response;
+  // };
 
   const handleViewClient = (client) => {
     props.navigation.navigate("ClientDetails", {
       client: client,
+      groupMode: true
     });
   };
 
   useEffect(() => {
-    getClientsFromGroup();
+    getClientsFromOneGroup(groupID);
   }, []);
 
   return (
@@ -46,8 +48,8 @@ export default function ViewOneGroup(props) {
         <Text style={styles.headerText}>{groupTitle}</Text>
         <View style={styles.clientGroupDetails}>
           <Text>
-            {clients.length !== 0 ? (
-              <Text style={styles.clientsLength}>{clients.length}</Text>
+            {clientsOfGroup.length !== 0 ? (
+              <Text style={styles.clientsLength}>{clientsOfGroup.length}</Text>
             ) : (
               <Text style={styles.clientsLength}>0</Text>
             )}
@@ -56,7 +58,7 @@ export default function ViewOneGroup(props) {
         </View>
       </View>
       <ScrollView contentContainerStyle={styles.clientsContainer}>
-        {clients.map((client) => (
+        {clientsOfGroup.map((client) => (
           <EachClient
             taskMode={true}
             key={client.client.id}

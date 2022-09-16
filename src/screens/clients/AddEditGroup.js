@@ -25,7 +25,6 @@ export default function AddEditGroup(props) {
     for (let i = 0; i < allGroupsCopy.length; i++) {
       const allGroupsId = allGroupsCopy[i].id;
       for (let j = 0; j < clientsGroups.length; j++) {
-        console.log(clientsGroups)
         if (allGroupsId === clientsGroups[j].clientGroupID) {
           allGroupsCopy[i] = {
             ...allGroupsCopy[i],
@@ -35,7 +34,6 @@ export default function AddEditGroup(props) {
         }
       }
     }
-    console.log(allGroupsCopy)
     return allGroupsCopy;
   };
 
@@ -66,7 +64,6 @@ export default function AddEditGroup(props) {
 
   const handleSubmit = async () => {
     const response = await addGroup(title);
-    console.log(response);
     if (response) {
       await getAllGroupsAndUpdate();
       setTitle("");

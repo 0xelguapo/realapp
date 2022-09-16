@@ -21,13 +21,11 @@ export default function ViewGroups(props) {
   const fetchGroups = async () => {
     const allGroupsResponse = await getAllGroups();
     let allGroupsArray = allGroupsResponse.data.listClientGroups.items;
-    console.log(allGroupsArray)
     setAllGroups(allGroupsArray);
   };
 
   const handleSubmit = async () => {
     const response = await addGroup(title);
-    console.log(response);
     if (response) {
       await getAllGroups();
       setTitle("");

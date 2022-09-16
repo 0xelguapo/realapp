@@ -10,10 +10,11 @@ import {
 } from "react-native";
 import useClient from "../../hooks/client-hook";
 import { ClientsContext } from "../../context/client-context";
+import { GroupsContext } from "../../context/group-context";
 import { Ionicons } from "@expo/vector-icons";
 import ClientOptions from "../../components/client/ClientOptions";
 import { format, parseISO } from "date-fns";
-import { Feather } from '@expo/vector-icons'
+import { Feather } from "@expo/vector-icons";
 
 export default function ClientDetails(props) {
   const { id, phone } = props.route.params.client;
@@ -21,6 +22,7 @@ export default function ClientDetails(props) {
   const [clientDetailsState, setClientDetailsState] = useState({
     reminder: { items: 0 },
   });
+  const { removeClientFromClientsOfGroupArray } = useContext(GroupsContext);
   const { getOneClient } = useContext(ClientsContext);
   const { updateFavorite, removeClient } = useClient();
 
@@ -28,7 +30,7 @@ export default function ClientDetails(props) {
     const response = await getOneClient(id);
     if (response) {
       setClientDetailsState(response.data.getClient);
-      console.log(response)
+      console.log(response);
     }
   };
 
@@ -79,12 +81,16 @@ export default function ClientDetails(props) {
   };
 
   const removeClientHandler = () => {
+    let removeResponse;
     Alert.alert("Are you sure you want to delete this client?", null, [
       { text: "Cancel", style: "cancel" },
       {
         text: "Delete",
         onPress: async () => {
-          await removeClient(id, index);
+          removeResponse = await removeClient(id, index);
+          if (removeResponse && props.route.params.groupMode === true) {
+            removeClientFromClientsOfGroupArray(id);
+          }
           props.navigation.goBack();
         },
         style: "destructive",
@@ -265,12 +271,12 @@ const styles = StyleSheet.create({
     borderColor: "#000000",
     minHeight: 75,
   },
-  bellIcon: { marginRight: 5},
+  bellIcon: { marginRight: 5 },
 
   remindersContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center'
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
   },
   reminders: {
     height: 35,
@@ -312,11 +318,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   emptyPlaceholderContainer: {
-    justifyContent: 'center',
-    alignItems: 'center'
+    justifyContent: "center",
+    alignItems: "center",
   },
   emptyPlaceholder: {
     color: "#ababab",
   },
-
 });
