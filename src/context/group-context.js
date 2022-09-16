@@ -1,7 +1,7 @@
 import { createContext, useState } from "react";
 import { API, graphqlOperation } from "aws-amplify";
 import * as mutations from "../graphql/mutations";
-import { getClientGroupWithClientDetails } from "../graphql/customQueries";
+import { getClientGroupWithClientDetails, listClientGroupsWithClients } from "../graphql/customQueries";
 
 const GroupsContext = createContext();
 
@@ -29,7 +29,7 @@ function GroupsContextProvider({ children }) {
     let response;
     try {
       response = await API.graphql(
-        graphqlOperation(customQueries.listClientGroupsWithClients)
+        graphqlOperation(listClientGroupsWithClients)
       );
     } catch (err) {
       console.error(err);

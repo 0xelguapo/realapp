@@ -1,37 +1,25 @@
 import { useEffect, useState, useContext } from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import { API, graphqlOperation } from "aws-amplify";
 import { getClientGroupWithClientDetails } from "../../graphql/customQueries";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, Feather } from "@expo/vector-icons";
 import EachClient from "../../components/client/EachClient";
 import { GroupsContext } from "../../context/group-context";
 
 export default function ViewOneGroup(props) {
-  const { clientsOfGroup, getClientsFromOneGroup } = useContext(GroupsContext)
+  const { clientsOfGroup, getClientsFromOneGroup } = useContext(GroupsContext);
   const { groupID, groupTitle } = props.route.params;
-
-  // const getClientsFromGroup = async () => {
-  //   let response;
-  //   try {
-  //     response = await API.graphql(
-  //       graphqlOperation(getClientGroupWithClientDetails, {
-  //         id: groupID,
-  //       })
-  //     );
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  //   console.log(response);
-  //   const { items: clientsArray } = response.data.getClientGroup.clients;
-  //   setClients(clientsArray);
-  //   console.log(clientsArray);
-  //   return response;
-  // };
 
   const handleViewClient = (client) => {
     props.navigation.navigate("ClientDetails", {
       client: client,
-      groupMode: true
+      groupMode: true,
     });
   };
 
@@ -56,6 +44,12 @@ export default function ViewOneGroup(props) {
           </Text>
           <Ionicons name="ios-people-outline" size={12} color="#535353" />
         </View>
+      </View>
+      <View style={styles.editContainer}>
+        <TouchableOpacity style={styles.editButton}>
+          <Feather name="edit-2" size={20} color="#535353" />
+          <Text style={styles.editText}>Edit</Text>
+        </TouchableOpacity>
       </View>
       <ScrollView contentContainerStyle={styles.clientsContainer}>
         {clientsOfGroup.map((client) => (
@@ -104,6 +98,19 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     color: "#454545",
     marginBottom: 5,
+  },
+  editContainer: {
+    height: 65,
+    alignItems: "center",
+    justifyContent: "space-evenly",
+    borderBottomWidth: 1,
+    borderBottomColor: "#e6e6e6",
+  },
+  editButton: {
+    height: "100%",
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    width: 60,
   },
   clientGroupDetails: {
     display: "flex",

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import {
   View,
   StyleSheet,
@@ -10,19 +10,15 @@ import { AntDesign } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import useClient from "../../hooks/client-hook";
 import Group from "../../components/more/Group";
+import { GroupsContext } from "../../context/group-context";
 
 export default function ViewGroups(props) {
   const [showInput, setShowInput] = useState(false);
   const [title, setTitle] = useState("");
-  const [allGroups, setAllGroups] = useState([]);
+  // const [allGroups, setAllGroups] = useState([]);
   const inputRef = useRef(null);
-  const { addGroup, getAllGroups } = useClient();
-
-  const fetchGroups = async () => {
-    const allGroupsResponse = await getAllGroups();
-    let allGroupsArray = allGroupsResponse.data.listClientGroups.items;
-    setAllGroups(allGroupsArray);
-  };
+  const { addGroup } = useClient();
+  const { allGroups, getAllGroups } = useContext(GroupsContext);
 
   const handleSubmit = async () => {
     const response = await addGroup(title);
@@ -34,7 +30,7 @@ export default function ViewGroups(props) {
   };
 
   useEffect(() => {
-    fetchGroups();
+    getAllGroups();
   }, []);
 
   useEffect(() => {
@@ -75,10 +71,7 @@ export default function ViewGroups(props) {
         )}
         <View style={styles.clientGroupsContainer}>
           {allGroups.map((el) => (
-            <Group
-              key={el.id}
-              el={el}
-            />
+            <Group key={el.id} el={el} />
           ))}
         </View>
       </View>
