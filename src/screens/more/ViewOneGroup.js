@@ -23,6 +23,13 @@ export default function ViewOneGroup(props) {
     });
   };
 
+  const handleEditGroup = () => {
+    props.navigation.navigate("EditClientsOfGroup", {
+      groupID: groupID,
+      groupTitle: groupTitle
+    });
+  };
+
   useEffect(() => {
     getClientsFromOneGroup(groupID);
   }, []);
@@ -46,7 +53,7 @@ export default function ViewOneGroup(props) {
         </View>
       </View>
       <View style={styles.editContainer}>
-        <TouchableOpacity style={styles.editButton}>
+        <TouchableOpacity style={styles.editButton} onPress={handleEditGroup}>
           <Feather name="edit-2" size={20} color="#535353" />
           <Text style={styles.editText}>Edit</Text>
         </TouchableOpacity>

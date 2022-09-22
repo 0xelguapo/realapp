@@ -11,6 +11,7 @@ function useClient() {
     mutateClientsArrayByIndex,
     removeClientFromArrayByIndex,
     getOneClient,
+    clientsArray,
   } = useContext(ClientsContext);
 
   const getClientGroups = async (id) => {
@@ -136,6 +137,11 @@ function useClient() {
       console.error(err);
     }
     if (index) removeClientFromArrayByIndex(index);
+    else {
+      const indexOfDeletedClient = clientsArray.findIndex((client) => client.id === clientId)
+      removeClientFromArrayByIndex(indexOfDeletedClient);
+
+    }
     return response;
   };
 

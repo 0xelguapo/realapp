@@ -1,4 +1,4 @@
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { API, graphqlOperation } from "aws-amplify";
 import { deleteNote } from "../../graphql/mutations";
 import { Ionicons } from "@expo/vector-icons";
@@ -25,14 +25,12 @@ export default function Note(props) {
           <Text style={styles.noteContent}>{props.content}</Text>
         )}
       </View>
-      <View style={styles.deleteContainer}>
-        <Ionicons
-          name="remove-circle-outline"
-          size={20}
-          color="#535353"
-          onPress={handleDeleteNote}
-        />
-      </View>
+      <TouchableOpacity
+        onPress={handleDeleteNote}
+        style={styles.deleteContainer}
+      >
+        <Ionicons name="remove-circle-outline" size={20} color="#535353" />
+      </TouchableOpacity>
     </View>
   );
 }
