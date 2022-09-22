@@ -6,10 +6,12 @@ import {
   TouchableOpacity,
   TextInput,
 } from "react-native";
+import { useSelector } from "react-redux";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import useClient from "../../hooks/client-hook";
 import Group from "../../components/more/Group";
 import { GroupsContext } from "../../context/group-context";
+import { selectAllGroups } from "../../redux/group-slice";
 
 export default function ViewGroups(props) {
   const [showInput, setShowInput] = useState(false);

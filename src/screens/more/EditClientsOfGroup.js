@@ -4,21 +4,25 @@ import {
   Text,
   TouchableOpacity,
   TextInput,
+  ScrollView,
 } from "react-native";
 import { useContext, useState } from "react";
 import { GroupsContext } from "../../context/group-context";
 import { Ionicons, AntDesign, Feather } from "@expo/vector-icons";
+import EditingClient from "../../components/more/EditingClient";
 
 export default function EditClientsOfGroup(props) {
   const { clientsOfGroup } = useContext(GroupsContext);
   const { groupID, groupTitle } = props.route.params;
   const [groupTitleInput, setGroupTitleInput] = useState(groupTitle);
 
+  console.log(clientsOfGroup);
+
   const handleBlurTitleInput = () => {
-    if(groupTitleInput !== groupTitle) {
-      console.log('blurred')
+    if (groupTitleInput !== groupTitle) {
+      console.log("blurred");
     }
-  }
+  };
 
   return (
     <View style={styles.container}>
@@ -51,6 +55,21 @@ export default function EditClientsOfGroup(props) {
           {clientsOfGroup.length} CONTACTS
         </Text>
       </View>
+      <ScrollView
+        style={styles.groupMembersContainer}
+        contentContainerStyle={{
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        {clientsOfGroup.map((client) => (
+          <EditingClient
+            key={client.client.id}
+            name={client.client.name}
+            company={client.client.company}
+          />
+        ))}
+      </ScrollView>
     </View>
   );
 }
