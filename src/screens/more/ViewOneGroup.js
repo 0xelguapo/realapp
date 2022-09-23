@@ -6,15 +6,18 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import { API, graphqlOperation } from "aws-amplify";
-import { getClientGroupWithClientDetails } from "../../graphql/customQueries";
 import { Ionicons, Feather } from "@expo/vector-icons";
 import EachClient from "../../components/client/EachClient";
 import { GroupsContext } from "../../context/group-context";
+import { useSelector } from "react-redux";
 
 export default function ViewOneGroup(props) {
   const { clientsOfGroup, getClientsFromOneGroup } = useContext(GroupsContext);
   const { groupID, groupTitle } = props.route.params;
+
+  const oneGroup = useSelector((state) =>
+    state.groups.groups.find((group) => group.id === groupID)
+  );
 
   const handleViewClient = (client) => {
     props.navigation.navigate("ClientDetails", {
@@ -26,7 +29,7 @@ export default function ViewOneGroup(props) {
   const handleEditGroup = () => {
     props.navigation.navigate("EditClientsOfGroup", {
       groupID: groupID,
-      groupTitle: groupTitle
+      groupTitle: groupTitle,
     });
   };
 
@@ -40,7 +43,7 @@ export default function ViewOneGroup(props) {
         <View style={styles.rectangleContainer}>
           <View style={styles.rectangle}></View>
         </View>
-        <Text style={styles.headerText}>{groupTitle}</Text>
+        <Text style={styles.headerText}>{oneGroup.title}</Text>
         <View style={styles.clientGroupDetails}>
           <Text>
             {clientsOfGroup.length !== 0 ? (

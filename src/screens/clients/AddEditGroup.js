@@ -68,6 +68,7 @@ export default function AddEditGroup(props) {
       await getAllGroupsAndUpdate();
       setTitle("");
       setShowInput(false);
+      console.log(response)
     }
   };
 

@@ -5,29 +5,39 @@ import {
   Text,
   TouchableOpacity,
   TextInput,
+  ScrollView,
 } from "react-native";
-import { useSelector } from "react-redux";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import useClient from "../../hooks/client-hook";
 import Group from "../../components/more/Group";
 import { GroupsContext } from "../../context/group-context";
-import { selectAllGroups } from "../../redux/group-slice";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  selectAllGroups,
+  fetchGroups,
+  addGroup,
+} from "../../redux/group-slice";
 
 export default function ViewGroups(props) {
   const [showInput, setShowInput] = useState(false);
   const [title, setTitle] = useState("");
   // const [allGroups, setAllGroups] = useState([]);
   const inputRef = useRef(null);
-  const { addGroup } = useClient();
+  // const { addGroup } = useClient();
   const { allGroups, getAllGroups } = useContext(GroupsContext);
 
+  const dispatch = useDispatch();
+  const groups = useSelector(selectAllGroups);
+
+  useEffect(() => {
+    dispatch(fetchGroups());
+    console.log(groups);
+  }, [dispatch]);
+
   const handleSubmit = async () => {
-    const response = await addGroup(title);
-    if (response) {
-      await getAllGroups();
-      setTitle("");
-      setShowInput(false);
-    }
+    dispatch(addGroup(title));
+    setTitle('')
+    setShowInput(false)
   };
 
   useEffect(() => {
@@ -70,11 +80,11 @@ export default function ViewGroups(props) {
             />
           </View>
         )}
-        <View style={styles.clientGroupsContainer}>
-          {allGroups.map((el) => (
+        <ScrollView contentContainerStyle={{ paddingTop: 30, paddingBottom: 100 }}>
+          {groups.map((el) => (
             <Group key={el.id} el={el} />
           ))}
-        </View>
+        </ScrollView>
       </View>
     </View>
   );
@@ -121,7 +131,5 @@ const styles = StyleSheet.create({
     fontSize: 14,
     borderColor: "#454545",
   },
-  clientGroupsContainer: {
-    paddingVertical: 10,
-  },
+  clientGroupsContainer: {},
 });

@@ -10,17 +10,18 @@ import { useContext, useState } from "react";
 import { GroupsContext } from "../../context/group-context";
 import { Ionicons, AntDesign, Feather } from "@expo/vector-icons";
 import EditingClient from "../../components/more/EditingClient";
+import { useDispatch } from "react-redux";
+import { editGroupName } from "../../redux/group-slice";
 
 export default function EditClientsOfGroup(props) {
   const { clientsOfGroup } = useContext(GroupsContext);
   const { groupID, groupTitle } = props.route.params;
   const [groupTitleInput, setGroupTitleInput] = useState(groupTitle);
-
-  console.log(clientsOfGroup);
+  const dispatch = useDispatch();
 
   const handleBlurTitleInput = () => {
     if (groupTitleInput !== groupTitle) {
-      console.log("blurred");
+      dispatch(editGroupName({ id: groupID, title: groupTitleInput }));
     }
   };
 
