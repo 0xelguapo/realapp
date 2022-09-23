@@ -10,13 +10,20 @@ import { useContext, useState } from "react";
 import { GroupsContext } from "../../context/group-context";
 import { Ionicons, AntDesign, Feather } from "@expo/vector-icons";
 import EditingClient from "../../components/more/EditingClient";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { editGroupName } from "../../redux/group-slice";
 
 export default function EditClientsOfGroup(props) {
   const { clientsOfGroup } = useContext(GroupsContext);
   const { groupID, groupTitle } = props.route.params;
   const [groupTitleInput, setGroupTitleInput] = useState(groupTitle);
+
+  const thisGroup = useSelector((state) =>
+    state.groups.groups.find((group) => group.id === groupID).clients.items
+  );
+
+  console.log(thisGroup)
+
   const dispatch = useDispatch();
 
   const handleBlurTitleInput = () => {
@@ -63,11 +70,15 @@ export default function EditClientsOfGroup(props) {
           justifyContent: "center",
         }}
       >
-        {clientsOfGroup.map((client) => (
+        {thisGroup.map((client, index) => (
           <EditingClient
             key={client.client.id}
+            clientId={client.client.id}
             name={client.client.name}
             company={client.client.company}
+            groupID={client.clientGroupID}
+            clientGroupID={client.id}
+            index={index}
           />
         ))}
       </ScrollView>

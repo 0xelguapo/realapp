@@ -28,6 +28,22 @@ export const listClientGroupsWithClients = /* GraphQL */ `
         clients {
           items {
             id
+            clientID
+            clientGroupID
+            createdAt
+              client {
+                id
+                name
+                phone
+                email
+                company
+                group {
+                  items {
+                    id
+                    clientGroupID
+                  }
+                }
+              }
           }
           nextToken
         }

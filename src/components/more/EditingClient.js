@@ -6,9 +6,16 @@ import {
   TouchableHighlight,
   TouchableOpacity,
 } from "react-native";
+import { useState } from 'react';
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 
-export default function EditingClient({ id, name, company }) {
+export default function EditingClient({ id, name, company, clientGroupID, groupID, index }) {
+  const [checked, setChecked] = useState(true);
+  const [clientIdsToBeRemoved, setClientIdsToBeRemoved] = useState([]);
+
+  console.log(groupID)
+
+
   return (
     <Pressable>
       <TouchableHighlight underlayColor="#f1f1f1">

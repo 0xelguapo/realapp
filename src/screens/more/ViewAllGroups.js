@@ -13,9 +13,9 @@ import Group from "../../components/more/Group";
 import { GroupsContext } from "../../context/group-context";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  selectAllGroups,
   fetchGroups,
   addGroup,
+  selectEveryGroup,
 } from "../../redux/group-slice";
 
 export default function ViewGroups(props) {
@@ -27,22 +27,21 @@ export default function ViewGroups(props) {
   const { allGroups, getAllGroups } = useContext(GroupsContext);
 
   const dispatch = useDispatch();
-  const groups = useSelector(selectAllGroups);
+  const groups = useSelector(selectEveryGroup);
 
   useEffect(() => {
     dispatch(fetchGroups());
-    console.log(groups);
   }, [dispatch]);
 
   const handleSubmit = async () => {
     dispatch(addGroup(title));
-    setTitle('')
-    setShowInput(false)
+    setTitle("");
+    setShowInput(false);
   };
 
-  useEffect(() => {
-    getAllGroups();
-  }, []);
+  // useEffect(() => {
+  //   getAllGroups();
+  // }, []);
 
   useEffect(() => {
     if (showInput) inputRef.current.focus();
@@ -80,7 +79,9 @@ export default function ViewGroups(props) {
             />
           </View>
         )}
-        <ScrollView contentContainerStyle={{ paddingTop: 30, paddingBottom: 100 }}>
+        <ScrollView
+          contentContainerStyle={{ paddingTop: 30, paddingBottom: 100 }}
+        >
           {groups.map((el) => (
             <Group key={el.id} el={el} />
           ))}

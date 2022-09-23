@@ -1,13 +1,21 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import {
+  createSlice,
+  createAsyncThunk,
+  createEntityAdapter,
+} from "@reduxjs/toolkit";
 import { API, graphqlOperation } from "aws-amplify";
 import { listClientGroupsWithClients } from "../graphql/customQueries";
 import * as mutations from "../graphql/mutations";
 
-const initialState = {
+const groupsAdapter = createEntityAdapter({
+  sortComparer: (a, b) => b.createdAt.localeCompare(a.createdAt),
+});
+
+const initialState = groupsAdapter.getInitialState({
   groups: [],
   status: "idle",
   error: null,
-};
+});
 
 export const fetchGroups = createAsyncThunk(
   "groups/fetchAllGroups",
@@ -49,18 +57,37 @@ export const editGroupName = createAsyncThunk(
     let response;
     try {
       response = await API.graphql(
-        graphqlOperation(mutations.updateClientGroup,
-        {
+        graphqlOperation(mutations.updateClientGroup, {
           input: groupDetails,
-        }
-      ));
+        })
+      );
     } catch (err) {
       console.error(err);
     }
     if (response) {
-      console.log(response)
+      console.log(response);
       return response.data.updateClientGroup;
     }
+  }
+);
+
+export const removeClientFromGroup = createAsyncThunk(
+  "groups/removeClientFromGroup",
+  async (removeDetails) => {
+    const { clientGroupID, groupID, clientID } = removeDetails;
+    let response;
+    try {
+      response = await API.graphql(
+        graphqlOperation(mutations.deleteGroupsClients, {
+          input: {
+            id: clientGroupID,
+          },
+        })
+      );
+    } catch (err) {
+      console.error(err);
+    }
+    return response.data;
   }
 );
 
@@ -72,7 +99,7 @@ export const groupSlice = createSlice({
     builder
       .addCase(fetchGroups.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.groups = action.payload;
+        groupsAdapter.upsertMany(state, action.payload);
       })
       .addCase(fetchGroups.rejected, (state, action) => {
         (state.status = "failed"), (state.error = action.error);
@@ -81,7 +108,7 @@ export const groupSlice = createSlice({
         state.groups.push(action.payload);
       })
       .addCase(editGroupName.fulfilled, (state, action) => {
-        console.log(action.payload)
+        console.log(action.payload);
         const index = state.groups.findIndex(
           (group) => group.id === action.payload.id
         );
@@ -90,7 +117,11 @@ export const groupSlice = createSlice({
   },
 });
 
-export const selectAllGroups = (state) => state.groups.groups;
+export const {
+  selectAll: selectEveryGroup,
+  selectById: selectGroupByIds,
+  selectIds: selectGroupIds,
+} = groupsAdapter.getSelectors((state) => state.groups);
 
 export const selectGroupById = (state, groupId) =>
   state.groups.groups.find((group) => group.id === groupId);

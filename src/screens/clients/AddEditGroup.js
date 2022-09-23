@@ -36,6 +36,7 @@ export default function AddEditGroup(props) {
     }
     return allGroupsCopy;
   };
+  
 
   const getAllGroupsAndUpdate = async () => {
     const allGroupsResponse = await getAllGroups();
@@ -45,6 +46,7 @@ export default function AddEditGroup(props) {
     if (allGroupsArray && clientsGroupsArray) {
       let finalArray = updateClientGroups(allGroupsArray, clientsGroupsArray);
       setAllGroups(finalArray);
+      console.log(finalArray)
     }
   };
 
