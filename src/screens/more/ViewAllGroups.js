@@ -21,10 +21,7 @@ import {
 export default function ViewGroups(props) {
   const [showInput, setShowInput] = useState(false);
   const [title, setTitle] = useState("");
-  // const [allGroups, setAllGroups] = useState([]);
   const inputRef = useRef(null);
-  // const { addGroup } = useClient();
-  const { allGroups, getAllGroups } = useContext(GroupsContext);
 
   const dispatch = useDispatch();
   const groups = useSelector(selectAllGroups);
@@ -39,10 +36,6 @@ export default function ViewGroups(props) {
     setShowInput(false);
   };
 
-  // useEffect(() => {
-  //   getAllGroups();
-  // }, []);
-
   useEffect(() => {
     if (showInput) inputRef.current.focus();
   }, [showInput]);
@@ -50,10 +43,11 @@ export default function ViewGroups(props) {
   return (
     <View style={styles.container}>
       <View style={styles.headingContainer}>
-        <Text style={styles.screenTitle}>All Groups</Text>
         <TouchableOpacity onPress={props.navigation.goBack}>
-          <AntDesign name="close" size={24} color="#ababab" />
+          <AntDesign name="left" size={24} color="#ababab" />
+          {/* <AntDesign name="close" size={24} color="#ababab" /> */}
         </TouchableOpacity>
+        <Text style={styles.screenTitle}>All Groups</Text>
       </View>
       <View style={styles.body}>
         <TouchableOpacity
@@ -93,16 +87,17 @@ export default function ViewGroups(props) {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 25,
-    paddingVertical: 20,
+    paddingTop: 65,
+    paddingBottom: 40,
   },
   headingContainer: {
     display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "center",
   },
   screenTitle: {
     fontWeight: "500",
-    fontSize: 16,
+    fontSize: 18,
+    marginTop: 10,
   },
   body: {
     paddingVertical: 30,

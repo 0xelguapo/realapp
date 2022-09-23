@@ -45,13 +45,17 @@ export default function More(props) {
     props.navigation.navigate("ViewAllGroups");
   };
 
+  const handleViewReminders = () => {
+    props.navigation.navigate("ViewAllReminders");
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.headingContainer}>
         <Text style={styles.headingText}>EXTRAS</Text>
       </View>
       <View style={styles.optionsContainer}>
-        <TouchableOpacity style={styles.option}>
+        <TouchableOpacity style={styles.option} onPress={handleViewReminders}>
           <Feather name="bell" size={24} color="#535353" />
           <Text style={styles.optionText}>Reminders</Text>
         </TouchableOpacity>

@@ -6,6 +6,7 @@ import ViewAllGroups from "./ViewAllGroups";
 import ViewOneGroup from "./ViewOneGroup";
 import ClientDetails from "../clients/ClientDetails";
 import EditClientsOfGroup from "./EditClientsOfGroup";
+import ViewAllReminders from "./ViewAllReminders";
 
 const Stack = createNativeStackNavigator();
 
@@ -36,7 +37,7 @@ export default function MoreNavigator() {
         component={AddReminder}
       />
       <Stack.Screen
-        options={{ presentation: "modal", headerShown: false }}
+        options={{ headerShown: false }}
         name="ViewAllGroups"
         component={ViewAllGroups}
       />
@@ -54,6 +55,11 @@ export default function MoreNavigator() {
         options={{ presentation: "modal", headerShown: false }}
         name="EditClientsOfGroup"
         component={EditClientsOfGroup}
+      />
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name="ViewAllReminders"
+        component={ViewAllReminders}
       />
     </Stack.Navigator>
   );
