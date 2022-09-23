@@ -5,19 +5,23 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import { Ionicons, Feather } from "@expo/vector-icons";
 import EachClient from "../../components/client/EachClient";
 import { GroupsContext } from "../../context/group-context";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  selectGroupById,
+  deleteGroup,
+  removeMultipleClientsFromGroup,
+} from "../../redux/group-slice";
 
 export default function ViewOneGroup(props) {
-  const { clientsOfGroup, getClientsFromOneGroup } = useContext(GroupsContext);
+  // const { clientsOfGroup, getClientsFromOneGroup } = useContext(GroupsContext);
   const { groupID, groupTitle } = props.route.params;
-
-  const oneGroup = useSelector((state) =>
-    state.groups.groups.find((group) => group.id === groupID)
-  );
+  const dispatch = useDispatch();
+  const thisGroup = useSelector((state) => selectGroupById(state, groupID));
 
   const handleViewClient = (client) => {
     props.navigation.navigate("ClientDetails", {
@@ -33,9 +37,36 @@ export default function ViewOneGroup(props) {
     });
   };
 
-  useEffect(() => {
-    getClientsFromOneGroup(groupID);
-  }, []);
+  const handleDeleteGroup = () => {
+    Alert.alert(
+      "Are you sure you want to delete this group? This action cannot be undone",
+      null,
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: () => {
+            if (thisGroup.clients.items.length === 0) {
+              props.navigation.goBack();
+              dispatch(deleteGroup(groupID));
+            } else {
+              const allClientsToBeRemoved = thisGroup.clients.items.map(
+                (el) => el.id
+              );
+              props.navigation.goBack();
+              dispatch(
+                removeMultipleClientsFromGroup({
+                  removeIDs: allClientsToBeRemoved,
+                  groupID: groupID,
+                })
+              ).then(() => dispatch(deleteGroup(groupID)));
+            }
+          },
+        },
+      ]
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -43,11 +74,13 @@ export default function ViewOneGroup(props) {
         <View style={styles.rectangleContainer}>
           <View style={styles.rectangle}></View>
         </View>
-        <Text style={styles.headerText}>{oneGroup.title}</Text>
+        <Text style={styles.headerText}>{thisGroup.title}</Text>
         <View style={styles.clientGroupDetails}>
           <Text>
-            {clientsOfGroup.length !== 0 ? (
-              <Text style={styles.clientsLength}>{clientsOfGroup.length}</Text>
+            {thisGroup.clients.items.length !== 0 ? (
+              <Text style={styles.clientsLength}>
+                {thisGroup.clients.items.length}
+              </Text>
             ) : (
               <Text style={styles.clientsLength}>0</Text>
             )}
@@ -58,11 +91,22 @@ export default function ViewOneGroup(props) {
       <View style={styles.editContainer}>
         <TouchableOpacity style={styles.editButton} onPress={handleEditGroup}>
           <Feather name="edit-2" size={20} color="#535353" />
-          <Text style={styles.editText}>Edit</Text>
+          <Text style={styles.editText}>EDIT</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            ...styles.editButton,
+            borderLeftWidth: 1,
+            borderLeftColor: "#e6e6e6",
+          }}
+          onPress={handleDeleteGroup}
+        >
+          <Ionicons name="remove-circle-outline" size={24} color="#535353" />
+          <Text style={styles.editText}>DELETE</Text>
         </TouchableOpacity>
       </View>
       <ScrollView contentContainerStyle={styles.clientsContainer}>
-        {clientsOfGroup.map((client) => (
+        {thisGroup.clients.items.map((client) => (
           <EachClient
             taskMode={true}
             key={client.client.id}
@@ -110,6 +154,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   editContainer: {
+    flexDirection: "row",
     height: 65,
     alignItems: "center",
     justifyContent: "space-evenly",
@@ -120,7 +165,7 @@ const styles = StyleSheet.create({
     height: "100%",
     justifyContent: "space-evenly",
     alignItems: "center",
-    width: 60,
+    flex: 1,
   },
   clientGroupDetails: {
     display: "flex",

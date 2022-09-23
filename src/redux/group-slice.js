@@ -12,7 +12,6 @@ const groupsAdapter = createEntityAdapter({
 });
 
 const initialState = groupsAdapter.getInitialState({
-  groups: [],
   status: "idle",
   error: null,
 });
@@ -71,6 +70,29 @@ export const editGroupName = createAsyncThunk(
   }
 );
 
+export const removeMultipleClientsFromGroup = createAsyncThunk(
+  "groups/removeMultipleClientsFromGroup",
+  async (removeDetails) => {
+    let response;
+    const { removeIDs, groupID } = removeDetails;
+    const promises = removeIDs.map((removeID) => {
+      return API.graphql(
+        graphqlOperation(mutations.deleteGroupsClients, {
+          input: { id: removeID },
+        })
+      );
+    });
+    try {
+      response = await Promise.all(promises);
+    } catch (err) {
+      console.error(err);
+    }
+    if (response) {
+      return { removeIDs, groupID };
+    }
+  }
+);
+
 export const removeClientFromGroup = createAsyncThunk(
   "groups/removeClientFromGroup",
   async (removeDetails) => {
@@ -91,6 +113,24 @@ export const removeClientFromGroup = createAsyncThunk(
   }
 );
 
+export const deleteGroup = createAsyncThunk(
+  "groups/deleteGroup",
+  async (groupID) => {
+    let response;
+    try {
+      response = await API.graphql(
+        graphqlOperation(mutations.deleteClientGroup, {
+          input: { id: groupID },
+        })
+      );
+    } catch (err) {
+      console.error(err);
+    }
+    console.log(response.data);
+    return response.data.deleteClientGroup;
+  }
+);
+
 export const groupSlice = createSlice({
   name: "groups",
   initialState,
@@ -105,7 +145,7 @@ export const groupSlice = createSlice({
         (state.status = "failed"), (state.error = action.error);
       })
       .addCase(addGroup.fulfilled, (state, action) => {
-        state.groups.push(action.payload);
+        groupsAdapter.addOne(state, action.payload);
       })
       .addCase(editGroupName.fulfilled, (state, action) => {
         console.log(action.payload);
@@ -113,17 +153,26 @@ export const groupSlice = createSlice({
           (group) => group.id === action.payload.id
         );
         state.groups[index] = action.payload;
+      })
+      .addCase(removeMultipleClientsFromGroup.fulfilled, (state, action) => {
+        const updatedClients = state.entities[
+          action.payload.groupID
+        ].clients.items.filter(
+          (el) => !action.payload.removeIDs.includes(el.id)
+        );
+        state.entities[action.payload.groupID].clients.items = updatedClients;
+        // console.log(state.entities[action.payload.groupID]);
+      })
+      .addCase(deleteGroup.fulfilled, (state, action) => {
+        groupsAdapter.removeOne(state, action.payload.id);
       });
   },
 });
 
 export const {
-  selectAll: selectEveryGroup,
-  selectById: selectGroupByIds,
+  selectAll: selectAllGroups,
+  selectById: selectGroupById,
   selectIds: selectGroupIds,
 } = groupsAdapter.getSelectors((state) => state.groups);
-
-export const selectGroupById = (state, groupId) =>
-  state.groups.groups.find((group) => group.id === groupId);
 
 export default groupSlice.reducer;

@@ -37,12 +37,6 @@ export const listClientGroupsWithClients = /* GraphQL */ `
                 phone
                 email
                 company
-                group {
-                  items {
-                    id
-                    clientGroupID
-                  }
-                }
               }
           }
           nextToken

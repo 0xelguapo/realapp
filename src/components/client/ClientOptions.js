@@ -83,7 +83,7 @@ export default function ClientOptions({
       >
         <View style={styles.optionIconContainer}>
           <Ionicons name="remove-circle-outline" size={24} color="#535353" />
-          <Text style={styles.optionText}>REMOVE</Text>
+          <Text style={styles.optionText}>DELETE</Text>
         </View>
       </TouchableHighlight>
     </ScrollView>

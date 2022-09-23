@@ -6,22 +6,36 @@ import {
   TouchableHighlight,
   TouchableOpacity,
 } from "react-native";
-import { useState } from 'react';
+import { useState } from "react";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 
-export default function EditingClient({ id, name, company, clientGroupID, groupID, index }) {
+export default function EditingClient({
+  id,
+  name,
+  company,
+  clientGroupID,
+  groupID,
+  index,
+  handleAddToRemove,
+}) {
   const [checked, setChecked] = useState(true);
-  const [clientIdsToBeRemoved, setClientIdsToBeRemoved] = useState([]);
 
-  console.log(groupID)
-
+  const handleCheck = () => {
+    if (checked) {
+      handleAddToRemove(clientGroupID, false);
+      setChecked(false);
+    } else {
+      handleAddToRemove(clientGroupID, true);
+      setChecked(true);
+    }
+  };
 
   return (
     <Pressable>
-      <TouchableHighlight underlayColor="#f1f1f1">
+      <TouchableHighlight underlayColor="#f1f1f1" onPress={handleCheck}>
         <View style={styles.container}>
           <View style={styles.checkContainer}>
-            <Ionicons name="checkmark" size={30} color="#535353" />
+            {checked && <Ionicons name="checkmark" size={30} color="#535353" />}
           </View>
           <View style={styles.clientDetails}>
             <Text style={styles.name}>{name}</Text>

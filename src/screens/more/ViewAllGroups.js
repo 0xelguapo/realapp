@@ -15,7 +15,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   fetchGroups,
   addGroup,
-  selectEveryGroup,
+  selectAllGroups,
 } from "../../redux/group-slice";
 
 export default function ViewGroups(props) {
@@ -27,7 +27,7 @@ export default function ViewGroups(props) {
   const { allGroups, getAllGroups } = useContext(GroupsContext);
 
   const dispatch = useDispatch();
-  const groups = useSelector(selectEveryGroup);
+  const groups = useSelector(selectAllGroups);
 
   useEffect(() => {
     dispatch(fetchGroups());

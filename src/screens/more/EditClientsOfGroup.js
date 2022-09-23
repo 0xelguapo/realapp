@@ -11,20 +11,42 @@ import { GroupsContext } from "../../context/group-context";
 import { Ionicons, AntDesign, Feather } from "@expo/vector-icons";
 import EditingClient from "../../components/more/EditingClient";
 import { useDispatch, useSelector } from "react-redux";
-import { editGroupName } from "../../redux/group-slice";
+import {
+  editGroupName,
+  selectGroupById,
+  removeMultipleClientsFromGroup,
+} from "../../redux/group-slice";
 
 export default function EditClientsOfGroup(props) {
   const { clientsOfGroup } = useContext(GroupsContext);
   const { groupID, groupTitle } = props.route.params;
   const [groupTitleInput, setGroupTitleInput] = useState(groupTitle);
-
-  const thisGroup = useSelector((state) =>
-    state.groups.groups.find((group) => group.id === groupID).clients.items
-  );
-
-  console.log(thisGroup)
-
+  const [clientsToBeRemovedFromGroup, setClientsToBeRemovedFromGroup] =
+    useState([]);
   const dispatch = useDispatch();
+
+  const handleAddToRemove = (clientGroupID, undo = false) => {
+    let idsArray = [...clientsToBeRemovedFromGroup];
+    if (!undo) {
+      idsArray.push(clientGroupID);
+      setClientsToBeRemovedFromGroup(idsArray);
+    } else {
+      const index = idsArray.indexOf(clientGroupID);
+      idsArray.splice(index, 1);
+      setClientsToBeRemovedFromGroup(idsArray);
+    }
+  };
+
+  const handleSubmit = () => {
+    dispatch(
+      removeMultipleClientsFromGroup({
+        removeIDs: clientsToBeRemovedFromGroup,
+        groupID: groupID,
+      })
+    );
+  };
+
+  const thisGroup = useSelector((state) => selectGroupById(state, groupID));
 
   const handleBlurTitleInput = () => {
     if (groupTitleInput !== groupTitle) {
@@ -42,7 +64,7 @@ export default function EditClientsOfGroup(props) {
           <TouchableOpacity onPress={props.navigation.goBack}>
             <Feather name="x-circle" size={28} color="#ababab" />
           </TouchableOpacity>
-          <TouchableOpacity onPress={props.navigation.goBack}>
+          <TouchableOpacity onPress={handleSubmit}>
             <AntDesign name="checkcircleo" size={25} color="#ababab" />
           </TouchableOpacity>
         </View>
@@ -60,7 +82,7 @@ export default function EditClientsOfGroup(props) {
       </View>
       <View style={styles.groupLengthContainer}>
         <Text style={styles.groupLengthText}>
-          {clientsOfGroup.length} CONTACTS
+          {thisGroup.clients.items.length} CONTACTS
         </Text>
       </View>
       <ScrollView
@@ -70,7 +92,7 @@ export default function EditClientsOfGroup(props) {
           justifyContent: "center",
         }}
       >
-        {thisGroup.map((client, index) => (
+        {thisGroup.clients.items.map((client, index) => (
           <EditingClient
             key={client.client.id}
             clientId={client.client.id}
@@ -79,6 +101,7 @@ export default function EditClientsOfGroup(props) {
             groupID={client.clientGroupID}
             clientGroupID={client.id}
             index={index}
+            handleAddToRemove={handleAddToRemove}
           />
         ))}
       </ScrollView>
