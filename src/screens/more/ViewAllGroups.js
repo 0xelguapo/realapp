@@ -10,7 +10,6 @@ import {
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import useClient from "../../hooks/client-hook";
 import Group from "../../components/more/Group";
-import { GroupsContext } from "../../context/group-context";
 import { useSelector, useDispatch } from "react-redux";
 import {
   fetchGroups,

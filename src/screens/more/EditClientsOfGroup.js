@@ -6,8 +6,7 @@ import {
   TextInput,
   ScrollView,
 } from "react-native";
-import { useContext, useState } from "react";
-import { GroupsContext } from "../../context/group-context";
+import { useState } from "react";
 import { Ionicons, AntDesign, Feather } from "@expo/vector-icons";
 import EditingClient from "../../components/more/EditingClient";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,7 +17,6 @@ import {
 } from "../../redux/group-slice";
 
 export default function EditClientsOfGroup(props) {
-  const { clientsOfGroup } = useContext(GroupsContext);
   const { groupID, groupTitle } = props.route.params;
   const [groupTitleInput, setGroupTitleInput] = useState(groupTitle);
   const [clientsToBeRemovedFromGroup, setClientsToBeRemovedFromGroup] =

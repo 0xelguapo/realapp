@@ -1,11 +1,11 @@
 import { StyleSheet, Text, View, ScrollView } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 
-export default function ViewAllReminders() {
+export default function ViewAllReminders(props) {
   return (
     <View style={styles.container}>
-      <View style={styles.headingContainer}>
-        <AntDesign name="left" size={24} color="#ababab" />
+      <View style={styles.headingContainer}> 
+        <AntDesign name="left" size={24} color="#ababab" onPress={props.navigation.goBack}/>
         <Text style={styles.screenTitle}>All Reminders</Text>
       </View>
       <ScrollView style={styles.bodyContainer}>
