@@ -1,14 +1,14 @@
 import { View, Pressable, Text, StyleSheet } from "react-native";
 import { useState, useContext } from "react";
-import {
-  formatDistanceToNowStrict,
-  parseISO,
-} from "date-fns";
+import { formatDistanceToNowStrict, parseISO } from "date-fns";
 import { AntDesign } from "@expo/vector-icons";
 import { useEffect } from "react";
-import { RemindersContext } from "../../context/reminder-context";
+import { useDispatch } from "react-redux";
+import { deleteOneReminder } from "../../redux/reminders-slice";
 
 export default function Reminder({ id, name, date }) {
+  const dispatch = useDispatch();
+
   let formattedDate = formatDistanceToNowStrict(parseISO(date), {
     addSuffix: true,
     unit: "day",
@@ -16,12 +16,10 @@ export default function Reminder({ id, name, date }) {
   const [checked, setChecked] = useState(false);
   const [dateState, setDateState] = useState(formattedDate);
   const [pastDate, setPastDate] = useState(false);
-  const { deleteReminder } = useContext(RemindersContext)
 
   const handleDeleteReminder = async () => {
-    let response = await deleteReminder(id);
-    console.log(response);
     setChecked(true);
+    dispatch(deleteOneReminder(id));
   };
 
   const handleDateFormat = () => {
@@ -70,7 +68,7 @@ export default function Reminder({ id, name, date }) {
 
 const styles = StyleSheet.create({
   reminder: {
-    paddingVertical: 5,
+    paddingVertical: 8,
     alignItems: "center",
     display: "flex",
     flexDirection: "row",

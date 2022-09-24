@@ -5,13 +5,13 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import { useContext, useState } from "react";
-import { RemindersContext } from "../../context/reminder-context";
+import { useDispatch } from "react-redux";
+import { createOneReminder } from "../../redux/reminders-slice";
 
 export default function EditReminder(props) {
   const { goBack } = props.navigation;
   const { clientId, homeMode } = props.route.params;
-  const { createReminder } = useContext(RemindersContext);
+  const dispatch = useDispatch();
 
   const handleCreateReminder = async (length) => {
     let date = new Date();
@@ -32,18 +32,14 @@ export default function EditReminder(props) {
         date.setDate(date.getDate() + 365);
         break;
     }
-    const response = await createReminder({
-      date: date,
-      clientId: clientId,
-    });
-    if (response && !homeMode) {
+    dispatch(createOneReminder({ date: date, clientId: clientId }));
+    if (!homeMode) {
       props.navigation.navigate({
         name: "ClientDetails",
         params: { id: clientId },
         merge: true,
       });
-    }
-    if (homeMode) {
+    } else {
       props.navigation.goBack();
     }
   };

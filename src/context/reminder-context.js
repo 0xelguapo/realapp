@@ -7,7 +7,8 @@ import { parseISO, differenceInCalendarDays } from "date-fns";
 const RemindersContext = createContext();
 
 function RemindersContextProvider({ children }) {
-  const [remindersArray, setRemindersArray] = useState([]);
+  const [allRemindersArray, setAllRemindersArray] = useState([]);
+  const [sortedRemindersArray, setSortedRemindersArray] = useState([]);
 
   const getAllReminders = async () => {
     let response;
@@ -18,7 +19,10 @@ function RemindersContextProvider({ children }) {
     } catch (err) {
       console.error(err);
     }
-    return response;
+    if (response) {
+      setAllRemindersArray(response.data.listReminders.items);
+      return response;
+    }
   };
 
   const deleteReminder = async (reminderId) => {
@@ -46,7 +50,7 @@ function RemindersContextProvider({ children }) {
         else return false;
       });
       const sortedResponse = filteredResponse.sort((a, b) => a.date - b.date);
-      setRemindersArray(sortedResponse);
+      setSortedRemindersArray(sortedResponse);
     }
   };
 
@@ -68,7 +72,8 @@ function RemindersContextProvider({ children }) {
   return (
     <RemindersContext.Provider
       value={{
-        remindersArray,
+        allRemindersArray,
+        sortedRemindersArray,
         deleteReminder,
         getReminders,
         getAllReminders,

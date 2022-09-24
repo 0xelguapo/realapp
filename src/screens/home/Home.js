@@ -9,16 +9,24 @@ import {
 import AddHome from "../../components/home/AddHome";
 import EachTask from "../../components/EachTask";
 import Reminder from "../../components/client/Reminder";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchReminders,
+  selectAllReminders,
+} from "../../redux/reminders-slice";
 import { TaskContext } from "../../context/task-context";
 import { RemindersContext } from "../../context/reminder-context";
 import { MaterialIcons } from "@expo/vector-icons";
 import { ClientsContext } from "../../context/client-context";
+import { parseISO, differenceInCalendarDays } from "date-fns";
+import RemindersList from "../../components/home/RemindersList";
 
 export default function Home(props) {
+  const dispatch = useDispatch();
   const [refreshVisible, setRefreshVisible] = useState(true);
   const { tasksArray, fetchTasks } = useContext(TaskContext);
   const { getAllClients } = useContext(ClientsContext);
-  const { remindersArray, getReminders } = useContext(RemindersContext);
+  const { sortedRemindersArray, getReminders } = useContext(RemindersContext);
 
   const handleManualRefresh = () => {
     setRefreshVisible(false);
@@ -28,10 +36,6 @@ export default function Home(props) {
     getReminders();
     fetchTasks();
   };
-
-  useEffect(() => {
-    getReminders();
-  }, []);
 
   useEffect(() => {
     getAllClients();
@@ -56,22 +60,7 @@ export default function Home(props) {
           <View style={styles.titleContainer}>
             <Text style={styles.titleHeader}>UPCOMING REMINDERS</Text>
           </View>
-          <ScrollView styles={styles.remindersScrollContainer}>
-            {remindersArray.length > 0 ? (
-              remindersArray.map((item) => (
-                <Reminder
-                  key={item.id}
-                  id={item.id}
-                  name={item.client.name}
-                  date={item.date}
-                />
-              ))
-            ) : (
-              <Text style={styles.placeholder}>
-                Reminders less than 3 days will show here
-              </Text>
-            )}
-          </ScrollView>
+          <RemindersList homeMode={true} />
         </View>
         <View style={styles.tasksContainer}>
           <View style={styles.titleContainer}>

@@ -64,7 +64,6 @@ export const editGroupName = createAsyncThunk(
       console.error(err);
     }
     if (response) {
-      console.log(response);
       return response.data.updateClientGroup;
     }
   }
@@ -126,7 +125,6 @@ export const deleteGroup = createAsyncThunk(
     } catch (err) {
       console.error(err);
     }
-    console.log(response.data);
     return response.data.deleteClientGroup;
   }
 );
@@ -148,7 +146,6 @@ export const groupSlice = createSlice({
         groupsAdapter.addOne(state, action.payload);
       })
       .addCase(editGroupName.fulfilled, (state, action) => {
-        console.log(action.payload);
         const index = state.groups.findIndex(
           (group) => group.id === action.payload.id
         );
@@ -161,7 +158,6 @@ export const groupSlice = createSlice({
           (el) => !action.payload.removeIDs.includes(el.id)
         );
         state.entities[action.payload.groupID].clients.items = updatedClients;
-        // console.log(state.entities[action.payload.groupID]);
       })
       .addCase(deleteGroup.fulfilled, (state, action) => {
         groupsAdapter.removeOne(state, action.payload.id);

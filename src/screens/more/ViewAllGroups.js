@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
   },
   screenTitle: {
     fontWeight: "500",
-    fontSize: 18,
+    fontSize: 20,
     marginTop: 10,
   },
   body: {
