@@ -8,32 +8,22 @@ import {
 } from "react-native";
 import AddHome from "../../components/home/AddHome";
 import EachTask from "../../components/EachTask";
-import Reminder from "../../components/client/Reminder";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchReminders,
-  selectAllReminders,
-} from "../../redux/reminders-slice";
+import { useDispatch } from "react-redux";
 import { TaskContext } from "../../context/task-context";
-import { RemindersContext } from "../../context/reminder-context";
 import { MaterialIcons } from "@expo/vector-icons";
 import { ClientsContext } from "../../context/client-context";
-import { parseISO, differenceInCalendarDays } from "date-fns";
 import RemindersList from "../../components/home/RemindersList";
 
 export default function Home(props) {
-  const dispatch = useDispatch();
   const [refreshVisible, setRefreshVisible] = useState(true);
   const { tasksArray, fetchTasks } = useContext(TaskContext);
   const { getAllClients } = useContext(ClientsContext);
-  const { sortedRemindersArray, getReminders } = useContext(RemindersContext);
 
   const handleManualRefresh = () => {
     setRefreshVisible(false);
     setTimeout(() => {
       setRefreshVisible(true);
     }, 2000);
-    getReminders();
     fetchTasks();
   };
 
@@ -51,7 +41,7 @@ export default function Home(props) {
           <MaterialIcons name="refresh" size={20} color="#454545" />
         </TouchableOpacity>
       )}
-      <AddHome navigation={props.navigation} />
+      <AddHome />
       <View style={styles.headerContainer}>
         <Text style={styles.headerTitle}>Your Focus</Text>
       </View>

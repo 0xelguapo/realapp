@@ -67,6 +67,7 @@ export default function AddReminder(props) {
             value={searchInput}
             onChangeText={handleSearch}
             placeholder="Search for a name, category..."
+            placeholderTextColor="#7b7b7c"
           />
         </View>
       </View>

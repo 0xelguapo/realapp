@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useContext, useRef } from "react";
+import { useEffect, useCallback, useContext, useRef, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -19,9 +19,11 @@ export default function Clients({ navigation }) {
     isLoading,
     getAllClients,
     successStatus,
-    favoriteClients,
     getFavoriteClients,
   } = useContext(ClientsContext);
+  const [searchInput, setSearchInput] = useState('')
+  const [filteredData, setFilteredData] = useState(clientsArray);
+
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const scrollOffsetY = useRef(new Animated.Value(0)).current;
   const headerScrollHeight = scrollOffsetY.interpolate({
@@ -29,6 +31,7 @@ export default function Clients({ navigation }) {
     outputRange: [0, -90],
     extrapolate: "clamp",
   });
+  
 
   const viewClientHandler = useCallback((client, index) => {
     navigation.navigate("ClientDetails", { client: client, index: index });
@@ -46,6 +49,21 @@ export default function Clients({ navigation }) {
     ),
     []
   );
+
+  const handleSearch = (text) => {
+    if (text) {
+      const selectedData = clientsArray.filter((c) => {
+        const clientData = c.name ? c.name.toUpperCase() : "".toUpperCase();
+        const textData = text.toUpperCase();
+        return clientData.indexOf(textData) > -1;
+      });
+      setFilteredData(selectedData);
+      setSearchInput(text);
+    } else {
+      setFilteredData(clientsArray);
+      setSearchInput(text);
+    }
+  };
 
   useEffect(() => {
     onSuccess();
@@ -90,9 +108,11 @@ export default function Clients({ navigation }) {
             <Ionicons name="ios-search" size={20} color="black" />
             <TextInput
               style={styles.input}
-              placeholder="Search for a name, category..."
-              returnKeyType="search"
-              
+              placeholderTextColor="#7b7b7c"
+              placeholder="Search by name"
+              returnKeyType="done"
+              onChangeText={handleSearch}
+              value={searchInput}
             />
           </View>
         </View>
@@ -140,7 +160,7 @@ export default function Clients({ navigation }) {
           </View>
         ) : (
           <Animated.FlatList
-            data={clientsArray}
+            data={filteredData}
             renderItem={renderClient}
             keyExtractor={(c) => c.id}
             onRefresh={getAllClients}
@@ -180,7 +200,7 @@ const styles = StyleSheet.create({
     display: "flex",
     paddingHorizontal: 20,
     paddingBottom: 15,
-    zIndex: 2,
+    zIndex: 3,
     paddingTop: 20,
   },
   headerText: {

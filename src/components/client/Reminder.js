@@ -1,5 +1,5 @@
 import { View, Pressable, Text, StyleSheet } from "react-native";
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { formatDistanceToNowStrict, parseISO } from "date-fns";
 import { AntDesign } from "@expo/vector-icons";
 import { useEffect } from "react";

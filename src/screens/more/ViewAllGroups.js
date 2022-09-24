@@ -42,9 +42,11 @@ export default function ViewGroups(props) {
   return (
     <View style={styles.container}>
       <View style={styles.headingContainer}>
-        <TouchableOpacity onPress={props.navigation.goBack}>
+        <TouchableOpacity
+          style={styles.backButtonContainer}
+          onPress={props.navigation.goBack}
+        >
           <AntDesign name="left" size={24} color="#ababab" />
-          {/* <AntDesign name="close" size={24} color="#ababab" /> */}
         </TouchableOpacity>
         <Text style={styles.screenTitle}>All Groups</Text>
       </View>
@@ -92,11 +94,12 @@ const styles = StyleSheet.create({
   headingContainer: {
     display: "flex",
     justifyContent: "center",
+    flexDirection: "row",
   },
+  backButtonContainer: { position: "absolute", left: 0 },
   screenTitle: {
     fontWeight: "500",
     fontSize: 20,
-    marginTop: 10,
   },
   body: {
     paddingVertical: 30,

@@ -9,7 +9,6 @@ import {
   SafeAreaView,
 } from "react-native";
 import { TaskContext } from "../../context/task-context";
-import { Ionicons } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import EachTask from "../../components/EachTask";
 import SuccessMessage from "../../components/SuccessMessage";
@@ -26,7 +25,7 @@ export default function Tasks({ navigation }) {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.headerContainer}>
         <Text style={styles.headerTitle}>Tasks</Text>
       </View>
@@ -52,7 +51,7 @@ export default function Tasks({ navigation }) {
       >
         <Entypo name="add-to-list" size={28} color="white" />
       </Pressable>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -68,6 +67,7 @@ const styles = StyleSheet.create({
     paddingBottom: 15,
     flexDirection: "row",
     justifyContent: "space-between",
+    paddingTop: 20,
   },
   headerTitle: {
     fontSize: 25,

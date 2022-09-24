@@ -6,7 +6,6 @@ import {
 import { API, graphqlOperation } from "aws-amplify";
 import { listReminders } from "../graphql/customQueries";
 import { deleteReminder, createReminder } from "../graphql/mutations";
-import { parseISO, differenceInCalendarDays } from "date-fns";
 
 const remindersAdapter = createEntityAdapter({
   sortComparer: (a, b) => a.date.localeCompare(b.date),
