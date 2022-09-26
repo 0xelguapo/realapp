@@ -6,7 +6,6 @@ import {
   Text,
   View,
   ActivityIndicator,
-  SafeAreaView,
 } from "react-native";
 import { TaskContext } from "../../context/task-context";
 import { Entypo } from "@expo/vector-icons";

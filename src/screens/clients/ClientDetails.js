@@ -11,10 +11,11 @@ import {
 import useClient from "../../hooks/client-hook";
 import { ClientsContext } from "../../context/client-context";
 import { GroupsContext } from "../../context/group-context";
-import { Ionicons } from "@expo/vector-icons";
 import ClientOptions from "../../components/client/ClientOptions";
-import { format, parseISO } from "date-fns";
-import { Feather } from "@expo/vector-icons";
+import DetailsReminders from "../../components/client/clientDetails/DetailsReminders";
+import DetailsNote from "../../components/client/clientDetails/DetailsNote";
+import DetailsConnectionHistory from "../../components/client/clientDetails/DetailsConnectionHistory";
+import DetailsTasks from "../../components/client/clientDetails/DetailsTasks";
 
 export default function ClientDetails(props) {
   const { id, phone } = props.route.params.client;
@@ -132,85 +133,19 @@ export default function ClientDetails(props) {
         viewEditReminder={viewEditReminder}
       />
       <View style={styles.body}>
-        <View style={styles.remindersContainer}>
-          <View style={styles.bellIcon}>
-            <Feather name="bell" size={15} color="#535353" />
-          </View>
-          <ScrollView
-            style={styles.reminders}
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-          >
-            {clientDetailsState.reminder.items.length ? (
-              clientDetailsState.reminder.items.map((item) => (
-                <View key={item.id} style={styles.reminder}>
-                  <Text style={styles.reminderDate}>
-                    {format(parseISO(item.date), "MM/dd/yy")}
-                  </Text>
-                </View>
-              ))
-            ) : (
-              <View style={styles.emptyPlaceholderContainer}>
-                <Text style={styles.emptyPlaceholder}>
-                  No reminders set up...
-                </Text>
-              </View>
-            )}
-          </ScrollView>
-        </View>
-        <View style={styles.detailsContainer}>
-          <View style={styles.blockHeadingContainer}>
-            <Text style={styles.blockHeadingText}>NOTES</Text>
-            <Pressable onPress={viewNoteHandler}>
-              <Ionicons name="add-circle-outline" size={20} color="#ababab" />
-            </Pressable>
-          </View>
-          <View style={styles.detailContainer}>
-            {clientDetailsState.notes ? (
-              <Text style={styles.notesText}>{clientDetailsState.notes}</Text>
-            ) : (
-              <Text style={styles.emptyPlaceholder}>Add a note here...</Text>
-            )}
-          </View>
-        </View>
-        <View style={styles.detailsContainer}>
-          <View style={styles.blockHeadingContainer}>
-            <Text style={styles.blockHeadingText}>CONNECTION HISTORY</Text>
-            <Pressable onPress={viewConnectionHandler}>
-              <Ionicons name="add-circle-outline" size={20} color="#ababab" />
-            </Pressable>
-          </View>
-          <View style={styles.detailContainer}>
-            {clientDetailsState.connectionHistory?.items &&
-              clientDetailsState.connectionHistory.items.map((el) => (
-                <View style={styles.connection} key={el.id}>
-                  <Text style={styles.connectionTitle}>{el.title}</Text>
-                  {el.date && (
-                    <Text style={styles.connectionDate}>
-                      {el.date.replace(",", " •")}
-                    </Text>
-                  )}
-                </View>
-              ))}
-          </View>
-        </View>
-        <View style={styles.detailsContainer}>
-          <View style={styles.blockHeadingContainer}>
-            <Text style={styles.blockHeadingText}>TASKS</Text>
-            <Pressable onPress={viewTaskHandler}>
-              <Ionicons name="add-circle-outline" size={20} color="#ababab" />
-            </Pressable>
-          </View>
-          <View style={styles.detailContainer}>
-            {clientDetailsState.tasks?.items &&
-              clientDetailsState.tasks.items.map((el) => (
-                <View style={styles.taskContainer} key={el.id}>
-                  <Text style={styles.connectionTitle}>{el.title}</Text>
-                  <Text style={styles.connectionDate}>{el.description}</Text>
-                </View>
-              ))}
-          </View>
-        </View>
+        <DetailsReminders clientDetailsState={clientDetailsState} />
+        <DetailsNote
+          clientDetailsState={clientDetailsState}
+          viewNoteHandler={viewNoteHandler}
+        />
+        <DetailsConnectionHistory
+          clientDetailsState={clientDetailsState}
+          viewConnectionHandler={viewConnectionHandler}
+        />
+        <DetailsTasks
+          clientDetailsState={clientDetailsState}
+          viewTaskHandler={viewTaskHandler}
+        />
       </View>
       <View style={{ height: 100 }}></View>
     </ScrollView>
@@ -271,51 +206,9 @@ const styles = StyleSheet.create({
     borderColor: "#000000",
     minHeight: 75,
   },
-  bellIcon: { marginRight: 5 },
-
-  remindersContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  reminders: {
-    height: 35,
-    paddingVertical: 5,
-  },
-  reminder: {
-    marginRight: 10,
-    borderRadius: 5,
-    paddingHorizontal: 5,
-    paddingVertical: 2,
-    backgroundColor: "#e4e4e4",
-    justifyContent: "center",
-  },
-  reminderDate: {
-    display: "flex",
-    color: "#545454",
-    fontWeight: "500",
-  },
-  notesContainer: {
-    paddingVertical: 5,
-  },
-  notesText: {
-    color: "#6c6c6c",
-  },
   detailContainer: {
     display: "flex",
     paddingVertical: 3,
-  },
-  connection: {
-    paddingVertical: 5,
-  },
-  connectionTitle: {
-    fontWeight: "500",
-    fontSize: 15,
-    color: "#6c6c6c",
-  },
-  connectionDate: {
-    color: "#ababab",
-    fontSize: 14,
   },
   emptyPlaceholderContainer: {
     justifyContent: "center",

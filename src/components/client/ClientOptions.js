@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     paddingTop: 10,
-    paddingBottom: 20,
+    paddingBottom: 10,
     justifyContent: "flex-start",
     width: "auto",
   },
