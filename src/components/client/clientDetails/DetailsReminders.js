@@ -55,4 +55,11 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   bellIcon: { marginRight: 5 },
+  emptyPlaceholderContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  emptyPlaceholder: {
+    color: "#ababab",
+  },
 });

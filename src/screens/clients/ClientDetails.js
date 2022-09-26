@@ -3,10 +3,9 @@ import {
   View,
   Text,
   StyleSheet,
-  Pressable,
-  TouchableHighlight,
   ScrollView,
   Alert,
+  Pressable,
 } from "react-native";
 import useClient from "../../hooks/client-hook";
 import { ClientsContext } from "../../context/client-context";
@@ -16,6 +15,7 @@ import DetailsReminders from "../../components/client/clientDetails/DetailsRemin
 import DetailsNote from "../../components/client/clientDetails/DetailsNote";
 import DetailsConnectionHistory from "../../components/client/clientDetails/DetailsConnectionHistory";
 import DetailsTasks from "../../components/client/clientDetails/DetailsTasks";
+import DetailsContact from "../../components/client/clientDetails/DetailsContact";
 
 export default function ClientDetails(props) {
   const { id, phone } = props.route.params.client;
@@ -23,6 +23,7 @@ export default function ClientDetails(props) {
   const [clientDetailsState, setClientDetailsState] = useState({
     reminder: { items: 0 },
   });
+  const [contactDetailsVisible, setContactDetailsVisible] = useState(false);
   const { removeClientFromClientsOfGroupArray } = useContext(GroupsContext);
   const { getOneClient } = useContext(ClientsContext);
   const { updateFavorite, removeClient } = useClient();
@@ -31,7 +32,6 @@ export default function ClientDetails(props) {
     const response = await getOneClient(id);
     if (response) {
       setClientDetailsState(response.data.getClient);
-      console.log(response);
     }
   };
 
@@ -133,19 +133,55 @@ export default function ClientDetails(props) {
         viewEditReminder={viewEditReminder}
       />
       <View style={styles.body}>
-        <DetailsReminders clientDetailsState={clientDetailsState} />
-        <DetailsNote
-          clientDetailsState={clientDetailsState}
-          viewNoteHandler={viewNoteHandler}
-        />
-        <DetailsConnectionHistory
-          clientDetailsState={clientDetailsState}
-          viewConnectionHandler={viewConnectionHandler}
-        />
-        <DetailsTasks
-          clientDetailsState={clientDetailsState}
-          viewTaskHandler={viewTaskHandler}
-        />
+        <View style={styles.chooseInfoContainer}>
+          <Pressable
+            style={!contactDetailsVisible && { borderBottomWidth: 1 }}
+            onPress={() => setContactDetailsVisible(false)}
+          >
+            <Text
+              style={
+                contactDetailsVisible
+                  ? { ...styles.chooseInfoTitle, color: "#ababab" }
+                  : styles.chooseInfoTitle
+              }
+            >
+              OVERVIEW
+            </Text>
+          </Pressable>
+          <Pressable
+            style={contactDetailsVisible && { borderBottomWidth: 1 }}
+            onPress={() => setContactDetailsVisible(true)}
+          >
+            <Text
+              style={
+                contactDetailsVisible
+                  ? styles.chooseInfoTitle
+                  : { ...styles.chooseInfoTitle, color: "#ababab" }
+              }
+            >
+              CONTACT INFO
+            </Text>
+          </Pressable>
+        </View>
+        {contactDetailsVisible ? (
+          <DetailsContact clientDetailsState={clientDetailsState} />
+        ) : (
+          <>
+            <DetailsReminders clientDetailsState={clientDetailsState} />
+            <DetailsNote
+              clientDetailsState={clientDetailsState}
+              viewNoteHandler={viewNoteHandler}
+            />
+            <DetailsConnectionHistory
+              clientDetailsState={clientDetailsState}
+              viewConnectionHandler={viewConnectionHandler}
+            />
+            <DetailsTasks
+              clientDetailsState={clientDetailsState}
+              viewTaskHandler={viewTaskHandler}
+            />
+          </>
+        )}
       </View>
       <View style={{ height: 100 }}></View>
     </ScrollView>
@@ -187,6 +223,17 @@ const styles = StyleSheet.create({
   },
   body: {
     display: "flex",
+  },
+  chooseInfoContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginTop: 5,
+    marginBottom: 20,
+  },
+  chooseInfoTitle: {
+    fontWeight: "600",
+    letterSpacing: 2,
+    fontSize: 12,
   },
   blockHeadingText: {
     color: "#ababab",

@@ -50,4 +50,11 @@ const styles = StyleSheet.create({
   notesText: {
     color: "#6c6c6c",
   },
+  emptyPlaceholderContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  emptyPlaceholder: {
+    color: "#ababab",
+  },
 });
