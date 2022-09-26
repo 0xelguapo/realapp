@@ -1,11 +1,11 @@
 import { createSlice, configureStore } from "@reduxjs/toolkit";
-import clientReducer from "./client-slice";
-import groupReducer from "./group-slice";
+import clientsReducer from "./clients-slice";
+import groupReducer from "./groups-slice";
 import remindersReducer from "./reminders-slice";
 
 const store = configureStore({
   reducer: {
-    client: clientReducer,
+    clients: clientsReducer,
     groups: groupReducer,
     reminders: remindersReducer,
   },

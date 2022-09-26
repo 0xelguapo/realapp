@@ -11,7 +11,9 @@ import {
 } from "react-native";
 import { ClientsContext } from "../../context/client-context";
 import EachClient from "../../components/client/EachClient";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, Feather } from "@expo/vector-icons";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchClients, selectAllClients } from "../../redux/clients-slice";
 
 export default function Clients({ navigation }) {
   const {
@@ -21,7 +23,9 @@ export default function Clients({ navigation }) {
     successStatus,
     getFavoriteClients,
   } = useContext(ClientsContext);
-  const [searchInput, setSearchInput] = useState('')
+  const dispatch = useDispatch();
+  const allClients = useSelector(selectAllClients);
+  const [searchInput, setSearchInput] = useState("");
   const [filteredData, setFilteredData] = useState(clientsArray);
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -31,7 +35,6 @@ export default function Clients({ navigation }) {
     outputRange: [0, -90],
     extrapolate: "clamp",
   });
-  
 
   const viewClientHandler = useCallback((client, index) => {
     navigation.navigate("ClientDetails", { client: client, index: index });
@@ -114,6 +117,11 @@ export default function Clients({ navigation }) {
               onChangeText={handleSearch}
               value={searchInput}
             />
+            {searchInput.length !== 0 && (
+              <TouchableOpacity onPress={() => handleSearch("")}>
+                <Feather name="x-circle" size={20} color="#7b7b7c" />
+              </TouchableOpacity>
+            )}
           </View>
         </View>
         <Animated.View

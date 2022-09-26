@@ -14,7 +14,7 @@ import {
   editGroupName,
   selectGroupById,
   removeMultipleClientsFromGroup,
-} from "../../redux/group-slice";
+} from "../../redux/groups-slice";
 
 export default function EditClientsOfGroup(props) {
   const { groupID, groupTitle } = props.route.params;

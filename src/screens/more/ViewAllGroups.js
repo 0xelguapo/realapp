@@ -15,7 +15,7 @@ import {
   fetchGroups,
   addGroup,
   selectAllGroups,
-} from "../../redux/group-slice";
+} from "../../redux/groups-slice";
 
 export default function ViewGroups(props) {
   const [showInput, setShowInput] = useState(false);

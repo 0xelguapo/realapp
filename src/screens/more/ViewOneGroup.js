@@ -9,13 +9,12 @@ import {
 } from "react-native";
 import { Ionicons, Feather } from "@expo/vector-icons";
 import EachClient from "../../components/client/EachClient";
-import { GroupsContext } from "../../context/group-context";
 import { useSelector, useDispatch } from "react-redux";
 import {
   selectGroupById,
   deleteGroup,
   removeMultipleClientsFromGroup,
-} from "../../redux/group-slice";
+} from "../../redux/groups-slice";
 
 export default function ViewOneGroup(props) {
   // const { clientsOfGroup, getClientsFromOneGroup } = useContext(GroupsContext);
