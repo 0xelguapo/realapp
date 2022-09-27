@@ -8,13 +8,12 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   FlatList,
+  TouchableOpacity,
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import EachClient from "../../components/client/EachClient";
 import { ClientsContext } from "../../context/client-context";
-import { AntDesign } from "@expo/vector-icons";
-import { FontAwesome5 } from "@expo/vector-icons";
-import { FontAwesome } from "@expo/vector-icons";
+import { FontAwesome5, FontAwesome, AntDesign } from "@expo/vector-icons";
 import CustomPressable from "../../components/CustomPressable";
 import { TaskContext } from "../../context/task-context";
 
@@ -89,7 +88,7 @@ export default function AddTask({ navigation }) {
         content: description,
         date: date,
         clientId: selectedClient.id,
-        completed: false
+        completed: false,
       }
     : { title: title, content: description, date: date, completed: false };
 
@@ -117,22 +116,21 @@ export default function AddTask({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.headingContainer}>
-          <AntDesign
-            name="left"
-            size={25}
-            onPress={() => navigation.goBack()}
-            style={{ width: "50%" }}
-          />
-          <Text style={styles.title}>New Task</Text>
-        </View>
-      </TouchableWithoutFeedback>
+      <View style={styles.headingContainer}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <AntDesign name="left" size={25} color="#6c6c6c" />
+        </TouchableOpacity>
+        <Text style={styles.screenTitle}>Add a Task</Text>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <AntDesign name="check" size={28} color="#6c6c6c" />
+        </TouchableOpacity>
+      </View>
       <View style={styles.formContainer}>
         <TextInput
           onChangeText={(newText) => setTitle(newText)}
           style={styles.titleInput}
           placeholder="Title"
+          placeholderTextColor={"#cacacb"}
           value={title}
           autoFocus={true}
         />
@@ -215,21 +213,25 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     height: "100%",
+    backgroundColor: "white",
   },
   headingContainer: {
-    flex: 0.06,
-    padding: 20,
+    display: "flex",
+    flexDirection: "row",
+    paddingVertical: 20,
+    paddingHorizontal: 20,
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "#f6f6f6",
   },
-  title: {
-    marginTop: 15,
-    fontSize: 22,
-    fontWeight: "700",
-    color: "#212121",
+  screenTitle: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: "#6c6c6c",
   },
   formContainer: {
     flex: 1,
     marginTop: 20,
-    backgroundColor: "white",
     paddingHorizontal: 20,
   },
   titleInput: {

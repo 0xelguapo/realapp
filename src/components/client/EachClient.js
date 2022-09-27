@@ -14,7 +14,7 @@ export default function EachClient({
   email,
   onPress,
   taskMode,
-  index
+  index,
 }) {
   const formattedPhone =
     phone.length <= 10
@@ -31,19 +31,21 @@ export default function EachClient({
         <TouchableHighlight onPress={onPress} underlayColor="#f1f1f1">
           <View style={styles.taskModeContainer}>
             <Text style={styles.name}>{name}</Text>
-            <Text style={styles.company}>{company}</Text>
+            {company.length > 0 && (
+              <Text style={styles.company}>{company}</Text>
+            )}
           </View>
         </TouchableHighlight>
       </Pressable>
     );
   }
-  
+
   return (
     <Pressable>
       <TouchableHighlight onPress={onPress} underlayColor="#f1f1f1">
         <View style={styles.container}>
           <Text style={styles.name}>{name}</Text>
-          <Text style={styles.phone}>{company}</Text>
+          {company.length > 0 && <Text style={styles.phone}>{company}</Text>}
           <View style={styles.goContainer}>
             <SimpleLineIcons name="options" size={24} color="#dddddf" />
           </View>
@@ -59,14 +61,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingVertical: 10,
     paddingHorizontal: 20,
-    height: 80,
+    height: 70,
     borderBottomWidth: 0.5,
     borderBottomColor: "#e6e6e6",
   },
   name: {
     fontWeight: "600",
     fontSize: 18,
-    marginBottom: 3
+    marginBottom: 3,
   },
   company: {
     color: "#7b7b7c",

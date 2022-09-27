@@ -34,6 +34,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   detailText: {
-    fontWeight: '500'
+    fontWeight: '500',
+    color: '#454545'
   }
 });

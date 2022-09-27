@@ -59,7 +59,7 @@ export default function EditClient(props) {
       >
         <ScrollView style={styles.detailsContainer}>
           <View style={styles.avatar}>
-            <Text style={styles.avatarText}>D</Text>
+            <Text style={styles.avatarText}>{fullName[0].toUpperCase()}</Text>
           </View>
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldTitle}>FULL NAME</Text>
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
   },
   editClientHeadingText: {
     fontSize: 18,
-    fontWeight: "500",
+    fontWeight: "600",
     color: "#6c6c6c",
   },
   keyboardAvoiding: {

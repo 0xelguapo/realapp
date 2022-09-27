@@ -24,7 +24,7 @@ function ClientContextProvider({ children }) {
       setClientsArray(response.data.listClients.items);
     }
     setIsLoading(false);
-    return response
+    return response;
   }, []);
 
   const getOneClient = useCallback(async (clientId) => {
@@ -36,7 +36,7 @@ function ClientContextProvider({ children }) {
     } catch (err) {
       console.error(err);
     }
-    console.log('gettingOneClient')
+    console.log("gettingOneClient");
     return response;
   }, []);
 
@@ -50,7 +50,7 @@ function ClientContextProvider({ children }) {
     let newClientsArray = [...clientsArray];
     newClientsArray.splice(index, 1);
     setClientsArray(newClientsArray);
-  }
+  };
 
   const onSuccess = () => {
     setSuccessStatus(true);
@@ -59,20 +59,18 @@ function ClientContextProvider({ children }) {
     }, 4000);
   };
 
-  const addClient = async (formState, clientDetails) => {
+  const addClient = async (clientDetails) => {
     let response;
     let newClientsArray = [];
-    if (!formState.inputs.name.value) {
-      Alert.alert("Required Field Empty", "Please add a name");
-    } else {
-      try {
-        response = await API.graphql(
-          graphqlOperation(mutations.createClient, { input: clientDetails })
-        );
-      } catch (err) {
-        console.log("error creating client", err);
-      }
+
+    try {
+      response = await API.graphql(
+        graphqlOperation(mutations.createClient, { input: clientDetails })
+      );
+    } catch (err) {
+      console.log("error creating client", err);
     }
+
     if (response) {
       newClientsArray = [response.data.createClient, ...clientsArray];
       setClientsArray(newClientsArray);
@@ -100,10 +98,9 @@ function ClientContextProvider({ children }) {
     if (response.data.listClients.items) {
       setFavoriteClients(response.data.listClients.items);
     }
-    console.log('gettingFavoriteClients')
+    console.log("gettingFavoriteClients");
     return response;
   };
-
 
   return (
     <ClientsContext.Provider
