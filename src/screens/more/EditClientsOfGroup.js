@@ -42,6 +42,7 @@ export default function EditClientsOfGroup(props) {
         groupID: groupID,
       })
     );
+    props.navigation.goBack()
   };
 
   const thisGroup = useSelector((state) => selectGroupById(state, groupID));
@@ -50,6 +51,7 @@ export default function EditClientsOfGroup(props) {
     if (groupTitleInput !== groupTitle) {
       dispatch(editGroupName({ id: groupID, title: groupTitleInput }));
     }
+    console.log('blur')
   };
 
   return (

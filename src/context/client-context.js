@@ -18,7 +18,7 @@ function ClientContextProvider({ children }) {
     try {
       response = await API.graphql(graphqlOperation(queries.listClients));
     } catch (err) {
-      console.log("error getting clients", err);
+      console.error("error getting clients", err);
     }
     if (response) {
       setClientsArray(response.data.listClients.items);

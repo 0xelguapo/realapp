@@ -1,30 +1,38 @@
 import { View, Text, Pressable, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-export default function DetailsConnectionHistory({ clientDetailsState, viewConnectionHandler }) {
+export default function DetailsConnectionHistory({
+  clientDetailsState,
+  viewConnectionHandler,
+}) {
   return (
     <View style={styles.detailsContainer}>
-          <View style={styles.blockHeadingContainer}>
-            <Text style={styles.blockHeadingText}>CONNECTION HISTORY</Text>
-            <Pressable onPress={viewConnectionHandler}>
-              <Ionicons name="add-circle-outline" size={20} color="#ababab" />
-            </Pressable>
+      <View style={styles.blockHeadingContainer}>
+        <Text style={styles.blockHeadingText}>CONNECTION HISTORY</Text>
+        <Pressable onPress={viewConnectionHandler}>
+          <Ionicons name="add-circle-outline" size={20} color="#ababab" />
+        </Pressable>
+      </View>
+      <View style={styles.detailContainer}>
+        {clientDetailsState.connectionHistory.items?.length ? (
+          clientDetailsState.connectionHistory.items.map((el) => (
+            <View style={styles.connection} key={el.id}>
+              <Text style={styles.connectionTitle}>{el.title}</Text>
+              {el.date && (
+                <Text style={styles.connectionDate}>
+                  {el.date.replace(",", " •")}
+                </Text>
+              )}
+            </View>
+          ))
+        ) : (
+          <View style={styles.emptyPlaceholderContainer}>
+            <Text style={styles.emptyPlaceholder}>Log your calls...</Text>
           </View>
-          <View style={styles.detailContainer}>
-            {clientDetailsState.connectionHistory?.items &&
-              clientDetailsState.connectionHistory.items.map((el) => (
-                <View style={styles.connection} key={el.id}>
-                  <Text style={styles.connectionTitle}>{el.title}</Text>
-                  {el.date && (
-                    <Text style={styles.connectionDate}>
-                      {el.date.replace(",", " •")}
-                    </Text>
-                  )}
-                </View>
-              ))}
-          </View>
-        </View>
-  )
+        )}
+      </View>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -62,4 +70,10 @@ const styles = StyleSheet.create({
     color: "#ababab",
     fontSize: 14,
   },
-})
+  emptyPlaceholderContainer: {
+    justifyContent: "center",
+  },
+  emptyPlaceholder: {
+    color: "#ababab",
+  },
+});

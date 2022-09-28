@@ -1,6 +1,6 @@
 import {
   View,
-  TouchableHighlight,
+  TouchableOpacity,
   Text,
   StyleSheet,
   ScrollView,
@@ -15,7 +15,8 @@ export default function ClientOptions({
   removeClientHandler,
   clientDetailsState,
   viewEditGroupHandler,
-  viewEditReminder
+  viewEditReminder,
+  groupMode,
 }) {
   return (
     <ScrollView
@@ -23,10 +24,10 @@ export default function ClientOptions({
       horizontal={true}
       showsHorizontalScrollIndicator={false}
     >
-      <TouchableHighlight
+      <TouchableOpacity
         underlayColor="#e8e8e8"
         onPress={favoriteHandler}
-        style={styles.touchableHighlightStyle}
+        style={styles.touchableOpacityStyle}
       >
         <View style={styles.optionIconContainer}>
           {clientDetailsState.favorite ? (
@@ -36,56 +37,58 @@ export default function ClientOptions({
           )}
           <Text style={styles.optionText}>FAVORITE</Text>
         </View>
-      </TouchableHighlight>
-      <TouchableHighlight
+      </TouchableOpacity>
+      <TouchableOpacity
         underlayColor="#e8e8e8"
-        style={styles.touchableHighlightStyle}
+        style={styles.touchableOpacityStyle}
       >
         <View style={styles.optionIconContainer}>
           <AntDesign name="contacts" size={24} color="#535353" />
           <Text style={styles.optionText}>CONTACT</Text>
         </View>
-      </TouchableHighlight>
-      <TouchableHighlight
+      </TouchableOpacity>
+      <TouchableOpacity
         underlayColor="#e8e8e8"
-        style={styles.touchableHighlightStyle}
+        style={styles.touchableOpacityStyle}
         onPress={viewEditReminder}
       >
         <View style={styles.optionIconContainer}>
           <Feather name="bell" size={24} color="#535353" />
           <Text style={styles.optionText}>REMIND</Text>
         </View>
-      </TouchableHighlight>
-      <TouchableHighlight
+      </TouchableOpacity>
+      {!groupMode && (
+        <TouchableOpacity
+          underlayColor="#e8e8e8"
+          style={styles.touchableOpacityStyle}
+          onPress={viewEditGroupHandler}
+        >
+          <View style={styles.optionIconContainer}>
+            <Ionicons name="people-outline" size={24} color="#535353" />
+            <Text style={styles.optionText}>GROUP</Text>
+          </View>
+        </TouchableOpacity>
+      )}
+      <TouchableOpacity
         underlayColor="#e8e8e8"
-        style={styles.touchableHighlightStyle}
-        onPress={viewEditGroupHandler}
-      >
-        <View style={styles.optionIconContainer}>
-          <Ionicons name="people-outline" size={24} color="#535353" />
-          <Text style={styles.optionText}>GROUP</Text>
-        </View>
-      </TouchableHighlight>
-      <TouchableHighlight
-        underlayColor="#e8e8e8"
-        style={styles.touchableHighlightStyle}
+        style={styles.touchableOpacityStyle}
         onPress={viewEditClientHandler}
       >
         <View style={styles.optionIconContainer}>
           <Feather name="edit-2" size={24} color="#535353" />
           <Text style={styles.optionText}>EDIT</Text>
         </View>
-      </TouchableHighlight>
-      <TouchableHighlight
+      </TouchableOpacity>
+      <TouchableOpacity
         underlayColor="#e8e8e8"
-        style={styles.touchableHighlightStyle}
+        style={styles.touchableOpacityStyle}
         onPress={removeClientHandler}
       >
         <View style={styles.optionIconContainer}>
           <Ionicons name="remove-circle-outline" size={24} color="#535353" />
           <Text style={styles.optionText}>DELETE</Text>
         </View>
-      </TouchableHighlight>
+      </TouchableOpacity>
     </ScrollView>
   );
 }
@@ -105,7 +108,7 @@ const styles = StyleSheet.create({
     width: 69,
     marginRight: 15,
   },
-  touchableHighlightStyle: {
+  touchableOpacityStyle: {
     borderRadius: 5,
     padding: 5,
   },

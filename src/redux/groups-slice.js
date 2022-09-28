@@ -132,7 +132,18 @@ export const deleteGroup = createAsyncThunk(
 export const groupSlice = createSlice({
   name: "groups",
   initialState,
-  reducers: {},
+  reducers: {
+    handleDeletedClient(state, action) {
+      for (const group in state.entities) {
+        const clientsArray = state.entities[group].clients.items;
+        for (let i = 0; i < clientsArray.length; i++) {
+          if (clientsArray[i].client.id === action.payload) {
+            state.entities[group].clients.items.splice(i, 1)
+          }
+        }
+      }
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchGroups.fulfilled, (state, action) => {
@@ -146,10 +157,8 @@ export const groupSlice = createSlice({
         groupsAdapter.addOne(state, action.payload);
       })
       .addCase(editGroupName.fulfilled, (state, action) => {
-        const index = state.groups.findIndex(
-          (group) => group.id === action.payload.id
-        );
-        state.groups[index] = action.payload;
+        const { id, title } = action.payload;
+        state.entities[id].title = title;
       })
       .addCase(removeMultipleClientsFromGroup.fulfilled, (state, action) => {
         const updatedClients = state.entities[
@@ -170,5 +179,7 @@ export const {
   selectById: selectGroupById,
   selectIds: selectGroupIds,
 } = groupsAdapter.getSelectors((state) => state.groups);
+
+export const { handleDeletedClient } = groupSlice.actions;
 
 export default groupSlice.reducer;

@@ -17,7 +17,6 @@ import {
 } from "../../redux/groups-slice";
 
 export default function ViewOneGroup(props) {
-  // const { clientsOfGroup, getClientsFromOneGroup } = useContext(GroupsContext);
   const { groupID, groupTitle } = props.route.params;
   const dispatch = useDispatch();
   const thisGroup = useSelector((state) => selectGroupById(state, groupID));
@@ -32,7 +31,7 @@ export default function ViewOneGroup(props) {
   const handleEditGroup = () => {
     props.navigation.navigate("EditClientsOfGroup", {
       groupID: groupID,
-      groupTitle: groupTitle,
+      groupTitle: thisGroup.title,
     });
   };
 

@@ -69,6 +69,10 @@ export default function Clients({ navigation }) {
   };
 
   useEffect(() => {
+    dispatch(fetchClients())
+  }, [dispatch])
+
+  useEffect(() => {
     onSuccess();
   }, [successStatus]);
 
@@ -178,7 +182,7 @@ export default function Clients({ navigation }) {
               { useNativeDriver: true }
             )}
             scrollEventThrottle={16}
-            style={{ paddingVertical: 50 }}
+            style={{ paddingVertical: 50, marginTop: 5 }}
             contentContainerStyle={{ paddingBottom: 50 }}
           />
         )}

@@ -8,20 +8,31 @@ import {
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
-import useClient from "../../hooks/client-hook";
 import ClientGroup from "../../components/client/ClientGroup";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  selectAllGroups,
+  fetchGroups,
+  addGroup,
+} from "../../redux/groups-slice";
+import { selectClientById } from "../../redux/clients-slice";
 
 export default function AddEditGroup(props) {
   const { clientId, index } = props.route.params;
   const [showInput, setShowInput] = useState(false);
   const [title, setTitle] = useState("");
   const [allGroups, setAllGroups] = useState([]);
-  const [thisClientsGroups, setThisClientsGroups] = useState([]);
   const inputRef = useRef(null);
-  const { addGroup, getAllGroups, getClientGroups } = useClient();
+
+  const dispatch = useDispatch();
+  const groups = useSelector(selectAllGroups);
+
+  const clientsGroups = useSelector((state) =>
+    selectClientById(state, clientId)
+  ).group.items;
 
   const updateClientGroups = (allGroups, clientsGroups) => {
-    let allGroupsCopy = allGroups.slice(0);
+    let allGroupsCopy = [...allGroups];
     for (let i = 0; i < allGroupsCopy.length; i++) {
       const allGroupsId = allGroupsCopy[i].id;
       for (let j = 0; j < clientsGroups.length; j++) {
@@ -29,48 +40,33 @@ export default function AddEditGroup(props) {
           allGroupsCopy[i] = {
             ...allGroupsCopy[i],
             inGroup: true,
-            clientGroupID: clientsGroups[j].id
+            clientGroupID: clientsGroups[j].id,
           };
         }
       }
     }
     return allGroupsCopy;
   };
-  
 
   const getAllGroupsAndUpdate = async () => {
-    const allGroupsResponse = await getAllGroups();
-    let allGroupsArray = allGroupsResponse.data.listClientGroups.items;
-    const clientsGroupsResponse = await getClientGroups(clientId);
-    let clientsGroupsArray = clientsGroupsResponse.data.getClient.group.items;
-    if (allGroupsArray && clientsGroupsArray) {
-      let finalArray = updateClientGroups(allGroupsArray, clientsGroupsArray);
-      setAllGroups(finalArray);
-      console.log(finalArray)
-    }
+    dispatch(fetchGroups());
+    let finalArray = updateClientGroups(groups, clientsGroups);
+    setAllGroups(finalArray);
   };
 
   useEffect(() => {
     getAllGroupsAndUpdate();
-  }, []);
-
-  useEffect(() => {
-    if (allGroups.length !== 0 && thisClientsGroups.length !== 0) {
-      updateClientGroups(allGroups, thisClientsGroups);
-    }
-  }, []);
+  }, [groups, clientsGroups, dispatch]);
 
   useEffect(() => {
     if (showInput) inputRef.current.focus();
   }, [showInput]);
 
   const handleSubmit = async () => {
-    const response = await addGroup(title);
-    if (response) {
-      await getAllGroupsAndUpdate();
+    if (title) {
+      dispatch(addGroup(title));
       setTitle("");
       setShowInput(false);
-      console.log(response)
     }
   };
 
@@ -108,7 +104,12 @@ export default function AddEditGroup(props) {
         )}
         <View style={styles.clientGroupsContainer}>
           {allGroups.map((el) => (
-            <ClientGroup key={el.id} el={el} clientId={clientId} clientGroupID={el.clientGroupID} />
+            <ClientGroup
+              key={el.id}
+              el={el}
+              clientId={clientId}
+              clientGroupID={el.clientGroupID}
+            />
           ))}
         </View>
       </View>

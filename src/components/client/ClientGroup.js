@@ -9,11 +9,10 @@ export default function ClientGroup({ el, clientId, clientGroupID }) {
   const [clientGroupIDState, setClientGroupIDState] = useState(clientGroupID);
   const { addClientToGroup, removeClientFromGroup } = useClient();
 
-
   const addToGroup = async () => {
     const response = await addClientToGroup(clientId, el.id);
     if (response) {
-      console.log(response.data)
+      console.log(response.data);
       setClientGroupIDState(response.data.createGroupsClients.id);
       setGroupLength((prevState) => prevState + 1);
     }
@@ -39,15 +38,12 @@ export default function ClientGroup({ el, clientId, clientGroupID }) {
       <View>
         <Text style={styles.clientGroupTitle}>{el.title}</Text>
         <View style={styles.clientGroupDetails}>
-          <Text>
-            {!el.clients?.length ? (
-              <Text style={styles.clientsLength}>
-                {groupLength}
-              </Text>
-            ) : (
-              <Text style={styles.clientsLength}>0</Text>
-            )}
-          </Text>
+          {!el.clients?.length ? (
+            <Text style={styles.clientsLength}>{groupLength}</Text>
+          ) : (
+            <Text style={styles.clientsLength}>0</Text>
+          )}
+
           <Ionicons name="ios-people-outline" size={12} color="#535353" />
         </View>
       </View>
@@ -79,11 +75,12 @@ const styles = StyleSheet.create({
   },
   clientGroupTitle: {
     fontWeight: "600",
-    marginBottom: 3
+    marginBottom: 3,
   },
   clientsLength: {
     fontSize: 12,
     fontWeight: "500",
     color: "#535353",
+    marginRight: 3,
   },
 });

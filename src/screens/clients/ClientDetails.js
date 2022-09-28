@@ -6,6 +6,7 @@ import {
   ScrollView,
   Alert,
   Pressable,
+  ActivityIndicator,
 } from "react-native";
 import useClient from "../../hooks/client-hook";
 import { ClientsContext } from "../../context/client-context";
@@ -16,31 +17,34 @@ import DetailsNote from "../../components/client/clientDetails/DetailsNote";
 import DetailsConnectionHistory from "../../components/client/clientDetails/DetailsConnectionHistory";
 import DetailsTasks from "../../components/client/clientDetails/DetailsTasks";
 import DetailsContact from "../../components/client/clientDetails/DetailsContact";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchOneClient,
+  selectClientById,
+  updateFavorite,
+  removeClient,
+} from "../../redux/clients-slice";
+import { handleDeletedClient } from "../../redux/groups-slice";
 
 export default function ClientDetails(props) {
   const { id, phone } = props.route.params.client;
   const { index } = props.route.params;
-  const [clientDetailsState, setClientDetailsState] = useState({
-    reminder: { items: 0 },
-  });
   const [contactDetailsVisible, setContactDetailsVisible] = useState(false);
   const { removeClientFromClientsOfGroupArray } = useContext(GroupsContext);
-  const { getOneClient } = useContext(ClientsContext);
-  const { updateFavorite, removeClient } = useClient();
 
-  const getClientDetails = async () => {
-    const response = await getOneClient(id);
-    if (response) {
-      setClientDetailsState(response.data.getClient);
-    }
+  const dispatch = useDispatch();
+  const clientSelect = useSelector((state) => selectClientById(state, id));
+
+  const fetchClientDetails = () => {
+    dispatch(fetchOneClient(id));
   };
 
+  useEffect(() => {
+    fetchClientDetails();
+  }, [dispatch]);
+
   const favoriteHandler = async () => {
-    await updateFavorite(id, !clientDetailsState.favorite, index);
-    setClientDetailsState({
-      ...clientDetailsState,
-      favorite: !clientDetailsState.favorite,
-    });
+    dispatch(updateFavorite({ id: id, favorite: !clientSelect.favorite }));
   };
 
   const viewConnectionHandler = () => {
@@ -50,7 +54,7 @@ export default function ClientDetails(props) {
   const viewNoteHandler = () => {
     props.navigation.navigate("AddEditNote", {
       clientId: id,
-      notes: clientDetailsState.notes,
+      notes: clientSelect.notes,
     });
   };
 
@@ -63,7 +67,7 @@ export default function ClientDetails(props) {
   const viewEditClientHandler = () => {
     props.navigation.navigate("EditClient", {
       clientId: id,
-      clientDetailsState: clientDetailsState,
+      clientDetailsState: clientSelect,
       index: index,
     });
   };
@@ -82,17 +86,17 @@ export default function ClientDetails(props) {
   };
 
   const removeClientHandler = () => {
-    let removeResponse;
     Alert.alert("Are you sure you want to delete this client?", null, [
       { text: "Cancel", style: "cancel" },
       {
         text: "Delete",
         onPress: async () => {
-          removeResponse = await removeClient(id, index);
-          if (removeResponse && props.route.params.groupMode === true) {
-            removeClientFromClientsOfGroupArray(id);
-          }
+          dispatch(removeClient(id));
           props.navigation.goBack();
+          dispatch(handleDeletedClient(id));
+          // if (removeResponse && props.route.params.groupMode === true) {
+          //   removeClientFromClientsOfGroupArray(id);
+          // }
         },
         style: "destructive",
       },
@@ -101,7 +105,7 @@ export default function ClientDetails(props) {
 
   useEffect(() => {
     let isMounted = true;
-    if (isMounted || props.route.params) getClientDetails();
+    if (isMounted || props.route.params) fetchClientDetails();
     return () => (isMounted = false);
   }, [props.route.params]);
 
@@ -114,81 +118,95 @@ export default function ClientDetails(props) {
         )}-${phone.slice(7, 11)}`;
 
   return (
-    <ScrollView style={styles.scrollContainer} stickyHeaderIndices={[0]}>
-      <View style={styles.header}>
-        <View style={styles.rectangleContainer}>
-          <View style={styles.rectangle}></View>
+    <>
+      {!clientSelect ? (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#7b7b7c" />
         </View>
-        <Text style={styles.name}>{clientDetailsState.name}</Text>
-        <Text style={styles.company}>{clientDetailsState.company}</Text>
-      </View>
-      <ClientOptions
-        clientDetailsState={clientDetailsState}
-        clientId={id}
-        index={index}
-        favoriteHandler={favoriteHandler}
-        viewEditClientHandler={viewEditClientHandler}
-        removeClientHandler={removeClientHandler}
-        viewEditGroupHandler={viewEditGroupHandler}
-        viewEditReminder={viewEditReminder}
-      />
-      <View style={styles.body}>
-        <View style={styles.chooseInfoContainer}>
-          <Pressable
-            style={!contactDetailsVisible && { borderBottomWidth: 1 }}
-            onPress={() => setContactDetailsVisible(false)}
-          >
-            <Text
-              style={
-                contactDetailsVisible
-                  ? { ...styles.chooseInfoTitle, color: "#ababab" }
-                  : styles.chooseInfoTitle
-              }
-            >
-              OVERVIEW
-            </Text>
-          </Pressable>
-          <Pressable
-            style={contactDetailsVisible && { borderBottomWidth: 1 }}
-            onPress={() => setContactDetailsVisible(true)}
-          >
-            <Text
-              style={
-                contactDetailsVisible
-                  ? styles.chooseInfoTitle
-                  : { ...styles.chooseInfoTitle, color: "#ababab" }
-              }
-            >
-              CONTACT INFO
-            </Text>
-          </Pressable>
-        </View>
-        {contactDetailsVisible ? (
-          <DetailsContact clientDetailsState={clientDetailsState} />
-        ) : (
-          <>
-            <DetailsReminders clientDetailsState={clientDetailsState} />
-            <DetailsNote
-              clientDetailsState={clientDetailsState}
-              viewNoteHandler={viewNoteHandler}
-            />
-            <DetailsConnectionHistory
-              clientDetailsState={clientDetailsState}
-              viewConnectionHandler={viewConnectionHandler}
-            />
-            <DetailsTasks
-              clientDetailsState={clientDetailsState}
-              viewTaskHandler={viewTaskHandler}
-            />
-          </>
-        )}
-      </View>
-      <View style={{ height: 100 }}></View>
-    </ScrollView>
+      ) : (
+        <ScrollView style={styles.scrollContainer} stickyHeaderIndices={[0]}>
+          <View style={styles.header}>
+            <View style={styles.rectangleContainer}>
+              <View style={styles.rectangle}></View>
+            </View>
+            <Text style={styles.name}>{clientSelect.name}</Text>
+            <Text style={styles.company}>{clientSelect.company}</Text>
+          </View>
+          <ClientOptions
+            clientDetailsState={clientSelect}
+            clientId={id}
+            index={index}
+            favoriteHandler={favoriteHandler}
+            viewEditClientHandler={viewEditClientHandler}
+            removeClientHandler={removeClientHandler}
+            viewEditGroupHandler={viewEditGroupHandler}
+            viewEditReminder={viewEditReminder}
+            groupMode={props.route.params.groupMode}
+          />
+          <View style={styles.body}>
+            <View style={styles.chooseInfoContainer}>
+              <Pressable
+                style={!contactDetailsVisible && { borderBottomWidth: 1 }}
+                onPress={() => setContactDetailsVisible(false)}
+              >
+                <Text
+                  style={
+                    contactDetailsVisible
+                      ? { ...styles.chooseInfoTitle, color: "#ababab" }
+                      : styles.chooseInfoTitle
+                  }
+                >
+                  OVERVIEW
+                </Text>
+              </Pressable>
+              <Pressable
+                style={contactDetailsVisible && { borderBottomWidth: 1 }}
+                onPress={() => setContactDetailsVisible(true)}
+              >
+                <Text
+                  style={
+                    contactDetailsVisible
+                      ? styles.chooseInfoTitle
+                      : { ...styles.chooseInfoTitle, color: "#ababab" }
+                  }
+                >
+                  CONTACT INFO
+                </Text>
+              </Pressable>
+            </View>
+            {contactDetailsVisible ? (
+              <DetailsContact clientDetailsState={clientSelect} />
+            ) : (
+              <>
+                <DetailsReminders clientDetailsState={clientSelect} />
+                <DetailsNote
+                  clientDetailsState={clientSelect}
+                  viewNoteHandler={viewNoteHandler}
+                />
+                <DetailsConnectionHistory
+                  clientDetailsState={clientSelect}
+                  viewConnectionHandler={viewConnectionHandler}
+                />
+                <DetailsTasks
+                  clientDetailsState={clientSelect}
+                  viewTaskHandler={viewTaskHandler}
+                />
+              </>
+            )}
+          </View>
+          <View style={{ height: 100 }}></View>
+        </ScrollView>
+      )}
+    </>
   );
 }
 
 const styles = StyleSheet.create({
+  loadingContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    height: "100%",
+  },
   scrollContainer: {
     display: "flex",
     paddingHorizontal: 30,

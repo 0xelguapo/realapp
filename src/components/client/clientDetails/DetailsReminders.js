@@ -13,7 +13,7 @@ export default function DetailsReminders({ clientDetailsState }) {
         horizontal={true}
         showsHorizontalScrollIndicator={false}
       >
-        {clientDetailsState.reminder.items.length ? (
+        {clientDetailsState.reminder.items?.length ? (
           clientDetailsState.reminder.items.map((item) => (
             <View key={item.id} style={styles.reminder}>
               <Text style={styles.reminderDate}>

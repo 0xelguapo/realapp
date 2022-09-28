@@ -7,6 +7,7 @@ import {
   TextInput,
   ScrollView,
 } from "react-native";
+import { useIsFocused } from "@react-navigation/native";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import useClient from "../../hooks/client-hook";
 import Group from "../../components/more/Group";
@@ -17,17 +18,19 @@ import {
   selectAllGroups,
 } from "../../redux/groups-slice";
 
+
 export default function ViewGroups(props) {
   const [showInput, setShowInput] = useState(false);
   const [title, setTitle] = useState("");
   const inputRef = useRef(null);
+  const isFocused = useIsFocused()
 
   const dispatch = useDispatch();
   const groups = useSelector(selectAllGroups);
 
   useEffect(() => {
-    dispatch(fetchGroups());
-  }, [dispatch]);
+    if(isFocused) dispatch(fetchGroups());
+  }, [dispatch, isFocused]);
 
   const handleSubmit = async () => {
     dispatch(addGroup(title));
