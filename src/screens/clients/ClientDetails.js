@@ -24,7 +24,8 @@ import {
   updateFavorite,
   removeClient,
 } from "../../redux/clients-slice";
-import { handleDeletedClient } from "../../redux/groups-slice";
+import { handleGroupsOnDeleteClient } from "../../redux/groups-slice";
+import { handleRemindersOnDeleteClient } from "../../redux/reminders-slice";
 
 export default function ClientDetails(props) {
   const { id, phone } = props.route.params.client;
@@ -34,6 +35,7 @@ export default function ClientDetails(props) {
 
   const dispatch = useDispatch();
   const clientSelect = useSelector((state) => selectClientById(state, id));
+  console.log(clientSelect)
 
   const fetchClientDetails = () => {
     dispatch(fetchOneClient(id));
@@ -93,10 +95,8 @@ export default function ClientDetails(props) {
         onPress: async () => {
           dispatch(removeClient(id));
           props.navigation.goBack();
-          dispatch(handleDeletedClient(id));
-          // if (removeResponse && props.route.params.groupMode === true) {
-          //   removeClientFromClientsOfGroupArray(id);
-          // }
+          dispatch(handleGroupsOnDeleteClient(id));
+          dispatch(handleRemindersOnDeleteClient(id))
         },
         style: "destructive",
       },

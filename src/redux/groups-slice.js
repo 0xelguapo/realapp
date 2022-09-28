@@ -133,7 +133,7 @@ export const groupSlice = createSlice({
   name: "groups",
   initialState,
   reducers: {
-    handleDeletedClient(state, action) {
+    handleGroupsOnDeleteClient(state, action) {
       for (const group in state.entities) {
         const clientsArray = state.entities[group].clients.items;
         for (let i = 0; i < clientsArray.length; i++) {
@@ -180,6 +180,6 @@ export const {
   selectIds: selectGroupIds,
 } = groupsAdapter.getSelectors((state) => state.groups);
 
-export const { handleDeletedClient } = groupSlice.actions;
+export const { handleGroupsOnDeleteClient } = groupSlice.actions;
 
 export default groupSlice.reducer;

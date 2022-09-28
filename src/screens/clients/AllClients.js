@@ -26,7 +26,7 @@ export default function Clients({ navigation }) {
   const dispatch = useDispatch();
   const allClients = useSelector(selectAllClients);
   const [searchInput, setSearchInput] = useState("");
-  const [filteredData, setFilteredData] = useState(clientsArray);
+  const [filteredData, setFilteredData] = useState(allClients);
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const scrollOffsetY = useRef(new Animated.Value(0)).current;
@@ -55,7 +55,7 @@ export default function Clients({ navigation }) {
 
   const handleSearch = (text) => {
     if (text) {
-      const selectedData = clientsArray.filter((c) => {
+      const selectedData = allClients.filter((c) => {
         const clientData = c.name ? c.name.toUpperCase() : "".toUpperCase();
         const textData = text.toUpperCase();
         return clientData.indexOf(textData) > -1;
@@ -63,7 +63,7 @@ export default function Clients({ navigation }) {
       setFilteredData(selectedData);
       setSearchInput(text);
     } else {
-      setFilteredData(clientsArray);
+      setFilteredData(allClients);
       setSearchInput(text);
     }
   };
@@ -75,10 +75,6 @@ export default function Clients({ navigation }) {
   useEffect(() => {
     onSuccess();
   }, [successStatus]);
-
-  useEffect(() => {
-    getAllClients();
-  }, []);
 
   useEffect(() => {
     getFavoriteClients();
@@ -146,7 +142,7 @@ export default function Clients({ navigation }) {
               },
             ]}
           >
-            {clientsArray.map((fave, index) => {
+            {allClients.map((fave, index) => {
               if (fave.favorite) {
                 return (
                   <Pressable

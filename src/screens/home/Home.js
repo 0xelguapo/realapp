@@ -13,11 +13,14 @@ import { TaskContext } from "../../context/task-context";
 import { MaterialIcons } from "@expo/vector-icons";
 import { ClientsContext } from "../../context/client-context";
 import RemindersList from "../../components/home/RemindersList";
+import { fetchReminders } from "../../redux/reminders-slice";
 
 export default function Home(props) {
   const [refreshVisible, setRefreshVisible] = useState(true);
   const { tasksArray, fetchTasks } = useContext(TaskContext);
   const { getAllClients } = useContext(ClientsContext);
+
+  const dispatch = useDispatch()
 
   const handleManualRefresh = () => {
     setRefreshVisible(false);
@@ -25,6 +28,7 @@ export default function Home(props) {
       setRefreshVisible(true);
     }, 2000);
     fetchTasks();
+    dispatch(fetchReminders())
   };
 
   useEffect(() => {

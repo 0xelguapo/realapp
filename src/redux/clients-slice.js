@@ -9,6 +9,7 @@ import {
   updateClient,
   deleteGroupsClients,
   deleteClient,
+  deleteReminder,
 } from "../graphql/mutations";
 import { listClientGroupsWithClients } from "../graphql/customQueries";
 import { listClients, getClient } from "../graphql/queries";
@@ -85,6 +86,7 @@ export const removeClient = createAsyncThunk(
   async (clientId) => {
     let response;
     let deleteGroupClientResponse;
+    let deleteRemindersResponse;
     let client;
 
     try {
@@ -94,7 +96,7 @@ export const removeClient = createAsyncThunk(
       return;
     }
 
-    const promises = client.data.getClient.group.items.map((group) => {
+    const groupPromises = client.data.getClient.group.items.map((group) => {
       return API.graphql(
         graphqlOperation(deleteGroupsClients, {
           input: { id: group.id },
@@ -103,12 +105,28 @@ export const removeClient = createAsyncThunk(
     });
 
     try {
-      deleteGroupClientResponse = await Promise.all(promises);
+      deleteGroupClientResponse = await Promise.all(groupPromises);
       console.log(deleteGroupClientResponse);
     } catch (err) {
       console.error("error delete group clients", err);
-      return;
+      return err;
     }
+
+    const remindersPromises = client.data.getClient.reminder.items.map(
+      (reminder) => {
+        return API.graphql(
+          graphqlOperation(deleteReminder, { input: { id: reminder.id } })
+        );
+      }
+    );
+
+    try {
+      deleteRemindersResponse = await Promise.all(remindersPromises);
+    } catch (err) {
+      console.error("error deleting reminders", err);
+      return err;
+    }
+
     if (deleteGroupClientResponse) {
       try {
         response = await API.graphql(

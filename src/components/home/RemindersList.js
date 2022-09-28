@@ -20,6 +20,16 @@ export default function RemindersList(props) {
 
   const allReminders = useSelector(selectAllReminders)
 
+  // const filterRemindersToUpcoming = (arrayOfReminders) => {
+  //   const copyOfReminders = [...arrayOfReminders];
+  //   copyOfReminders.filter((el) => {
+  //     const result = differenceInCalendarDays(parseISO(el.date), dateHelper);
+  //     if (result <= 5) return true;
+  //     else return false;
+  //   })
+  //   return copyOfReminders
+  // }
+
 
   const upcomingReminders = allReminders
     .filter((el) => {

@@ -46,6 +46,9 @@ const styles = StyleSheet.create({
     display: "flex",
     paddingVertical: 3,
   },
+  taskContainer: {
+    paddingVertical: 3
+  },
   connection: {
     paddingVertical: 5,
   },

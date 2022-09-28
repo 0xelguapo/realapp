@@ -64,7 +64,16 @@ export const createOneReminder = createAsyncThunk(
 export const remindersSlice = createSlice({
   name: "reminders",
   initialState,
-  reducers: {},
+  reducers: {
+    handleRemindersOnDeleteClient(state, action) {
+      for (const reminder in state.entities) {
+        const clientId = state.entities[reminder].clientId;
+        if (clientId === action.payload) {
+          remindersAdapter.removeOne(state, reminder)
+        }
+      }
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchReminders.fulfilled, (state, action) => {
@@ -85,5 +94,7 @@ export const {
   selectById: selectReminderById,
   selectIds: selectReminderIds,
 } = remindersAdapter.getSelectors((state) => state.reminders);
+
+export const { handleRemindersOnDeleteClient } = remindersSlice.actions;
 
 export default remindersSlice.reducer;
