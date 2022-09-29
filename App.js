@@ -2,8 +2,9 @@ import { StyleSheet, Text, View } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import Amplify from "aws-amplify";
 import awsconfig from "./src/aws-exports";
-import { AuthProvider } from "./src/context/auth-context"
+import { AuthProvider } from "./src/context/auth-context";
 import Navigation from "./src/navigation/index";
+import SuccessMessage from "./src/components/UI/SuccessMessage";
 
 Amplify.configure(awsconfig);
 

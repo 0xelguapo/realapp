@@ -9,17 +9,14 @@ import {
   KeyboardAvoidingView,
   ScrollView,
 } from "react-native";
-import {
-  AntDesign,
-  Ionicons,
-  MaterialCommunityIcons,
-  Octicons,
-} from "@expo/vector-icons";
-import { ClientsContext } from "../../context/client-context";
-import CustomPressable from "../../components/CustomPressable";
+import { useDispatch } from "react-redux";
+import { AntDesign, Ionicons } from "@expo/vector-icons";
+import { addClient } from "../../redux/clients-slice";
+import { SuccessContext } from "../../context/success-context";
 
 export default function AddClient({ navigation }) {
-  const { addClient } = useContext(ClientsContext);
+  const { onStatusChange } = useContext(SuccessContext);
+  const dispatch = useDispatch();
   const [name, setName] = useState("");
   const [company, setCompany] = useState("");
   const [emailInputs, setEmailInputs] = useState([]);
@@ -33,8 +30,11 @@ export default function AddClient({ navigation }) {
       email: emailInputs.toString(),
     };
     if (name.length !== 0) {
-      const response = await addClient(clientInputs);
-      if(response) navigation.goBack()
+      const response = await dispatch(addClient(clientInputs));
+      if (response) {
+        navigation.goBack();
+        onStatusChange();
+      }
     } else {
       Alert.alert("Please enter a valid name");
     }

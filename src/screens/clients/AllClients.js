@@ -1,4 +1,11 @@
-import { useEffect, useCallback, useContext, useRef, useState } from "react";
+import {
+  useEffect,
+  useCallback,
+  useRef,
+  useState,
+  useMemo,
+  useContext,
+} from "react";
 import {
   StyleSheet,
   Text,
@@ -9,26 +16,25 @@ import {
   Pressable,
   TouchableOpacity,
 } from "react-native";
-import { ClientsContext } from "../../context/client-context";
 import EachClient from "../../components/client/EachClient";
 import { Ionicons, Feather } from "@expo/vector-icons";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchClients, selectAllClients } from "../../redux/clients-slice";
 
 export default function Clients({ navigation }) {
-  const {
-    clientsArray,
-    isLoading,
-    getAllClients,
-    successStatus,
-    getFavoriteClients,
-  } = useContext(ClientsContext);
-  const dispatch = useDispatch();
-  const allClients = useSelector(selectAllClients);
   const [searchInput, setSearchInput] = useState("");
-  const [filteredData, setFilteredData] = useState(allClients);
+  const dispatch = useDispatch();
+  const status = useSelector((state) => state.clients.status);
+  const allClients = useSelector(selectAllClients);
 
-  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const filteredContacts = useMemo(() => {
+    return allClients.filter((c) => {
+      const clientData = c.name ? c.name.toUpperCase() : "".toUpperCase();
+      const textData = searchInput.toUpperCase();
+      return clientData.indexOf(textData) > -1;
+    });
+  }, [searchInput, allClients]);
+
   const scrollOffsetY = useRef(new Animated.Value(0)).current;
   const headerScrollHeight = scrollOffsetY.interpolate({
     inputRange: [0, 50],
@@ -53,143 +59,110 @@ export default function Clients({ navigation }) {
     []
   );
 
-  const handleSearch = (text) => {
-    if (text) {
-      const selectedData = allClients.filter((c) => {
-        const clientData = c.name ? c.name.toUpperCase() : "".toUpperCase();
-        const textData = text.toUpperCase();
-        return clientData.indexOf(textData) > -1;
-      });
-      setFilteredData(selectedData);
-      setSearchInput(text);
-    } else {
-      setFilteredData(allClients);
-      setSearchInput(text);
-    }
+  const getAllClients = async () => {
+    dispatch(fetchClients());
   };
 
   useEffect(() => {
-    dispatch(fetchClients())
-  }, [dispatch])
-
-  useEffect(() => {
-    onSuccess();
-  }, [successStatus]);
-
-  useEffect(() => {
-    getFavoriteClients();
+    dispatch(fetchClients());
   }, []);
 
-  const onSuccess = () => {
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 500,
-      useNativeDriver: true,
-    }).start();
-    setTimeout(() => {
-      Animated.timing(fadeAnim, {
-        toValue: 0,
-        duration: 500,
-        useNativeDriver: true,
-      }).start();
-    }, 3500);
-  };
+  useEffect(() => {
+    getAllClients();
+  }, []);
 
   return (
-    <View style={styles.container}>
-      {successStatus && (
-        <Animated.View style={[styles.fadingContainer, { opacity: fadeAnim }]}>
-          <Text style={styles.successText}>Contact created successfully</Text>
-        </Animated.View>
-      )}
-      <View style={styles.headerContainer}>
-        <View
-          style={{ backgroundColor: "#f5f5f5", zIndex: 1, paddingBottom: 10 }}
-        >
-          <Text style={styles.headerText}>Contacts</Text>
-          <View style={styles.inputContainer}>
-            <Ionicons name="ios-search" size={20} color="black" />
-            <TextInput
-              style={styles.input}
-              placeholderTextColor="#7b7b7c"
-              placeholder="Search by name"
-              returnKeyType="done"
-              onChangeText={handleSearch}
-              value={searchInput}
-            />
-            {searchInput.length !== 0 && (
-              <TouchableOpacity onPress={() => handleSearch("")}>
-                <Feather name="x-circle" size={20} color="#7b7b7c" />
-              </TouchableOpacity>
-            )}
-          </View>
-        </View>
-        <Animated.View
-          style={[{ transform: [{ translateY: headerScrollHeight }] }]}
-        >
-          <Text style={{ fontWeight: "700" }}>Favorites</Text>
-        </Animated.View>
-        <View>
-          <Animated.ScrollView
-            showsHorizontalScrollIndicator={false}
-            horizontal={true}
-            style={[
-              {
-                transform: [{ translateY: headerScrollHeight }],
-                position: "absolute",
-                top: 10,
-                width: "100%",
-              },
-            ]}
+    <>
+      <View style={styles.container}>
+        <View style={styles.headerContainer}>
+          <View
+            style={{ backgroundColor: "#f5f5f5", zIndex: 1, paddingBottom: 10 }}
           >
-            {allClients.map((fave, index) => {
-              if (fave.favorite) {
-                return (
-                  <Pressable
-                    style={styles.favoriteClient}
-                    key={fave.id}
-                    onPress={() => viewClientHandler(fave, index)}
-                  >
-                    <Text style={styles.favoriteFirstLetter}>
-                      {fave.name[0].toUpperCase()}
-                    </Text>
-                    <Text style={styles.favoriteName}>{fave.name}</Text>
-                  </Pressable>
-                );
-              }
-            })}
-          </Animated.ScrollView>
-        </View>
-      </View>
-      <View style={styles.list}>
-        {isLoading ? (
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" />
+            <Text style={styles.headerText}>Contacts</Text>
+            <View style={styles.inputContainer}>
+              <Ionicons name="ios-search" size={20} color="black" />
+              <TextInput
+                style={styles.input}
+                placeholderTextColor="#7b7b7c"
+                placeholder="Search by name"
+                returnKeyType="done"
+                onChangeText={setSearchInput}
+                value={searchInput}
+              />
+              {searchInput.length !== 0 && (
+                <TouchableOpacity onPress={() => handleSearch("")}>
+                  <Feather name="x-circle" size={20} color="#7b7b7c" />
+                </TouchableOpacity>
+              )}
+            </View>
           </View>
-        ) : (
-          <Animated.FlatList
-            data={filteredData}
-            renderItem={renderClient}
-            keyExtractor={(c) => c.id}
-            onRefresh={getAllClients}
-            refreshing={isLoading}
-            onScroll={Animated.event(
-              [{ nativeEvent: { contentOffset: { y: scrollOffsetY } } }],
-              { useNativeDriver: true }
-            )}
-            scrollEventThrottle={16}
-            style={{ paddingVertical: 50, marginTop: 5 }}
-            contentContainerStyle={{ paddingBottom: 50 }}
-          />
-        )}
+          <Animated.View
+            style={[{ transform: [{ translateY: headerScrollHeight }] }]}
+          >
+            <Text style={{ fontWeight: "700" }}>Favorites</Text>
+          </Animated.View>
+          <View>
+            <Animated.ScrollView
+              showsHorizontalScrollIndicator={false}
+              horizontal={true}
+              style={[
+                {
+                  transform: [{ translateY: headerScrollHeight }],
+                  position: "absolute",
+                  top: 10,
+                  width: "100%",
+                },
+              ]}
+            >
+              {allClients.map((fave, index) => {
+                if (fave.favorite) {
+                  return (
+                    <Pressable
+                      style={styles.favoriteClient}
+                      key={fave.id}
+                      onPress={() => viewClientHandler(fave, index)}
+                    >
+                      <Text style={styles.favoriteFirstLetter}>
+                        {fave.name[0].toUpperCase()}
+                      </Text>
+                      <Text style={styles.favoriteName}>{fave.name}</Text>
+                    </Pressable>
+                  );
+                }
+              })}
+            </Animated.ScrollView>
+          </View>
+        </View>
+        <View style={styles.list}>
+          {status !== "succeeded" ? (
+            <View style={styles.loadingContainer}>
+              <ActivityIndicator size="large" />
+            </View>
+          ) : (
+            <Animated.FlatList
+              data={filteredContacts}
+              renderItem={renderClient}
+              keyExtractor={(c) => c.id}
+              onRefresh={getAllClients}
+              refreshing={status !== "succeeded"}
+              onScroll={Animated.event(
+                [{ nativeEvent: { contentOffset: { y: scrollOffsetY } } }],
+                { useNativeDriver: true }
+              )}
+              scrollEventThrottle={16}
+              style={{ paddingVertical: 50, marginTop: 5 }}
+              contentContainerStyle={{ paddingBottom: 50 }}
+            />
+          )}
+        </View>
+        <TouchableOpacity
+          style={styles.addIconContainer}
+          onPress={() => navigation.navigate("AddClient")}
+        >
+          <Ionicons name="ios-person-add" size={25} color="white" />
+        </TouchableOpacity>
       </View>
-      <TouchableOpacity
-        style={styles.addIconContainer}
-        onPress={() => navigation.navigate("AddClient")}
-      >
-        <Ionicons name="ios-person-add" size={25} color="white" />
-      </TouchableOpacity>
-    </View>
+    </>
   );
 }
 

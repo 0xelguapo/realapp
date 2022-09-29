@@ -51,17 +51,20 @@ export const fetchOneClient = createAsyncThunk(
   }
 );
 
-export const addClient = createAsyncThunk("clients/addClient", async () => {
-  let response;
-  try {
-    response = await API.graphql(
-      graphqlOperation(createClient, { input: clientDetails })
-    );
-  } catch (err) {
-    console.error("error creating client", err);
+export const addClient = createAsyncThunk(
+  "clients/addClient",
+  async (clientInputs) => {
+    let response;
+    try {
+      response = await API.graphql(
+        graphqlOperation(createClient, { input: clientInputs })
+      );
+    } catch (err) {
+      console.error("error creating client", err);
+    }
+    return response.data.createClient;
   }
-  return response.data.createClient;
-});
+);
 
 export const updateFavorite = createAsyncThunk(
   "clients/updateFavorite",

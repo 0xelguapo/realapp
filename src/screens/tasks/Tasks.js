@@ -1,4 +1,4 @@
-import { useCallback, useContext } from "react";
+import { useCallback, useContext, useEffect } from "react";
 import {
   FlatList,
   Pressable,
@@ -10,7 +10,7 @@ import {
 import { TaskContext } from "../../context/task-context";
 import { Entypo } from "@expo/vector-icons";
 import EachTask from "../../components/EachTask";
-import SuccessMessage from "../../components/SuccessMessage";
+
 
 export default function Tasks({ navigation }) {
   const { isLoading, tasksArray, successStatus, fetchTasks } =

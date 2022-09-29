@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -8,9 +8,6 @@ import {
   Pressable,
   ActivityIndicator,
 } from "react-native";
-import useClient from "../../hooks/client-hook";
-import { ClientsContext } from "../../context/client-context";
-import { GroupsContext } from "../../context/group-context";
 import ClientOptions from "../../components/client/ClientOptions";
 import DetailsReminders from "../../components/client/clientDetails/DetailsReminders";
 import DetailsNote from "../../components/client/clientDetails/DetailsNote";
@@ -30,8 +27,8 @@ import { handleRemindersOnDeleteClient } from "../../redux/reminders-slice";
 export default function ClientDetails(props) {
   const { id, phone } = props.route.params.client;
   const { index } = props.route.params;
+  const [phoneArray, setPhoneArray] = useState([])
   const [contactDetailsVisible, setContactDetailsVisible] = useState(false);
-  const { removeClientFromClientsOfGroupArray } = useContext(GroupsContext);
 
   const dispatch = useDispatch();
   const clientSelect = useSelector((state) => selectClientById(state, id));
@@ -116,6 +113,8 @@ export default function ClientDetails(props) {
           4,
           7
         )}-${phone.slice(7, 11)}`;
+
+  
 
   return (
     <>
