@@ -46,7 +46,13 @@ export default function EditReminder(props) {
 
   return (
     <View style={styles.container}>
-      <Pressable onPress={goBack} style={styles.backdrop}></Pressable>
+      <Pressable
+        onPress={goBack}
+        style={[
+          StyleSheet.absoluteFill,
+          { backgroundColor: "rgba(0, 0, 0, 0.3)" },
+        ]}
+      />
       <View style={styles.modalContainer}>
         <View style={styles.titleHeaderContainer}>
           <Text style={styles.titleHeader}>Set a Reconnect Reminder</Text>
@@ -103,16 +109,10 @@ export default function EditReminder(props) {
 const styles = StyleSheet.create({
   container: {
     display: "flex",
-    height: "100%",
-    backgroundColor: "rgba(0, 0, 0, .3)",
+    flex: 1,
     alignItems: "center",
     paddingBottom: 50,
     justifyContent: "flex-end",
-  },
-  backdrop: {
-    height: "110%",
-    position: "absolute",
-    width: "100%",
   },
   modalContainer: {
     display: "flex",

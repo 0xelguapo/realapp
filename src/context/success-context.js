@@ -1,12 +1,14 @@
-import { useState, createContext, useRef } from "react";
+import { useState, createContext, useRef, useEffect } from "react";
 import { Animated } from "react-native";
 
 const SuccessContext = createContext();
 
 function SuccessContextProvider({ children }) {
   const fadeAnim = useRef(new Animated.Value(0)).current;
+  const [text, setText] = useState("SUCCESS");
 
-  const onStatusChange = () => {
+  const onStatusChange = (textInput) => {
+    setText(textInput);
     Animated.timing(fadeAnim, {
       toValue: 1,
       duration: 300,
@@ -21,10 +23,8 @@ function SuccessContextProvider({ children }) {
     }, 2800);
   };
 
-
-
   return (
-    <SuccessContext.Provider value={{ fadeAnim, onStatusChange }}>
+    <SuccessContext.Provider value={{ fadeAnim, text, onStatusChange }}>
       {children}
     </SuccessContext.Provider>
   );

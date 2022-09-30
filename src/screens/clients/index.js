@@ -62,7 +62,11 @@ export default function ClientsNavigator() {
         component={EditClient}
       />
       <Stack.Screen
-        options={{ presentation: "modal", headerShown: false }}
+        options={{
+          presentation: "containedModal",
+          headerShown: false,
+          cardOverlayEnabled: true,
+        }}
         name="AddEditGroup"
         component={AddEditGroup}
       />
@@ -71,6 +75,7 @@ export default function ClientsNavigator() {
           presentation: "transparentModal",
           headerShown: false,
           cardOverlayEnabled: true,
+          animation: "fade",
         }}
         name="EditReminder"
         component={EditReminder}

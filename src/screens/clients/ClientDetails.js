@@ -27,7 +27,6 @@ import { handleRemindersOnDeleteClient } from "../../redux/reminders-slice";
 export default function ClientDetails(props) {
   const { id, phone } = props.route.params.client;
   const { index } = props.route.params;
-  const [phoneArray, setPhoneArray] = useState([])
   const [contactDetailsVisible, setContactDetailsVisible] = useState(false);
 
   const dispatch = useDispatch();

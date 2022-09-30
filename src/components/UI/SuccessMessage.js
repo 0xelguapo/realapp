@@ -4,13 +4,15 @@ import { AntDesign } from "@expo/vector-icons";
 import { SuccessContext } from "../../context/success-context";
 
 export default function SuccessMessage(props) {
-  const { fadeAnim } = useContext(SuccessContext);
+  const { fadeAnim, text } = useContext(SuccessContext);
 
   return (
     <>
       <Animated.View style={[styles.fadingContainer, { opacity: fadeAnim }]}>
-        <AntDesign name="checkcircleo" size={14} color="#1761b8" />
-        <Text style={styles.successText}>SUCCESS</Text>
+        <View style={styles.iconContainer}>
+          <AntDesign name="checkcircleo" size={14} color="#1761b8" />
+        </View>
+        <Text style={styles.successText}>{text}</Text>
       </Animated.View>
     </>
   );
@@ -18,17 +20,23 @@ export default function SuccessMessage(props) {
 
 const styles = StyleSheet.create({
   fadingContainer: {
+    flex: 1,
     position: "absolute",
-    zIndex: 2,
     top: 60,
-    padding: 3,
+    zIndex: 2,
+    paddingVertical: 8,
+    paddingHorizontal: 10,
     backgroundColor: "#dae5f2",
     borderRadius: 20,
-    width: 100,
     alignSelf: "center",
     justifyContent: "space-evenly",
     flexDirection: "row",
     alignItems: "center",
+  },
+  iconContainer: {
+    width: 25,
+    alignItems: "center",
+    justifyContent: "center",
   },
   successText: {
     color: "#1761b8",

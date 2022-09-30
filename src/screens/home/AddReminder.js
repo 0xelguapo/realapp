@@ -6,16 +6,34 @@ import {
   FlatList,
   TextInput,
 } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
-import { Ionicons } from "@expo/vector-icons";
-import { useContext, useCallback, useEffect, useState } from "react";
+import { AntDesign, Ionicons } from "@expo/vector-icons";
+import { useContext, useCallback, useEffect, useState, useMemo } from "react";
 import { ClientsContext } from "../../context/client-context";
 import EachClient from "../../components/client/EachClient";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchClients, selectAllClients } from "../../redux/clients-slice";
 
 export default function AddReminder(props) {
-  const { clientsArray, isLoading } = useContext(ClientsContext);
-  const [filteredData, setFilteredData] = useState(clientsArray);
+  const { isLoading } = useContext(ClientsContext);
   const [searchInput, setSearchInput] = useState("");
+
+  const dispatch = useDispatch();
+  const allClients = useSelector(selectAllClients);
+  const status = useSelector((state) => state.clients.status);
+
+  const filteredData = useMemo(() => {
+    return allClients.filter((c) => {
+      const clientData = c.name ? c.name.toUpperCase() : "".toUpperCase();
+      const textData = searchInput.toUpperCase();
+      return clientData.indexOf(textData) > -1;
+    });
+  }, [searchInput, allClients]);
+
+  useEffect(() => {
+    if (allClients.length < 1) {
+      dispatch(fetchClients());
+    }
+  }, []);
 
   const renderClient = useCallback(
     ({ item, index }) => (
@@ -35,21 +53,6 @@ export default function AddReminder(props) {
     props.navigation.navigate("EditReminder", { clientId: id, homeMode: true });
   };
 
-  const handleSearch = (text) => {
-    if (text) {
-      const selectedData = clientsArray.filter((c) => {
-        const clientData = c.name ? c.name.toUpperCase() : "".toUpperCase();
-        const textData = text.toUpperCase();
-        return clientData.indexOf(textData) > -1;
-      });
-      setFilteredData(selectedData);
-      setSearchInput(text);
-    } else {
-      setFilteredData(clientsArray);
-      setSearchInput(text);
-    }
-  };
-
   return (
     <View style={styles.container}>
       <View style={styles.headingContainer}>
@@ -65,7 +68,7 @@ export default function AddReminder(props) {
           <TextInput
             style={styles.input}
             value={searchInput}
-            onChangeText={handleSearch}
+            onChangeText={setSearchInput}
             placeholder="Search for a name, category..."
             placeholderTextColor="#7b7b7c"
           />
@@ -76,7 +79,7 @@ export default function AddReminder(props) {
           data={filteredData}
           renderItem={renderClient}
           keyExtractor={(c) => c.id}
-          refreshing={isLoading}
+          refreshing={status !== "succeeded"}
           contentContainerStyle={{ paddingBottom: 50 }}
         />
       </View>
@@ -124,6 +127,6 @@ const styles = StyleSheet.create({
   },
   list: {
     flex: 1,
-    paddingHorizontal: 20,
+    paddingLeft: 20,
   },
 });

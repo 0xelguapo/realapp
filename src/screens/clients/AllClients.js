@@ -27,6 +27,12 @@ export default function Clients({ navigation }) {
   const status = useSelector((state) => state.clients.status);
   const allClients = useSelector(selectAllClients);
 
+  const favoriteClients = useMemo(() => {
+    return allClients.filter((c) => {
+      return c.favorite === true;
+    });
+  }, [allClients]);
+
   const filteredContacts = useMemo(() => {
     return allClients.filter((c) => {
       const clientData = c.name ? c.name.toUpperCase() : "".toUpperCase();
@@ -96,6 +102,7 @@ export default function Clients({ navigation }) {
               )}
             </View>
           </View>
+
           <Animated.View
             style={[{ transform: [{ translateY: headerScrollHeight }] }]}
           >
@@ -114,22 +121,26 @@ export default function Clients({ navigation }) {
                 },
               ]}
             >
-              {allClients.map((fave, index) => {
-                if (fave.favorite) {
+              {favoriteClients.length > 0 ? (
+                favoriteClients.map((client, index) => {
                   return (
                     <Pressable
                       style={styles.favoriteClient}
-                      key={fave.id}
-                      onPress={() => viewClientHandler(fave, index)}
+                      key={client.id}
+                      onPress={() => viewClientHandler(client, index)}
                     >
                       <Text style={styles.favoriteFirstLetter}>
-                        {fave.name[0].toUpperCase()}
+                        {client.name[0].toUpperCase()}
                       </Text>
-                      <Text style={styles.favoriteName}>{fave.name}</Text>
+                      <Text style={styles.favoriteName}>{client.name}</Text>
                     </Pressable>
                   );
-                }
-              })}
+                })
+              ) : (
+                <Text style={{ color: "#ababab" }}>
+                  Your favorites will be shown here...
+                </Text>
+              )}
             </Animated.ScrollView>
           </View>
         </View>

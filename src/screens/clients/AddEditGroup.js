@@ -55,7 +55,9 @@ export default function AddEditGroup(props) {
   };
 
   useEffect(() => {
-    getAllGroupsAndUpdate();
+    let isMounted = true;
+    if (isMounted) getAllGroupsAndUpdate();
+    return () => (isMounted = false);
   }, [groups, clientsGroups, dispatch]);
 
   useEffect(() => {

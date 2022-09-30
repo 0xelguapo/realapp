@@ -39,6 +39,7 @@ export default function HomeNavigator() {
           presentation: "transparentModal",
           headerShown: false,
           cardOverlayEnabled: true,
+          animation: 'fade'
         }}
         name="EditReminder"
         component={EditReminder}

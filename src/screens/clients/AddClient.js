@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -16,6 +16,8 @@ import { SuccessContext } from "../../context/success-context";
 
 export default function AddClient({ navigation }) {
   const { onStatusChange } = useContext(SuccessContext);
+  const phoneInputRef = useRef(null);
+  const emailInputRef = useRef(null)
   const dispatch = useDispatch();
   const [name, setName] = useState("");
   const [company, setCompany] = useState("");
@@ -33,7 +35,7 @@ export default function AddClient({ navigation }) {
       const response = await dispatch(addClient(clientInputs));
       if (response) {
         navigation.goBack();
-        onStatusChange();
+        onStatusChange("CONTACT CREATED");
       }
     } else {
       Alert.alert("Please enter a valid name");
@@ -53,7 +55,7 @@ export default function AddClient({ navigation }) {
 
   const handlePhoneInputChange = (text, index) => {
     let newPhoneInputs = [...phoneInputs];
-    newPhoneInputs[index] = text;
+    newPhoneInputs[index] = phoneFormat(text);
     setPhoneInputs(newPhoneInputs);
   };
 
@@ -86,16 +88,31 @@ export default function AddClient({ navigation }) {
       return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3)}`;
     }
     if (phoneLength > 10) {
-      return `+${phoneNumber.slice(0, 1)} (${phoneNumber.slice(
+      return `${phoneNumber.slice(0, 1)} (${phoneNumber.slice(
         1,
         4
       )}) ${phoneNumber.slice(4, 7)}-${phoneNumber.slice(7)}`;
+    } else {
+      return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(
+        3,
+        6
+      )}-${phoneNumber.slice(6)}`;
     }
-    return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(
-      3,
-      6
-    )}-${phoneNumber.slice(6)}`;
   };
+
+  useEffect(() => {
+    if (phoneInputs.length > 0) {
+      phoneInputRef.current.focus();
+    }
+    console.log('phoneref')
+  }, [phoneInputs]);
+
+  useEffect(() => {
+    if(emailInputs.length > 0) {
+      emailInputRef.current.focus();
+    }
+    console.log('emailRef')
+  }, [emailInputs])
 
   return (
     <View style={styles.container}>
@@ -114,7 +131,7 @@ export default function AddClient({ navigation }) {
         behavior="padding"
         keyboardVerticalOffset={75}
       >
-        <ScrollView>
+        <ScrollView keyboardShouldPersistTaps="always" keyboardDismissMode="on-drag">
           <View style={styles.avatar}>
             <Text style={styles.avatarText}>{name[0]}</Text>
           </View>
@@ -127,6 +144,7 @@ export default function AddClient({ navigation }) {
               value={name}
               onChangeText={setName}
               autoCapitalize="words"
+              autoFocus={true}
             />
           </View>
           <View style={styles.inputContainerOne}>
@@ -164,6 +182,7 @@ export default function AddClient({ navigation }) {
                     onChangeText={(text) => handlePhoneInputChange(text, index)}
                     placeholder="Phone"
                     placeholderTextColor="#454545"
+                    ref={phoneInputRef}
                   />
                 </View>
               );
@@ -202,11 +221,12 @@ export default function AddClient({ navigation }) {
                     onChangeText={(text) => handleEmailInputChange(text, index)}
                     placeholder="Email"
                     placeholderTextColor="#454545"
+                    ref={emailInputRef}
                   />
                 </View>
               );
             })}
-            {phoneInputs.length < 5 && (
+            {emailInputs.length < 5 && (
               <TouchableOpacity
                 style={styles.addAnotherButton}
                 onPress={handleAddAnotherEmailInput}
@@ -282,6 +302,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     flex: 1,
     fontSize: 16,
+    height: '90%',
   },
   inputContainerTwo: {
     paddingVertical: 10,
@@ -304,8 +325,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: "#cccccc",
     borderColor: "#dcdcdc",
-    borderWidth: 1,
+    borderWidth: .2,
     height: 40,
+    alignItems: 'center',
   },
   removeInput: {
     width: 40,
