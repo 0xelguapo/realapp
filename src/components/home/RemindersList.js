@@ -18,32 +18,20 @@ export default function RemindersList(props) {
   const dispatch = useDispatch();
   let dateHelper = new Date();
 
-  const allReminders = useSelector(selectAllReminders)
+  const allReminders = useSelector(selectAllReminders);
 
-  // const filterRemindersToUpcoming = (arrayOfReminders) => {
-  //   const copyOfReminders = [...arrayOfReminders];
-  //   copyOfReminders.filter((el) => {
-  //     const result = differenceInCalendarDays(parseISO(el.date), dateHelper);
-  //     if (result <= 5) return true;
-  //     else return false;
-  //   })
-  //   return copyOfReminders
-  // }
+  const upcomingReminders = allReminders.filter((el) => {
+    const result = differenceInCalendarDays(parseISO(el.date), dateHelper);
+    if (result <= 5) return true;
+    else return false;
+  });
 
-
-  const upcomingReminders = allReminders
-    .filter((el) => {
-      const result = differenceInCalendarDays(parseISO(el.date), dateHelper);
-      if (result <= 5) return true;
-      else return false;
-    })
-  
   useEffect(() => {
     dispatch(fetchReminders());
   }, [dispatch]);
 
   return (
-    <ScrollView>
+    <ScrollView contentContainerStyle={{}}>
       {props.homeMode ? (
         upcomingReminders.length > 0 ? (
           upcomingReminders.map((item) => (

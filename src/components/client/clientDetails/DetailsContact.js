@@ -2,10 +2,29 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import BlockHeading from "./BlockHeading";
 import * as Linking from "expo-linking";
 import { AntDesign, Feather } from "@expo/vector-icons";
-import globalStyles from "../../../globalStyles";
+import * as MailComposer from "expo-mail-composer";
+import { useEffect } from "react";
 
 export default function DetailsContact({ clientDetailsState }) {
-  console.log(clientDetailsState);
+  const handleSendEmail = async (email) => {
+    let canCompose;
+    let sendEmail;
+    try {
+      canCompose = await MailComposer.isAvailableAsync();
+    } catch (err) {
+      console.error(err);
+    }
+
+    if (canCompose) {
+      try {
+        sendEmail = await MailComposer.composeAsync({ recipients: [email] });
+        console.log(sendEmail);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  };
+
   return (
     <View style={styles.container}>
       <BlockHeading title={"PHONE NUMBERS"} />
@@ -31,9 +50,7 @@ export default function DetailsContact({ clientDetailsState }) {
             </View>
           ))
         ) : (
-          <Text style={globalStyles.emptyPlaceholderText}>
-            Add a phone number...
-          </Text>
+          <Text style={styles.emptyPlaceholderText}>Add a phone number...</Text>
         )}
       </View>
       <BlockHeading title="EMAILS" />
@@ -45,7 +62,7 @@ export default function DetailsContact({ clientDetailsState }) {
               <View style={styles.actions}>
                 <TouchableOpacity
                   style={styles.iconContainer}
-                  onPress={() => Linking.openURL(`mailto:${email}`)}
+                  onPress={() => handleSendEmail(email)}
                 >
                   <Feather name="mail" size={20} color="#6c6c6c" />
                 </TouchableOpacity>
@@ -53,9 +70,7 @@ export default function DetailsContact({ clientDetailsState }) {
             </View>
           ))
         ) : (
-          <Text style={globalStyles.emptyPlaceholderText}>
-            Add a phone number...
-          </Text>
+          <Text style={styles.emptyPlaceholderText}>Add an email...</Text>
         )}
       </View>
     </View>
@@ -87,5 +102,9 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     color: "#6c6c6c",
     fontSize: 15,
+  },
+  emptyPlaceholderText: {
+    marginTop: 5,
+    color: "#ababab",
   },
 });

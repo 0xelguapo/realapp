@@ -18,9 +18,8 @@ import { fetchReminders } from "../../redux/reminders-slice";
 export default function Home(props) {
   const [refreshVisible, setRefreshVisible] = useState(true);
   const { tasksArray, fetchTasks } = useContext(TaskContext);
-  const { getAllClients } = useContext(ClientsContext);
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const handleManualRefresh = () => {
     setRefreshVisible(false);
@@ -28,12 +27,8 @@ export default function Home(props) {
       setRefreshVisible(true);
     }, 2000);
     fetchTasks();
-    dispatch(fetchReminders())
+    dispatch(fetchReminders());
   };
-
-  useEffect(() => {
-    getAllClients();
-  }, []);
 
   return (
     <View style={styles.container}>
@@ -49,7 +44,7 @@ export default function Home(props) {
       <View style={styles.headerContainer}>
         <Text style={styles.headerTitle}>Your Focus</Text>
       </View>
-      <View style={styles.bodyContainer}>
+      <ScrollView style={styles.bodyContainer}>
         <View style={styles.remindersContainer}>
           <View style={styles.titleContainer}>
             <Text style={styles.titleHeader}>UPCOMING REMINDERS</Text>
@@ -69,7 +64,7 @@ export default function Home(props) {
             />
           ))}
         </View>
-      </View>
+      </ScrollView>
     </View>
   );
 }
