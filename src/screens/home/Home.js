@@ -11,7 +11,6 @@ import EachTask from "../../components/EachTask";
 import { useDispatch } from "react-redux";
 import { TaskContext } from "../../context/task-context";
 import { MaterialIcons } from "@expo/vector-icons";
-import { ClientsContext } from "../../context/client-context";
 import RemindersList from "../../components/home/RemindersList";
 import { fetchReminders } from "../../redux/reminders-slice";
 
