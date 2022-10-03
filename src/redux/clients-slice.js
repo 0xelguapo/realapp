@@ -11,7 +11,6 @@ import {
   deleteClient,
   deleteReminder,
 } from "../graphql/mutations";
-import { listClientGroupsWithClients } from "../graphql/customQueries";
 import { listClients, getClient } from "../graphql/queries";
 
 const clientsAdapter = createEntityAdapter({

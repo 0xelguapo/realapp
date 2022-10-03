@@ -3,19 +3,34 @@ import {
   StyleSheet,
   Text,
   View,
-  Button,
   TouchableOpacity,
   ScrollView,
+  Pressable,
+  Alert,
 } from "react-native";
 import { API, Auth, graphqlOperation } from "aws-amplify";
 import { AuthContext } from "../../context/auth-context";
-import { Feather, Ionicons } from "@expo/vector-icons";
+import { Feather, Ionicons, SimpleLineIcons } from "@expo/vector-icons";
 import * as queries from "../../graphql/queries";
 import Note from "../../components/more/Note";
 
 export default function More(props) {
+  const [modalVisible, setModalVisible] = useState(false);
   const [notesArray, setNotesArray] = useState([]);
   const { signOut } = useContext(AuthContext);
+
+  const handleSignOut = () => {
+    Alert.alert("Sign Out", "Are you sure you want to sign out?", [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Sign Out",
+        style: "destructive",
+        onPress: () => {
+          signOut();
+        },
+      },
+    ]);
+  };
 
   const fetchNotes = async () => {
     let response;
@@ -51,8 +66,25 @@ export default function More(props) {
 
   return (
     <View style={styles.container}>
+      {modalVisible && (
+        <Pressable
+          style={[StyleSheet.absoluteFill, { zIndex: 3 }]}
+          onPress={() => setModalVisible(false)}
+        />
+      )}
       <View style={styles.headingContainer}>
         <Text style={styles.headingText}>EXTRAS</Text>
+        <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+          <SimpleLineIcons name="options" size={24} color="#dddddf" />
+        </TouchableOpacity>
+        {modalVisible && (
+          <View style={styles.menuContainer}>
+            <TouchableOpacity style={styles.menuOption} onPress={handleSignOut}>
+              <Text style={styles.menuOptionText}>Sign Out</Text>
+              <Ionicons name="exit-outline" size={24} color="#333333" />
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
       <View style={styles.optionsContainer}>
         <TouchableOpacity style={styles.option} onPress={handleViewReminders}>
@@ -66,7 +98,9 @@ export default function More(props) {
       </View>
       <View style={styles.headingContainer}>
         <Text style={styles.headingText}>QUICK NOTES</Text>
-        <Ionicons name="add" size={28} color="black" onPress={handleAddNote} />
+        <TouchableOpacity onPress={handleAddNote}>
+          <Ionicons name="add" size={28} color="black" />
+        </TouchableOpacity>
       </View>
       <ScrollView style={styles.notesContainer}>
         {notesArray.map((note, index) => (
@@ -96,12 +130,43 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    zIndex: 3,
   },
   headingText: {
     fontSize: 18,
     fontWeight: "500",
     letterSpacing: 2,
   },
+  menuContainer: {
+    position: "absolute",
+    right: 20,
+    bottom: -20,
+    backgroundColor: "#f6f6f6",
+    width: 210,
+    zIndex: 10,
+    borderRadius: 10,
+    shadowRadius: 4,
+    shadowColor: "rgba(34, 34, 34, 0.58)",
+    shadowOpacity: 0.5,
+    shadowOffset: {
+      height: 4,
+    },
+  },
+  menuOption: {
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderBottomWidth: 0.2,
+    borderBottomColor: "#e7e7e7",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  menuOptionText: {
+    fontWeight: "500",
+    fontSize: 16,
+    color: "#333333",
+  },
+
   optionsContainer: {
     display: "flex",
     flexDirection: "row",

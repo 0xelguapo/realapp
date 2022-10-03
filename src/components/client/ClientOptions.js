@@ -38,7 +38,7 @@ export default function ClientOptions({
           <Text style={styles.optionText}>FAVORITE</Text>
         </View>
       </TouchableOpacity>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         underlayColor="#e8e8e8"
         style={styles.touchableOpacityStyle}
       >
@@ -46,7 +46,7 @@ export default function ClientOptions({
           <AntDesign name="contacts" size={24} color="#535353" />
           <Text style={styles.optionText}>CONTACT</Text>
         </View>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       <TouchableOpacity
         underlayColor="#e8e8e8"
         style={styles.touchableOpacityStyle}
