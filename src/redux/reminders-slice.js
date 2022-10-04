@@ -83,7 +83,6 @@ export const remindersSlice = createSlice({
         remindersAdapter.removeOne(state, action.payload.id);
       })
       .addCase(createOneReminder.fulfilled, (state, action) => {
-        console.log(action.payload);
         remindersAdapter.addOne(state, action.payload);
       });
   },

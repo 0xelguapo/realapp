@@ -129,7 +129,7 @@ export const deleteGroup = createAsyncThunk(
   }
 );
 
-export const groupSlice = createSlice({
+export const groupsSlice = createSlice({
   name: "groups",
   initialState,
   reducers: {
@@ -180,6 +180,6 @@ export const {
   selectIds: selectGroupIds,
 } = groupsAdapter.getSelectors((state) => state.groups);
 
-export const { handleGroupsOnDeleteClient } = groupSlice.actions;
+export const { handleGroupsOnDeleteClient } = groupsSlice.actions;
 
-export default groupSlice.reducer;
+export default groupsSlice.reducer;

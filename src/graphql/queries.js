@@ -45,6 +45,7 @@ export const getClient = /* GraphQL */ `
           content
           completed
           date
+          notificationId
           createdAt
           updatedAt
           owner
@@ -68,6 +69,7 @@ export const getClient = /* GraphQL */ `
           date
           recurring
           recurDate
+          notificationId
           clientId
           createdAt
           updatedAt
@@ -126,6 +128,7 @@ export const getReminder = /* GraphQL */ `
       date
       recurring
       recurDate
+      notificationId
       clientId
       client {
         id
@@ -172,6 +175,7 @@ export const listReminders = /* GraphQL */ `
         date
         recurring
         recurDate
+        notificationId
         clientId
         client {
           id
@@ -397,6 +401,7 @@ export const getTask = /* GraphQL */ `
       content
       completed
       date
+      notificationId
       client {
         id
         name
@@ -444,6 +449,7 @@ export const listTasks = /* GraphQL */ `
         content
         completed
         date
+        notificationId
         client {
           id
           name

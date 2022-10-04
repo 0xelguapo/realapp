@@ -36,7 +36,7 @@ export default function AddReminder(props) {
   const renderClient = useCallback(
     ({ item, index }) => (
       <EachClient
-        onPress={() => handleSelectClient(item.id)}
+        onPress={() => handleSelectClient(item.id, item.name)}
         index={index}
         name={item.name}
         phone={item.phone}
@@ -47,8 +47,12 @@ export default function AddReminder(props) {
     []
   );
 
-  const handleSelectClient = (id) => {
-    props.navigation.navigate("EditReminder", { clientId: id, homeMode: true });
+  const handleSelectClient = (id, clientName) => {
+    props.navigation.navigate("EditReminder", {
+      clientId: id,
+      homeMode: true,
+      clientName: clientName,
+    });
   };
 
   return (

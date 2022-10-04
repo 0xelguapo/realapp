@@ -48,6 +48,7 @@ export const createClient = /* GraphQL */ `
           content
           completed
           date
+          notificationId
           createdAt
           updatedAt
           owner
@@ -71,6 +72,7 @@ export const createClient = /* GraphQL */ `
           date
           recurring
           recurDate
+          notificationId
           clientId
           createdAt
           updatedAt
@@ -131,6 +133,7 @@ export const updateClient = /* GraphQL */ `
           content
           completed
           date
+          notificationId
           createdAt
           updatedAt
           owner
@@ -154,6 +157,7 @@ export const updateClient = /* GraphQL */ `
           date
           recurring
           recurDate
+          notificationId
           clientId
           createdAt
           updatedAt
@@ -214,6 +218,7 @@ export const deleteClient = /* GraphQL */ `
           content
           completed
           date
+          notificationId
           createdAt
           updatedAt
           owner
@@ -237,6 +242,7 @@ export const deleteClient = /* GraphQL */ `
           date
           recurring
           recurDate
+          notificationId
           clientId
           createdAt
           updatedAt
@@ -260,6 +266,7 @@ export const createReminder = /* GraphQL */ `
       date
       recurring
       recurDate
+      notificationId
       clientId
       client {
         id
@@ -304,6 +311,7 @@ export const updateReminder = /* GraphQL */ `
       date
       recurring
       recurDate
+      notificationId
       clientId
       client {
         id
@@ -348,6 +356,7 @@ export const deleteReminder = /* GraphQL */ `
       date
       recurring
       recurDate
+      notificationId
       clientId
       client {
         id
@@ -733,6 +742,7 @@ export const createTask = /* GraphQL */ `
       content
       completed
       date
+      notificationId
       client {
         id
         name
@@ -778,6 +788,7 @@ export const updateTask = /* GraphQL */ `
       content
       completed
       date
+      notificationId
       client {
         id
         name
@@ -823,6 +834,7 @@ export const deleteTask = /* GraphQL */ `
       content
       completed
       date
+      notificationId
       client {
         id
         name

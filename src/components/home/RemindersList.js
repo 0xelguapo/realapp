@@ -1,11 +1,5 @@
-import { useContext, useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-} from "react-native";
+import { useEffect } from "react";
+import { Text, StyleSheet, ScrollView } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchReminders,
@@ -40,6 +34,7 @@ export default function RemindersList(props) {
               id={item.id}
               name={item.client.name}
               date={item.date}
+              notificationId={item.notificationId}
             />
           ))
         ) : (

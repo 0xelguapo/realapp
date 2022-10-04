@@ -1,26 +1,26 @@
-import { useState, useContext, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import {
   View,
   Text,
   StyleSheet,
   TextInput,
   Pressable,
-  TouchableWithoutFeedback,
   Keyboard,
   FlatList,
   TouchableOpacity,
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import EachClient from "../../components/client/EachClient";
-import { ClientsContext } from "../../context/client-context";
 import { FontAwesome5, FontAwesome, AntDesign } from "@expo/vector-icons";
 import CustomPressable from "../../components/CustomPressable";
-import { TaskContext } from "../../context/task-context";
+import { useDispatch, useSelector } from "react-redux";
+import { addTask } from "../../redux/tasks-slice";
+import { fetchClients, selectAllClients } from "../../redux/clients-slice";
 
 export default function AddTask({ navigation }) {
-  const { addTask } = useContext(TaskContext);
-  const { clientsArray } = useContext(ClientsContext);
-  const [filteredData, setFilteredData] = useState(clientsArray);
+  const dispatch = useDispatch();
+  const allClients = useSelector(selectAllClients);
+  const clientStatus = useSelector((state) => state.clients.status);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [searchInput, setSearchInput] = useState("");
@@ -28,6 +28,18 @@ export default function AddTask({ navigation }) {
   const [pickerVisible, setPickerVisible] = useState(false);
   const [clientsVisible, setClientsVisible] = useState(false);
   const [selectedClient, setSelectedClient] = useState({});
+
+  const filteredData = useMemo(() => {
+    return allClients.filter((c) => {
+      const clientData = c.name ? c.name.toUpperCase() : "".toUpperCase();
+      const textData = searchInput.toUpperCase();
+      return clientData.indexOf(textData) > -1;
+    });
+  }, [searchInput, allClients]);
+
+  useEffect(() => {
+    if (allClients.length < 1) dispatch(fetchClients());
+  }, []);
 
   const onChange = (e, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -64,55 +76,28 @@ export default function AddTask({ navigation }) {
   const handleChooseClient = (client) => {
     setSelectedClient(client);
     setSearchInput(client.name);
+    setClientsVisible(false);
     console.log(client);
   };
 
-  const handleSearch = (text) => {
-    if (text) {
-      const selectedData = clientsArray.filter((c) => {
-        const clientData = c.name ? c.name.toUpperCase() : "".toUpperCase();
-        const textData = text.toUpperCase();
-        return clientData.indexOf(textData) > -1;
-      });
-      setFilteredData(selectedData);
-      setSearchInput(text);
-    } else {
-      setFilteredData(clientsArray);
-      setSearchInput(text);
-    }
-  };
-
-  let taskDetails = selectedClient.id
-    ? {
-        title: title,
-        content: description,
-        date: date,
-        clientId: selectedClient.id,
-        completed: false,
-      }
-    : { title: title, content: description, date: date, completed: false };
-
   const handleAddTask = async () => {
-    let response = await addTask(taskDetails);
+    let taskDetails = selectedClient.id
+      ? {
+          title: title,
+          content: description,
+          date: date,
+          clientId: selectedClient.id,
+          completed: false,
+        }
+      : { title: title, content: description, date: date, completed: false };
+
+    const response = await dispatch(addTask(taskDetails));
     if (response) {
       navigation.goBack();
     } else {
-      console.log("cannot add task");
+      console.error("cannot add task");
     }
   };
-  //   const fetchData = async () => {
-  //     let response;
-  //     try {
-  //       response = await API.graphql({
-  //         query: listClients,
-  //         variables: { filter: filter },
-  //       });
-  //       console.log(searchInput);
-  //       console.log(response);
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   };
 
   return (
     <View style={styles.container}>
@@ -178,7 +163,9 @@ export default function AddTask({ navigation }) {
           ) : (
             <View style={styles.addClientContainer}>
               <FontAwesome name="address-book-o" size={24} color="#0064e5" />
-              <Text style={styles.addDateText}>Associate Client</Text>
+              <Text style={styles.addDateText}>
+                {selectedClient.name || "Associate Client"}
+              </Text>
             </View>
           )}
         </Pressable>
@@ -186,16 +173,17 @@ export default function AddTask({ navigation }) {
           <View style={styles.contactContainer}>
             <TextInput
               style={styles.search}
-              placeholder="Search..."
               value={searchInput}
-              onChangeText={handleSearch}
+              onChangeText={setSearchInput}
+              placeholder="Search..."
+              placeholderTextColor="#7b7b7c"
               returnKeyType="done"
             />
             <View style={styles.listViewContainer}>
               <FlatList
-                style={styles.clientList}
                 data={filteredData}
                 renderItem={renderClient}
+                refreshing={clientStatus !== "succeeded"}
                 keyExtractor={(c) => c.id}
               />
             </View>

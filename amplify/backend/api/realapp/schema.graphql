@@ -23,6 +23,7 @@ type Reminder @model @auth(rules: [{ allow: owner }]) {
   date: String!
   recurring: Boolean @default(value: "false")
   recurDate: String
+  notificationId: String
   clientId: ID! @index(name: "byReminder")
   client: Client @belongsTo(fields: ["clientId"])
 }
@@ -57,6 +58,7 @@ type Task @model @auth(rules: [{ allow: owner }]) {
   content: String
   completed: Boolean
   date: String
+  notificationId: String
   client: Client @belongsTo(fields: ["clientId"])
 }
 

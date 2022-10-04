@@ -7,14 +7,21 @@ import {
   View,
   ActivityIndicator,
 } from "react-native";
-import { TaskContext } from "../../context/task-context";
 import { Entypo } from "@expo/vector-icons";
 import EachTask from "../../components/EachTask";
-
+import { useDispatch, useSelector } from "react-redux";
+import { selectAllTasks, fetchTasks } from "../../redux/tasks-slice";
 
 export default function Tasks({ navigation }) {
-  const { isLoading, tasksArray, successStatus, fetchTasks } =
-    useContext(TaskContext);
+  const dispatch = useDispatch();
+  const allTasks = useSelector(selectAllTasks);
+  const status = useSelector(state => state.tasks.status)
+
+  useEffect(() => {
+    if (allTasks.length < 1) {
+      dispatch(fetchTasks());
+    }
+  }, [dispatch]);
 
   const renderTask = useCallback(
     ({ item }) => (
@@ -28,19 +35,18 @@ export default function Tasks({ navigation }) {
       <View style={styles.headerContainer}>
         <Text style={styles.headerTitle}>Tasks</Text>
       </View>
-      {successStatus && <SuccessMessage>Task Created</SuccessMessage>}
       <View style={styles.listContainer}>
-        {isLoading ? (
+        {status !== 'succeeded' ? (
           <View style={styles.loadingContainer}>
             <ActivityIndicator size="large" />
           </View>
         ) : (
           <FlatList
-            data={tasksArray}
+            data={allTasks}
             renderItem={renderTask}
             keyExtractor={(t) => t.id}
-            onRefresh={fetchTasks}
-            refreshing={isLoading}
+            onRefresh={() => dispatch(fetchTasks())}
+            refreshing={status !== 'succeeded'}
           />
         )}
       </View>
@@ -91,7 +97,6 @@ const styles = StyleSheet.create({
     },
   },
   listContainer: {
-    flex: 0.85,
-    paddingHorizontal: 15,
+    paddingLeft: 15,
   },
 });

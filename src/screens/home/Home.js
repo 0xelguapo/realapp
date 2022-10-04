@@ -1,25 +1,21 @@
-import * as Device from "expo-device";
-import * as Notifications from "expo-notifications";
-import { useContext, useEffect, useState, useRef } from "react";
+import { useState } from "react";
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Platform,
 } from "react-native";
-import AddHome from "../../components/home/AddHome";
-import EachTask from "../../components/EachTask";
 import { useDispatch } from "react-redux";
-import { TaskContext } from "../../context/task-context";
-import { MaterialIcons } from "@expo/vector-icons";
-import RemindersList from "../../components/home/RemindersList";
 import { fetchReminders } from "../../redux/reminders-slice";
+import { fetchTasks } from "../../redux/tasks-slice";
+import RemindersList from "../../components/home/RemindersList";
+import TasksList from "../../components/home/TasksList";
+import AddHome from "../../components/home/AddHome";
+import { MaterialIcons } from "@expo/vector-icons";
 
 export default function Home(props) {
   const [refreshVisible, setRefreshVisible] = useState(true);
-  const { tasksArray, fetchTasks } = useContext(TaskContext);
 
   const dispatch = useDispatch();
 
@@ -28,7 +24,7 @@ export default function Home(props) {
     setTimeout(() => {
       setRefreshVisible(true);
     }, 2000);
-    fetchTasks();
+    dispatch(fetchTasks())
     dispatch(fetchReminders());
   };
 
@@ -57,14 +53,7 @@ export default function Home(props) {
           <View style={styles.titleContainer}>
             <Text style={styles.titleHeader}>TASKS</Text>
           </View>
-          {tasksArray.map((task) => (
-            <EachTask
-              key={task.id}
-              id={task.id}
-              title={task.title}
-              content={task.content}
-            />
-          ))}
+          <TasksList />
         </View>
       </ScrollView>
     </View>

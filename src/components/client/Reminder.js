@@ -1,4 +1,10 @@
-import { View, Pressable, Text, StyleSheet } from "react-native";
+import * as Notifications from "expo-notifications";
+import {
+  View,
+  Pressable,
+  Text,
+  StyleSheet,
+} from "react-native";
 import { useState } from "react";
 import { formatDistanceToNowStrict, parseISO } from "date-fns";
 import { AntDesign } from "@expo/vector-icons";
@@ -6,7 +12,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { deleteOneReminder } from "../../redux/reminders-slice";
 
-export default function Reminder({ id, name, date }) {
+export default function Reminder({ id, name, date, notificationId }) {
   const dispatch = useDispatch();
 
   let formattedDate = formatDistanceToNowStrict(parseISO(date), {
@@ -19,6 +25,7 @@ export default function Reminder({ id, name, date }) {
 
   const handleDeleteReminder = async () => {
     setChecked(true);
+    await Notifications.cancelScheduledNotificationAsync(notificationId);
     dispatch(deleteOneReminder(id));
   };
 
@@ -41,7 +48,7 @@ export default function Reminder({ id, name, date }) {
           onPress={handleDeleteReminder}
         ></Pressable>
       ) : (
-        <AntDesign name="checkcircle" size={15} color="#7b7b7c" />
+        <AntDesign name="checkcircle" size={18} color="#7b7b7c" />
       )}
       <Pressable style={styles.reminderDetails}>
         <Text
@@ -90,15 +97,15 @@ const styles = StyleSheet.create({
   },
   pastReminderDate: { color: "red" },
   circle: {
-    width: 15,
-    height: 15,
+    width: 18,
+    height: 18,
     borderWidth: 0.8,
     borderRadius: 50,
     borderColor: "#7b7b7c",
   },
   checkedCircle: {
-    width: 15,
-    height: 15,
+    width: 18,
+    height: 18,
     borderWidth: 0.8,
     borderRadius: 50,
     borderColor: "#7b7b7c",

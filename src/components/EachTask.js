@@ -9,32 +9,24 @@ import { useContext, useState } from "react";
 import { TaskContext } from "../context/task-context";
 import { AntDesign } from "@expo/vector-icons";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { useDispatch } from "react-redux";
+import { removeOneTask } from "../redux/tasks-slice";
 
 export default function EachTask({
+  id,
   title,
   content,
   date,
   client,
-  id,
   completed = false,
   taskMode = false,
 }) {
-  const { completeTask } = useContext(TaskContext);
+  const dispatch = useDispatch();
   const [checked, setChecked] = useState(false);
 
-  const taskDetails = {
-    id: id,
-    title: title,
-    date: date,
-    client: client,
-    completed: true,
-  };
-
   const handleCompleted = async () => {
-    let response = await completeTask(taskDetails);
-    if (response.data) {
-      setChecked(true)
-    }
+    setChecked(true);
+    dispatch(removeOneTask(id));
   };
 
   return (
@@ -48,7 +40,7 @@ export default function EachTask({
                   <View style={styles.circle}></View>
                 ) : (
                   <View style={styles.checkedCircle}>
-                    <AntDesign name="checkcircle" size={15} color="#7b7b7c" />
+                    <AntDesign name="checkcircle" size={18} color="#7b7b7c" />
                   </View>
                 )}
               </Pressable>
@@ -78,7 +70,7 @@ const styles = StyleSheet.create({
   container: {
     display: "flex",
     flexDirection: "row",
-    alignItems: 'center',
+    alignItems: "center",
     paddingVertical: 10,
     height: 50,
     // borderBottomWidth: 0.5,
@@ -92,7 +84,7 @@ const styles = StyleSheet.create({
   checkedTitle: {
     fontWeight: "500",
     fontSize: 16,
-    color: "#d3d3d3"
+    color: "#d3d3d3",
   },
   content: {
     fontSize: 12,
@@ -101,7 +93,7 @@ const styles = StyleSheet.create({
   checkedContent: {
     color: "#7b7b7c",
     textDecorationLine: "line-through",
-    color: "#d3d3d3"
+    color: "#d3d3d3",
   },
   goContainer: {
     display: "flex",
@@ -109,8 +101,8 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   circle: {
-    width: 15,
-    height: 15,
+    width: 18,
+    height: 18,
     borderWidth: 0.8,
     borderRadius: 50,
     borderColor: "#7b7b7c",

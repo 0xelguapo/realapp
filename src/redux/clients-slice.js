@@ -149,6 +149,9 @@ export const clientsSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      .addCase(fetchClients.pending, (state, action) => {
+        state.status = "pending";
+      })
       .addCase(fetchClients.fulfilled, (state, action) => {
         state.status = "succeeded";
         clientsAdapter.upsertMany(state, action.payload);

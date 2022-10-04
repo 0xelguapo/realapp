@@ -31,7 +31,6 @@ export default function ClientDetails(props) {
 
   const dispatch = useDispatch();
   const clientSelect = useSelector((state) => selectClientById(state, id));
-  console.log(clientSelect)
 
   const fetchClientDetails = () => {
     dispatch(fetchOneClient(id));
@@ -80,6 +79,7 @@ export default function ClientDetails(props) {
   const viewEditReminder = () => {
     props.navigation.navigate("EditReminder", {
       clientId: id,
+      clientName: clientSelect.name
     });
   };
 

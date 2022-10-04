@@ -1,4 +1,5 @@
 import * as Notifications from "expo-notifications";
+import { useEffect } from "react";
 import {
   View,
   Text,
@@ -11,29 +12,62 @@ import { createOneReminder } from "../../redux/reminders-slice";
 
 export default function EditReminder(props) {
   const { goBack } = props.navigation;
-  const { clientId, homeMode } = props.route.params;
+  const { clientId, homeMode, clientName } = props.route.params;
   const dispatch = useDispatch();
+
+  const handleScheduleNotification = async (time) => {
+    const response = await Notifications.scheduleNotificationAsync({
+      content: {
+        title: "Follow up with " + clientName.toUpperCase(),
+        body: `This is a reminder to contact ${clientName}`,
+      },
+      trigger: time,
+    });
+    return response;
+  };
 
   const handleCreateReminder = async (length) => {
     let date = new Date();
+    let notificationId;
     switch (length) {
       case "oneDay":
         date.setDate(date.getDate() + 1);
+        date.setHours(8);
+        date.setMinutes(0);
+        notificationId = await handleScheduleNotification(date);
         break;
       case "oneWeek":
         date.setDate(date.getDate() + 7);
+        date.setHours(8);
+        date.setMinutes(0);
+        notificationId = await handleScheduleNotification(date);
         break;
       case "oneMonth":
         date.setDate(date.getDate() + 30);
+        date.setHours(8);
+        date.setMinutes(0);
+        notificationId = await handleScheduleNotification(date);
         break;
       case "quarter":
         date.setDate(date.getDate() + 90);
+        date.setHours(8);
+        date.setMinutes(0);
+        notificationId = await handleScheduleNotification(date);
         break;
       case "year":
         date.setDate(date.getDate() + 365);
+        date.setHours(8);
+        date.setMinutes(0);
+        notificationId = await handleScheduleNotification(date);
         break;
     }
-    dispatch(createOneReminder({ date: date, clientId: clientId }));
+    dispatch(
+      createOneReminder({
+        date: date,
+        clientId: clientId,
+        notificationId: notificationId,
+      })
+    );
     if (!homeMode) {
       props.navigation.navigate({
         name: "ClientDetails",
