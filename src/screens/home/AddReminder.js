@@ -7,14 +7,12 @@ import {
   TextInput,
 } from "react-native";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
-import { useContext, useCallback, useEffect, useState, useMemo } from "react";
-import { ClientsContext } from "../../context/client-context";
+import { useCallback, useEffect, useState, useMemo } from "react";
 import EachClient from "../../components/client/EachClient";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchClients, selectAllClients } from "../../redux/clients-slice";
 
 export default function AddReminder(props) {
-  const { isLoading } = useContext(ClientsContext);
   const [searchInput, setSearchInput] = useState("");
 
   const dispatch = useDispatch();

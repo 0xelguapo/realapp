@@ -1,10 +1,13 @@
-import { useContext, useEffect, useState } from "react";
+import * as Device from "expo-device";
+import * as Notifications from "expo-notifications";
+import { useContext, useEffect, useState, useRef } from "react";
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  Platform,
 } from "react-native";
 import AddHome from "../../components/home/AddHome";
 import EachTask from "../../components/EachTask";

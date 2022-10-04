@@ -5,8 +5,6 @@ import { Alert } from "react-native";
 const AuthContext = createContext();
 
 function AuthProvider({ children }) {
-  const [loading, setLoading] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
 
   const checkUser = useCallback(async () => {
@@ -19,7 +17,6 @@ function AuthProvider({ children }) {
 
   useEffect(() => {
     checkUser();
-    console.log('checking user...')
   }, []);
 
   const signup = useCallback(async (username, password) => {
