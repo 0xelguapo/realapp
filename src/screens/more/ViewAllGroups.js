@@ -9,7 +9,6 @@ import {
 } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
-import useClient from "../../hooks/client-hook";
 import Group from "../../components/more/Group";
 import { useSelector, useDispatch } from "react-redux";
 import {

@@ -2,7 +2,6 @@ import { useState } from "react";
 import { StyleSheet, View, Text, Pressable } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
-import useClient from "../../hooks/client-hook";
 import {
   addClientToGroup,
   removeClientFromGroup,
@@ -17,13 +16,11 @@ export default function ClientGroup({ el, clientId, clientGroupID }) {
   const [checked, setChecked] = useState(el.inGroup);
   const [groupLength, setGroupLength] = useState(el.clients.items.length);
   const [clientGroupIDState, setClientGroupIDState] = useState(clientGroupID);
-  // const { addClientToGroup, removeClientFromGroup } = useClient();
 
   const addToGroup = async () => {
     const response = await dispatch(
       addClientToGroup({ clientId: clientId, clientGroupID: el.id })
     ).unwrap();
-    // const response = await addClientToGroup(clientId, el.id);
     if (response) {
       dispatch(
         handleAddClientToGroup({
