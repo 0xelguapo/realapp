@@ -7,38 +7,49 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   TouchableHighlight,
+  TouchableOpacity,
 } from "react-native";
 import { useState } from "react";
-import { Ionicons } from "@expo/vector-icons";
-import { AntDesign } from "@expo/vector-icons";
-import useClient from "../../hooks/client-hook";
+import { useDispatch } from "react-redux";
+import { editClient } from "../../redux/clients-slice";
+import { AntDesign, Ionicons } from "@expo/vector-icons";
 
 export default function EditClient(props) {
   const { clientId, clientDetailsState } = props.route.params;
-  const { index } = props.route.params
+  const { index } = props.route.params;
   const [fullName, setFullName] = useState(clientDetailsState.name);
   const [company, setCompany] = useState(clientDetailsState.company);
-  const [phone, setPhone] = useState(clientDetailsState.phone);
+  const [phoneInputs, setPhoneInputs] = useState(
+    clientDetailsState.phone.split(",")
+  );
   const [email, setEmail] = useState(clientDetailsState.email);
   const [notes, setNotes] = useState(clientDetailsState.notes);
-  const { updateClient } = useClient();
+  const dispatch = useDispatch();
 
+  const handleAddAnotherPhoneInput = () => {
+    let newPhoneInputs = [...phoneInputs, ""];
+    setPhoneInputs(newPhoneInputs);
+  };
+
+  const handleRemoveAnotherPhoneInput = (index) => {
+    let newPhoneInputs = [...phoneInputs];
+    newPhoneInputs.splice(index, 1);
+    setPhoneInputs(newPhoneInputs);
+  };
   const handleSubmit = async () => {
-    const connection = await updateClient({
+    const clientDetails = {
       id: clientId,
       name: fullName,
-      company: company,
-      phone: phone,
+      // phone: phone,
       email: email,
       notes: notes,
-    }, index);
-
+    };
+    dispatch(editClient(clientDetails));
     props.navigation.navigate({
       name: "ClientDetails",
       params: { id: clientId },
       merge: true,
     });
-    console.log(connection)
   };
 
   return (
@@ -79,11 +90,29 @@ export default function EditClient(props) {
           </View>
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldTitle}>PHONE</Text>
-            <TextInput
+            {phoneInputs.map((phone, index) => (
+              <View key={index} style={styles.extraInput}>
+                <TouchableOpacity
+                  style={styles.removeInput}
+                  onPress={() => handleRemoveAnotherPhoneInput(index)}
+                >
+                  <Ionicons name="md-remove-circle" size={24} color="#7b7b7c" />
+                </TouchableOpacity>
+                <TextInput
+                  style={styles.dynamicFieldInput}
+                  value={phone}
+                  keyboardType="number-pad"
+                  returnKeyType="done"
+                  placeholder="Phone"
+                  placeholderTextColor="#454545"
+                />
+              </View>
+            ))}
+            {/* <TextInput
               style={styles.fieldInput}
               value={phone}
               onChangeText={setPhone}
-            />
+            /> */}
           </View>
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldTitle}>EMAIL</Text>
@@ -164,5 +193,28 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#454545",
     fontWeight: "300",
+  },
+  dynamicFieldInput: {
+    color: "#454545",
+    borderColor: "#dcdcdc",
+    borderRadius: 5,
+    paddingLeft: 10,
+    flex: 1,
+    fontSize: 16,
+    height: '90%',
+  },
+  extraInput: {
+    flexDirection: "row",
+    backgroundColor: "#cccccc",
+    borderColor: "#dcdcdc",
+    borderWidth: .2,
+    height: 40,
+    alignItems: "center",
+    paddingHorizontal: 10
+  },
+  removeInput: {
+    width: 40,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

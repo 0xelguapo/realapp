@@ -83,6 +83,21 @@ export const updateFavorite = createAsyncThunk(
   }
 );
 
+export const editClient = createAsyncThunk(
+  "clients/editClient",
+  async (clientDetails) => {
+    let response;
+    try {
+      response = await API.graphql(
+        graphqlOperation(updateClient, { input: clientDetails })
+      );
+    } catch (err) {
+      console.error(err);
+    }
+    return response.data.updateClient;
+  }
+);
+
 export const removeClient = createAsyncThunk(
   "clients/removeClient",
   async (clientId) => {
@@ -167,6 +182,9 @@ export const clientsSlice = createSlice({
       })
       .addCase(removeClient.fulfilled, (state, action) => {
         clientsAdapter.removeOne(state, action.payload.id);
+      })
+      .addCase(editClient.fulfilled, (state, action) => {
+        state.entities[action.payload.id] = action.payload;
       });
   },
 });

@@ -6,13 +6,18 @@ const AuthContext = createContext();
 
 function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
+  const [appIsReady, setAppIsReady] = useState(false);
 
   const checkUser = useCallback(async () => {
-    await Auth.currentAuthenticatedUser()
-      .then((u) => {
+    try {
+      await Auth.currentAuthenticatedUser().then((u) => {
         setUser(u);
-      })
-      .catch((err) => console.log(err));
+      });
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setAppIsReady(true);
+    }
   }, []);
 
   useEffect(() => {
@@ -64,24 +69,25 @@ function AuthProvider({ children }) {
   }, []);
 
   const signOut = useCallback(async () => {
-    try { 
-      await Auth.signOut()
+    try {
+      await Auth.signOut();
     } catch (err) {
-      console.log('error singing out', err)
+      console.log("error singing out", err);
     }
-    setUser(null)
-  }, [])
+    setUser(null);
+  }, []);
 
   return (
     <AuthContext.Provider
       value={{
         user,
         isLoggedIn: !!user,
+        appIsReady,
         signup,
         resend,
         signin,
         confirmation,
-        signOut
+        signOut,
       }}
     >
       {children}

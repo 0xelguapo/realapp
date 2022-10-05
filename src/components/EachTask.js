@@ -5,8 +5,7 @@ import {
   Pressable,
   TouchableHighlight,
 } from "react-native";
-import { useContext, useState } from "react";
-import { TaskContext } from "../context/task-context";
+import { useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useDispatch } from "react-redux";

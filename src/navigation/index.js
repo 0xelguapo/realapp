@@ -1,3 +1,4 @@
+import { View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { useContext } from "react";
 import { AuthContext } from "../context/auth-context";

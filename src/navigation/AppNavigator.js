@@ -3,15 +3,9 @@ import * as Notifications from "expo-notifications";
 import { useEffect, useState, useRef } from "react";
 import { Text } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import HomeNavigator from "../screens/home";
-import ClientsNavigator from "../screens/clients";
-import TasksNavigator from "../screens/tasks";
-import MoreNavigator from "../screens/more";
 import { Provider } from "react-redux";
 import store from "../redux/index";
 import SuccessMessage from "../components/UI/SuccessMessage";
-import { ClientContextProvider } from "../context/client-context";
-import { TaskContextProvider } from "../context/task-context";
 import { SuccessContextProvider } from "../context/success-context";
 import {
   AntDesign,
@@ -19,6 +13,10 @@ import {
   MaterialCommunityIcons,
   Feather,
 } from "@expo/vector-icons";
+import HomeNavigator from "../screens/home";
+import ClientsNavigator from "../screens/clients";
+import TasksNavigator from "../screens/tasks";
+import MoreNavigator from "../screens/more";
 
 const Tab = createBottomTabNavigator();
 
@@ -63,35 +61,31 @@ export default function AppNavigator() {
 
   return (
     <Provider store={store}>
-      <ClientContextProvider>
-        <TaskContextProvider>
-          <SuccessContextProvider>
-            <SuccessMessage />
-            <Tab.Navigator screenOptions={{ tabBarStyle: styles }}>
-              <Tab.Screen
-                name="Home"
-                component={HomeNavigator}
-                options={optionsHandler}
-              />
-              <Tab.Screen
-                name="Clients"
-                component={ClientsNavigator}
-                options={optionsHandler}
-              />
-              <Tab.Screen
-                name="Tasks"
-                component={TasksNavigator}
-                options={optionsHandler}
-              />
-              <Tab.Screen
-                name="More"
-                component={MoreNavigator}
-                options={optionsHandler}
-              />
-            </Tab.Navigator>
-          </SuccessContextProvider>
-        </TaskContextProvider>
-      </ClientContextProvider>
+      <SuccessContextProvider>
+        <SuccessMessage />
+        <Tab.Navigator screenOptions={{ tabBarStyle: styles }}>
+          <Tab.Screen
+            name="Home"
+            component={HomeNavigator}
+            options={optionsHandler}
+          />
+          <Tab.Screen
+            name="Clients"
+            component={ClientsNavigator}
+            options={optionsHandler}
+          />
+          <Tab.Screen
+            name="Tasks"
+            component={TasksNavigator}
+            options={optionsHandler}
+          />
+          <Tab.Screen
+            name="More"
+            component={MoreNavigator}
+            options={optionsHandler}
+          />
+        </Tab.Navigator>
+      </SuccessContextProvider>
     </Provider>
   );
 }
@@ -100,7 +94,7 @@ async function registerForPushNotificationsAsync() {
   let token;
   if (Device.isDevice) {
     const { status: existingStatus } =
-      await Notifications.getPermissionsAsync(); 
+      await Notifications.getPermissionsAsync();
     let finalStatus = existingStatus;
     if (existingStatus !== "granted") {
       const { status } = await Notifications.requestPermissionsAsync();
@@ -111,7 +105,7 @@ async function registerForPushNotificationsAsync() {
     }
     token = (await Notifications.getExpoPushTokenAsync()).data;
   }
-  console.log(token)
+  console.log(token);
 
   return token;
 }
