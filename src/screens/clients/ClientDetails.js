@@ -38,7 +38,7 @@ export default function ClientDetails(props) {
 
   useEffect(() => {
     fetchClientDetails();
-  }, [dispatch]);
+  }, []);
 
   const favoriteHandler = async () => {
     dispatch(updateFavorite({ id: id, favorite: !clientSelect.favorite }));

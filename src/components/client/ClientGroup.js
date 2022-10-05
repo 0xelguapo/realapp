@@ -1,26 +1,57 @@
 import { useState } from "react";
 import { StyleSheet, View, Text, Pressable } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 import useClient from "../../hooks/client-hook";
+import {
+  addClientToGroup,
+  removeClientFromGroup,
+} from "../../redux/groups-slice";
+import {
+  handleAddClientToGroup,
+  handleRemoveClientFromGroup,
+} from "../../redux/clients-slice";
 
 export default function ClientGroup({ el, clientId, clientGroupID }) {
+  const dispatch = useDispatch();
   const [checked, setChecked] = useState(el.inGroup);
   const [groupLength, setGroupLength] = useState(el.clients.items.length);
   const [clientGroupIDState, setClientGroupIDState] = useState(clientGroupID);
-  const { addClientToGroup, removeClientFromGroup } = useClient();
+  // const { addClientToGroup, removeClientFromGroup } = useClient();
 
   const addToGroup = async () => {
-    const response = await addClientToGroup(clientId, el.id);
+    const response = await dispatch(
+      addClientToGroup({ clientId: clientId, clientGroupID: el.id })
+    ).unwrap();
+    // const response = await addClientToGroup(clientId, el.id);
     if (response) {
-      console.log(response.data);
-      setClientGroupIDState(response.data.createGroupsClients.id);
+      dispatch(
+        handleAddClientToGroup({
+          clientId: response.client.id,
+          clientGroupID: response.clientGroupID,
+          id: response.id,
+        })
+      );
+      setClientGroupIDState(response.id);
       setGroupLength((prevState) => prevState + 1);
     }
   };
 
   const removeFromGroup = async () => {
-    const response = await removeClientFromGroup(clientGroupIDState);
-    if (response) setGroupLength((prevState) => prevState - 1);
+    const response = await dispatch(
+      removeClientFromGroup(clientGroupIDState)
+    ).unwrap();
+    if (response) {
+      //response.id refers to the joinTable groupsClientsID
+      dispatch(
+        handleRemoveClientFromGroup({
+          clientId: response.client.id,
+          clientGroupID: response.clientGroupID,
+          id: response.id,
+        })
+      );
+      setGroupLength((prevState) => prevState - 1);
+    }
   };
 
   const handlePress = () => {

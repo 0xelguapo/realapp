@@ -69,6 +69,24 @@ export const editGroupName = createAsyncThunk(
   }
 );
 
+export const addClientToGroup = createAsyncThunk(
+  "groups/addClientToGroup",
+  async (details) => {
+    const { clientId, clientGroupID } = details;
+    let response;
+    try {
+      response = await API.graphql(
+        graphqlOperation(mutations.createGroupsClients, {
+          input: { clientID: clientId, clientGroupID: clientGroupID },
+        })
+      );
+    } catch (err) {
+      console.error(err);
+    }
+    return response.data.createGroupsClients;
+  }
+);
+
 export const removeMultipleClientsFromGroup = createAsyncThunk(
   "groups/removeMultipleClientsFromGroup",
   async (removeDetails) => {
@@ -94,8 +112,7 @@ export const removeMultipleClientsFromGroup = createAsyncThunk(
 
 export const removeClientFromGroup = createAsyncThunk(
   "groups/removeClientFromGroup",
-  async (removeDetails) => {
-    const { clientGroupID, groupID, clientID } = removeDetails;
+  async (clientGroupID) => {
     let response;
     try {
       response = await API.graphql(
@@ -108,7 +125,7 @@ export const removeClientFromGroup = createAsyncThunk(
     } catch (err) {
       console.error(err);
     }
-    return response.data;
+    return response.data.deleteGroupsClients;
   }
 );
 
@@ -138,7 +155,7 @@ export const groupsSlice = createSlice({
         const clientsArray = state.entities[group].clients.items;
         for (let i = 0; i < clientsArray.length; i++) {
           if (clientsArray[i].client.id === action.payload) {
-            state.entities[group].clients.items.splice(i, 1)
+            state.entities[group].clients.items.splice(i, 1);
           }
         }
       }
@@ -159,6 +176,17 @@ export const groupsSlice = createSlice({
       .addCase(editGroupName.fulfilled, (state, action) => {
         const { id, title } = action.payload;
         state.entities[id].title = title;
+      })
+      .addCase(addClientToGroup.fulfilled, (state, action) => {
+        state.entities[action.payload.clientGroupID].clients.items.push(
+          action.payload
+        );
+      })
+      .addCase(removeClientFromGroup.fulfilled, (state, action) => {
+        const {clientGroupID, id} = action.payload
+        const indexToRemove = state.entities[clientGroupID].clients.items.findIndex(item => item.id === id)
+        state.entities[clientGroupID].clients.items.splice(indexToRemove, 1)
+        // const index = state.entities[clientGroupID].clients.items.findIndex(item => item.id === action.payload.id);
       })
       .addCase(removeMultipleClientsFromGroup.fulfilled, (state, action) => {
         const updatedClients = state.entities[

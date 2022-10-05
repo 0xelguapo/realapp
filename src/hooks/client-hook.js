@@ -6,13 +6,13 @@ import * as mutations from "../graphql/mutations";
 import * as customQueries from "../graphql/customQueries";
 
 function useClient() {
-  const {
-    getFavoriteClients,
-    mutateClientsArrayByIndex,
-    removeClientFromArrayByIndex,
-    getOneClient,
-    clientsArray,
-  } = useContext(ClientsContext);
+  // const {
+  //   getFavoriteClients,
+  //   mutateClientsArrayByIndex,
+  //   removeClientFromArrayByIndex,
+  //   getOneClient,
+  //   clientsArray,
+  // } = useContext(ClientsContext);
 
   const getClientGroups = async (id) => {
     let response;
@@ -26,37 +26,7 @@ function useClient() {
     return response;
   };
 
-  const updateFavorite = async (id, favorite, index) => {
-    let response;
-    try {
-      response = await API.graphql(
-        graphqlOperation(mutations.updateClient, {
-          input: { id: id, favorite: favorite },
-        })
-      );
-      if (response) {
-        mutateClientsArrayByIndex(response.data.updateClient, index);
-      }
-    } catch (err) {
-      console.error("error adding favorite", err);
-    }
-    return response;
-  };
 
-  const updateClient = async (details, index) => {
-    let response;
-    try {
-      response = await API.graphql(
-        graphqlOperation(mutations.updateClient, { input: details })
-      );
-    } catch (err) {
-      console.error("error adding favorite", err);
-    }
-    if (response.data) {
-      mutateClientsArrayByIndex(response.data.updateClient, index);
-    }
-    return response;
-  };
 
   const addConnection = async (inputDetails) => {
     let response;
@@ -104,45 +74,6 @@ function useClient() {
       console.log("success", response.data.createTask);
       return response;
     }
-  };
-
-  const removeClient = async (clientId, index) => {
-    //remove client from all groups first before deleting
-    let response;
-    let deleteGroupClientResponse;
-    const client = await getOneClient(clientId);
-    const promises = client.data.getClient.group.items.map((group) => {
-      return API.graphql(
-        graphqlOperation(mutations.deleteGroupsClients, {
-          input: { id: group.id },
-        })
-      );
-    });
-
-    //delete associations to groups
-    try {
-      deleteGroupClientResponse = await Promise.all(promises);
-      console.log(deleteGroupClientResponse);
-    } catch (err) {
-      console.error(err);
-      return;
-    }
-
-    //delete client
-    try {
-      response = await API.graphql(
-        graphqlOperation(mutations.deleteClient, { input: { id: clientId } })
-      );
-    } catch (err) {
-      console.error(err);
-    }
-    if (index) removeClientFromArrayByIndex(index);
-    else {
-      const indexOfDeletedClient = clientsArray.findIndex((client) => client.id === clientId)
-      removeClientFromArrayByIndex(indexOfDeletedClient);
-
-    }
-    return response;
   };
 
   // retrieves all groups
@@ -218,14 +149,82 @@ function useClient() {
     return response;
   };
 
+    // const removeClient = async (clientId, index) => {
+  //   //remove client from all groups first before deleting
+  //   let response;
+  //   let deleteGroupClientResponse;
+  //   const client = await getOneClient(clientId);
+  //   const promises = client.data.getClient.group.items.map((group) => {
+  //     return API.graphql(
+  //       graphqlOperation(mutations.deleteGroupsClients, {
+  //         input: { id: group.id },
+  //       })
+  //     );
+  //   });
+
+  //   //delete associations to groups
+  //   try {
+  //     deleteGroupClientResponse = await Promise.all(promises);
+  //     console.log(deleteGroupClientResponse);
+  //   } catch (err) {
+  //     console.error(err);
+  //     return;
+  //   }
+
+  //   //delete client
+  //   try {
+  //     response = await API.graphql(
+  //       graphqlOperation(mutations.deleteClient, { input: { id: clientId } })
+  //     );
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  //   if (index) removeClientFromArrayByIndex(index);
+  //   else {
+  //     const indexOfDeletedClient = clientsArray.findIndex((client) => client.id === clientId)
+  //     removeClientFromArrayByIndex(indexOfDeletedClient);
+
+  //   }
+  //   return response;
+  // };
+
+    // const updateFavorite = async (id, favorite, index) => {
+  //   let response;
+  //   try {
+  //     response = await API.graphql(
+  //       graphqlOperation(mutations.updateClient, {
+  //         input: { id: id, favorite: favorite },
+  //       })
+  //     );
+  //     if (response) {
+  //       mutateClientsArrayByIndex(response.data.updateClient, index);
+  //     }
+  //   } catch (err) {
+  //     console.error("error adding favorite", err);
+  //   }
+  //   return response;
+  // };
+
+  // const updateClient = async (details, index) => {
+  //   let response;
+  //   try {
+  //     response = await API.graphql(
+  //       graphqlOperation(mutations.updateClient, { input: details })
+  //     );
+  //   } catch (err) {
+  //     console.error("error adding favorite", err);
+  //   }
+  //   if (response.data) {
+  //     mutateClientsArrayByIndex(response.data.updateClient, index);
+  //   }
+  //   return response;
+  // };
+
   return {
     getClientGroups,
-    updateFavorite,
-    updateClient,
     addConnection,
     addEditNote,
     addTask,
-    removeClient,
     addGroup,
     getAllGroups,
     addClientToGroup,

@@ -161,7 +161,16 @@ export const removeClient = createAsyncThunk(
 export const clientsSlice = createSlice({
   name: "clients",
   initialState,
-  reducers: {},
+  reducers: {
+    handleAddClientToGroup: (state, action) => {
+      state.entities[action.payload.clientId].group.items.push(action.payload)
+    },
+    handleRemoveClientFromGroup: (state, action) => {
+      const { clientId, clientGroupID, id } = action.payload
+      const indexToRemove = state.entities[clientId].group.items.findIndex(item => item.clientGroupID === clientGroupID);
+      state.entities[clientId].group.items.splice(indexToRemove, 1)
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchClients.pending, (state, action) => {
@@ -184,7 +193,7 @@ export const clientsSlice = createSlice({
         clientsAdapter.removeOne(state, action.payload.id);
       })
       .addCase(editClient.fulfilled, (state, action) => {
-        console.log(action.payload)
+        console.log(action.payload);
         state.entities[action.payload.id] = action.payload;
       });
   },
@@ -195,5 +204,8 @@ export const {
   selectById: selectClientById,
   selectIds: selectClientIds,
 } = clientsAdapter.getSelectors((state) => state.clients);
+
+export const { handleAddClientToGroup, handleRemoveClientFromGroup } =
+  clientsSlice.actions;
 
 export default clientsSlice.reducer;
