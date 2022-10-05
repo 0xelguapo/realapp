@@ -184,6 +184,7 @@ export const clientsSlice = createSlice({
         clientsAdapter.removeOne(state, action.payload.id);
       })
       .addCase(editClient.fulfilled, (state, action) => {
+        console.log(action.payload)
         state.entities[action.payload.id] = action.payload;
       });
   },

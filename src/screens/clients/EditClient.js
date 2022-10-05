@@ -8,23 +8,31 @@ import {
   KeyboardAvoidingView,
   TouchableHighlight,
   TouchableOpacity,
+  Alert,
 } from "react-native";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { editClient } from "../../redux/clients-slice";
+import { phoneFormat } from "../../utility/phone-format";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 
 export default function EditClient(props) {
   const { clientId, clientDetailsState } = props.route.params;
-  const { index } = props.route.params;
   const [fullName, setFullName] = useState(clientDetailsState.name);
   const [company, setCompany] = useState(clientDetailsState.company);
   const [phoneInputs, setPhoneInputs] = useState(
     clientDetailsState.phone.split(",")
   );
-  const [email, setEmail] = useState(clientDetailsState.email);
+  const [emailInputs, setEmailInputs] = useState(
+    clientDetailsState.email.split(",")
+  );
   const [notes, setNotes] = useState(clientDetailsState.notes);
   const dispatch = useDispatch();
+  const phoneInputRef = useRef(null);
+  const emailInputRef = useRef(null);
+  const isMountedPhone = useRef(false);
+  const isMountedEmail = useRef(false)
+  // const { index } = props.route.params;
 
   const handleAddAnotherPhoneInput = () => {
     let newPhoneInputs = [...phoneInputs, ""];
@@ -36,20 +44,64 @@ export default function EditClient(props) {
     newPhoneInputs.splice(index, 1);
     setPhoneInputs(newPhoneInputs);
   };
+
+  const handlePhoneInputChange = (text, index) => {
+    let newPhoneInputs = [...phoneInputs];
+    newPhoneInputs[index] = phoneFormat(text);
+    setPhoneInputs(newPhoneInputs);
+  };
+
+  const handleAddAnotherEmailInput = () => {
+    let newEmailInputs = [...emailInputs, ""];
+    setEmailInputs(newEmailInputs);
+  };
+
+  const handleRemoveAnotherEmailInput = (index) => {
+    let newEmailInputs = [...emailInputs];
+    newEmailInputs.splice(index, 1);
+    setEmailInputs(newEmailInputs);
+  };
+
+  const handleEmailInputChange = (text, index) => {
+    let newEmailInputs = [...emailInputs];
+    newEmailInputs[index] = text;
+    setEmailInputs(newEmailInputs);
+  };
+
+  useEffect(() => {
+    if (phoneInputs.length > 0 && isMountedPhone.current) {
+      phoneInputRef.current.focus();
+    } else {
+      isMountedPhone.current = true;
+    }
+  }, [phoneInputs.length]);
+
+  useEffect(() => {
+    if (emailInputs.length > 0 && isMountedEmail.current) {
+      emailInputRef.current.focus();
+    } else {
+      isMountedEmail.current = true;
+    }
+  }, [emailInputs.length]);
+
   const handleSubmit = async () => {
     const clientDetails = {
       id: clientId,
       name: fullName,
-      // phone: phone,
-      email: email,
+      phone: phoneInputs.toString(),
+      email: emailInputs.toString(),
       notes: notes,
     };
-    dispatch(editClient(clientDetails));
-    props.navigation.navigate({
-      name: "ClientDetails",
-      params: { id: clientId },
-      merge: true,
-    });
+    if (fullName.length !== 0) {
+      dispatch(editClient(clientDetails));
+      props.navigation.navigate({
+        name: "ClientDetails",
+        params: { id: clientId },
+        merge: true,
+      });
+    } else {
+      Alert.alert("Please enter a valid name");
+    }
   };
 
   return (
@@ -88,6 +140,7 @@ export default function EditClient(props) {
               onChangeText={setCompany}
             />
           </View>
+
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldTitle}>PHONE</Text>
             {phoneInputs.map((phone, index) => (
@@ -100,27 +153,66 @@ export default function EditClient(props) {
                 </TouchableOpacity>
                 <TextInput
                   style={styles.dynamicFieldInput}
-                  value={phone}
+                  value={phoneFormat(phoneInputs[index])}
                   keyboardType="number-pad"
                   returnKeyType="done"
                   placeholder="Phone"
                   placeholderTextColor="#454545"
+                  onChangeText={(text) => handlePhoneInputChange(text, index)}
+                  ref={phoneInputRef}
                 />
               </View>
             ))}
-            {/* <TextInput
-              style={styles.fieldInput}
-              value={phone}
-              onChangeText={setPhone}
-            /> */}
+            {phoneInputs.length < 5 && (
+              <TouchableOpacity
+                style={styles.addAnotherButton}
+                onPress={handleAddAnotherPhoneInput}
+              >
+                <Ionicons name="md-add-sharp" size={24} color="#7b7b7c" />
+                <Text style={styles.addAnotherText}>Add Phone Number</Text>
+              </TouchableOpacity>
+            )}
           </View>
+
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldTitle}>EMAIL</Text>
-            <TextInput
-              style={styles.fieldInput}
-              value={email}
-              onChangeText={setEmail}
-            />
+            {emailInputs.map((input, index) => {
+              return (
+                <View key={index} style={styles.extraInput}>
+                  <TouchableOpacity
+                    style={styles.removeInput}
+                    onPress={() => handleRemoveAnotherEmailInput(index)}
+                  >
+                    <Ionicons
+                      name="md-remove-circle"
+                      size={24}
+                      color="#7b7b7c"
+                    />
+                  </TouchableOpacity>
+                  <TextInput
+                    key={index}
+                    style={styles.dynamicFieldInput}
+                    value={emailInputs[index]}
+                    keyboardType="email-address"
+                    returnKeyType="done"
+                    autoCapitalize="none"
+                    onChangeText={(text) => handleEmailInputChange(text, index)}
+                    placeholder="Email"
+                    placeholderTextColor="#454545"
+                    ref={emailInputRef}
+                  />
+                </View>
+              );
+            })}
+            {emailInputs.length < 5 && (
+              <TouchableOpacity
+                style={styles.addAnotherButton}
+                onPress={handleAddAnotherEmailInput}
+              >
+                <Ionicons name="md-add-sharp" size={24} color="#7b7b7c" />
+                <Text style={styles.addAnotherText}>Add Email</Text>
+              </TouchableOpacity>
+            )}
           </View>
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldTitle}>NOTES</Text>
@@ -201,20 +293,33 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     flex: 1,
     fontSize: 16,
-    height: '90%',
+    height: "90%",
   },
   extraInput: {
     flexDirection: "row",
     backgroundColor: "#cccccc",
     borderColor: "#dcdcdc",
-    borderWidth: .2,
+    borderWidth: 0.2,
     height: 40,
     alignItems: "center",
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
   },
   removeInput: {
     width: 40,
     justifyContent: "center",
     alignItems: "center",
+  },
+  addAnotherButton: {
+    height: 40,
+    backgroundColor: "#cccccc",
+    paddingVertical: 3,
+    flexDirection: "row",
+    alignItems: "center",
+    borderColor: "#dcdcdc",
+    paddingLeft: 10,
+  },
+  addAnotherText: {
+    fontWeight: "500",
+    color: "#7b7b7c",
   },
 });

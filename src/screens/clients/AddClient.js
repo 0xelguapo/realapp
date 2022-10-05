@@ -13,6 +13,7 @@ import { useDispatch } from "react-redux";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import { addClient } from "../../redux/clients-slice";
 import { SuccessContext } from "../../context/success-context";
+import  {phoneFormat} from '../../utility/phone-format'
 
 export default function AddClient({ navigation }) {
   const { onStatusChange } = useContext(SuccessContext);
@@ -76,43 +77,19 @@ export default function AddClient({ navigation }) {
     setEmailInputs(newEmailInputs);
   };
 
-  const phoneFormat = (number) => {
-    if (!number) {
-      return "";
-    }
-    const phoneNumber = number.replace(/[^\d]/g, "");
-    const phoneLength = phoneNumber.length;
-    if (phoneLength < 4) return phoneNumber;
-
-    if (phoneLength < 7) {
-      return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3)}`;
-    }
-    if (phoneLength > 10) {
-      return `${phoneNumber.slice(0, 1)} (${phoneNumber.slice(
-        1,
-        4
-      )}) ${phoneNumber.slice(4, 7)}-${phoneNumber.slice(7)}`;
-    } else {
-      return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(
-        3,
-        6
-      )}-${phoneNumber.slice(6)}`;
-    }
-  };
-
   useEffect(() => {
     if (phoneInputs.length > 0) {
       phoneInputRef.current.focus();
     }
     console.log('phoneref')
-  }, [phoneInputs]);
+  }, [phoneInputs.length]);
 
   useEffect(() => {
     if(emailInputs.length > 0) {
       emailInputRef.current.focus();
     }
     console.log('emailRef')
-  }, [emailInputs])
+  }, [emailInputs.length])
 
   return (
     <View style={styles.container}>
@@ -174,7 +151,6 @@ export default function AddClient({ navigation }) {
                     />
                   </TouchableOpacity>
                   <TextInput
-                    key={index}
                     style={styles.textInputOne}
                     keyboardType="number-pad"
                     returnKeyType="done"
@@ -218,6 +194,7 @@ export default function AddClient({ navigation }) {
                     keyboardType="email-address"
                     returnKeyType="done"
                     autoCapitalize="none"
+                    value={emailInputs[index]}
                     onChangeText={(text) => handleEmailInputChange(text, index)}
                     placeholder="Email"
                     placeholderTextColor="#454545"
