@@ -5,21 +5,26 @@ export const getClient = /* GraphQL */ `
   query GetClient($id: ID!) {
     getClient(id: $id) {
       id
-      name
+      firstname
+      lastname
       company
       phone
       email
       notes
       favorite
+      clientStreet
+      clientCity
+      clientState
+      clientZip
       connectionHistory {
         items {
           id
           title
           date
           clientId
+          owner
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
@@ -30,10 +35,10 @@ export const getClient = /* GraphQL */ `
           city
           state
           zip
+          owner
           createdAt
           updatedAt
           clientPropertiesId
-          owner
         }
         nextToken
       }
@@ -46,9 +51,9 @@ export const getClient = /* GraphQL */ `
           completed
           date
           notificationId
+          owner
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
@@ -71,15 +76,15 @@ export const getClient = /* GraphQL */ `
           recurDate
           notificationId
           clientId
+          owner
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
+      owner
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -92,12 +97,17 @@ export const listClients = /* GraphQL */ `
     listClients(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        name
+        firstname
+        lastname
         company
         phone
         email
         notes
         favorite
+        clientStreet
+        clientCity
+        clientState
+        clientZip
         connectionHistory {
           nextToken
         }
@@ -113,9 +123,9 @@ export const listClients = /* GraphQL */ `
         reminder {
           nextToken
         }
+        owner
         createdAt
         updatedAt
-        owner
       }
       nextToken
     }
@@ -132,12 +142,17 @@ export const getReminder = /* GraphQL */ `
       clientId
       client {
         id
-        name
+        firstname
+        lastname
         company
         phone
         email
         notes
         favorite
+        clientStreet
+        clientCity
+        clientState
+        clientZip
         connectionHistory {
           nextToken
         }
@@ -153,13 +168,13 @@ export const getReminder = /* GraphQL */ `
         reminder {
           nextToken
         }
+        owner
         createdAt
         updatedAt
-        owner
       }
+      owner
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -179,19 +194,24 @@ export const listReminders = /* GraphQL */ `
         clientId
         client {
           id
-          name
+          firstname
+          lastname
           company
           phone
           email
           notes
           favorite
+          clientStreet
+          clientCity
+          clientState
+          clientZip
+          owner
           createdAt
           updatedAt
-          owner
         }
+        owner
         createdAt
         updatedAt
-        owner
       }
       nextToken
     }
@@ -213,9 +233,9 @@ export const getClientGroup = /* GraphQL */ `
         }
         nextToken
       }
+      owner
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -232,9 +252,9 @@ export const listClientGroups = /* GraphQL */ `
         clients {
           nextToken
         }
+        owner
         createdAt
         updatedAt
-        owner
       }
       nextToken
     }
@@ -249,12 +269,17 @@ export const getConnectionHistory = /* GraphQL */ `
       clientId
       client {
         id
-        name
+        firstname
+        lastname
         company
         phone
         email
         notes
         favorite
+        clientStreet
+        clientCity
+        clientState
+        clientZip
         connectionHistory {
           nextToken
         }
@@ -270,13 +295,13 @@ export const getConnectionHistory = /* GraphQL */ `
         reminder {
           nextToken
         }
+        owner
         createdAt
         updatedAt
-        owner
       }
+      owner
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -298,19 +323,24 @@ export const listConnectionHistories = /* GraphQL */ `
         clientId
         client {
           id
-          name
+          firstname
+          lastname
           company
           phone
           email
           notes
           favorite
+          clientStreet
+          clientCity
+          clientState
+          clientZip
+          owner
           createdAt
           updatedAt
-          owner
         }
+        owner
         createdAt
         updatedAt
-        owner
       }
       nextToken
     }
@@ -326,12 +356,17 @@ export const getProperty = /* GraphQL */ `
       zip
       client {
         id
-        name
+        firstname
+        lastname
         company
         phone
         email
         notes
         favorite
+        clientStreet
+        clientCity
+        clientState
+        clientZip
         connectionHistory {
           nextToken
         }
@@ -347,14 +382,14 @@ export const getProperty = /* GraphQL */ `
         reminder {
           nextToken
         }
+        owner
         createdAt
         updatedAt
-        owner
       }
+      owner
       createdAt
       updatedAt
       clientPropertiesId
-      owner
     }
   }
 `;
@@ -373,20 +408,25 @@ export const listProperties = /* GraphQL */ `
         zip
         client {
           id
-          name
+          firstname
+          lastname
           company
           phone
           email
           notes
           favorite
+          clientStreet
+          clientCity
+          clientState
+          clientZip
+          owner
           createdAt
           updatedAt
-          owner
         }
+        owner
         createdAt
         updatedAt
         clientPropertiesId
-        owner
       }
       nextToken
     }
@@ -404,12 +444,17 @@ export const getTask = /* GraphQL */ `
       notificationId
       client {
         id
-        name
+        firstname
+        lastname
         company
         phone
         email
         notes
         favorite
+        clientStreet
+        clientCity
+        clientState
+        clientZip
         connectionHistory {
           nextToken
         }
@@ -425,13 +470,13 @@ export const getTask = /* GraphQL */ `
         reminder {
           nextToken
         }
+        owner
         createdAt
         updatedAt
-        owner
       }
+      owner
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -452,19 +497,24 @@ export const listTasks = /* GraphQL */ `
         notificationId
         client {
           id
-          name
+          firstname
+          lastname
           company
           phone
           email
           notes
           favorite
+          clientStreet
+          clientCity
+          clientState
+          clientZip
+          owner
           createdAt
           updatedAt
-          owner
         }
+        owner
         createdAt
         updatedAt
-        owner
       }
       nextToken
     }
@@ -476,9 +526,9 @@ export const getNote = /* GraphQL */ `
       id
       title
       content
+      owner
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -493,9 +543,9 @@ export const listNotes = /* GraphQL */ `
         id
         title
         content
+        owner
         createdAt
         updatedAt
-        owner
       }
       nextToken
     }
@@ -509,12 +559,17 @@ export const getGroupsClients = /* GraphQL */ `
       clientGroupID
       client {
         id
-        name
+        firstname
+        lastname
         company
         phone
         email
         notes
         favorite
+        clientStreet
+        clientCity
+        clientState
+        clientZip
         connectionHistory {
           nextToken
         }
@@ -530,9 +585,9 @@ export const getGroupsClients = /* GraphQL */ `
         reminder {
           nextToken
         }
+        owner
         createdAt
         updatedAt
-        owner
       }
       clientGroup {
         id
@@ -540,9 +595,9 @@ export const getGroupsClients = /* GraphQL */ `
         clients {
           nextToken
         }
+        owner
         createdAt
         updatedAt
-        owner
       }
       createdAt
       updatedAt
@@ -563,22 +618,27 @@ export const listGroupsClients = /* GraphQL */ `
         clientGroupID
         client {
           id
-          name
+          firstname
+          lastname
           company
           phone
           email
           notes
           favorite
+          clientStreet
+          clientCity
+          clientState
+          clientZip
+          owner
           createdAt
           updatedAt
-          owner
         }
         clientGroup {
           id
           title
+          owner
           createdAt
           updatedAt
-          owner
         }
         createdAt
         updatedAt
@@ -588,16 +648,16 @@ export const listGroupsClients = /* GraphQL */ `
     }
   }
 `;
-export const clientByName = /* GraphQL */ `
-  query ClientByName(
-    $name: String!
+export const clientByFirstName = /* GraphQL */ `
+  query ClientByFirstName(
+    $firstname: String!
     $sortDirection: ModelSortDirection
     $filter: ModelClientFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    clientByName(
-      name: $name
+    clientByFirstName(
+      firstname: $firstname
       sortDirection: $sortDirection
       filter: $filter
       limit: $limit
@@ -605,12 +665,17 @@ export const clientByName = /* GraphQL */ `
     ) {
       items {
         id
-        name
+        firstname
+        lastname
         company
         phone
         email
         notes
         favorite
+        clientStreet
+        clientCity
+        clientState
+        clientZip
         connectionHistory {
           nextToken
         }
@@ -626,9 +691,60 @@ export const clientByName = /* GraphQL */ `
         reminder {
           nextToken
         }
+        owner
         createdAt
         updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const clientByLastName = /* GraphQL */ `
+  query ClientByLastName(
+    $lastname: String!
+    $sortDirection: ModelSortDirection
+    $filter: ModelClientFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    clientByLastName(
+      lastname: $lastname
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        firstname
+        lastname
+        company
+        phone
+        email
+        notes
+        favorite
+        clientStreet
+        clientCity
+        clientState
+        clientZip
+        connectionHistory {
+          nextToken
+        }
+        properties {
+          nextToken
+        }
+        tasks {
+          nextToken
+        }
+        group {
+          nextToken
+        }
+        reminder {
+          nextToken
+        }
         owner
+        createdAt
+        updatedAt
       }
       nextToken
     }

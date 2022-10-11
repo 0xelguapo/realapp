@@ -14,7 +14,7 @@ import {
 import { listClients, getClient } from "../graphql/queries";
 
 const clientsAdapter = createEntityAdapter({
-  sortComparer: (a, b) => a.name.localeCompare(b.name),
+  sortComparer: (a, b) => a.firstname.localeCompare(b.firstname),
 });
 
 const initialState = clientsAdapter.getInitialState({

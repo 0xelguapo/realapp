@@ -8,21 +8,26 @@ export const createClient = /* GraphQL */ `
   ) {
     createClient(input: $input, condition: $condition) {
       id
-      name
+      firstname
+      lastname
       company
       phone
       email
       notes
       favorite
+      clientStreet
+      clientCity
+      clientState
+      clientZip
       connectionHistory {
         items {
           id
           title
           date
           clientId
+          owner
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
@@ -33,10 +38,10 @@ export const createClient = /* GraphQL */ `
           city
           state
           zip
+          owner
           createdAt
           updatedAt
           clientPropertiesId
-          owner
         }
         nextToken
       }
@@ -49,9 +54,9 @@ export const createClient = /* GraphQL */ `
           completed
           date
           notificationId
+          owner
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
@@ -74,15 +79,15 @@ export const createClient = /* GraphQL */ `
           recurDate
           notificationId
           clientId
+          owner
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
+      owner
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -93,21 +98,26 @@ export const updateClient = /* GraphQL */ `
   ) {
     updateClient(input: $input, condition: $condition) {
       id
-      name
+      firstname
+      lastname
       company
       phone
       email
       notes
       favorite
+      clientStreet
+      clientCity
+      clientState
+      clientZip
       connectionHistory {
         items {
           id
           title
           date
           clientId
+          owner
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
@@ -118,10 +128,10 @@ export const updateClient = /* GraphQL */ `
           city
           state
           zip
+          owner
           createdAt
           updatedAt
           clientPropertiesId
-          owner
         }
         nextToken
       }
@@ -134,9 +144,9 @@ export const updateClient = /* GraphQL */ `
           completed
           date
           notificationId
+          owner
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
@@ -159,15 +169,15 @@ export const updateClient = /* GraphQL */ `
           recurDate
           notificationId
           clientId
+          owner
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
+      owner
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -178,21 +188,26 @@ export const deleteClient = /* GraphQL */ `
   ) {
     deleteClient(input: $input, condition: $condition) {
       id
-      name
+      firstname
+      lastname
       company
       phone
       email
       notes
       favorite
+      clientStreet
+      clientCity
+      clientState
+      clientZip
       connectionHistory {
         items {
           id
           title
           date
           clientId
+          owner
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
@@ -203,10 +218,10 @@ export const deleteClient = /* GraphQL */ `
           city
           state
           zip
+          owner
           createdAt
           updatedAt
           clientPropertiesId
-          owner
         }
         nextToken
       }
@@ -219,9 +234,9 @@ export const deleteClient = /* GraphQL */ `
           completed
           date
           notificationId
+          owner
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
@@ -244,15 +259,15 @@ export const deleteClient = /* GraphQL */ `
           recurDate
           notificationId
           clientId
+          owner
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
+      owner
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -270,12 +285,17 @@ export const createReminder = /* GraphQL */ `
       clientId
       client {
         id
-        name
+        firstname
+        lastname
         company
         phone
         email
         notes
         favorite
+        clientStreet
+        clientCity
+        clientState
+        clientZip
         connectionHistory {
           nextToken
         }
@@ -291,13 +311,13 @@ export const createReminder = /* GraphQL */ `
         reminder {
           nextToken
         }
+        owner
         createdAt
         updatedAt
-        owner
       }
+      owner
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -315,12 +335,17 @@ export const updateReminder = /* GraphQL */ `
       clientId
       client {
         id
-        name
+        firstname
+        lastname
         company
         phone
         email
         notes
         favorite
+        clientStreet
+        clientCity
+        clientState
+        clientZip
         connectionHistory {
           nextToken
         }
@@ -336,13 +361,13 @@ export const updateReminder = /* GraphQL */ `
         reminder {
           nextToken
         }
+        owner
         createdAt
         updatedAt
-        owner
       }
+      owner
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -360,12 +385,17 @@ export const deleteReminder = /* GraphQL */ `
       clientId
       client {
         id
-        name
+        firstname
+        lastname
         company
         phone
         email
         notes
         favorite
+        clientStreet
+        clientCity
+        clientState
+        clientZip
         connectionHistory {
           nextToken
         }
@@ -381,13 +411,13 @@ export const deleteReminder = /* GraphQL */ `
         reminder {
           nextToken
         }
+        owner
         createdAt
         updatedAt
-        owner
       }
+      owner
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -410,9 +440,9 @@ export const createClientGroup = /* GraphQL */ `
         }
         nextToken
       }
+      owner
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -435,9 +465,9 @@ export const updateClientGroup = /* GraphQL */ `
         }
         nextToken
       }
+      owner
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -460,9 +490,9 @@ export const deleteClientGroup = /* GraphQL */ `
         }
         nextToken
       }
+      owner
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -478,12 +508,17 @@ export const createConnectionHistory = /* GraphQL */ `
       clientId
       client {
         id
-        name
+        firstname
+        lastname
         company
         phone
         email
         notes
         favorite
+        clientStreet
+        clientCity
+        clientState
+        clientZip
         connectionHistory {
           nextToken
         }
@@ -499,13 +534,13 @@ export const createConnectionHistory = /* GraphQL */ `
         reminder {
           nextToken
         }
+        owner
         createdAt
         updatedAt
-        owner
       }
+      owner
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -521,12 +556,17 @@ export const updateConnectionHistory = /* GraphQL */ `
       clientId
       client {
         id
-        name
+        firstname
+        lastname
         company
         phone
         email
         notes
         favorite
+        clientStreet
+        clientCity
+        clientState
+        clientZip
         connectionHistory {
           nextToken
         }
@@ -542,13 +582,13 @@ export const updateConnectionHistory = /* GraphQL */ `
         reminder {
           nextToken
         }
+        owner
         createdAt
         updatedAt
-        owner
       }
+      owner
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -564,12 +604,17 @@ export const deleteConnectionHistory = /* GraphQL */ `
       clientId
       client {
         id
-        name
+        firstname
+        lastname
         company
         phone
         email
         notes
         favorite
+        clientStreet
+        clientCity
+        clientState
+        clientZip
         connectionHistory {
           nextToken
         }
@@ -585,13 +630,13 @@ export const deleteConnectionHistory = /* GraphQL */ `
         reminder {
           nextToken
         }
+        owner
         createdAt
         updatedAt
-        owner
       }
+      owner
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -608,12 +653,17 @@ export const createProperty = /* GraphQL */ `
       zip
       client {
         id
-        name
+        firstname
+        lastname
         company
         phone
         email
         notes
         favorite
+        clientStreet
+        clientCity
+        clientState
+        clientZip
         connectionHistory {
           nextToken
         }
@@ -629,14 +679,14 @@ export const createProperty = /* GraphQL */ `
         reminder {
           nextToken
         }
+        owner
         createdAt
         updatedAt
-        owner
       }
+      owner
       createdAt
       updatedAt
       clientPropertiesId
-      owner
     }
   }
 `;
@@ -653,12 +703,17 @@ export const updateProperty = /* GraphQL */ `
       zip
       client {
         id
-        name
+        firstname
+        lastname
         company
         phone
         email
         notes
         favorite
+        clientStreet
+        clientCity
+        clientState
+        clientZip
         connectionHistory {
           nextToken
         }
@@ -674,14 +729,14 @@ export const updateProperty = /* GraphQL */ `
         reminder {
           nextToken
         }
+        owner
         createdAt
         updatedAt
-        owner
       }
+      owner
       createdAt
       updatedAt
       clientPropertiesId
-      owner
     }
   }
 `;
@@ -698,12 +753,17 @@ export const deleteProperty = /* GraphQL */ `
       zip
       client {
         id
-        name
+        firstname
+        lastname
         company
         phone
         email
         notes
         favorite
+        clientStreet
+        clientCity
+        clientState
+        clientZip
         connectionHistory {
           nextToken
         }
@@ -719,14 +779,14 @@ export const deleteProperty = /* GraphQL */ `
         reminder {
           nextToken
         }
+        owner
         createdAt
         updatedAt
-        owner
       }
+      owner
       createdAt
       updatedAt
       clientPropertiesId
-      owner
     }
   }
 `;
@@ -745,12 +805,17 @@ export const createTask = /* GraphQL */ `
       notificationId
       client {
         id
-        name
+        firstname
+        lastname
         company
         phone
         email
         notes
         favorite
+        clientStreet
+        clientCity
+        clientState
+        clientZip
         connectionHistory {
           nextToken
         }
@@ -766,13 +831,13 @@ export const createTask = /* GraphQL */ `
         reminder {
           nextToken
         }
+        owner
         createdAt
         updatedAt
-        owner
       }
+      owner
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -791,12 +856,17 @@ export const updateTask = /* GraphQL */ `
       notificationId
       client {
         id
-        name
+        firstname
+        lastname
         company
         phone
         email
         notes
         favorite
+        clientStreet
+        clientCity
+        clientState
+        clientZip
         connectionHistory {
           nextToken
         }
@@ -812,13 +882,13 @@ export const updateTask = /* GraphQL */ `
         reminder {
           nextToken
         }
+        owner
         createdAt
         updatedAt
-        owner
       }
+      owner
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -837,12 +907,17 @@ export const deleteTask = /* GraphQL */ `
       notificationId
       client {
         id
-        name
+        firstname
+        lastname
         company
         phone
         email
         notes
         favorite
+        clientStreet
+        clientCity
+        clientState
+        clientZip
         connectionHistory {
           nextToken
         }
@@ -858,13 +933,13 @@ export const deleteTask = /* GraphQL */ `
         reminder {
           nextToken
         }
+        owner
         createdAt
         updatedAt
-        owner
       }
+      owner
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -877,9 +952,9 @@ export const createNote = /* GraphQL */ `
       id
       title
       content
+      owner
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -892,9 +967,9 @@ export const updateNote = /* GraphQL */ `
       id
       title
       content
+      owner
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -907,9 +982,9 @@ export const deleteNote = /* GraphQL */ `
       id
       title
       content
+      owner
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -924,12 +999,17 @@ export const createGroupsClients = /* GraphQL */ `
       clientGroupID
       client {
         id
-        name
+        firstname
+        lastname
         company
         phone
         email
         notes
         favorite
+        clientStreet
+        clientCity
+        clientState
+        clientZip
         connectionHistory {
           nextToken
         }
@@ -945,9 +1025,9 @@ export const createGroupsClients = /* GraphQL */ `
         reminder {
           nextToken
         }
+        owner
         createdAt
         updatedAt
-        owner
       }
       clientGroup {
         id
@@ -955,9 +1035,9 @@ export const createGroupsClients = /* GraphQL */ `
         clients {
           nextToken
         }
+        owner
         createdAt
         updatedAt
-        owner
       }
       createdAt
       updatedAt
@@ -976,12 +1056,17 @@ export const updateGroupsClients = /* GraphQL */ `
       clientGroupID
       client {
         id
-        name
+        firstname
+        lastname
         company
         phone
         email
         notes
         favorite
+        clientStreet
+        clientCity
+        clientState
+        clientZip
         connectionHistory {
           nextToken
         }
@@ -997,9 +1082,9 @@ export const updateGroupsClients = /* GraphQL */ `
         reminder {
           nextToken
         }
+        owner
         createdAt
         updatedAt
-        owner
       }
       clientGroup {
         id
@@ -1007,9 +1092,9 @@ export const updateGroupsClients = /* GraphQL */ `
         clients {
           nextToken
         }
+        owner
         createdAt
         updatedAt
-        owner
       }
       createdAt
       updatedAt
@@ -1028,12 +1113,17 @@ export const deleteGroupsClients = /* GraphQL */ `
       clientGroupID
       client {
         id
-        name
+        firstname
+        lastname
         company
         phone
         email
         notes
         favorite
+        clientStreet
+        clientCity
+        clientState
+        clientZip
         connectionHistory {
           nextToken
         }
@@ -1049,9 +1139,9 @@ export const deleteGroupsClients = /* GraphQL */ `
         reminder {
           nextToken
         }
+        owner
         createdAt
         updatedAt
-        owner
       }
       clientGroup {
         id
@@ -1059,9 +1149,9 @@ export const deleteGroupsClients = /* GraphQL */ `
         clients {
           nextToken
         }
+        owner
         createdAt
         updatedAt
-        owner
       }
       createdAt
       updatedAt

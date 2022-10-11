@@ -29,7 +29,7 @@ function AuthProvider({ children }) {
       const { user } = await Auth.signUp(username, password);
       console.log("successful", user);
     } catch (err) {
-      console.log("error", err);
+      console.error(err);
     }
   }, []);
 
@@ -38,17 +38,17 @@ function AuthProvider({ children }) {
     try {
       confirmedUser = await Auth.confirmSignUp(username, confirmation);
     } catch (err) {
-      console.log("error confirming", err);
+      console.error(err);
     }
     console.log(confirmedUser);
   }, []);
 
   const resend = useCallback(async (username) => {
     try {
-      await Auth.resendSignUp(username);
-      console.log("code resent successfully");
+      const response = await Auth.resendSignUp(username);
+      console.log(response);
     } catch (err) {
-      console.log("error resending code:", err);
+      console.error(err);
     }
   }, []);
 
@@ -61,7 +61,7 @@ function AuthProvider({ children }) {
         "Invalid Credentials",
         "Please check your email and password then try again"
       );
-      console.log("error", err);
+      console.error(err);
       return;
     }
     setUser(signedInUser);
@@ -72,7 +72,7 @@ function AuthProvider({ children }) {
     try {
       await Auth.signOut();
     } catch (err) {
-      console.log("error singing out", err);
+      console.error(err);
     }
     setUser(null);
   }, []);

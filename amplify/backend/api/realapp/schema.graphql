@@ -5,17 +5,24 @@
 
 type Client @model @auth(rules: [{ allow: owner }]) {
   id: ID!
-  name: String! @index(name: "byName", queryField: "clientByName")
+  firstname: String! @index(name: "byFirstName", queryField: "clientByFirstName")
+  lastname: String @index(name: "byLastName", queryField: "clientByLastName")
   company: String
   phone: String
   email: String
   notes: String
   favorite: Boolean @default(value: "false")
+  clientStreet: String
+  clientCity: String
+  clientState: String
+  clientZip: String
   connectionHistory: [ConnectionHistory] @hasMany(indexName: "byConnectionHistory", fields: ["id"])
   properties: [Property] @hasMany(indexName: "")
   tasks: [Task] @hasMany(indexName: "byClient", fields: ["id"])
   group: [ClientGroup] @manyToMany(relationName: "GroupsClients")
   reminder: [Reminder] @hasMany(indexName: "byReminder", fields: ["id"])
+  owner: String @auth(rules: [{ allow: owner, operations: [read, delete] }])
+
 }
 
 type Reminder @model @auth(rules: [{ allow: owner }]) {
@@ -26,12 +33,14 @@ type Reminder @model @auth(rules: [{ allow: owner }]) {
   notificationId: String
   clientId: ID! @index(name: "byReminder")
   client: Client @belongsTo(fields: ["clientId"])
+  owner: String @auth(rules: [{ allow: owner, operations: [read, delete] }])
 }
 
 type ClientGroup @model @auth(rules: [{ allow: owner }]) {
   id: ID!
   title: String!
   clients: [Client] @manyToMany(relationName: "GroupsClients")
+  owner: String @auth(rules: [{ allow: owner, operations: [read, delete] }])
 }
 
 type ConnectionHistory @model @auth(rules: [{ allow: owner }]) {
@@ -40,6 +49,7 @@ type ConnectionHistory @model @auth(rules: [{ allow: owner }]) {
   date: String
   clientId: ID! @index(name: "byConnectionHistory", sortKeyFields: ["title"])
   client: Client @belongsTo(fields: ["clientId"])
+  owner: String @auth(rules: [{ allow: owner, operations: [read, delete] }])
 }
 
 type Property @model @auth(rules: [{ allow: owner }]) {
@@ -49,6 +59,7 @@ type Property @model @auth(rules: [{ allow: owner }]) {
   state: String
   zip: Int
   client: Client @belongsTo
+  owner: String @auth(rules: [{ allow: owner, operations: [read, delete] }])
 }
 
 type Task @model @auth(rules: [{ allow: owner }]) {
@@ -60,10 +71,12 @@ type Task @model @auth(rules: [{ allow: owner }]) {
   date: String
   notificationId: String
   client: Client @belongsTo(fields: ["clientId"])
+  owner: String @auth(rules: [{ allow: owner, operations: [read, delete] }])
 }
 
 type Note @model @auth(rules: [{ allow: owner }]) {
   id: ID!
   title: String
   content: String
+  owner: String @auth(rules: [{ allow: owner, operations: [read, delete] }])
 }

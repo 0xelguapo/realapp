@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
-import Amplify from "aws-amplify";
+import { Amplify } from "aws-amplify";
 import awsconfig from "./src/aws-exports";
 import { AuthProvider } from "./src/context/auth-context";
 import Navigation from "./src/navigation/index";

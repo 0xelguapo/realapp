@@ -18,6 +18,15 @@
         "realapp8e8e08f1": {
           "googleClientId": "973695514664-mek3ctj1oppfglu3knj55snkt7lmj3m6.apps.googleusercontent.com"
         }
+      },
+      "function": {
+        "batchcreateclients": {
+          "deploymentBucketName": "amplify-realapp-dev-142224-deployment",
+          "s3Key": "amplify-builds/batchcreateclients-655647626f703663372f-build.zip"
+        }
+      },
+      "api": {
+        "realapp": {}
       }
     }
   }

@@ -1,5 +1,12 @@
 {
-  "function": {},
+  "function": {
+    "batchcreateclients": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": []
+    }
+  },
   "auth": {
     "realapp8e8e08f1": {
       "service": "Cognito",

@@ -1,4 +1,12 @@
 export type AmplifyDependentResourcesAttributes = {
+    "function": {
+        "batchcreateclients": {
+            "Name": "string",
+            "Arn": "string",
+            "Region": "string",
+            "LambdaExecutionRole": "string"
+        }
+    },
     "auth": {
         "realapp8e8e08f1": {
             "IdentityPoolId": "string",
