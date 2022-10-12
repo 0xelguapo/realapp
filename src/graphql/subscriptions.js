@@ -5,8 +5,8 @@ export const onCreateClient = /* GraphQL */ `
   subscription OnCreateClient($owner: String) {
     onCreateClient(owner: $owner) {
       id
-      firstname
-      lastname
+      firstName
+      lastName
       company
       phone
       email
@@ -92,8 +92,8 @@ export const onUpdateClient = /* GraphQL */ `
   subscription OnUpdateClient($owner: String) {
     onUpdateClient(owner: $owner) {
       id
-      firstname
-      lastname
+      firstName
+      lastName
       company
       phone
       email
@@ -179,8 +179,8 @@ export const onDeleteClient = /* GraphQL */ `
   subscription OnDeleteClient($owner: String) {
     onDeleteClient(owner: $owner) {
       id
-      firstname
-      lastname
+      firstName
+      lastName
       company
       phone
       email
@@ -273,8 +273,8 @@ export const onCreateReminder = /* GraphQL */ `
       clientId
       client {
         id
-        firstname
-        lastname
+        firstName
+        lastName
         company
         phone
         email
@@ -320,8 +320,8 @@ export const onUpdateReminder = /* GraphQL */ `
       clientId
       client {
         id
-        firstname
-        lastname
+        firstName
+        lastName
         company
         phone
         email
@@ -367,8 +367,8 @@ export const onDeleteReminder = /* GraphQL */ `
       clientId
       client {
         id
-        firstname
-        lastname
+        firstName
+        lastName
         company
         phone
         email
@@ -478,8 +478,8 @@ export const onCreateConnectionHistory = /* GraphQL */ `
       clientId
       client {
         id
-        firstname
-        lastname
+        firstName
+        lastName
         company
         phone
         email
@@ -523,8 +523,8 @@ export const onUpdateConnectionHistory = /* GraphQL */ `
       clientId
       client {
         id
-        firstname
-        lastname
+        firstName
+        lastName
         company
         phone
         email
@@ -568,8 +568,8 @@ export const onDeleteConnectionHistory = /* GraphQL */ `
       clientId
       client {
         id
-        firstname
-        lastname
+        firstName
+        lastName
         company
         phone
         email
@@ -614,8 +614,8 @@ export const onCreateProperty = /* GraphQL */ `
       zip
       client {
         id
-        firstname
-        lastname
+        firstName
+        lastName
         company
         phone
         email
@@ -661,8 +661,8 @@ export const onUpdateProperty = /* GraphQL */ `
       zip
       client {
         id
-        firstname
-        lastname
+        firstName
+        lastName
         company
         phone
         email
@@ -708,8 +708,8 @@ export const onDeleteProperty = /* GraphQL */ `
       zip
       client {
         id
-        firstname
-        lastname
+        firstName
+        lastName
         company
         phone
         email
@@ -757,8 +757,8 @@ export const onCreateTask = /* GraphQL */ `
       notificationId
       client {
         id
-        firstname
-        lastname
+        firstName
+        lastName
         company
         phone
         email
@@ -805,8 +805,8 @@ export const onUpdateTask = /* GraphQL */ `
       notificationId
       client {
         id
-        firstname
-        lastname
+        firstName
+        lastName
         company
         phone
         email
@@ -853,8 +853,8 @@ export const onDeleteTask = /* GraphQL */ `
       notificationId
       client {
         id
-        firstname
-        lastname
+        firstName
+        lastName
         company
         phone
         email
@@ -933,8 +933,8 @@ export const onCreateGroupsClients = /* GraphQL */ `
       clientGroupID
       client {
         id
-        firstname
-        lastname
+        firstName
+        lastName
         company
         phone
         email
@@ -987,8 +987,8 @@ export const onUpdateGroupsClients = /* GraphQL */ `
       clientGroupID
       client {
         id
-        firstname
-        lastname
+        firstName
+        lastName
         company
         phone
         email
@@ -1041,8 +1041,8 @@ export const onDeleteGroupsClients = /* GraphQL */ `
       clientGroupID
       client {
         id
-        firstname
-        lastname
+        firstName
+        lastName
         company
         phone
         email

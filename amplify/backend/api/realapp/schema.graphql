@@ -3,10 +3,11 @@
 
 # input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
 
-type Client @model @auth(rules: [{ allow: owner }]) {
+type Client @model @auth(rules: [{ allow: owner }, { allow: public, provider: apiKey, operations: [create, update] }]) {
   id: ID!
-  firstname: String! @index(name: "byFirstName", queryField: "clientByFirstName")
-  lastname: String @index(name: "byLastName", queryField: "clientByLastName")
+  firstName: String!
+    @index(name: "byFirstName", queryField: "clientByFirstName")
+  lastName: String
   company: String
   phone: String
   email: String
@@ -16,13 +17,13 @@ type Client @model @auth(rules: [{ allow: owner }]) {
   clientCity: String
   clientState: String
   clientZip: String
-  connectionHistory: [ConnectionHistory] @hasMany(indexName: "byConnectionHistory", fields: ["id"])
+  connectionHistory: [ConnectionHistory]
+    @hasMany(indexName: "byConnectionHistory", fields: ["id"])
   properties: [Property] @hasMany(indexName: "")
   tasks: [Task] @hasMany(indexName: "byClient", fields: ["id"])
   group: [ClientGroup] @manyToMany(relationName: "GroupsClients")
   reminder: [Reminder] @hasMany(indexName: "byReminder", fields: ["id"])
-  owner: String @auth(rules: [{ allow: owner, operations: [read, delete] }])
-
+  owner: String @auth(rules: [{ allow: owner, operations: [read, delete] }, { allow: public, provider: apiKey, operations: [create, update]}])
 }
 
 type Reminder @model @auth(rules: [{ allow: owner }]) {
@@ -79,4 +80,9 @@ type Note @model @auth(rules: [{ allow: owner }]) {
   title: String
   content: String
   owner: String @auth(rules: [{ allow: owner, operations: [read, delete] }])
+}
+
+type Mutation {
+  batchCreateClients(inputFields: String!): String
+    @function(name: "batchcreateclients-dev")
 }

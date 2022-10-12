@@ -8,7 +8,8 @@ import {
 import { SimpleLineIcons } from "@expo/vector-icons";
 
 export default function EachClient({
-  name,
+  firstName,
+  lastName,
   phone,
   company,
   email,
@@ -16,6 +17,7 @@ export default function EachClient({
   taskMode,
   index,
 }) {
+  const fullName = lastName ? (firstName + ' ' + lastName) : firstName
 
   //for the add task view
   if (taskMode) {
@@ -23,7 +25,7 @@ export default function EachClient({
       <Pressable>
         <TouchableHighlight onPress={onPress} underlayColor="#f1f1f1">
           <View style={styles.taskModeContainer}>
-            <Text style={styles.name}>{name}</Text>
+            <Text style={styles.name}>{fullName}</Text>
             {company.length > 0 && (
               <Text style={styles.company}>{company}</Text>
             )}
@@ -37,7 +39,7 @@ export default function EachClient({
     <Pressable>
       <TouchableHighlight onPress={onPress} underlayColor="#f1f1f1">
         <View style={styles.container}>
-          <Text style={styles.name}>{name}</Text>
+          <Text style={styles.name}>{fullName}</Text>
           {company.length > 0 && <Text style={styles.phone}>{company}</Text>}
           <View style={styles.goContainer}>
             <SimpleLineIcons name="options" size={24} color="#dddddf" />

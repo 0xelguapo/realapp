@@ -12,7 +12,9 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { deleteOneReminder } from "../../redux/reminders-slice";
 
-export default function Reminder({ id, name, date, notificationId }) {
+export default function Reminder({ id, firstName, lastName, date, notificationId }) {
+  const fullName = lastName ? (firstName + ' ' + lastName) : firstName
+
   const dispatch = useDispatch();
 
   let formattedDate = formatDistanceToNowStrict(parseISO(date), {
@@ -58,7 +60,7 @@ export default function Reminder({ id, name, date, notificationId }) {
               : styles.checkedReminderClientName
           }
         >
-          {name}
+          {fullName}
         </Text>
         <Text
           style={[

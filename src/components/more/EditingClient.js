@@ -7,17 +7,19 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useState } from "react";
-import { AntDesign, Ionicons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function EditingClient({
   id,
-  name,
+  firstName,
+  lastName,
   company,
   clientGroupID,
   groupID,
   index,
   handleAddToRemove,
 }) {
+  const fullName = lastName ? firstName + " " + lastName : firstName;
   const [checked, setChecked] = useState(true);
 
   const handleCheck = () => {
@@ -38,7 +40,7 @@ export default function EditingClient({
             {checked && <Ionicons name="checkmark" size={30} color="#535353" />}
           </View>
           <View style={styles.clientDetails}>
-            <Text style={styles.name}>{name}</Text>
+            <Text style={styles.name}>{fullName}</Text>
             <Text style={styles.phone}>{company}</Text>
           </View>
         </View>

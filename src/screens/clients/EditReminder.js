@@ -12,14 +12,15 @@ import { createOneReminder } from "../../redux/reminders-slice";
 
 export default function EditReminder(props) {
   const { goBack } = props.navigation;
-  const { clientId, homeMode, clientName } = props.route.params;
+  const { clientId, homeMode, firstName, lastName } = props.route.params;
+  const fullName = lastName ? (firstName + ' ' + lastName) : (firstName)
   const dispatch = useDispatch();
 
   const handleScheduleNotification = async (time) => {
     const response = await Notifications.scheduleNotificationAsync({
       content: {
-        title: "Follow up with " + clientName.toUpperCase(),
-        body: `This is a reminder to contact ${clientName}`,
+        title: "Follow up with " + fullName.toUpperCase(),
+        body: `This is a reminder to contact ${fullName}`,
       },
       trigger: time,
     });

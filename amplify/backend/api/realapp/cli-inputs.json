@@ -3,10 +3,23 @@
   "serviceConfiguration": {
     "apiName": "realapp",
     "serviceName": "AppSync",
-    "gqlSchemaPath": "/Users/eric/realapp/amplify/backend/api/realapp/schema.graphql",
     "defaultAuthType": {
       "mode": "AMAZON_COGNITO_USER_POOLS",
       "cognitoUserPoolId": "authrealapp8e8e08f1"
-    }
+    },
+    "conflictResolution": {},
+    "additionalAuthTypes": [
+      {
+        "mode": "API_KEY",
+        "expirationTime": 365,
+        "apiKeyExpirationDate": "2023-10-11T23:13:58.929Z",
+        "keyDescription": "api-lambda"
+      },
+      {
+        "mode": "AWS_LAMBDA",
+        "lambdaFunction": "batchcreateclients",
+        "ttlSeconds": "300"
+      }
+    ]
   }
 }

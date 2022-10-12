@@ -5,8 +5,8 @@ export const getClient = /* GraphQL */ `
   query GetClient($id: ID!) {
     getClient(id: $id) {
       id
-      firstname
-      lastname
+      firstName
+      lastName
       company
       phone
       email
@@ -97,8 +97,8 @@ export const listClients = /* GraphQL */ `
     listClients(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        firstname
-        lastname
+        firstName
+        lastName
         company
         phone
         email
@@ -142,8 +142,8 @@ export const getReminder = /* GraphQL */ `
       clientId
       client {
         id
-        firstname
-        lastname
+        firstName
+        lastName
         company
         phone
         email
@@ -194,8 +194,8 @@ export const listReminders = /* GraphQL */ `
         clientId
         client {
           id
-          firstname
-          lastname
+          firstName
+          lastName
           company
           phone
           email
@@ -269,8 +269,8 @@ export const getConnectionHistory = /* GraphQL */ `
       clientId
       client {
         id
-        firstname
-        lastname
+        firstName
+        lastName
         company
         phone
         email
@@ -323,8 +323,8 @@ export const listConnectionHistories = /* GraphQL */ `
         clientId
         client {
           id
-          firstname
-          lastname
+          firstName
+          lastName
           company
           phone
           email
@@ -356,8 +356,8 @@ export const getProperty = /* GraphQL */ `
       zip
       client {
         id
-        firstname
-        lastname
+        firstName
+        lastName
         company
         phone
         email
@@ -408,8 +408,8 @@ export const listProperties = /* GraphQL */ `
         zip
         client {
           id
-          firstname
-          lastname
+          firstName
+          lastName
           company
           phone
           email
@@ -444,8 +444,8 @@ export const getTask = /* GraphQL */ `
       notificationId
       client {
         id
-        firstname
-        lastname
+        firstName
+        lastName
         company
         phone
         email
@@ -497,8 +497,8 @@ export const listTasks = /* GraphQL */ `
         notificationId
         client {
           id
-          firstname
-          lastname
+          firstName
+          lastName
           company
           phone
           email
@@ -559,8 +559,8 @@ export const getGroupsClients = /* GraphQL */ `
       clientGroupID
       client {
         id
-        firstname
-        lastname
+        firstName
+        lastName
         company
         phone
         email
@@ -618,8 +618,8 @@ export const listGroupsClients = /* GraphQL */ `
         clientGroupID
         client {
           id
-          firstname
-          lastname
+          firstName
+          lastName
           company
           phone
           email
@@ -650,14 +650,14 @@ export const listGroupsClients = /* GraphQL */ `
 `;
 export const clientByFirstName = /* GraphQL */ `
   query ClientByFirstName(
-    $firstname: String!
+    $firstName: String!
     $sortDirection: ModelSortDirection
     $filter: ModelClientFilterInput
     $limit: Int
     $nextToken: String
   ) {
     clientByFirstName(
-      firstname: $firstname
+      firstName: $firstName
       sortDirection: $sortDirection
       filter: $filter
       limit: $limit
@@ -665,59 +665,8 @@ export const clientByFirstName = /* GraphQL */ `
     ) {
       items {
         id
-        firstname
-        lastname
-        company
-        phone
-        email
-        notes
-        favorite
-        clientStreet
-        clientCity
-        clientState
-        clientZip
-        connectionHistory {
-          nextToken
-        }
-        properties {
-          nextToken
-        }
-        tasks {
-          nextToken
-        }
-        group {
-          nextToken
-        }
-        reminder {
-          nextToken
-        }
-        owner
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-  }
-`;
-export const clientByLastName = /* GraphQL */ `
-  query ClientByLastName(
-    $lastname: String!
-    $sortDirection: ModelSortDirection
-    $filter: ModelClientFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    clientByLastName(
-      lastname: $lastname
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        firstname
-        lastname
+        firstName
+        lastName
         company
         phone
         email

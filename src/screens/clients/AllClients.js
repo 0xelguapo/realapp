@@ -35,7 +35,8 @@ export default function Clients({ navigation }) {
 
   const filteredContacts = useMemo(() => {
     return allClients.filter((c) => {
-      const clientData = c.name ? c.name.toUpperCase() : "".toUpperCase();
+      const fullName = c.firstName + ' ' + c?.lastName
+      const clientData = fullName ? fullName.toUpperCase() : "".toUpperCase();
       const textData = searchInput.toUpperCase();
       return clientData.indexOf(textData) > -1;
     });
@@ -57,7 +58,8 @@ export default function Clients({ navigation }) {
       <EachClient
         onPress={() => viewClientHandler(item, index)}
         index={index}
-        name={item.name}
+        firstName={item.firstName}
+        lastName={item.lastName}
         phone={item.phone}
         company={item.company}
       />
@@ -130,9 +132,9 @@ export default function Clients({ navigation }) {
                       onPress={() => viewClientHandler(client, index)}
                     >
                       <Text style={styles.favoriteFirstLetter}>
-                        {client.name[0].toUpperCase()}
+                        {client.firstName[0].toUpperCase()}
                       </Text>
-                      <Text style={styles.favoriteName}>{client.name}</Text>
+                      <Text style={styles.favoriteName}>{client.firstname + ' ' + client.lastname}</Text>
                     </Pressable>
                   );
                 })

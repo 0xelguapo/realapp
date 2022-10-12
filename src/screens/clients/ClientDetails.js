@@ -79,7 +79,8 @@ export default function ClientDetails(props) {
   const viewEditReminder = () => {
     props.navigation.navigate("EditReminder", {
       clientId: id,
-      clientName: clientSelect.name
+      clientFirstName: clientSelect.firstname,
+      clientLastName: clientSelect.lastname
     });
   };
 
@@ -117,7 +118,7 @@ export default function ClientDetails(props) {
             <View style={styles.rectangleContainer}>
               <View style={styles.rectangle}></View>
             </View>
-            <Text style={styles.name}>{clientSelect.name}</Text>
+            <Text style={styles.name}>{clientSelect.lastName ? (clientSelect.firstName + ' ' + clientSelect.lastName) : (clientSelect.firstName)}</Text>
             <Text style={styles.company}>{clientSelect.company}</Text>
           </View>
           <ClientOptions

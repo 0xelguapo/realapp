@@ -109,7 +109,8 @@ export default function ViewOneGroup(props) {
             taskMode={true}
             key={client.client.id}
             phone={client.client.phone}
-            name={client.client.name}
+            firstName={client.client.firstName}
+            lastName={client.client.lastName}
             company={client.client.company}
             onPress={() => handleViewClient(client.client)}
           />

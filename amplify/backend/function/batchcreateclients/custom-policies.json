@@ -1,6 +1,6 @@
 [
   {
-    "Action": ["dynamodb:PutItem", "dynamodb:UpdateItem"],
-    "Resource": ["arn:aws:dynamodb:us-west-1:512520082405:table/Client-piqaab2fiveavntp6bdkxc4rye-dev"]
+    "Action": ["dynamodb:PutItem", "dynamodb:UpdateItem", "appsync:GraphQL", "appsync:GetGraphqlApi"],
+    "Resource": ["arn:aws:dynamodb:us-west-1:512520082405:table/Client-piqaab2fiveavntp6bdkxc4rye-dev", "arn:aws:appsync:us-west-1:512520082405:*"]
   }
 ]

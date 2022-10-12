@@ -2,7 +2,8 @@ export const getClientGroups = /* GraphQL */ `
   query GetClient($id: ID!) {
     getClient(id: $id) {
       id
-      name
+      firstName
+      lastName
       group {
         items {
           id
@@ -33,7 +34,8 @@ export const listClientGroupsWithClients = /* GraphQL */ `
             createdAt
               client {
                 id
-                name
+                firstName
+                lastName
                 phone
                 email
                 company
@@ -65,7 +67,8 @@ export const getClientGroupWithClientDetails = /* GraphQL */ `
           owner
             client {
               id
-              name
+              firstName
+              lastName
               phone
               email
               company
@@ -93,7 +96,8 @@ export const createReminder = /* GraphQL */ `
       clientId
       client {
         id
-        name
+        firstName
+        lastName
         reminder {
           id
           date
@@ -131,7 +135,8 @@ export const listReminders = /* GraphQL */ `
         clientId
         client {
           id
-          name
+          firstName
+          lastName
           company
         }
         createdAt

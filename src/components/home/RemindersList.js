@@ -32,7 +32,8 @@ export default function RemindersList(props) {
             <Reminder
               key={item.id}
               id={item.id}
-              name={item.client.name}
+              firstName={item.client.firstName}
+              lastName={item.client.lastName}
               date={item.date}
               notificationId={item.notificationId}
             />
@@ -47,7 +48,8 @@ export default function RemindersList(props) {
           <Reminder
             key={item.id}
             id={item.id}
-            name={item.client.name}
+            firstName={item.client.firstName}
+            lastName={item.client.lastName}
             date={item.date}
           />
         ))

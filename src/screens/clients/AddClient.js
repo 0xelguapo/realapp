@@ -20,19 +20,21 @@ export default function AddClient({ navigation }) {
   const phoneInputRef = useRef(null);
   const emailInputRef = useRef(null)
   const dispatch = useDispatch();
-  const [name, setName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState('')
   const [company, setCompany] = useState("");
   const [emailInputs, setEmailInputs] = useState([]);
   const [phoneInputs, setPhoneInputs] = useState([]);
 
   const handleAddClient = async () => {
     const clientInputs = {
-      name: name,
+      firstName: firstName,
+      lastName: lastName,
       company: company,
       phone: phoneInputs.toString(),
       email: emailInputs.toString(),
     };
-    if (name.length !== 0) {
+    if (firstName.length !== 0) {
       const response = await dispatch(addClient(clientInputs));
       if (response) {
         navigation.goBack();
@@ -110,18 +112,29 @@ export default function AddClient({ navigation }) {
       >
         <ScrollView keyboardShouldPersistTaps="always" keyboardDismissMode="on-drag">
           <View style={styles.avatar}>
-            <Text style={styles.avatarText}>{name[0]}</Text>
+            <Text style={styles.avatarText}>{firstName[0]}</Text>
           </View>
           <View style={styles.inputContainerOne}>
             <Ionicons name="person-outline" size={20} color="black" />
             <TextInput
               style={styles.textInputOne}
-              placeholder={"Full Name"}
+              placeholder={"First Name"}
               placeholderTextColor="#454545"
-              value={name}
-              onChangeText={setName}
+              value={firstName}
+              onChangeText={setFirstName}
               autoCapitalize="words"
               autoFocus={true}
+            />
+          </View>
+          <View style={styles.inputContainerOne}>
+            <Ionicons name="person-outline" size={20} color="black" />
+            <TextInput
+              style={styles.textInputOne}
+              placeholder={"Last Name"}
+              placeholderTextColor="#454545"
+              value={lastName}
+              onChangeText={setLastName}
+              autoCapitalize="words"
             />
           </View>
           <View style={styles.inputContainerOne}>

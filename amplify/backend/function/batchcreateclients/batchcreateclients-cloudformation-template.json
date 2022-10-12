@@ -15,6 +15,21 @@
     },
     "s3Key": {
       "Type": "String"
+    },
+    "apirealappGraphQLAPIIdOutput": {
+      "Type": "String",
+      "Default": "apirealappGraphQLAPIIdOutput"
+    },
+    "apirealappGraphQLAPIEndpointOutput": {
+      "Type": "String",
+      "Default": "apirealappGraphQLAPIEndpointOutput"
+    },
+    "secretsPathAmplifyAppId": {
+      "Type": "String"
+    },
+    "apirealappGraphQLAPIKeyOutput": {
+      "Type": "String",
+      "Default": "apirealappGraphQLAPIKeyOutput"
     }
   },
   "Conditions": {
@@ -69,6 +84,37 @@
             },
             "REGION": {
               "Ref": "AWS::Region"
+            },
+            "API_REALAPP_GRAPHQLAPIIDOUTPUT": {
+              "Ref": "apirealappGraphQLAPIIdOutput"
+            },
+            "API_REALAPP_GRAPHQLAPIENDPOINTOUTPUT": {
+              "Ref": "apirealappGraphQLAPIEndpointOutput"
+            },
+            "GRAPHQL_API_KEY": {
+              "Fn::Join": [
+                "",
+                [
+                  {
+                    "Fn::Sub": [
+                      "/amplify/${appId}/${env}/AMPLIFY_${functionName}_",
+                      {
+                        "appId": {
+                          "Ref": "secretsPathAmplifyAppId"
+                        },
+                        "env": {
+                          "Ref": "env"
+                        },
+                        "functionName": "batchcreateclients"
+                      }
+                    ]
+                  },
+                  "GRAPHQL_API_KEY"
+                ]
+              ]
+            },
+            "API_REALAPP_GRAPHQLAPIKEYOUTPUT": {
+              "Ref": "apirealappGraphQLAPIKeyOutput"
             }
           }
         },
@@ -78,7 +124,7 @@
             "Arn"
           ]
         },
-        "Runtime": "nodejs14.x",
+        "Runtime": "nodejs16.x",
         "Layers": [],
         "Timeout": 25
       }
@@ -175,10 +221,13 @@
             {
               "Action": [
                 "dynamodb:PutItem",
-                "dynamodb:UpdateItem"
+                "dynamodb:UpdateItem",
+                "appsync:GraphQL",
+                "appsync:GetGraphqlApi"
               ],
               "Resource": [
-                "arn:aws:dynamodb:us-west-1:512520082405:table/Client-piqaab2fiveavntp6bdkxc4rye-dev"
+                "arn:aws:dynamodb:us-west-1:512520082405:table/Client-piqaab2fiveavntp6bdkxc4rye-dev",
+                "arn:aws:appsync:us-west-1:512520082405:*"
               ],
               "Effect": "Allow"
             }
@@ -191,6 +240,140 @@
         ]
       },
       "DependsOn": "LambdaExecutionRole"
+    },
+    "AmplifyResourcesPolicy": {
+      "DependsOn": [
+        "LambdaExecutionRole"
+      ],
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyName": "amplify-lambda-execution-policy",
+        "Roles": [
+          {
+            "Ref": "LambdaExecutionRole"
+          }
+        ],
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "appsync:GraphQL"
+              ],
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:appsync:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":apis/",
+                      {
+                        "Ref": "apirealappGraphQLAPIIdOutput"
+                      },
+                      "/types/Query/*"
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:appsync:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":apis/",
+                      {
+                        "Ref": "apirealappGraphQLAPIIdOutput"
+                      },
+                      "/types/Mutation/*"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "PermissionForAppSyncToInvokeLambda": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "LambdaFunction"
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "appsync.amazonaws.com"
+      }
+    },
+    "AmplifyFunctionSecretsPolicy": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyName": "amplify-function-secrets-policy",
+        "Roles": [
+          {
+            "Ref": "LambdaExecutionRole"
+          }
+        ],
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "ssm:GetParameter",
+                "ssm:GetParameters"
+              ],
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:ssm:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":parameter",
+                    {
+                      "Fn::Sub": [
+                        "/amplify/${appId}/${env}/AMPLIFY_${functionName}_",
+                        {
+                          "appId": {
+                            "Ref": "secretsPathAmplifyAppId"
+                          },
+                          "env": {
+                            "Ref": "env"
+                          },
+                          "functionName": "batchcreateclients"
+                        }
+                      ]
+                    },
+                    "*"
+                  ]
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "DependsOn": [
+        "LambdaExecutionRole"
+      ]
     }
   },
   "Outputs": {

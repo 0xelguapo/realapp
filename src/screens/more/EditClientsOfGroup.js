@@ -96,7 +96,8 @@ export default function EditClientsOfGroup(props) {
           <EditingClient
             key={client.client.id}
             clientId={client.client.id}
-            name={client.client.name}
+            firstName={client.client.firstName}
+            lastName={client.client.lastName}
             company={client.client.company}
             groupID={client.clientGroupID}
             clientGroupID={client.id}

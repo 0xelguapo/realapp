@@ -31,7 +31,8 @@ export default function AddTask({ navigation }) {
 
   const filteredData = useMemo(() => {
     return allClients.filter((c) => {
-      const clientData = c.name ? c.name.toUpperCase() : "".toUpperCase();
+      const fullName = c.firstName + " " + c?.lastName;
+      const clientData = fullName ? fullName.toUpperCase() : "".toUpperCase();
       const textData = searchInput.toUpperCase();
       return clientData.indexOf(textData) > -1;
     });
@@ -65,7 +66,8 @@ export default function AddTask({ navigation }) {
       <EachClient
         onPress={() => handleChooseClient(item)}
         taskMode={true}
-        name={item.name}
+        firstName={item.firstName}
+        lastName={item.lastName}
         phone={item.phone}
         company={item.company}
       />
@@ -75,7 +77,7 @@ export default function AddTask({ navigation }) {
 
   const handleChooseClient = (client) => {
     setSelectedClient(client);
-    setSearchInput(client.name);
+    setSearchInput(client.firstName + " ", client.lastName);
     setClientsVisible(false);
     console.log(client);
   };
@@ -152,10 +154,10 @@ export default function AddTask({ navigation }) {
           {clientsVisible ? (
             <View style={styles.closeClients}>
               <FontAwesome name="remove" size={24} color="#ff6b66" />
-              {selectedClient.name && (
+              {selectedClient.firstName && (
                 <View style={styles.selectedClientContainer}>
                   <Text style={styles.selectedClientText}>
-                    {selectedClient.name}
+                    {selectedClient.firstName + " " + selectedClient.lastName}
                   </Text>
                 </View>
               )}
@@ -164,7 +166,9 @@ export default function AddTask({ navigation }) {
             <View style={styles.addClientContainer}>
               <FontAwesome name="address-book-o" size={24} color="#0064e5" />
               <Text style={styles.addDateText}>
-                {selectedClient.name || "Associate Client"}
+                {selectedClient.firstName
+                  ? selectedClient.firstName + " " + selectedClient.lastName
+                  : "Associate Client"}
               </Text>
             </View>
           )}
