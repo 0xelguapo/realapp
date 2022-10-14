@@ -52,6 +52,7 @@ export default function Input(props) {
         keyboardType={props.keyboardType}
         returnKeyType={props.returnKeyType}
         autoCapitalize={props.autoCapitalize}
+        secureTextEntry={props.secureTextEntry}
       />
       {!inputState.isValid && inputState.isTouched && (
         <Text style={styles.error}>{props.errorText}</Text>

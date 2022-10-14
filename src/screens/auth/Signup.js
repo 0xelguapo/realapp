@@ -9,6 +9,8 @@ import {
   Modal,
   Button,
   TextInput,
+  ActivityIndicator,
+  TouchableHighlight
 } from "react-native";
 import {
   VALIDATOR_EMAIL,
@@ -20,7 +22,7 @@ import Input from "../../components/Input";
 import useForm from "../../hooks/form-hook";
 
 export default function Signup({ navigation }) {
-  const { signup, resend, confirmation, signin } = useContext(AuthContext);
+  const { signup, resend, confirmation, signin, isLoading } = useContext(AuthContext);
   const [showModal, setShowModal] = useState(false);
   const [confirmationText, setConfirmationText] = useState("");
   const [formState, inputHandler] = useForm(
@@ -43,23 +45,19 @@ export default function Signup({ navigation }) {
       formState.inputs.password.value
     );
     setShowModal(!showModal);
-    console.log("signup", result);
   };
 
   const handleConfirmation = async () => {
     let result;
     result = await confirmation(formState.inputs.email.value, confirmationText);
-    console.log("confirmation result", result);
     result = await signin(
       formState.inputs.email.value,
       formState.inputs.password.value
     );
-    console.log('after confirmation', result)
   };
 
   const handleResend = async () => {
     const result = await resend(formState.inputs.email.value);
-    console.log("resend", result);
   };
 
   return (
@@ -97,11 +95,11 @@ export default function Signup({ navigation }) {
             <Text style={styles.resend} onPress={handleResend}>
               Or resend email
             </Text>
-            <Pressable style={styles.button}>
-              <Text style={styles.buttonText} onPress={handleConfirmation}>
-                Confirm
+            <TouchableHighlight style={styles.button} onPress={handleConfirmation}>
+              <Text style={styles.buttonText}>
+                {isLoading ? (<ActivityIndicator size="small" />) : ('Confirm')}
               </Text>
-            </Pressable>
+            </TouchableHighlight>
             <Button title="Go back" onPress={() => setShowModal(!showModal)} />
           </View>
         </Modal>
@@ -111,6 +109,7 @@ export default function Signup({ navigation }) {
           helperText={"Email"}
           validators={[VALIDATOR_EMAIL()]}
           errorText={"Please enter a valid email!"}
+          keyboardType="email-address"
         />
         <Input
           nativeID="password"
@@ -118,6 +117,7 @@ export default function Signup({ navigation }) {
           helperText={"Password (min. 8 char)"}
           validators={[VALIDATOR_REQUIRE(), VALIDATOR_MINLENGTH(8)]}
           errorText={"Please enter a password longer than 8 characters"}
+          secureTextEntry={true}
         />
         <Pressable
           style={

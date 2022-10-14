@@ -1,4 +1,9 @@
-import { StyleSheet, Text, View, Pressable } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableHighlight,
+} from "react-native";
 import LottieView from "lottie-react-native";
 
 export default function Welcome({ navigation }) {
@@ -14,14 +19,12 @@ export default function Welcome({ navigation }) {
       <Text style={styles.subText}>
         The client management tool made by agents, for agents
       </Text>
-      <Pressable style={styles.button}>
-        <Text
-          style={styles.buttonText}
-          onPress={() => navigation.navigate("Signup")}
-        >
-          Create an Account
-        </Text>
-      </Pressable>
+      <TouchableHighlight
+        style={styles.button}
+        onPress={() => navigation.navigate("Signup")}
+      >
+        <Text style={styles.buttonText}>Create an Account</Text>
+      </TouchableHighlight>
       <Text style={styles.login} onPress={() => navigation.navigate("Login")}>
         Existing User? Log In here
       </Text>

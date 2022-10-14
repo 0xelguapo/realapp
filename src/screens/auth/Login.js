@@ -18,8 +18,7 @@ import Input from "../../components/Input";
 import useForm from "../../hooks/form-hook";
 
 export default function Login({ navigation }) {
-  const { signin } = useContext(AuthContext);
-  const [isLoading, setIsLoading] = useState(false);
+  const { signin, isLoading } = useContext(AuthContext);
   const [formState, inputHandler] = useForm(
     {
       email: {
@@ -35,26 +34,14 @@ export default function Login({ navigation }) {
   );
 
   const handleSignin = async () => {
-    setIsLoading(true);
     const response = await signin(
       formState.inputs.email.value,
       formState.inputs.password.value
     );
     if (!response) {
       return;
-    } else {
-      console.log("res", response);
     }
-    setIsLoading(false);
   };
-
-  if (isLoading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" />
-      </View>
-    );
-  }
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -69,6 +56,7 @@ export default function Login({ navigation }) {
           helperText={"Email"}
           validators={[VALIDATOR_EMAIL()]}
           errorText={"Please enter a valid email!"}
+          keyboardType="email-address"
         />
         <Input
           nativeID="password"
@@ -76,6 +64,7 @@ export default function Login({ navigation }) {
           helperText={"Password (min. 8 char)"}
           validators={[VALIDATOR_REQUIRE(), VALIDATOR_MINLENGTH(8)]}
           errorText={"Please enter a password longer than 8 characters"}
+          secureTextEntry={true}
         />
         <Pressable
           style={
@@ -93,7 +82,7 @@ export default function Login({ navigation }) {
                 : { ...styles.buttonText, ...styles.buttonTextDisabled }
             }
           >
-            Continue
+            {!isLoading ? ('Continue') : (<ActivityIndicator size="small" />)}
           </Text>
         </Pressable>
       </View>

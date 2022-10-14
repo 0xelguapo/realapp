@@ -3,7 +3,7 @@
 
 # input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
 
-type Client @model @auth(rules: [{ allow: owner }, { allow: public, provider: apiKey, operations: [create, update] }]) {
+type Client @model @auth(rules: [{ allow: owner }, { allow: public, provider: apiKey, operations: [create] }]) {
   id: ID!
   firstName: String!
     @index(name: "byFirstName", queryField: "clientByFirstName")
@@ -26,7 +26,7 @@ type Client @model @auth(rules: [{ allow: owner }, { allow: public, provider: ap
   owner: String @auth(rules: [{ allow: owner, operations: [read, delete] }, { allow: public, provider: apiKey, operations: [create, update]}])
 }
 
-type Reminder @model @auth(rules: [{ allow: owner }]) {
+type Reminder @model @auth(rules: [{ allow: owner }, { allow: public, provider: apiKey, operations: [create] }]) {
   id: ID!
   date: String!
   recurring: Boolean @default(value: "false")
@@ -34,36 +34,36 @@ type Reminder @model @auth(rules: [{ allow: owner }]) {
   notificationId: String
   clientId: ID! @index(name: "byReminder")
   client: Client @belongsTo(fields: ["clientId"])
-  owner: String @auth(rules: [{ allow: owner, operations: [read, delete] }])
+  owner: String @auth(rules: [{ allow: owner, operations: [read, delete]}, { allow: public, provider: apiKey, operations: [create, update]}])
 }
 
-type ClientGroup @model @auth(rules: [{ allow: owner }]) {
+type ClientGroup @model @auth(rules: [{ allow: owner }, { allow: public, provider: apiKey, operations: [create] }]) {
   id: ID!
   title: String!
   clients: [Client] @manyToMany(relationName: "GroupsClients")
-  owner: String @auth(rules: [{ allow: owner, operations: [read, delete] }])
+  owner: String @auth(rules: [{ allow: owner, operations: [read, delete] }, { allow: public, provider: apiKey, operations: [create, update]}])
 }
 
-type ConnectionHistory @model @auth(rules: [{ allow: owner }]) {
+type ConnectionHistory @model @auth(rules: [{ allow: owner }, { allow: public, provider: apiKey, operations: [create] }]) {
   id: ID!
   title: String!
   date: String
   clientId: ID! @index(name: "byConnectionHistory", sortKeyFields: ["title"])
   client: Client @belongsTo(fields: ["clientId"])
-  owner: String @auth(rules: [{ allow: owner, operations: [read, delete] }])
+  owner: String @auth(rules: [{ allow: owner, operations: [read, delete]} , { allow: public, provider: apiKey, operations: [create, update] }])
 }
 
-type Property @model @auth(rules: [{ allow: owner }]) {
+type Property @model @auth(rules: [{ allow: owner }, { allow: public, provider: apiKey, operations: [create] }]) {
   id: ID!
   street: String!
   city: String
   state: String
   zip: Int
   client: Client @belongsTo
-  owner: String @auth(rules: [{ allow: owner, operations: [read, delete] }])
+  owner: String @auth(rules: [{ allow: owner, operations: [read, delete] }, { allow: public, provider: apiKey, operations: [create, update]}])
 }
 
-type Task @model @auth(rules: [{ allow: owner }]) {
+type Task @model @auth(rules: [{ allow: owner }, { allow: public, provider: apiKey, operations: [create] }]) {
   id: ID!
   clientId: ID @index(name: "byClient", sortKeyFields: ["title"])
   title: String!
@@ -72,14 +72,14 @@ type Task @model @auth(rules: [{ allow: owner }]) {
   date: String
   notificationId: String
   client: Client @belongsTo(fields: ["clientId"])
-  owner: String @auth(rules: [{ allow: owner, operations: [read, delete] }])
+  owner: String @auth(rules: [{ allow: owner, operations: [read, delete] }, { allow: public, provider: apiKey, operations: [create, update]}])
 }
 
-type Note @model @auth(rules: [{ allow: owner }]) {
+type Note @model @auth(rules: [{ allow: owner }, { allow: public, provider: apiKey, operations: [create] }]) {
   id: ID!
   title: String
   content: String
-  owner: String @auth(rules: [{ allow: owner, operations: [read, delete] }])
+  owner: String @auth(rules: [{ allow: owner, operations: [read, delete] }, { allow: public, provider: apiKey, operations: [create, update]}])
 }
 
 type Mutation {

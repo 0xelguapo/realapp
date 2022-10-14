@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "api": {
+      "realapp": [
+        "Mutation"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}
