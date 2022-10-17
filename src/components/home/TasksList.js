@@ -13,7 +13,7 @@ export default function TasksList() {
   }, [dispatch]);
 
   return (
-    <View>
+    <>
       {allTasks.map((task) => (
         <EachTask
           key={task.id}
@@ -22,6 +22,6 @@ export default function TasksList() {
           content={task.content}
         />
       ))}
-    </View>
+    </>
   );
 }

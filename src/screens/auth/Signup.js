@@ -10,7 +10,7 @@ import {
   Button,
   TextInput,
   ActivityIndicator,
-  TouchableHighlight
+  TouchableHighlight,
 } from "react-native";
 import {
   VALIDATOR_EMAIL,
@@ -22,7 +22,8 @@ import Input from "../../components/Input";
 import useForm from "../../hooks/form-hook";
 
 export default function Signup({ navigation }) {
-  const { signup, resend, confirmation, signin, isLoading } = useContext(AuthContext);
+  const { signup, resend, confirmation, signin, isLoading } =
+    useContext(AuthContext);
   const [showModal, setShowModal] = useState(false);
   const [confirmationText, setConfirmationText] = useState("");
   const [formState, inputHandler] = useForm(
@@ -95,9 +96,12 @@ export default function Signup({ navigation }) {
             <Text style={styles.resend} onPress={handleResend}>
               Or resend email
             </Text>
-            <TouchableHighlight style={styles.button} onPress={handleConfirmation}>
+            <TouchableHighlight
+              style={styles.button}
+              onPress={handleConfirmation}
+            >
               <Text style={styles.buttonText}>
-                {isLoading ? (<ActivityIndicator size="small" />) : ('Confirm')}
+                {isLoading ? <ActivityIndicator size="small" /> : "Confirm"}
               </Text>
             </TouchableHighlight>
             <Button title="Go back" onPress={() => setShowModal(!showModal)} />
@@ -135,7 +139,7 @@ export default function Signup({ navigation }) {
                 : { ...styles.buttonText, ...styles.buttonTextDisabled }
             }
           >
-            Continue
+            {isLoading ? <ActivityIndicator size="small" /> : "Continue"}
           </Text>
         </Pressable>
       </View>

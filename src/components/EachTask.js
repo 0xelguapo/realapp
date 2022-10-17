@@ -71,7 +71,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     paddingVertical: 10,
-    height: 50,
+    paddingRight: 25,
+    minHeight: 50,
     // borderBottomWidth: 0.5,
     // borderBottomColor: "#e6e6e6",
   },
@@ -79,6 +80,9 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     fontSize: 16,
     color: "#454545",
+  },
+  textContainer: {
+    flex: 1,
   },
   checkedTitle: {
     fontWeight: "500",

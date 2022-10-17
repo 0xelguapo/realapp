@@ -19,6 +19,9 @@ export default function EachClient({
 }) {
   const fullName = lastName ? (firstName + ' ' + lastName) : firstName
 
+  let companyTrue = company !== null && company.length > 0
+  console.log(companyTrue)
+
   //for the add task view
   if (taskMode) {
     return (
@@ -26,7 +29,7 @@ export default function EachClient({
         <TouchableHighlight onPress={onPress} underlayColor="#f1f1f1">
           <View style={styles.taskModeContainer}>
             <Text style={styles.name}>{fullName}</Text>
-            {company.length > 0 && (
+            {companyTrue && (
               <Text style={styles.company}>{company}</Text>
             )}
           </View>
@@ -40,7 +43,7 @@ export default function EachClient({
       <TouchableHighlight onPress={onPress} underlayColor="#f1f1f1">
         <View style={styles.container}>
           <Text style={styles.name}>{fullName}</Text>
-          {company.length > 0 && <Text style={styles.phone}>{company}</Text>}
+          {companyTrue && <Text style={styles.phone}>{company}</Text>}
           <View style={styles.goContainer}>
             <SimpleLineIcons name="options" size={24} color="#dddddf" />
           </View>

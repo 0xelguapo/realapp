@@ -19,6 +19,7 @@ function AuthProvider({ children }) {
     } finally {
       setAppIsReady(true);
     }
+    console.log(user)
   }, []);
 
   useEffect(() => {
@@ -27,10 +28,13 @@ function AuthProvider({ children }) {
 
   const signup = useCallback(async (username, password) => {
     let user;
+    setIsLoading(true)
     try {
       user = await Auth.signUp(username, password);
     } catch (err) {
       console.error(err);
+    } finally {
+      setIsLoading(false)
     }
     return user
   }, []);

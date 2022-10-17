@@ -134,7 +134,7 @@ export default function Clients({ navigation }) {
                       <Text style={styles.favoriteFirstLetter}>
                         {client.firstName[0].toUpperCase()}
                       </Text>
-                      <Text style={styles.favoriteName}>{client.firstname + ' ' + client.lastname}</Text>
+                      <Text style={styles.favoriteName}>{client.firstName + ' ' + client.lastName}</Text>
                     </Pressable>
                   );
                 })
@@ -260,6 +260,7 @@ const styles = StyleSheet.create({
   favoriteName: {
     fontSize: 10,
     fontWeight: "300",
+    textAlign: 'center'
   },
   list: {
     flex: 1,

@@ -24,6 +24,11 @@ export default function DetailsContact({ clientDetailsState }) {
       }
     }
   };
+  let hasFullAddress =
+    clientDetailsState.clientStreet !== null &&
+    clientDetailsState.clientCity !== null &&
+    clientDetailsState.clientState !== null &&
+    clientDetailsState.clientZip !== null;
 
   return (
     <View style={styles.container}>
@@ -73,6 +78,26 @@ export default function DetailsContact({ clientDetailsState }) {
           <Text style={styles.emptyPlaceholderText}>Add an email...</Text>
         )}
       </View>
+      <View style={styles.addressContainer}>
+        <BlockHeading title="CONTACT ADDRESS" />
+        {clientDetailsState.clientStreet.length > 0 && (
+          <Text style={{ ...styles.addressDetail, marginTop: 8 }}>
+            {clientDetailsState.clientStreet}
+          </Text>
+        )}
+        {clientDetailsState.clientCity.length > 0 && (
+          <Text style={styles.addressDetail}>
+            {clientDetailsState.clientCity}
+          </Text>
+        )}
+        {clientDetailsState.clientState.length > 0 && (
+          <Text style={styles.addressDetail}>
+            {clientDetailsState.clientState +
+              " " +
+              clientDetailsState?.clientZip}
+          </Text>
+        )}
+      </View>
     </View>
   );
 }
@@ -106,5 +131,13 @@ const styles = StyleSheet.create({
   emptyPlaceholderText: {
     marginTop: 5,
     color: "#ababab",
+  },
+  addressContainer: {
+    marginTop: 20,
+  },
+  addressDetail: {
+    marginTop: 2,
+    fontSize: 15,
+    color: "#6c6c6c",
   },
 });

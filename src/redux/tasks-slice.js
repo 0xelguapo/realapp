@@ -8,7 +8,7 @@ import { createTask, deleteTask } from "../graphql/mutations";
 import { listTasks } from "../graphql/queries";
 
 const tasksAdapter = createEntityAdapter({
-  sortComparer: (a, b) => a.date.localeCompare(b.date),
+  sortComparer: (a, b) => a?.date.localeCompare(b?.date),
 });
 
 const initialState = tasksAdapter.getInitialState({

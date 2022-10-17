@@ -15,12 +15,10 @@ import { selectAllTasks, fetchTasks } from "../../redux/tasks-slice";
 export default function Tasks({ navigation }) {
   const dispatch = useDispatch();
   const allTasks = useSelector(selectAllTasks);
-  const status = useSelector(state => state.tasks.status)
+  const status = useSelector((state) => state.tasks.status);
 
   useEffect(() => {
-    if (allTasks.length < 1) {
-      dispatch(fetchTasks());
-    }
+   dispatch(fetchTasks())
   }, [dispatch]);
 
   const renderTask = useCallback(
