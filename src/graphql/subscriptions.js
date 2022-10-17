@@ -35,10 +35,11 @@ export const onCreateClient = /* GraphQL */ `
           city
           state
           zip
+          note
+          clientId
           owner
           createdAt
           updatedAt
-          clientPropertiesId
         }
         nextToken
       }
@@ -122,10 +123,11 @@ export const onUpdateClient = /* GraphQL */ `
           city
           state
           zip
+          note
+          clientId
           owner
           createdAt
           updatedAt
-          clientPropertiesId
         }
         nextToken
       }
@@ -209,10 +211,11 @@ export const onDeleteClient = /* GraphQL */ `
           city
           state
           zip
+          note
+          clientId
           owner
           createdAt
           updatedAt
-          clientPropertiesId
         }
         nextToken
       }
@@ -253,6 +256,156 @@ export const onDeleteClient = /* GraphQL */ `
           owner
           createdAt
           updatedAt
+        }
+        nextToken
+      }
+      owner
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateProperty = /* GraphQL */ `
+  subscription OnCreateProperty($owner: String) {
+    onCreateProperty(owner: $owner) {
+      id
+      street
+      city
+      state
+      zip
+      note
+      group {
+        items {
+          id
+          propertyID
+          propertyGroupID
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      clientId
+      owner
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateProperty = /* GraphQL */ `
+  subscription OnUpdateProperty($owner: String) {
+    onUpdateProperty(owner: $owner) {
+      id
+      street
+      city
+      state
+      zip
+      note
+      group {
+        items {
+          id
+          propertyID
+          propertyGroupID
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      clientId
+      owner
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteProperty = /* GraphQL */ `
+  subscription OnDeleteProperty($owner: String) {
+    onDeleteProperty(owner: $owner) {
+      id
+      street
+      city
+      state
+      zip
+      note
+      group {
+        items {
+          id
+          propertyID
+          propertyGroupID
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      clientId
+      owner
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreatePropertyGroup = /* GraphQL */ `
+  subscription OnCreatePropertyGroup($owner: String) {
+    onCreatePropertyGroup(owner: $owner) {
+      id
+      title
+      description
+      properties {
+        items {
+          id
+          propertyID
+          propertyGroupID
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      owner
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdatePropertyGroup = /* GraphQL */ `
+  subscription OnUpdatePropertyGroup($owner: String) {
+    onUpdatePropertyGroup(owner: $owner) {
+      id
+      title
+      description
+      properties {
+        items {
+          id
+          propertyID
+          propertyGroupID
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      owner
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeletePropertyGroup = /* GraphQL */ `
+  subscription OnDeletePropertyGroup($owner: String) {
+    onDeletePropertyGroup(owner: $owner) {
+      id
+      title
+      description
+      properties {
+        items {
+          id
+          propertyID
+          propertyGroupID
+          createdAt
+          updatedAt
+          owner
         }
         nextToken
       }
@@ -604,147 +757,6 @@ export const onDeleteConnectionHistory = /* GraphQL */ `
     }
   }
 `;
-export const onCreateProperty = /* GraphQL */ `
-  subscription OnCreateProperty($owner: String) {
-    onCreateProperty(owner: $owner) {
-      id
-      street
-      city
-      state
-      zip
-      client {
-        id
-        firstName
-        lastName
-        company
-        phone
-        email
-        notes
-        favorite
-        clientStreet
-        clientCity
-        clientState
-        clientZip
-        connectionHistory {
-          nextToken
-        }
-        properties {
-          nextToken
-        }
-        tasks {
-          nextToken
-        }
-        group {
-          nextToken
-        }
-        reminder {
-          nextToken
-        }
-        owner
-        createdAt
-        updatedAt
-      }
-      owner
-      createdAt
-      updatedAt
-      clientPropertiesId
-    }
-  }
-`;
-export const onUpdateProperty = /* GraphQL */ `
-  subscription OnUpdateProperty($owner: String) {
-    onUpdateProperty(owner: $owner) {
-      id
-      street
-      city
-      state
-      zip
-      client {
-        id
-        firstName
-        lastName
-        company
-        phone
-        email
-        notes
-        favorite
-        clientStreet
-        clientCity
-        clientState
-        clientZip
-        connectionHistory {
-          nextToken
-        }
-        properties {
-          nextToken
-        }
-        tasks {
-          nextToken
-        }
-        group {
-          nextToken
-        }
-        reminder {
-          nextToken
-        }
-        owner
-        createdAt
-        updatedAt
-      }
-      owner
-      createdAt
-      updatedAt
-      clientPropertiesId
-    }
-  }
-`;
-export const onDeleteProperty = /* GraphQL */ `
-  subscription OnDeleteProperty($owner: String) {
-    onDeleteProperty(owner: $owner) {
-      id
-      street
-      city
-      state
-      zip
-      client {
-        id
-        firstName
-        lastName
-        company
-        phone
-        email
-        notes
-        favorite
-        clientStreet
-        clientCity
-        clientState
-        clientZip
-        connectionHistory {
-          nextToken
-        }
-        properties {
-          nextToken
-        }
-        tasks {
-          nextToken
-        }
-        group {
-          nextToken
-        }
-        reminder {
-          nextToken
-        }
-        owner
-        createdAt
-        updatedAt
-      }
-      owner
-      createdAt
-      updatedAt
-      clientPropertiesId
-    }
-  }
-`;
 export const onCreateTask = /* GraphQL */ `
   subscription OnCreateTask($owner: String) {
     onCreateTask(owner: $owner) {
@@ -1075,6 +1087,120 @@ export const onDeleteGroupsClients = /* GraphQL */ `
         id
         title
         clients {
+          nextToken
+        }
+        owner
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onCreateGroupsProperty = /* GraphQL */ `
+  subscription OnCreateGroupsProperty($owner: String) {
+    onCreateGroupsProperty(owner: $owner) {
+      id
+      propertyID
+      propertyGroupID
+      property {
+        id
+        street
+        city
+        state
+        zip
+        note
+        group {
+          nextToken
+        }
+        clientId
+        owner
+        createdAt
+        updatedAt
+      }
+      propertyGroup {
+        id
+        title
+        description
+        properties {
+          nextToken
+        }
+        owner
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onUpdateGroupsProperty = /* GraphQL */ `
+  subscription OnUpdateGroupsProperty($owner: String) {
+    onUpdateGroupsProperty(owner: $owner) {
+      id
+      propertyID
+      propertyGroupID
+      property {
+        id
+        street
+        city
+        state
+        zip
+        note
+        group {
+          nextToken
+        }
+        clientId
+        owner
+        createdAt
+        updatedAt
+      }
+      propertyGroup {
+        id
+        title
+        description
+        properties {
+          nextToken
+        }
+        owner
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onDeleteGroupsProperty = /* GraphQL */ `
+  subscription OnDeleteGroupsProperty($owner: String) {
+    onDeleteGroupsProperty(owner: $owner) {
+      id
+      propertyID
+      propertyGroupID
+      property {
+        id
+        street
+        city
+        state
+        zip
+        note
+        group {
+          nextToken
+        }
+        clientId
+        owner
+        createdAt
+        updatedAt
+      }
+      propertyGroup {
+        id
+        title
+        description
+        properties {
           nextToken
         }
         owner

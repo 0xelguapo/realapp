@@ -3,6 +3,7 @@ import clientsReducer from "./clients-slice";
 import groupsReducer from "./groups-slice";
 import remindersReducer from "./reminders-slice";
 import tasksReducer from "./tasks-slice";
+import propertiesReducer from "./properties-slice";
 
 const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ const store = configureStore({
     groups: groupsReducer,
     reminders: remindersReducer,
     tasks: tasksReducer,
+    properties: propertiesReducer,
   },
 });
 

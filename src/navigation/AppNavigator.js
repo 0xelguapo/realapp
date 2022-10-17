@@ -12,11 +12,13 @@ import {
   Ionicons,
   MaterialCommunityIcons,
   Feather,
+  FontAwesome
 } from "@expo/vector-icons";
 import HomeNavigator from "../screens/home";
 import ClientsNavigator from "../screens/clients";
 import TasksNavigator from "../screens/tasks";
 import MoreNavigator from "../screens/more";
+import PropertiesNavigator from "../screens/properties";
 
 const Tab = createBottomTabNavigator();
 
@@ -65,7 +67,7 @@ export default function AppNavigator() {
         <SuccessMessage />
         <Tab.Navigator screenOptions={{ tabBarStyle: styles }}>
           <Tab.Screen
-            name="Home"
+            name="Focus"
             component={HomeNavigator}
             options={optionsHandler}
           />
@@ -75,10 +77,15 @@ export default function AppNavigator() {
             options={optionsHandler}
           />
           <Tab.Screen
+            name="Properties"
+            component={PropertiesNavigator}
+            options={optionsHandler}
+          />
+          {/* <Tab.Screen
             name="Tasks"
             component={TasksNavigator}
             options={optionsHandler}
-          />
+          /> */}
           <Tab.Screen
             name="More"
             component={MoreNavigator}
@@ -122,7 +129,7 @@ const styles = {
 
 const optionsHandler = ({ route }) => {
   switch (route.name) {
-    case "Home":
+    case "Focus":
       return {
         tabBarLabel: ({ focused }) =>
           focused ? (
@@ -134,9 +141,9 @@ const optionsHandler = ({ route }) => {
           ),
         tabBarIcon: ({ focused }) =>
           focused ? (
-            <Feather name="home" size={25} color="#0064e5" />
+            <Feather name="clipboard" size={22} color="#0064e5" />
           ) : (
-            <Feather name="home" size={25} color="#727272" />
+            <Feather name="clipboard" size={22} color="#727272" />
           ),
         headerShown: false,
       };
@@ -152,38 +159,56 @@ const optionsHandler = ({ route }) => {
           ),
         tabBarIcon: ({ focused }) =>
           focused ? (
-            <Ionicons name="people" size={28} color="#0064e5" />
+            <Ionicons name="person-outline" size={25} color="#0064e5" />
           ) : (
-            <Ionicons name="people" size={28} color="#727272" />
+            <Ionicons name="person-outline" size={25} color="#727272" />
           ),
         headerShown: false,
       };
-    case "Tasks":
+    case "Properties":
       return {
         tabBarLabel: ({ focused }) =>
-          focused ? (
-            <Text style={{ fontSize: 11, color: "#0064e5", fontWeight: "600" }}>
-              {route.name}
-            </Text>
-          ) : (
-            <Text style={{ fontSize: 11, color: "#727272" }}>{route.name}</Text>
-          ),
-        tabBarIcon: ({ focused }) =>
-          focused ? (
-            <MaterialCommunityIcons
-              name="clipboard-list-outline"
-              size={28}
-              color="#0064e5"
-            />
-          ) : (
-            <MaterialCommunityIcons
-              name="clipboard-list-outline"
-              size={28}
-              color="#727272"
-            />
-          ),
-        headerShown: false,
-      };
+        focused ? (
+          <Text style={{ fontSize: 11, color: "#0064e5", fontWeight: "600" }}>
+            {route.name}
+          </Text>
+        ) : (
+          <Text style={{ fontSize: 11, color: "#727272" }}>{route.name}</Text>
+        ),
+      tabBarIcon: ({ focused }) =>
+        focused ? (
+          <FontAwesome name="building-o" size={21} color="#0064e5" />
+        ) : (
+          <FontAwesome name="building-o" size={21} color="#727272" />
+        ),
+      headerShown: false,
+      }
+    // case "Tasks":
+    //   return {
+    //     tabBarLabel: ({ focused }) =>
+    //       focused ? (
+    //         <Text style={{ fontSize: 11, color: "#0064e5", fontWeight: "600" }}>
+    //           {route.name}
+    //         </Text>
+    //       ) : (
+    //         <Text style={{ fontSize: 11, color: "#727272" }}>{route.name}</Text>
+    //       ),
+    //     tabBarIcon: ({ focused }) =>
+    //       focused ? (
+    //         <MaterialCommunityIcons
+    //           name="clipboard-list-outline"
+    //           size={28}
+    //           color="#0064e5"
+    //         />
+    //       ) : (
+    //         <MaterialCommunityIcons
+    //           name="clipboard-list-outline"
+    //           size={28}
+    //           color="#727272"
+    //         />
+    //       ),
+    //     headerShown: false,
+    //   };
     case "More":
       return {
         tabBarLabel: ({ focused }) =>
@@ -196,9 +221,9 @@ const optionsHandler = ({ route }) => {
           ),
         tabBarIcon: ({ focused }) =>
           focused ? (
-            <AntDesign name="appstore-o" size={28} color="#0064e5" />
+            <AntDesign name="appstore-o" size={22} color="#0064e5" />
           ) : (
-            <AntDesign name="appstore-o" size={28} color="#727272" />
+            <AntDesign name="appstore-o" size={22} color="#727272" />
           ),
         headerShown: false,
       };

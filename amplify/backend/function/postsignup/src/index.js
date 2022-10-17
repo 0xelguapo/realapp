@@ -17,6 +17,14 @@ const createClientQuery = /* GraphQL */ `
   }
 `;
 
+const createConnectionHistoryQuery = /* GraphQL */ `
+  mutation createConnectionHistory($input: CreateConnectionHistoryInput!) {
+    createConnectionHistory(input: $input) {
+      id
+    }
+  }
+`;
+
 const createReminderQuery = /* GraphQL */ `
   mutation createReminder($input: CreateReminderInput!) {
     createReminder(input: $input) {
@@ -26,13 +34,20 @@ const createReminderQuery = /* GraphQL */ `
 `;
 
 const createTaskQuery = /* GraphQL */ `
-  mutation createTask($input: createTaskInput!) {
+  mutation createTask($input: CreateTaskInput!) {
     createTask(input: $input) {
       id
     }
   }
 `;
 
+const createNoteQuery = /* GraphQL */ `
+  mutation createNote($input: CreateNoteInput!) {
+    createNote(input: $input) {
+      id
+    }
+  }
+`;
 const GRAPHQL_APIKEY = process.env.API_REALAPP_GRAPHQLAPIKEYOUTPUT;
 const GRAPHQL_ENDPOINT = process.env.API_REALAPP_GRAPHQLAPIENDPOINTOUTPUT;
 
@@ -45,11 +60,11 @@ export const handler = async (event, context, callback) => {
   /** @type {import('node-fetch').RequestInit} */
 
   //---- create client ----//
-  // let userId = event.request.userAttributes.sub;
-  let userId = "79c4f9f2-9848-4ca3-b2e4-884484ae5c97"
+  let userId = event.request.userAttributes.sub;
+  // let userId = "2612aa2f-e76d-4c3d-a077-2da27797313b"
 
-  const createClientVariables = { input: { firstName: "Sample", lastName: "Contact", favorite: true, company: "CoAgent Team", phone: "3105558592, 2125559912", email: "eric@coagent.co,emailMeAnytime@youremail.com", notes: "You can import your existing clients from an excel sheet or .csv on our website, https://coagent.co/", clientStreet: "5422 Kings Landing Blvd", clientState: "CA", clientCity: "Thrones", clientZip: "88228", owner: userId } };
-  const createClientVariablesTwo = { input: { firstName: "First", lastName: "Contact", favorite: true, company: "CoAgent Team", phone: "1215552151, 4245559421", email: "eric@coagent.co,emailMeAnytime@youremail.com", notes: "Welcome to your first contact! Browse around this screen and get a feel of things. Create reminders, log your call/connection histories, and set up tasks.", clientStreet: "54221 Jon Snow Avenue", clientState: "CA", clientCity: "Thrones", clientZip: "512142", owner: userId } };
+  const createClientVariables = { input: { firstName: "Jon Snow", lastName: "Sample", favorite: true, company: "CoAgent Team", phone: "3105558592,2125559912", email: "eric@coagent.co,emailMeAnytime@youremail.com", notes: "You can import your existing clients from an excel sheet or .csv on our website, https://coagent.co/", clientStreet: "5422 Nights Watch Blvd", clientState: "CA", clientCity: "Thrones", clientZip: "88228", owner: userId } };
+  const createClientVariablesTwo = { input: { firstName: "First", lastName: "Contact", favorite: true, company: "CoAgent Team", phone: "1215552151,4245559421", email: "eric@coagent.co,emailMeAnytime@youremail.com", notes: "Welcome to your first contact! Browse around this screen and get a feel of things. Create reminders, log your call/connection histories, and set up tasks.", clientStreet: "54221 Jon Snow Avenue", clientState: "CA", clientCity: "Thrones", clientZip: "512142", owner: userId } };
 
   const createClientOptions = {
     method: "POST",
@@ -59,11 +74,6 @@ export const handler = async (event, context, callback) => {
     body: JSON.stringify({ query: createClientQuery, variables: createClientVariables }),
   };
   
-  const createSecondClientOptions = {
-    ...createClientOptions,
-    body: JSON.stringify({ query: createClientQuery, variables: { ...createClientVariablesTwo }})
-  }
-
   const createClientRequest = new Request(GRAPHQL_ENDPOINT, createClientOptions);
 
   let createClientStatusCode = 200;
@@ -85,9 +95,10 @@ export const handler = async (event, context, callback) => {
     };
     console.log(error);
   }
-
-  //  ---- create reminder for above client ---- //
+  
   let firstCreatedClientId = createClientBody.data.createClient.id;
+  
+  //  ---- create reminder for first client ---- //
   let date = new Date();
   date.setDate(date.getDate() + 1);
   date.setHours(8);
@@ -110,10 +121,28 @@ export const handler = async (event, context, callback) => {
   } catch (error) {
     console.log(error)
   }
-
-  // ----create a task---- //
   
-  const createTaskVariables = { input: {title: "Set Reminders to contact client", content: "Reminders send you notifications when you need to follow up or reach out to a client", owner: userId }}
+  // ---- create connection history for first client ---- //
+  const createConnectionHistoryVariables = {input: {title: 'Reached Cell Phone', date: date.toLocaleString(), clientId: firstCreatedClientId , owner: userId}}
+  const createConnectionHistoryOptions = {
+    method: "POST",
+    headers: {
+      'x-api-key': GRAPHQL_APIKEY
+    },
+    body: JSON.stringify({ query: createConnectionHistoryQuery, variables: createConnectionHistoryVariables }),
+  }
+  
+  const createConnectionHistoryRequest = new Request(GRAPHQL_ENDPOINT, createConnectionHistoryOptions);
+  try {
+    await fetch(createConnectionHistoryRequest);
+  } catch (error) {
+    console.log(error)
+  }
+  
+
+  // ----create task---- //
+  
+  const createTaskVariables = { input: {title: "You can set 'Reminders'", content: "Reminders notify you to reach out to a client. You can create a reminder via your clients!", date: date, clientId: firstCreatedClientId, owner: userId }}
 
   const createTaskOptions = {
     method: "POST",
@@ -132,35 +161,24 @@ export const handler = async (event, context, callback) => {
     console.log(error)
   }
 
-  // --- create second task ---- //
-
-//   const createSecondTaskVariables = {input: {title: "Tasks are tracked here", content: "Click the + button to start marking tasks!", owner: userId}}
-
-//   const createSecondTaskOptions = {
-//     ...createTaskOptions,
-//     body: JSON.stringify({ query: createTaskQuery, variables: createSecondTaskVariables })
-//   }
-
-//   const createSecondTaskRequest = new Request(GRAPHQL_ENDPOINT, createSecondTaskOptions)
-
-//   try {
-//     await fetch(createSecondTaskRequest)
-//   } catch (error) {
-//     console.log(error)
-//   }
-
-
   // ----create second client---- //
+  const createSecondClientOptions = {
+    ...createClientOptions,
+    body: JSON.stringify({ query: createClientQuery, variables: { ...createClientVariablesTwo }})
+  }
+
   
   const createSecondClientRequest = new Request(GRAPHQL_ENDPOINT, createSecondClientOptions)
 
   let createSecondClientResponse;
   let createSecondClientBody;
   let createSecondClientStatusCode = 200;
+  let secondCreatedClientId;
   
   try {
     createSecondClientResponse = await fetch(createSecondClientRequest);
     createSecondClientBody = await createSecondClientResponse.json()
+    secondCreatedClientId = createSecondClientBody.data.createClient.id
   }
   catch (error) {
     createSecondClientStatusCode = 400;
@@ -174,7 +192,63 @@ export const handler = async (event, context, callback) => {
     console.log(error);
   }
   
+  // ---- create second connection history for second client ---- //
   
+  const createSecondConnectionHistoryVariables = {input: {title: 'Left Voicemail (LVM)', date: date.toLocaleString(), clientId: secondCreatedClientId , owner: userId}}
+  const createSecondConnectionHistoryOptions = {
+    method: "POST",
+    headers: {
+      'x-api-key': GRAPHQL_APIKEY
+    },
+    body: JSON.stringify({ query: createConnectionHistoryQuery, variables: createSecondConnectionHistoryVariables }),
+  }
+  
+  const createSecondConnectionHistoryRequest = new Request(GRAPHQL_ENDPOINT, createSecondConnectionHistoryOptions);
+  try {
+    await fetch(createSecondConnectionHistoryRequest);
+  } catch (error) {
+    console.log(error)
+  }
+  
+  // --- create second task ---- //
+
+  const createSecondTaskVariables = {input: {title: "Upload your existing clients", content: "You can upload your existing clients via excel sheet or .csv. Visit our website to start! https://coagent.co", date: date, clientId: secondCreatedClientId, owner: userId}}
+
+  const createSecondTaskOptions = {
+    ...createTaskOptions,
+    body: JSON.stringify({ query: createTaskQuery, variables: createSecondTaskVariables })
+  }
+
+  const createSecondTaskRequest = new Request(GRAPHQL_ENDPOINT, createSecondTaskOptions)
+
+  try {
+    await fetch(createSecondTaskRequest)
+  } catch (error) {
+    console.log(error)
+  }
+
+
+
+  
+// ---- create note ---- //
+
+  const createNoteVariables = { input: {title: "Add a quick note here", content: "View all your groups and reminders above!", owner: userId }}
+
+  const createNoteOptions = {
+    method: "POST",
+    headers: {
+      'x-api-key': GRAPHQL_APIKEY
+    },
+    body: JSON.stringify({ query: createNoteQuery, variables: createNoteVariables }),
+  };
+
+  const createNoteRequest = new Request(GRAPHQL_ENDPOINT, createNoteOptions)
+  
+  try {
+    await fetch(createNoteRequest)
+  } catch (error) {
+    console.log(error)
+  }
   
   callback(null, event)
 

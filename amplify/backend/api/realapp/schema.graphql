@@ -19,10 +19,30 @@ type Client @model @auth(rules: [{ allow: owner }, { allow: public, provider: ap
   clientZip: String
   connectionHistory: [ConnectionHistory]
     @hasMany(indexName: "byConnectionHistory", fields: ["id"])
-  properties: [Property] @hasMany(indexName: "")
+  properties: [Property] @hasMany(indexName: "byProperty", fields: ["id"])
   tasks: [Task] @hasMany(indexName: "byClient", fields: ["id"])
   group: [ClientGroup] @manyToMany(relationName: "GroupsClients")
   reminder: [Reminder] @hasMany(indexName: "byReminder", fields: ["id"])
+  owner: String @auth(rules: [{ allow: owner, operations: [read, delete] }, { allow: public, provider: apiKey, operations: [create, update]}])
+}
+
+type Property @model @auth(rules: [{ allow: owner }, { allow: public, provider: apiKey, operations: [create] }]) {
+  id: ID!
+  street: String!
+  city: String
+  state: String
+  zip: Int
+  note: String
+  group: [PropertyGroup] @manyToMany(relationName: "GroupsProperty")
+  clientId: ID @index(name: "byProperty")
+  owner: String @auth(rules: [{ allow: owner, operations: [read, delete] }, { allow: public, provider: apiKey, operations: [create, update]}])
+}
+
+type PropertyGroup @model @auth(rules: [{ allow: owner }, { allow: public, provider: apiKey, operations: [create] }]) {
+  id: ID!
+  title: String!
+  description: String
+  properties: [Property] @manyToMany(relationName: "GroupsProperty")
   owner: String @auth(rules: [{ allow: owner, operations: [read, delete] }, { allow: public, provider: apiKey, operations: [create, update]}])
 }
 
@@ -50,16 +70,6 @@ type ConnectionHistory @model @auth(rules: [{ allow: owner }, { allow: public, p
   date: String
   clientId: ID! @index(name: "byConnectionHistory", sortKeyFields: ["title"])
   client: Client @belongsTo(fields: ["clientId"])
-  owner: String @auth(rules: [{ allow: owner, operations: [read, delete] }, { allow: public, provider: apiKey, operations: [create, update]}])
-}
-
-type Property @model @auth(rules: [{ allow: owner }, { allow: public, provider: apiKey, operations: [create] }]) {
-  id: ID!
-  street: String!
-  city: String
-  state: String
-  zip: Int
-  client: Client @belongsTo
   owner: String @auth(rules: [{ allow: owner, operations: [read, delete] }, { allow: public, provider: apiKey, operations: [create, update]}])
 }
 

@@ -20,7 +20,6 @@ export default function EachClient({
   const fullName = lastName ? (firstName + ' ' + lastName) : firstName
 
   let companyTrue = company !== null && company.length > 0
-  console.log(companyTrue)
 
   //for the add task view
   if (taskMode) {

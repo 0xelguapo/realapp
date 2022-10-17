@@ -35,10 +35,11 @@ export const getClient = /* GraphQL */ `
           city
           state
           zip
+          note
+          clientId
           owner
           createdAt
           updatedAt
-          clientPropertiesId
         }
         nextToken
       }
@@ -121,6 +122,104 @@ export const listClients = /* GraphQL */ `
           nextToken
         }
         reminder {
+          nextToken
+        }
+        owner
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getProperty = /* GraphQL */ `
+  query GetProperty($id: ID!) {
+    getProperty(id: $id) {
+      id
+      street
+      city
+      state
+      zip
+      note
+      group {
+        items {
+          id
+          propertyID
+          propertyGroupID
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      clientId
+      owner
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listProperties = /* GraphQL */ `
+  query ListProperties(
+    $filter: ModelPropertyFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listProperties(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        street
+        city
+        state
+        zip
+        note
+        group {
+          nextToken
+        }
+        clientId
+        owner
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getPropertyGroup = /* GraphQL */ `
+  query GetPropertyGroup($id: ID!) {
+    getPropertyGroup(id: $id) {
+      id
+      title
+      description
+      properties {
+        items {
+          id
+          propertyID
+          propertyGroupID
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      owner
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listPropertyGroups = /* GraphQL */ `
+  query ListPropertyGroups(
+    $filter: ModelPropertyGroupFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listPropertyGroups(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        title
+        description
+        properties {
           nextToken
         }
         owner
@@ -346,92 +445,6 @@ export const listConnectionHistories = /* GraphQL */ `
     }
   }
 `;
-export const getProperty = /* GraphQL */ `
-  query GetProperty($id: ID!) {
-    getProperty(id: $id) {
-      id
-      street
-      city
-      state
-      zip
-      client {
-        id
-        firstName
-        lastName
-        company
-        phone
-        email
-        notes
-        favorite
-        clientStreet
-        clientCity
-        clientState
-        clientZip
-        connectionHistory {
-          nextToken
-        }
-        properties {
-          nextToken
-        }
-        tasks {
-          nextToken
-        }
-        group {
-          nextToken
-        }
-        reminder {
-          nextToken
-        }
-        owner
-        createdAt
-        updatedAt
-      }
-      owner
-      createdAt
-      updatedAt
-      clientPropertiesId
-    }
-  }
-`;
-export const listProperties = /* GraphQL */ `
-  query ListProperties(
-    $filter: ModelPropertyFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listProperties(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        street
-        city
-        state
-        zip
-        client {
-          id
-          firstName
-          lastName
-          company
-          phone
-          email
-          notes
-          favorite
-          clientStreet
-          clientCity
-          clientState
-          clientZip
-          owner
-          createdAt
-          updatedAt
-        }
-        owner
-        createdAt
-        updatedAt
-        clientPropertiesId
-      }
-      nextToken
-    }
-  }
-`;
 export const getTask = /* GraphQL */ `
   query GetTask($id: ID!) {
     getTask(id: $id) {
@@ -636,6 +649,87 @@ export const listGroupsClients = /* GraphQL */ `
         clientGroup {
           id
           title
+          owner
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+        owner
+      }
+      nextToken
+    }
+  }
+`;
+export const getGroupsProperty = /* GraphQL */ `
+  query GetGroupsProperty($id: ID!) {
+    getGroupsProperty(id: $id) {
+      id
+      propertyID
+      propertyGroupID
+      property {
+        id
+        street
+        city
+        state
+        zip
+        note
+        group {
+          nextToken
+        }
+        clientId
+        owner
+        createdAt
+        updatedAt
+      }
+      propertyGroup {
+        id
+        title
+        description
+        properties {
+          nextToken
+        }
+        owner
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const listGroupsProperties = /* GraphQL */ `
+  query ListGroupsProperties(
+    $filter: ModelGroupsPropertyFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listGroupsProperties(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        propertyID
+        propertyGroupID
+        property {
+          id
+          street
+          city
+          state
+          zip
+          note
+          clientId
+          owner
+          createdAt
+          updatedAt
+        }
+        propertyGroup {
+          id
+          title
+          description
           owner
           createdAt
           updatedAt

@@ -43,10 +43,11 @@ export const deleteClient = /* GraphQL */ `
           city
           state
           zip
+          note
+          clientId
           owner
           createdAt
           updatedAt
-          clientPropertiesId
         }
         nextToken
       }
@@ -87,6 +88,741 @@ export const deleteClient = /* GraphQL */ `
           owner
           createdAt
           updatedAt
+        }
+        nextToken
+      }
+      owner
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteProperty = /* GraphQL */ `
+  mutation DeleteProperty(
+    $input: DeletePropertyInput!
+    $condition: ModelPropertyConditionInput
+  ) {
+    deleteProperty(input: $input, condition: $condition) {
+      id
+      street
+      city
+      state
+      zip
+      note
+      group {
+        items {
+          id
+          propertyID
+          propertyGroupID
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      clientId
+      owner
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deletePropertyGroup = /* GraphQL */ `
+  mutation DeletePropertyGroup(
+    $input: DeletePropertyGroupInput!
+    $condition: ModelPropertyGroupConditionInput
+  ) {
+    deletePropertyGroup(input: $input, condition: $condition) {
+      id
+      title
+      description
+      properties {
+        items {
+          id
+          propertyID
+          propertyGroupID
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      owner
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteReminder = /* GraphQL */ `
+  mutation DeleteReminder(
+    $input: DeleteReminderInput!
+    $condition: ModelReminderConditionInput
+  ) {
+    deleteReminder(input: $input, condition: $condition) {
+      id
+      date
+      recurring
+      recurDate
+      notificationId
+      clientId
+      client {
+        id
+        firstName
+        lastName
+        company
+        phone
+        email
+        notes
+        favorite
+        clientStreet
+        clientCity
+        clientState
+        clientZip
+        connectionHistory {
+          nextToken
+        }
+        properties {
+          nextToken
+        }
+        tasks {
+          nextToken
+        }
+        group {
+          nextToken
+        }
+        reminder {
+          nextToken
+        }
+        owner
+        createdAt
+        updatedAt
+      }
+      owner
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteClientGroup = /* GraphQL */ `
+  mutation DeleteClientGroup(
+    $input: DeleteClientGroupInput!
+    $condition: ModelClientGroupConditionInput
+  ) {
+    deleteClientGroup(input: $input, condition: $condition) {
+      id
+      title
+      clients {
+        items {
+          id
+          clientID
+          clientGroupID
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      owner
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteConnectionHistory = /* GraphQL */ `
+  mutation DeleteConnectionHistory(
+    $input: DeleteConnectionHistoryInput!
+    $condition: ModelConnectionHistoryConditionInput
+  ) {
+    deleteConnectionHistory(input: $input, condition: $condition) {
+      id
+      title
+      date
+      clientId
+      client {
+        id
+        firstName
+        lastName
+        company
+        phone
+        email
+        notes
+        favorite
+        clientStreet
+        clientCity
+        clientState
+        clientZip
+        connectionHistory {
+          nextToken
+        }
+        properties {
+          nextToken
+        }
+        tasks {
+          nextToken
+        }
+        group {
+          nextToken
+        }
+        reminder {
+          nextToken
+        }
+        owner
+        createdAt
+        updatedAt
+      }
+      owner
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteTask = /* GraphQL */ `
+  mutation DeleteTask(
+    $input: DeleteTaskInput!
+    $condition: ModelTaskConditionInput
+  ) {
+    deleteTask(input: $input, condition: $condition) {
+      id
+      clientId
+      title
+      content
+      completed
+      date
+      notificationId
+      client {
+        id
+        firstName
+        lastName
+        company
+        phone
+        email
+        notes
+        favorite
+        clientStreet
+        clientCity
+        clientState
+        clientZip
+        connectionHistory {
+          nextToken
+        }
+        properties {
+          nextToken
+        }
+        tasks {
+          nextToken
+        }
+        group {
+          nextToken
+        }
+        reminder {
+          nextToken
+        }
+        owner
+        createdAt
+        updatedAt
+      }
+      owner
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteNote = /* GraphQL */ `
+  mutation DeleteNote(
+    $input: DeleteNoteInput!
+    $condition: ModelNoteConditionInput
+  ) {
+    deleteNote(input: $input, condition: $condition) {
+      id
+      title
+      content
+      owner
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateGroupsClients = /* GraphQL */ `
+  mutation UpdateGroupsClients(
+    $input: UpdateGroupsClientsInput!
+    $condition: ModelGroupsClientsConditionInput
+  ) {
+    updateGroupsClients(input: $input, condition: $condition) {
+      id
+      clientID
+      clientGroupID
+      client {
+        id
+        firstName
+        lastName
+        company
+        phone
+        email
+        notes
+        favorite
+        clientStreet
+        clientCity
+        clientState
+        clientZip
+        connectionHistory {
+          nextToken
+        }
+        properties {
+          nextToken
+        }
+        tasks {
+          nextToken
+        }
+        group {
+          nextToken
+        }
+        reminder {
+          nextToken
+        }
+        owner
+        createdAt
+        updatedAt
+      }
+      clientGroup {
+        id
+        title
+        clients {
+          nextToken
+        }
+        owner
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const deleteGroupsClients = /* GraphQL */ `
+  mutation DeleteGroupsClients(
+    $input: DeleteGroupsClientsInput!
+    $condition: ModelGroupsClientsConditionInput
+  ) {
+    deleteGroupsClients(input: $input, condition: $condition) {
+      id
+      clientID
+      clientGroupID
+      client {
+        id
+        firstName
+        lastName
+        company
+        phone
+        email
+        notes
+        favorite
+        clientStreet
+        clientCity
+        clientState
+        clientZip
+        connectionHistory {
+          nextToken
+        }
+        properties {
+          nextToken
+        }
+        tasks {
+          nextToken
+        }
+        group {
+          nextToken
+        }
+        reminder {
+          nextToken
+        }
+        owner
+        createdAt
+        updatedAt
+      }
+      clientGroup {
+        id
+        title
+        clients {
+          nextToken
+        }
+        owner
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const updateGroupsProperty = /* GraphQL */ `
+  mutation UpdateGroupsProperty(
+    $input: UpdateGroupsPropertyInput!
+    $condition: ModelGroupsPropertyConditionInput
+  ) {
+    updateGroupsProperty(input: $input, condition: $condition) {
+      id
+      propertyID
+      propertyGroupID
+      property {
+        id
+        street
+        city
+        state
+        zip
+        note
+        group {
+          nextToken
+        }
+        clientId
+        owner
+        createdAt
+        updatedAt
+      }
+      propertyGroup {
+        id
+        title
+        description
+        properties {
+          nextToken
+        }
+        owner
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const deleteGroupsProperty = /* GraphQL */ `
+  mutation DeleteGroupsProperty(
+    $input: DeleteGroupsPropertyInput!
+    $condition: ModelGroupsPropertyConditionInput
+  ) {
+    deleteGroupsProperty(input: $input, condition: $condition) {
+      id
+      propertyID
+      propertyGroupID
+      property {
+        id
+        street
+        city
+        state
+        zip
+        note
+        group {
+          nextToken
+        }
+        clientId
+        owner
+        createdAt
+        updatedAt
+      }
+      propertyGroup {
+        id
+        title
+        description
+        properties {
+          nextToken
+        }
+        owner
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const createClient = /* GraphQL */ `
+  mutation CreateClient(
+    $input: CreateClientInput!
+    $condition: ModelClientConditionInput
+  ) {
+    createClient(input: $input, condition: $condition) {
+      id
+      firstName
+      lastName
+      company
+      phone
+      email
+      notes
+      favorite
+      clientStreet
+      clientCity
+      clientState
+      clientZip
+      connectionHistory {
+        items {
+          id
+          title
+          date
+          clientId
+          owner
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      properties {
+        items {
+          id
+          street
+          city
+          state
+          zip
+          note
+          clientId
+          owner
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      tasks {
+        items {
+          id
+          clientId
+          title
+          content
+          completed
+          date
+          notificationId
+          owner
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      group {
+        items {
+          id
+          clientID
+          clientGroupID
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      reminder {
+        items {
+          id
+          date
+          recurring
+          recurDate
+          notificationId
+          clientId
+          owner
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      owner
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateClient = /* GraphQL */ `
+  mutation UpdateClient(
+    $input: UpdateClientInput!
+    $condition: ModelClientConditionInput
+  ) {
+    updateClient(input: $input, condition: $condition) {
+      id
+      firstName
+      lastName
+      company
+      phone
+      email
+      notes
+      favorite
+      clientStreet
+      clientCity
+      clientState
+      clientZip
+      connectionHistory {
+        items {
+          id
+          title
+          date
+          clientId
+          owner
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      properties {
+        items {
+          id
+          street
+          city
+          state
+          zip
+          note
+          clientId
+          owner
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      tasks {
+        items {
+          id
+          clientId
+          title
+          content
+          completed
+          date
+          notificationId
+          owner
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      group {
+        items {
+          id
+          clientID
+          clientGroupID
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      reminder {
+        items {
+          id
+          date
+          recurring
+          recurDate
+          notificationId
+          clientId
+          owner
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      owner
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createProperty = /* GraphQL */ `
+  mutation CreateProperty(
+    $input: CreatePropertyInput!
+    $condition: ModelPropertyConditionInput
+  ) {
+    createProperty(input: $input, condition: $condition) {
+      id
+      street
+      city
+      state
+      zip
+      note
+      group {
+        items {
+          id
+          propertyID
+          propertyGroupID
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      clientId
+      owner
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateProperty = /* GraphQL */ `
+  mutation UpdateProperty(
+    $input: UpdatePropertyInput!
+    $condition: ModelPropertyConditionInput
+  ) {
+    updateProperty(input: $input, condition: $condition) {
+      id
+      street
+      city
+      state
+      zip
+      note
+      group {
+        items {
+          id
+          propertyID
+          propertyGroupID
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      clientId
+      owner
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createPropertyGroup = /* GraphQL */ `
+  mutation CreatePropertyGroup(
+    $input: CreatePropertyGroupInput!
+    $condition: ModelPropertyGroupConditionInput
+  ) {
+    createPropertyGroup(input: $input, condition: $condition) {
+      id
+      title
+      description
+      properties {
+        items {
+          id
+          propertyID
+          propertyGroupID
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      owner
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updatePropertyGroup = /* GraphQL */ `
+  mutation UpdatePropertyGroup(
+    $input: UpdatePropertyGroupInput!
+    $condition: ModelPropertyGroupConditionInput
+  ) {
+    updatePropertyGroup(input: $input, condition: $condition) {
+      id
+      title
+      description
+      properties {
+        items {
+          id
+          propertyID
+          propertyGroupID
+          createdAt
+          updatedAt
+          owner
         }
         nextToken
       }
@@ -196,56 +932,6 @@ export const updateReminder = /* GraphQL */ `
     }
   }
 `;
-export const deleteReminder = /* GraphQL */ `
-  mutation DeleteReminder(
-    $input: DeleteReminderInput!
-    $condition: ModelReminderConditionInput
-  ) {
-    deleteReminder(input: $input, condition: $condition) {
-      id
-      date
-      recurring
-      recurDate
-      notificationId
-      clientId
-      client {
-        id
-        firstName
-        lastName
-        company
-        phone
-        email
-        notes
-        favorite
-        clientStreet
-        clientCity
-        clientState
-        clientZip
-        connectionHistory {
-          nextToken
-        }
-        properties {
-          nextToken
-        }
-        tasks {
-          nextToken
-        }
-        group {
-          nextToken
-        }
-        reminder {
-          nextToken
-        }
-        owner
-        createdAt
-        updatedAt
-      }
-      owner
-      createdAt
-      updatedAt
-    }
-  }
-`;
 export const createClientGroup = /* GraphQL */ `
   mutation CreateClientGroup(
     $input: CreateClientGroupInput!
@@ -277,31 +963,6 @@ export const updateClientGroup = /* GraphQL */ `
     $condition: ModelClientGroupConditionInput
   ) {
     updateClientGroup(input: $input, condition: $condition) {
-      id
-      title
-      clients {
-        items {
-          id
-          clientID
-          clientGroupID
-          createdAt
-          updatedAt
-          owner
-        }
-        nextToken
-      }
-      owner
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const deleteClientGroup = /* GraphQL */ `
-  mutation DeleteClientGroup(
-    $input: DeleteClientGroupInput!
-    $condition: ModelClientGroupConditionInput
-  ) {
-    deleteClientGroup(input: $input, condition: $condition) {
       id
       title
       clients {
@@ -417,204 +1078,6 @@ export const updateConnectionHistory = /* GraphQL */ `
     }
   }
 `;
-export const deleteConnectionHistory = /* GraphQL */ `
-  mutation DeleteConnectionHistory(
-    $input: DeleteConnectionHistoryInput!
-    $condition: ModelConnectionHistoryConditionInput
-  ) {
-    deleteConnectionHistory(input: $input, condition: $condition) {
-      id
-      title
-      date
-      clientId
-      client {
-        id
-        firstName
-        lastName
-        company
-        phone
-        email
-        notes
-        favorite
-        clientStreet
-        clientCity
-        clientState
-        clientZip
-        connectionHistory {
-          nextToken
-        }
-        properties {
-          nextToken
-        }
-        tasks {
-          nextToken
-        }
-        group {
-          nextToken
-        }
-        reminder {
-          nextToken
-        }
-        owner
-        createdAt
-        updatedAt
-      }
-      owner
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const createProperty = /* GraphQL */ `
-  mutation CreateProperty(
-    $input: CreatePropertyInput!
-    $condition: ModelPropertyConditionInput
-  ) {
-    createProperty(input: $input, condition: $condition) {
-      id
-      street
-      city
-      state
-      zip
-      client {
-        id
-        firstName
-        lastName
-        company
-        phone
-        email
-        notes
-        favorite
-        clientStreet
-        clientCity
-        clientState
-        clientZip
-        connectionHistory {
-          nextToken
-        }
-        properties {
-          nextToken
-        }
-        tasks {
-          nextToken
-        }
-        group {
-          nextToken
-        }
-        reminder {
-          nextToken
-        }
-        owner
-        createdAt
-        updatedAt
-      }
-      owner
-      createdAt
-      updatedAt
-      clientPropertiesId
-    }
-  }
-`;
-export const updateProperty = /* GraphQL */ `
-  mutation UpdateProperty(
-    $input: UpdatePropertyInput!
-    $condition: ModelPropertyConditionInput
-  ) {
-    updateProperty(input: $input, condition: $condition) {
-      id
-      street
-      city
-      state
-      zip
-      client {
-        id
-        firstName
-        lastName
-        company
-        phone
-        email
-        notes
-        favorite
-        clientStreet
-        clientCity
-        clientState
-        clientZip
-        connectionHistory {
-          nextToken
-        }
-        properties {
-          nextToken
-        }
-        tasks {
-          nextToken
-        }
-        group {
-          nextToken
-        }
-        reminder {
-          nextToken
-        }
-        owner
-        createdAt
-        updatedAt
-      }
-      owner
-      createdAt
-      updatedAt
-      clientPropertiesId
-    }
-  }
-`;
-export const deleteProperty = /* GraphQL */ `
-  mutation DeleteProperty(
-    $input: DeletePropertyInput!
-    $condition: ModelPropertyConditionInput
-  ) {
-    deleteProperty(input: $input, condition: $condition) {
-      id
-      street
-      city
-      state
-      zip
-      client {
-        id
-        firstName
-        lastName
-        company
-        phone
-        email
-        notes
-        favorite
-        clientStreet
-        clientCity
-        clientState
-        clientZip
-        connectionHistory {
-          nextToken
-        }
-        properties {
-          nextToken
-        }
-        tasks {
-          nextToken
-        }
-        group {
-          nextToken
-        }
-        reminder {
-          nextToken
-        }
-        owner
-        createdAt
-        updatedAt
-      }
-      owner
-      createdAt
-      updatedAt
-      clientPropertiesId
-    }
-  }
-`;
 export const createTask = /* GraphQL */ `
   mutation CreateTask(
     $input: CreateTaskInput!
@@ -717,57 +1180,6 @@ export const updateTask = /* GraphQL */ `
     }
   }
 `;
-export const deleteTask = /* GraphQL */ `
-  mutation DeleteTask(
-    $input: DeleteTaskInput!
-    $condition: ModelTaskConditionInput
-  ) {
-    deleteTask(input: $input, condition: $condition) {
-      id
-      clientId
-      title
-      content
-      completed
-      date
-      notificationId
-      client {
-        id
-        firstName
-        lastName
-        company
-        phone
-        email
-        notes
-        favorite
-        clientStreet
-        clientCity
-        clientState
-        clientZip
-        connectionHistory {
-          nextToken
-        }
-        properties {
-          nextToken
-        }
-        tasks {
-          nextToken
-        }
-        group {
-          nextToken
-        }
-        reminder {
-          nextToken
-        }
-        owner
-        createdAt
-        updatedAt
-      }
-      owner
-      createdAt
-      updatedAt
-    }
-  }
-`;
 export const createNote = /* GraphQL */ `
   mutation CreateNote(
     $input: CreateNoteInput!
@@ -792,258 +1204,6 @@ export const updateNote = /* GraphQL */ `
       id
       title
       content
-      owner
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const deleteNote = /* GraphQL */ `
-  mutation DeleteNote(
-    $input: DeleteNoteInput!
-    $condition: ModelNoteConditionInput
-  ) {
-    deleteNote(input: $input, condition: $condition) {
-      id
-      title
-      content
-      owner
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const deleteGroupsClients = /* GraphQL */ `
-  mutation DeleteGroupsClients(
-    $input: DeleteGroupsClientsInput!
-    $condition: ModelGroupsClientsConditionInput
-  ) {
-    deleteGroupsClients(input: $input, condition: $condition) {
-      id
-      clientID
-      clientGroupID
-      client {
-        id
-        firstName
-        lastName
-        company
-        phone
-        email
-        notes
-        favorite
-        clientStreet
-        clientCity
-        clientState
-        clientZip
-        connectionHistory {
-          nextToken
-        }
-        properties {
-          nextToken
-        }
-        tasks {
-          nextToken
-        }
-        group {
-          nextToken
-        }
-        reminder {
-          nextToken
-        }
-        owner
-        createdAt
-        updatedAt
-      }
-      clientGroup {
-        id
-        title
-        clients {
-          nextToken
-        }
-        owner
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-      owner
-    }
-  }
-`;
-export const createClient = /* GraphQL */ `
-  mutation CreateClient(
-    $input: CreateClientInput!
-    $condition: ModelClientConditionInput
-  ) {
-    createClient(input: $input, condition: $condition) {
-      id
-      firstName
-      lastName
-      company
-      phone
-      email
-      notes
-      favorite
-      clientStreet
-      clientCity
-      clientState
-      clientZip
-      connectionHistory {
-        items {
-          id
-          title
-          date
-          clientId
-          owner
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      properties {
-        items {
-          id
-          street
-          city
-          state
-          zip
-          owner
-          createdAt
-          updatedAt
-          clientPropertiesId
-        }
-        nextToken
-      }
-      tasks {
-        items {
-          id
-          clientId
-          title
-          content
-          completed
-          date
-          notificationId
-          owner
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      group {
-        items {
-          id
-          clientID
-          clientGroupID
-          createdAt
-          updatedAt
-          owner
-        }
-        nextToken
-      }
-      reminder {
-        items {
-          id
-          date
-          recurring
-          recurDate
-          notificationId
-          clientId
-          owner
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      owner
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const updateClient = /* GraphQL */ `
-  mutation UpdateClient(
-    $input: UpdateClientInput!
-    $condition: ModelClientConditionInput
-  ) {
-    updateClient(input: $input, condition: $condition) {
-      id
-      firstName
-      lastName
-      company
-      phone
-      email
-      notes
-      favorite
-      clientStreet
-      clientCity
-      clientState
-      clientZip
-      connectionHistory {
-        items {
-          id
-          title
-          date
-          clientId
-          owner
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      properties {
-        items {
-          id
-          street
-          city
-          state
-          zip
-          owner
-          createdAt
-          updatedAt
-          clientPropertiesId
-        }
-        nextToken
-      }
-      tasks {
-        items {
-          id
-          clientId
-          title
-          content
-          completed
-          date
-          notificationId
-          owner
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      group {
-        items {
-          id
-          clientID
-          clientGroupID
-          createdAt
-          updatedAt
-          owner
-        }
-        nextToken
-      }
-      reminder {
-        items {
-          id
-          date
-          recurring
-          recurDate
-          notificationId
-          clientId
-          owner
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
       owner
       createdAt
       updatedAt
@@ -1107,51 +1267,35 @@ export const createGroupsClients = /* GraphQL */ `
     }
   }
 `;
-export const updateGroupsClients = /* GraphQL */ `
-  mutation UpdateGroupsClients(
-    $input: UpdateGroupsClientsInput!
-    $condition: ModelGroupsClientsConditionInput
+export const createGroupsProperty = /* GraphQL */ `
+  mutation CreateGroupsProperty(
+    $input: CreateGroupsPropertyInput!
+    $condition: ModelGroupsPropertyConditionInput
   ) {
-    updateGroupsClients(input: $input, condition: $condition) {
+    createGroupsProperty(input: $input, condition: $condition) {
       id
-      clientID
-      clientGroupID
-      client {
+      propertyID
+      propertyGroupID
+      property {
         id
-        firstName
-        lastName
-        company
-        phone
-        email
-        notes
-        favorite
-        clientStreet
-        clientCity
-        clientState
-        clientZip
-        connectionHistory {
-          nextToken
-        }
-        properties {
-          nextToken
-        }
-        tasks {
-          nextToken
-        }
+        street
+        city
+        state
+        zip
+        note
         group {
           nextToken
         }
-        reminder {
-          nextToken
-        }
+        clientId
         owner
         createdAt
         updatedAt
       }
-      clientGroup {
+      propertyGroup {
         id
         title
-        clients {
+        description
+        properties {
           nextToken
         }
         owner
