@@ -71,6 +71,8 @@ export const propertiesSlice = createSlice({
       .addCase(fetchProperties.fulfilled, (state, action) => {
         state.status = "succeeded";
         propertiesAdapter.upsertMany(state, action.payload);
+      }).addCase(fetchOneProperty.fulfilled, (state, action) => {
+        state.entities[action.payload.id] = action.payload;
       })
       .addCase(addProperty.fulfilled, (state, action) => {
         propertiesAdapter.addOne(state, action.payload);

@@ -35,6 +35,8 @@ export const getClient = /* GraphQL */ `
           city
           state
           zip
+          price
+          capRate
           note
           clientId
           owner
@@ -47,6 +49,7 @@ export const getClient = /* GraphQL */ `
         items {
           id
           clientId
+          propertyId
           title
           content
           completed
@@ -140,7 +143,25 @@ export const getProperty = /* GraphQL */ `
       city
       state
       zip
+      price
+      capRate
       note
+      tasks {
+        items {
+          id
+          clientId
+          propertyId
+          title
+          content
+          completed
+          date
+          notificationId
+          owner
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       group {
         items {
           id
@@ -172,7 +193,12 @@ export const listProperties = /* GraphQL */ `
         city
         state
         zip
+        price
+        capRate
         note
+        tasks {
+          nextToken
+        }
         group {
           nextToken
         }
@@ -450,6 +476,7 @@ export const getTask = /* GraphQL */ `
     getTask(id: $id) {
       id
       clientId
+      propertyId
       title
       content
       completed
@@ -503,6 +530,7 @@ export const listTasks = /* GraphQL */ `
       items {
         id
         clientId
+        propertyId
         title
         content
         completed
@@ -673,7 +701,12 @@ export const getGroupsProperty = /* GraphQL */ `
         city
         state
         zip
+        price
+        capRate
         note
+        tasks {
+          nextToken
+        }
         group {
           nextToken
         }
@@ -720,6 +753,8 @@ export const listGroupsProperties = /* GraphQL */ `
           city
           state
           zip
+          price
+          capRate
           note
           clientId
           owner

@@ -43,7 +43,7 @@ export default function AllProperties({ navigation }) {
         city={item.city}
         state={item.state}
         zipCode={item.zip}
-        handlePress={() => console.log(item)}
+        handlePress={() => navigation.navigate('PropertyDetails', { id: item.id })}
       />
     ),
     []

@@ -43,6 +43,8 @@ export const deleteClient = /* GraphQL */ `
           city
           state
           zip
+          price
+          capRate
           note
           clientId
           owner
@@ -55,6 +57,7 @@ export const deleteClient = /* GraphQL */ `
         items {
           id
           clientId
+          propertyId
           title
           content
           completed
@@ -108,7 +111,25 @@ export const deleteProperty = /* GraphQL */ `
       city
       state
       zip
+      price
+      capRate
       note
+      tasks {
+        items {
+          id
+          clientId
+          propertyId
+          title
+          content
+          completed
+          date
+          notificationId
+          owner
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       group {
         items {
           id
@@ -284,6 +305,7 @@ export const deleteTask = /* GraphQL */ `
     deleteTask(input: $input, condition: $condition) {
       id
       clientId
+      propertyId
       title
       content
       completed
@@ -471,7 +493,12 @@ export const updateGroupsProperty = /* GraphQL */ `
         city
         state
         zip
+        price
+        capRate
         note
+        tasks {
+          nextToken
+        }
         group {
           nextToken
         }
@@ -512,7 +539,12 @@ export const deleteGroupsProperty = /* GraphQL */ `
         city
         state
         zip
+        price
+        capRate
         note
+        tasks {
+          nextToken
+        }
         group {
           nextToken
         }
@@ -575,6 +607,8 @@ export const createClient = /* GraphQL */ `
           city
           state
           zip
+          price
+          capRate
           note
           clientId
           owner
@@ -587,6 +621,7 @@ export const createClient = /* GraphQL */ `
         items {
           id
           clientId
+          propertyId
           title
           content
           completed
@@ -666,6 +701,8 @@ export const updateClient = /* GraphQL */ `
           city
           state
           zip
+          price
+          capRate
           note
           clientId
           owner
@@ -678,6 +715,7 @@ export const updateClient = /* GraphQL */ `
         items {
           id
           clientId
+          propertyId
           title
           content
           completed
@@ -731,7 +769,25 @@ export const createProperty = /* GraphQL */ `
       city
       state
       zip
+      price
+      capRate
       note
+      tasks {
+        items {
+          id
+          clientId
+          propertyId
+          title
+          content
+          completed
+          date
+          notificationId
+          owner
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       group {
         items {
           id
@@ -761,7 +817,25 @@ export const updateProperty = /* GraphQL */ `
       city
       state
       zip
+      price
+      capRate
       note
+      tasks {
+        items {
+          id
+          clientId
+          propertyId
+          title
+          content
+          completed
+          date
+          notificationId
+          owner
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       group {
         items {
           id
@@ -1086,6 +1160,7 @@ export const createTask = /* GraphQL */ `
     createTask(input: $input, condition: $condition) {
       id
       clientId
+      propertyId
       title
       content
       completed
@@ -1137,6 +1212,7 @@ export const updateTask = /* GraphQL */ `
     updateTask(input: $input, condition: $condition) {
       id
       clientId
+      propertyId
       title
       content
       completed
@@ -1282,7 +1358,12 @@ export const createGroupsProperty = /* GraphQL */ `
         city
         state
         zip
+        price
+        capRate
         note
+        tasks {
+          nextToken
+        }
         group {
           nextToken
         }

@@ -48,6 +48,16 @@ const createNoteQuery = /* GraphQL */ `
     }
   }
 `;
+
+const createPropertyQuery = /* GraphQL */ `
+  mutation createProperty($input: CreatePropertyInput!) {
+    createProperty(input: $input) {
+      id
+    }
+  }
+`;
+
+
 const GRAPHQL_APIKEY = process.env.API_REALAPP_GRAPHQLAPIKEYOUTPUT;
 const GRAPHQL_ENDPOINT = process.env.API_REALAPP_GRAPHQLAPIENDPOINTOUTPUT;
 
@@ -62,6 +72,7 @@ export const handler = async (event, context, callback) => {
   //---- create client ----//
   let userId = event.request.userAttributes.sub;
   // let userId = "2612aa2f-e76d-4c3d-a077-2da27797313b"
+  // let userId = "1283acf9-98cb-4582-b19e-52659493fe4f"
 
   const createClientVariables = { input: { firstName: "Jon Snow", lastName: "Sample", favorite: true, company: "CoAgent Team", phone: "3105558592,2125559912", email: "eric@coagent.co,emailMeAnytime@youremail.com", notes: "You can import your existing clients from an excel sheet or .csv on our website, https://coagent.co/", clientStreet: "5422 Nights Watch Blvd", clientState: "CA", clientCity: "Thrones", clientZip: "88228", owner: userId } };
   const createClientVariablesTwo = { input: { firstName: "First", lastName: "Contact", favorite: true, company: "CoAgent Team", phone: "1215552151,4245559421", email: "eric@coagent.co,emailMeAnytime@youremail.com", notes: "Welcome to your first contact! Browse around this screen and get a feel of things. Create reminders, log your call/connection histories, and set up tasks.", clientStreet: "54221 Jon Snow Avenue", clientState: "CA", clientCity: "Thrones", clientZip: "512142", owner: userId } };
@@ -246,6 +257,45 @@ export const handler = async (event, context, callback) => {
   
   try {
     await fetch(createNoteRequest)
+  } catch (error) {
+    console.log(error)
+  }
+  
+  // ---- create property ---- //
+  const createPropertyVariables = { input: {street: '12819 Kings Landing Blvd', city: 'Westeros', state: 'CA', zip: '90210', note: 'Planning on listing in the next few months dependent on market conditions. Mortgage is half paid off, already has a buyer profile in mind.', price: '5000000', clientId: firstCreatedClientId, owner: userId}}
+  
+  const createPropertyOptions = {
+    method: 'POST',
+    headers: {
+      'x-api-key': GRAPHQL_APIKEY
+    },
+    body: JSON.stringify({ query: createPropertyQuery, variables: createPropertyVariables })
+  }
+  
+  const createPropertyRequest = new Request(GRAPHQL_ENDPOINT, createPropertyOptions);
+  
+  try {
+    await fetch(createPropertyRequest);
+  } catch (error) {
+    console.log(error)
+  }
+  
+  
+  // ---- create second property ---- //
+  const createSecondPropertyVariables = { input: { street: '94381 Braavos Street', city: 'City of Braavos', state: 'WE', zip: '19205', note: 'Retail investment property, ready to sell but she is unsure about market conditions. Cap rate estimated around 5.50%. ', price: '3000000', clientId: secondCreatedClientId, owner: userId}}
+  
+  const createSecondPropertyOptions = {
+    method: 'POST',
+    headers: {
+      'x-api-key': GRAPHQL_APIKEY
+    },
+    body: JSON.stringify({ query: createPropertyQuery, variables: createSecondPropertyVariables })
+  };
+  
+  const createSecondPropertyRequest = new Request(GRAPHQL_ENDPOINT, createSecondPropertyOptions);
+  
+  try {
+    await fetch(createSecondPropertyRequest)
   } catch (error) {
     console.log(error)
   }
