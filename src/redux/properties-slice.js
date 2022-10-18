@@ -55,7 +55,6 @@ export const addProperty = createAsyncThunk(
     } catch (err) {
       console.error(err);
     }
-
     return response.data.createProperty;
   }
 );
@@ -72,6 +71,9 @@ export const propertiesSlice = createSlice({
       .addCase(fetchProperties.fulfilled, (state, action) => {
         state.status = "succeeded";
         propertiesAdapter.upsertMany(state, action.payload);
+      })
+      .addCase(addProperty.fulfilled, (state, action) => {
+        propertiesAdapter.addOne(state, action.payload);
       });
   },
 });

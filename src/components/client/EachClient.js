@@ -4,6 +4,7 @@ import {
   Text,
   Pressable,
   TouchableHighlight,
+  TouchableOpacity,
 } from "react-native";
 import { SimpleLineIcons } from "@expo/vector-icons";
 
@@ -25,14 +26,14 @@ export default function EachClient({
   if (taskMode) {
     return (
       <Pressable>
-        <TouchableHighlight onPress={onPress} underlayColor="#f1f1f1">
+        <TouchableOpacity onPress={onPress}>
           <View style={styles.taskModeContainer}>
             <Text style={styles.name}>{fullName}</Text>
             {companyTrue && (
               <Text style={styles.company}>{company}</Text>
             )}
           </View>
-        </TouchableHighlight>
+        </TouchableOpacity>
       </Pressable>
     );
   }

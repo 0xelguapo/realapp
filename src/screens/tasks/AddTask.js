@@ -77,7 +77,7 @@ export default function AddTask({ navigation }) {
 
   const handleChooseClient = (client) => {
     setSelectedClient(client);
-    setSearchInput(client.firstName + " ", client.lastName);
+    setSearchInput(client.firstName + " ", client?.lastName);
     setClientsVisible(false);
     console.log(client);
   };

@@ -12,11 +12,46 @@ import {
   Text,
   TouchableOpacity,
   TextInput,
+  FlatList,
 } from "react-native";
-import { Ionicons, AntDesign } from "@expo/vector-icons";
+import { Ionicons, AntDesign, Feather } from "@expo/vector-icons";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchProperties,
+  selectAllProperties,
+} from "../../redux/properties-slice";
+import EachProperty from "../../components/property/EachProperty";
 
 export default function AllProperties({ navigation }) {
+  const dispatch = useDispatch();
+  const status = useSelector((state) => state.properties.status);
+  const allProperties = useSelector(selectAllProperties);
   const [searchInput, setSearchInput] = useState("");
+
+  const filteredProperties = useMemo(() => {
+    return allProperties.filter((p) => {
+      const propertyData = p.street ? p.street.toUpperCase() : "".toUpperCase();
+      const textData = searchInput.toUpperCase();
+      return propertyData.indexOf(textData) > -1;
+    });
+  }, [searchInput, allProperties]);
+
+  const renderProperty = useCallback(
+    ({ item, index }) => (
+      <EachProperty
+        street={item.street}
+        city={item.city}
+        state={item.state}
+        zipCode={item.zip}
+        handlePress={() => console.log(item)}
+      />
+    ),
+    []
+  );
+
+  useEffect(() => {
+    dispatch(fetchProperties());
+  }, [dispatch]);
 
   return (
     <View style={styles.container}>
@@ -38,6 +73,16 @@ export default function AllProperties({ navigation }) {
             </TouchableOpacity>
           )}
         </View>
+      </View>
+      <View style={styles.listContainer}>
+        <FlatList
+          data={filteredProperties}
+          renderItem={renderProperty}
+          keyExtractor={(p) => p.id}
+          onRefresh={() => dispatch(fetchProperties())}
+          refreshing={status !== "succeeded"}
+          contentContainerStyle={{ paddingBottom: 50 }}
+        />
       </View>
       <TouchableOpacity
         style={styles.addIconContainer}
@@ -111,4 +156,7 @@ const styles = StyleSheet.create({
       height: 4,
     },
   },
+  listContainer: {
+    flex: 1,
+  }
 });

@@ -31,7 +31,7 @@ type Property @model @auth(rules: [{ allow: owner }, { allow: public, provider: 
   street: String!
   city: String
   state: String
-  zip: Int
+  zip: String
   note: String
   group: [PropertyGroup] @manyToMany(relationName: "GroupsProperty")
   clientId: ID @index(name: "byProperty")

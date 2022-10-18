@@ -7,16 +7,30 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   FlatList,
+  SafeAreaView,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from "react-native";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo, useCallback } from "react";
 import {
   AntDesign,
   MaterialCommunityIcons,
   Feather,
   Ionicons,
 } from "@expo/vector-icons";
+import { useDispatch, useSelector } from "react-redux";
+import propertiesSlice, { addProperty } from "../../redux/properties-slice";
+import { fetchClients, selectAllClients } from "../../redux/clients-slice";
+import EachClient from "../../components/client/EachClient";
 
 export default function AddProperty({ navigation }) {
+  const dispatch = useDispatch();
+  const allClients = useSelector(selectAllClients);
+  const clientStatus = useSelector((state) => state.clients.status);
+  const [clientsVisible, setClientsVisible] = useState(false);
+  const [searchInput, setSearchInput] = useState("");
+  const [selectedClient, setSelectedClient] = useState("");
+
   const [streetAddress, setStreetAddress] = useState("");
   const [city, setCity] = useState("");
   const [stateAbbr, setStateAbbr] = useState("");
@@ -26,33 +40,78 @@ export default function AddProperty({ navigation }) {
   const stateRef = useRef();
   const zipRef = useRef();
 
-  const [clientsVisible, setClientsVisible] = useState(false);
+  const filteredData = useMemo(() => {
+    return allClients.filter((c) => {
+      const fullName = c.firstName + " " + c?.lastName;
+      const clientData = fullName ? fullName.toUpperCase() : "".toUpperCase();
+      const textData = searchInput.toUpperCase();
+      return clientData.indexOf(textData) > -1;
+    });
+  }, [searchInput, allClients]);
 
-  const handleAddProperty = () => {
-    
+  useEffect(() => {
+    if (clientStatus !== "succeeded") dispatch(fetchClients());
+  }, []);
+
+  const handleShowClients = () => {
+    setClientsVisible(!clientsVisible);
+    if (selectedClient) {
+      setSearchInput("");
+      setSelectedClient("");
+    }
+    Keyboard.dismiss();
+  };
+
+  const handleChooseClient = (client) => {
+    setSelectedClient(client);
+    setSearchInput(client.firstName + " " + client?.lastName);
+    setClientsVisible(false);
+    console.log(client);
+  };
+
+  const renderClient = useCallback(
+    ({ item }) => (
+      <EachClient
+        onPress={() => handleChooseClient(item)}
+        taskMode={true}
+        firstName={item.firstName}
+        lastName={item.lastName}
+        phone={item.phone}
+        company={item.company}
+      />
+    ),
+    []
+  );
+
+  const handleAddProperty = async () => {
+    const propertyInputs = {
+      street: streetAddress,
+      city: city,
+      state: stateAbbr,
+      zip: zipCode,
+      note: note,
+      clientId: selectedClient.id
+    };
+    const response = await dispatch(addProperty(propertyInputs)).unwrap();
+    if (response) {
+      navigation.goBack();
+    }
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.headingContainer}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <AntDesign name="left" size={25} color="#6c6c6c" />
-        </TouchableOpacity>
-        <Text style={styles.screenTitle}>New Property</Text>
-        <TouchableOpacity onPress={handleAddProperty}>
-          <Text style={styles.saveText}>Save</Text>
-        </TouchableOpacity>
-      </View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.container}>
+        <View style={styles.headingContainer}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <AntDesign name="left" size={25} color="#6c6c6c" />
+          </TouchableOpacity>
+          <Text style={styles.screenTitle}>New Property</Text>
+          <TouchableOpacity onPress={handleAddProperty}>
+            <Text style={styles.saveText}>Save</Text>
+          </TouchableOpacity>
+        </View>
 
-      <KeyboardAvoidingView
-        style={styles.keyboardAvoiding}
-        behavior="padding"
-        keyboardVerticalOffset={75}
-      >
-        <ScrollView
-          keyboardShouldPersistTaps="always"
-          keyboardDismissMode="on-drag"
-        >
+        <View style={styles.inputsContainer}>
           <View style={styles.inputContainer}>
             <MaterialCommunityIcons
               name="office-building-marker-outline"
@@ -66,6 +125,7 @@ export default function AddProperty({ navigation }) {
               value={streetAddress}
               onChangeText={setStreetAddress}
               autoCapitalize="words"
+              autoCorrect={false}
               autoFocus={true}
               blurOnSubmit={false}
               onSubmitEditing={() => cityRef.current.focus()}
@@ -101,7 +161,7 @@ export default function AddProperty({ navigation }) {
               placeholderTextColor="#757575"
               value={stateAbbr}
               onChangeText={setStateAbbr}
-              autoCapitalize="words"
+              autoCapitalize="characters"
               ref={stateRef}
               blurOnSubmit={false}
               onSubmitEditing={() => zipRef.current.focus()}
@@ -114,38 +174,80 @@ export default function AddProperty({ navigation }) {
               onChangeText={setZipCode}
               autoCapitalize="words"
               ref={zipRef}
+              keyboardType="numeric"
             />
           </View>
 
-          <View style={styles.addNoteContainer}>
-            <Text style={styles.addNoteHeader}>Add a note</Text>
-            <TextInput
-              style={styles.addNoteInput}
-              value={note}
-              onChangeText={setNote}
-              multiline={true}
-            />
-          </View>
-
-          <TouchableOpacity
-            style={styles.addAnotherButton}
-            onPress={() => setClientsVisible(!clientsVisible)}
-          >
-            {!clientsVisible ? (
-              <>
-                <Ionicons name="md-add-sharp" size={24} color="#026bff" />
-                <Text style={styles.addOwnershipText}>Add Ownership</Text>
-              </>
-            ) : (
-              <>
-                <Ionicons name="md-remove-circle" size={20} color="red" />
-                <Text style={styles.removeOwnershipText}>Remove Ownership</Text>
-              </>
-            )}
-          </TouchableOpacity>
-        </ScrollView>
-      </KeyboardAvoidingView>
-    </View>
+          {!clientsVisible ? (
+            <>
+              {!selectedClient ? (
+                <TouchableOpacity
+                  style={styles.addAnotherButton}
+                  onPress={handleShowClients}
+                >
+                  <Ionicons name="md-add-sharp" size={24} color="#026bff" />
+                  <Text style={styles.addOwnershipText}>Add Ownership</Text>
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  style={styles.addAnotherButton}
+                  onPress={handleShowClients}
+                >
+                  <Ionicons name="md-remove-circle" size={20} color="red" />
+                  <Text style={styles.ownedByText}>
+                    Owned by:{" "}
+                    <Text style={styles.selectedClientName}>
+                      {selectedClient.firstName +
+                        " " +
+                        selectedClient?.lastName}
+                    </Text>
+                  </Text>
+                </TouchableOpacity>
+              )}
+            </>
+          ) : (
+            <>
+              <View style={styles.addClientContainer}>
+                <TouchableOpacity
+                  style={styles.addAnotherButton}
+                  onPress={handleShowClients}
+                >
+                  <Ionicons name="md-remove-circle" size={20} color="red" />
+                </TouchableOpacity>
+                <View style={styles.listViewContainer}>
+                  <TextInput
+                    style={styles.search}
+                    value={searchInput}
+                    onChangeText={setSearchInput}
+                    placeholder="Search..."
+                    placeholderTextColor="#7b7b7c"
+                    returnKeyType="done"
+                  />
+                  <FlatList
+                    keyboardShouldPersistTaps={"handled"}
+                    data={filteredData}
+                    renderItem={renderClient}
+                    refreshing={clientStatus !== "succeeded"}
+                    keyExtractor={(c) => c.id}
+                  />
+                </View>
+              </View>
+            </>
+          )}
+          <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }} keyboardVerticalOffset={65}>
+            <View style={styles.addNoteContainer}>
+              <Text style={styles.addNoteHeader}>Add a note</Text>
+              <TextInput
+                style={styles.addNoteInput}
+                value={note}
+                onChangeText={setNote}
+                multiline={true}
+              />
+            </View>
+          </KeyboardAvoidingView>
+        </View>
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 
@@ -178,6 +280,10 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 25,
   },
+  inputsContainer: {
+    paddingVertical: 20,
+    flex: 1,
+  },
   inputContainer: {
     backgroundColor: "white",
     flexDirection: "row",
@@ -198,6 +304,7 @@ const styles = StyleSheet.create({
   },
   addNoteContainer: {
     paddingVertical: 20,
+    height: 150,
   },
   addNoteHeader: {
     fontWeight: "500",
@@ -207,11 +314,10 @@ const styles = StyleSheet.create({
   addNoteInput: {
     borderColor: "#dcdcdc",
     backgroundColor: "white",
-    borderRadius: 5,
     paddingLeft: 20,
     flex: 1,
     fontSize: 16,
-    height: 70,
+    height: 50,
   },
   addAnotherButton: {
     height: 40,
@@ -226,9 +332,42 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     color: "#026bff",
   },
+  removeOwnershipContainer: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    height: "100%",
+  },
   removeOwnershipText: {
-    color: 'red',
-    fontWeight: '500',
-    paddingLeft: 5
-  }
+    color: "red",
+    fontWeight: "500",
+    paddingLeft: 5,
+  },
+  addClientContainer: {
+    display: "flex",
+    flex: 1,
+  },
+  listViewContainer: {
+    flex: 1,
+    paddingHorizontal: 20,
+    backgroundColor: "white",
+  },
+  search: {
+    fontSize: 16,
+    height: 30,
+    paddingVertical: 5,
+  },
+  ownedByText: {
+    fontWeight: "500",
+  },
+  selectedClientNameContainer: {
+    marginLeft: 5,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 10,
+    backgroundColor: "#0064e5",
+  },
+  selectedClientName: {
+    fontWeight: "700",
+  },
 });
