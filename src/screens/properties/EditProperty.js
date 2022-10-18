@@ -1,44 +1,43 @@
 import {
+  ScrollView,
+  StyleSheet,
+  TextInput,
   View,
   Text,
-  StyleSheet,
   TouchableOpacity,
-  TextInput,
-  KeyboardAvoidingView,
   FlatList,
   Keyboard,
-  TouchableWithoutFeedback,
+  SafeAreaView
 } from "react-native";
-import { useEffect, useRef, useState, useMemo, useCallback } from "react";
-import {
-  AntDesign,
-  MaterialCommunityIcons,
-  Feather,
-  Ionicons,
-} from "@expo/vector-icons";
+import { useState, useRef, useEffect, useMemo, useCallback } from "react";
+import { AntDesign, MaterialCommunityIcons, Feather, Ionicons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
-import { addProperty } from "../../redux/properties-slice";
-import { fetchClients, selectAllClients } from "../../redux/clients-slice";
+import { selectAllClients, fetchClients, selectClientById } from "../../redux/clients-slice";
 import EachClient from "../../components/client/EachClient";
+import { editProperty } from "../../redux/properties-slice";
 
-export default function AddProperty({ navigation }) {
+export default function EditProperty(props) {
+  const { propertyState } = props.route.params;
   const dispatch = useDispatch();
+
+  const propertyOwner = useSelector((state) => selectClientById(state, propertyState.clientId))
   const allClients = useSelector(selectAllClients);
   const clientStatus = useSelector((state) => state.clients.status);
+
   const [clientsVisible, setClientsVisible] = useState(false);
   const [searchInput, setSearchInput] = useState("");
-  const [selectedClient, setSelectedClient] = useState("");
+  const [selectedClient, setSelectedClient] = useState(propertyOwner);
 
-  const [streetAddress, setStreetAddress] = useState("");
-  const [city, setCity] = useState("");
-  const [stateAbbr, setStateAbbr] = useState("");
-  const [zipCode, setZipCode] = useState("");
-  const [price, setPrice] = useState('')
-  const [note, setNote] = useState("");
+  const [streetAddress, setStreetAddress] = useState(propertyState.street);
+  const [city, setCity] = useState(propertyState.city);
+  const [stateAbbr, setStateAbbr] = useState(propertyState.state);
+  const [zipCode, setZipCode] = useState(propertyState.zip);
+  const [price, setPrice] = useState(propertyState.price);
+  const [note, setNote] = useState(propertyState.note);
   const cityRef = useRef();
   const stateRef = useRef();
   const zipRef = useRef();
-  const priceRef = useRef()
+  const priceRef = useRef();
 
   const filteredData = useMemo(() => {
     return allClients.filter((c) => {
@@ -83,121 +82,115 @@ export default function AddProperty({ navigation }) {
     []
   );
 
-  const handleAddProperty = async () => {
+  const handleSubmit = async () => {
     const propertyInputs = {
       street: streetAddress,
       city: city,
       state: stateAbbr,
       zip: zipCode,
       price: price,
-      note: note,
       clientId: selectedClient.id
-    };
-    const response = await dispatch(addProperty(propertyInputs)).unwrap();
-    if (response) {
-      navigation.goBack();
     }
-  };
+    const response = await dispatch(editProperty(propertyInputs)).unwrap()
+    console.log(response)
+    if(response) {
+      props.navigation.goBack()
+    }
+  }
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={styles.container}>
-        <View style={styles.headingContainer}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <AntDesign name="left" size={25} color="#6c6c6c" />
-          </TouchableOpacity>
-          <Text style={styles.screenTitle}>New Property</Text>
-          <TouchableOpacity onPress={handleAddProperty}>
-            <Text style={styles.saveText}>Save</Text>
-          </TouchableOpacity>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.headingContainer}>
+        <TouchableOpacity onPress={() => props.navigation.goBack()}>
+          <AntDesign name="left" size={25} color="#6c6c6c" />
+        </TouchableOpacity>
+        <Text style={styles.screenTitle}>Edit Property</Text>
+        <TouchableOpacity onPress={handleSubmit}>
+          <Text style={styles.saveText}>Save</Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.inputsContainer}>
+        <View style={styles.inputContainer}>
+          <MaterialCommunityIcons
+            name="office-building-marker-outline"
+            size={20}
+            color="black"
+          />
+          <TextInput
+            style={styles.textInput}
+            placeholder={"Street Address"}
+            placeholderTextColor="#757575"
+            value={streetAddress}
+            onChangeText={setStreetAddress}
+            autoCapitalize="words"
+            autoCorrect={false}
+            autoFocus={true}
+            blurOnSubmit={false}
+            onSubmitEditing={() => cityRef.current.focus()}
+          />
         </View>
-
-        <View style={styles.inputsContainer}>
-          <View style={styles.inputContainer}>
-            <MaterialCommunityIcons
-              name="office-building-marker-outline"
-              size={20}
-              color="black"
-            />
-            <TextInput
-              style={styles.textInput}
-              placeholder={"Street Address"}
-              placeholderTextColor="#757575"
-              value={streetAddress}
-              onChangeText={setStreetAddress}
-              autoCapitalize="words"
-              autoCorrect={false}
-              autoFocus={true}
-              blurOnSubmit={false}
-              onSubmitEditing={() => cityRef.current.focus()}
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <MaterialCommunityIcons
-              name="city-variant-outline"
-              size={20}
-              color="black"
-            />
-            <TextInput
-              style={styles.textInput}
-              placeholder={"City"}
-              placeholderTextColor="#757575"
-              value={city}
-              onChangeText={setCity}
-              autoCapitalize="words"
-              ref={cityRef}
-              blurOnSubmit={false}
-              onSubmitEditing={() => stateRef.current.focus()}
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <Feather name="map-pin" size={20} color="black" />
-            <TextInput
-              style={{
-                ...styles.textInput,
-                borderRightWidth: 0.5,
-                borderRadius: 0,
-              }}
-              placeholder={"State"}
-              placeholderTextColor="#757575"
-              value={stateAbbr}
-              onChangeText={setStateAbbr}
-              autoCapitalize="characters"
-              ref={stateRef}
-              blurOnSubmit={false}
-              onSubmitEditing={() => zipRef.current.focus()}
-            />
-            <TextInput
-              style={{ ...styles.textInput, paddingLeft: 20 }}
-              placeholder={"Zip"}
-              placeholderTextColor="#757575"
-              value={zipCode}
-              onChangeText={setZipCode}
-              autoCapitalize="words"
-              ref={zipRef}
-              keyboardType="numeric"
-              blurOnSubmit={false}
-              onSubmitEditing={() => priceRef.current.focus()}
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <Feather
-              name="dollar-sign"
-              size={20}
-              color="black"
-            />
-            <TextInput
-              style={styles.textInput}
-              placeholder={"Price"}
-              placeholderTextColor="#757575"
-              value={price}
-              onChangeText={setPrice}
-              keyboardType="numeric"
-              ref={priceRef}             
-            />
-          </View>
-
-          {!clientsVisible ? (
+        <View style={styles.inputContainer}>
+          <MaterialCommunityIcons
+            name="city-variant-outline"
+            size={20}
+            color="black"
+          />
+          <TextInput
+            style={styles.textInput}
+            placeholder={"City"}
+            placeholderTextColor="#757575"
+            value={city}
+            onChangeText={setCity}
+            autoCapitalize="words"
+            ref={cityRef}
+            blurOnSubmit={false}
+            onSubmitEditing={() => stateRef.current.focus()}
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <Feather name="map-pin" size={20} color="black" />
+          <TextInput
+            style={{
+              ...styles.textInput,
+              borderRightWidth: 0.5,
+              borderRadius: 0,
+            }}
+            placeholder={"State"}
+            placeholderTextColor="#757575"
+            value={stateAbbr}
+            onChangeText={setStateAbbr}
+            autoCapitalize="characters"
+            ref={stateRef}
+            blurOnSubmit={false}
+            onSubmitEditing={() => zipRef.current.focus()}
+          />
+          <TextInput
+            style={{ ...styles.textInput, paddingLeft: 20 }}
+            placeholder={"Zip"}
+            placeholderTextColor="#757575"
+            value={zipCode}
+            onChangeText={setZipCode}
+            autoCapitalize="words"
+            ref={zipRef}
+            keyboardType="numeric"
+            blurOnSubmit={false}
+            onSubmitEditing={() => priceRef.current.focus()}
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <Feather name="dollar-sign" size={20} color="black" />
+          <TextInput
+            style={styles.textInput}
+            placeholder={"Price"}
+            placeholderTextColor="#757575"
+            value={price}
+            onChangeText={setPrice}
+            keyboardType="numeric"
+            ref={priceRef}
+          />
+        </View>
+        {!clientsVisible ? (
             <>
               {!selectedClient ? (
                 <TouchableOpacity
@@ -253,27 +246,14 @@ export default function AddProperty({ navigation }) {
               </View>
             </>
           )}
-          <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }} keyboardVerticalOffset={100}>
-            <View style={styles.addNoteContainer}>
-              <Text style={styles.addNoteHeader}>Add a note</Text>
-              <TextInput
-                style={styles.addNoteInput}
-                value={note}
-                onChangeText={setNote}
-                multiline={true}
-              />
-            </View>
-          </KeyboardAvoidingView>
-        </View>
       </View>
-    </TouchableWithoutFeedback>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingBottom: 100,
   },
   headingContainer: {
     flexDirection: "row",
@@ -292,12 +272,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "500",
     color: "#0064e5",
-  },
-  keyboardAvoiding: {
-    display: "flex",
-    flexDirection: "column",
-    flex: 1,
-    paddingVertical: 25,
   },
   inputsContainer: {
     paddingVertical: 20,
@@ -320,23 +294,6 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     height: "90%",
-  },
-  addNoteContainer: {
-    paddingVertical: 20,
-    height: 150,
-  },
-  addNoteHeader: {
-    fontWeight: "500",
-    paddingHorizontal: 20,
-    marginBottom: 5,
-  },
-  addNoteInput: {
-    borderColor: "#dcdcdc",
-    backgroundColor: "white",
-    paddingLeft: 20,
-    flex: 1,
-    fontSize: 16,
-    height: 50,
   },
   addAnotherButton: {
     height: 40,

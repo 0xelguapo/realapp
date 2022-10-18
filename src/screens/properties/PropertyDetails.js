@@ -5,44 +5,58 @@ import {
   ScrollView,
   Text,
   TouchableOpacity,
+  SafeAreaView,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { selectClientById } from "../../redux/clients-slice";
+import { fetchOneClient, selectClientById } from "../../redux/clients-slice";
 import {
   fetchOneProperty,
   selectPropertyById,
 } from "../../redux/properties-slice";
-import { Feather, Ionicons } from "@expo/vector-icons";
+import { Feather, Ionicons, AntDesign } from "@expo/vector-icons";
 import PropertyOptions from "../../components/property/PropertyOptions";
 
 export default function PropertyDetails({ navigation, route }) {
   const { id } = route.params;
+  const dispatch = useDispatch();
   const property = useSelector((state) => selectPropertyById(state, id));
-  const propertyOwnerId = property.clientId;
+  const propertyOwnerId = property?.clientId;
+
   const propertyOwner = useSelector((state) =>
     selectClientById(state, propertyOwnerId)
   );
 
-  const dispatch = useDispatch();
+  const viewEditPropertyHandler = () => {
+    navigation.navigate("EditProperty", { propertyState: property });
+  };
+
+  const fetchOwnerDetails = async () => {
+    if (propertyOwnerId) {
+      const response = await dispatch(fetchOneClient(propertyOwnerId)).unwrap();
+    }
+  };
 
   const fetchPropertyDetails = () => {
     dispatch(fetchOneProperty(id)).unwrap();
   };
 
   useEffect(() => {
+    fetchOwnerDetails();
+  }, []);
+
+  useEffect(() => {
     fetchPropertyDetails();
   }, [dispatch]);
 
   return (
-    <ScrollView
-      contentContainerStyle={[
-        { backgroundColor: "#f4f4f4", display: "flex", paddingBottom: 100, },
-      ]}
-    >
+    <SafeAreaView>
+      <TouchableOpacity
+        style={styles.backButtonContainer}
+        onPress={navigation.goBack}
+      >
+        <AntDesign name="left" size={24} color="black" />
+      </TouchableOpacity>
       <View style={styles.header}>
-        <View style={styles.rectangleContainer}>
-          <View style={styles.rectangle}></View>
-        </View>
         <View style={styles.headingContainer}>
           <Text style={styles.street}>{property.street}</Text>
           <View style={styles.headingBody}>
@@ -64,8 +78,8 @@ export default function PropertyDetails({ navigation, route }) {
           )}
         </View>
       </View>
-      <PropertyOptions />
-      <View style={styles.body}>
+      <ScrollView style={styles.body}>
+        <PropertyOptions viewEditPropertyHandler={viewEditPropertyHandler} />
         <View style={styles.ownedByContainer}>
           {propertyOwner ? (
             <>
@@ -104,14 +118,18 @@ export default function PropertyDetails({ navigation, route }) {
             </View>
           )}
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   header: {
-    paddingVertical: 20,
+    paddingBottom: 20,
+  },
+  backButtonContainer: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
   },
   rectangleContainer: {
     display: "flex",
@@ -151,6 +169,8 @@ const styles = StyleSheet.create({
     color: "#454545",
   },
   body: {
+    height: "100%",
+    paddingBottom: 100,
   },
   ownedByContainer: {
     display: "flex",

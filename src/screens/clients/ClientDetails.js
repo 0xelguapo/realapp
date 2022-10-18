@@ -7,6 +7,8 @@ import {
   Alert,
   Pressable,
   ActivityIndicator,
+  SafeAreaView,
+  TouchableOpacity,
 } from "react-native";
 import ClientOptions from "../../components/client/ClientOptions";
 import DetailsReminders from "../../components/client/clientDetails/DetailsReminders";
@@ -23,6 +25,7 @@ import {
 } from "../../redux/clients-slice";
 import { handleGroupsOnDeleteClient } from "../../redux/groups-slice";
 import { handleRemindersOnDeleteClient } from "../../redux/reminders-slice";
+import { AntDesign } from "@expo/vector-icons";
 
 export default function ClientDetails(props) {
   const { id, phone } = props.route.params.client;
@@ -80,7 +83,7 @@ export default function ClientDetails(props) {
     props.navigation.navigate("EditReminder", {
       clientId: id,
       clientFirstName: clientSelect.firstname,
-      clientLastName: clientSelect.lastname
+      clientLastName: clientSelect.lastname,
     });
   };
 
@@ -93,7 +96,7 @@ export default function ClientDetails(props) {
           dispatch(removeClient(id));
           props.navigation.goBack();
           dispatch(handleGroupsOnDeleteClient(id));
-          dispatch(handleRemindersOnDeleteClient(id))
+          dispatch(handleRemindersOnDeleteClient(id));
         },
         style: "destructive",
       },
@@ -113,26 +116,33 @@ export default function ClientDetails(props) {
           <ActivityIndicator size="large" color="#7b7b7c" />
         </View>
       ) : (
-        <ScrollView style={styles.scrollContainer} stickyHeaderIndices={[0]}>
+        <SafeAreaView style={styles.container}>
+          <TouchableOpacity
+            style={styles.backButtonContainer}
+            onPress={props.navigation.goBack}
+          >
+            <AntDesign name="left" size={24} color="black" />
+          </TouchableOpacity>
           <View style={styles.header}>
-            <View style={styles.rectangleContainer}>
-              <View style={styles.rectangle}></View>
-            </View>
-            <Text style={styles.name}>{clientSelect.lastName ? (clientSelect.firstName + ' ' + clientSelect.lastName) : (clientSelect.firstName)}</Text>
+            <Text style={styles.name}>
+              {clientSelect.lastName
+                ? clientSelect.firstName + " " + clientSelect.lastName
+                : clientSelect.firstName}
+            </Text>
             <Text style={styles.company}>{clientSelect.company}</Text>
           </View>
-          <ClientOptions
-            clientDetailsState={clientSelect}
-            clientId={id}
-            index={index}
-            favoriteHandler={favoriteHandler}
-            viewEditClientHandler={viewEditClientHandler}
-            removeClientHandler={removeClientHandler}
-            viewEditGroupHandler={viewEditGroupHandler}
-            viewEditReminder={viewEditReminder}
-            groupMode={props.route.params.groupMode}
-          />
-          <View style={styles.body}>
+          <ScrollView style={styles.body}>
+            <ClientOptions
+              clientDetailsState={clientSelect}
+              clientId={id}
+              index={index}
+              favoriteHandler={favoriteHandler}
+              viewEditClientHandler={viewEditClientHandler}
+              removeClientHandler={removeClientHandler}
+              viewEditGroupHandler={viewEditGroupHandler}
+              viewEditReminder={viewEditReminder}
+              groupMode={props.route.params.groupMode}
+            />
             <View style={styles.chooseInfoContainer}>
               <Pressable
                 style={!contactDetailsVisible && { borderBottomWidth: 1 }}
@@ -164,9 +174,11 @@ export default function ClientDetails(props) {
               </Pressable>
             </View>
             {contactDetailsVisible ? (
-              <DetailsContact clientDetailsState={clientSelect} />
+              <View style={styles.detailsContainer}>
+                <DetailsContact clientDetailsState={clientSelect} />
+              </View>
             ) : (
-              <>
+              <View style={styles.detailsContainer}>
                 <DetailsReminders clientDetailsState={clientSelect} />
                 <DetailsNote
                   clientDetailsState={clientSelect}
@@ -180,11 +192,10 @@ export default function ClientDetails(props) {
                   clientDetailsState={clientSelect}
                   viewTaskHandler={viewTaskHandler}
                 />
-              </>
+              </View>
             )}
-          </View>
-          <View style={{ height: 100 }}></View>
-        </ScrollView>
+          </ScrollView>
+        </SafeAreaView>
       )}
     </>
   );
@@ -196,29 +207,20 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     height: "100%",
   },
-  scrollContainer: {
+  backButtonContainer: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+  },
+  container: {
     display: "flex",
-    paddingHorizontal: 30,
     backgroundColor: "#f4f4f4",
-  },
-  rectangleContainer: {
-    display: "flex",
-    position: "",
-    alignItems: "center",
-    height: 25,
-    width: "100%",
-    marginBottom: 15,
-  },
-  rectangle: {
-    justifyContent: "center",
-    width: 75,
-    height: 7,
-    borderRadius: 10,
-    backgroundColor: "#c7c7c7",
+    flex: 1,
   },
   header: {
-    paddingVertical: 20,
+    paddingVertical: 0,
     backgroundColor: "#f4f4f4",
+    paddingHorizontal: 30,
+    paddingVertical: 10,
   },
   name: {
     fontSize: 20,
@@ -232,10 +234,13 @@ const styles = StyleSheet.create({
   },
   body: {
     display: "flex",
+    height: "100%",
+    paddingBottom: 50,
+    paddingHorizontal: 20,
   },
   chooseInfoContainer: {
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "space-evenly",
     marginTop: 5,
     marginBottom: 20,
   },
@@ -258,9 +263,8 @@ const styles = StyleSheet.create({
     borderBottomColor: "#ababab",
   },
   detailsContainer: {
-    paddingVertical: 5,
     borderColor: "#000000",
-    minHeight: 75,
+    paddingHorizontal: 10,
   },
   detailContainer: {
     display: "flex",

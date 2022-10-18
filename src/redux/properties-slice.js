@@ -59,6 +59,21 @@ export const addProperty = createAsyncThunk(
   }
 );
 
+export const editProperty = createAsyncThunk(
+  "properties/editProperty",
+  async (propertyDetails) => {
+    let response;
+    try {
+      response = await API.graphql(
+        graphqlOperation(updateProperty, { input: propertyDetails })
+      );
+    } catch (err) {
+      console.error(err);
+    }
+    return response.data.updateProperty;
+  }
+);
+
 export const propertiesSlice = createSlice({
   name: "properties",
   initialState,
@@ -71,11 +86,15 @@ export const propertiesSlice = createSlice({
       .addCase(fetchProperties.fulfilled, (state, action) => {
         state.status = "succeeded";
         propertiesAdapter.upsertMany(state, action.payload);
-      }).addCase(fetchOneProperty.fulfilled, (state, action) => {
+      })
+      .addCase(fetchOneProperty.fulfilled, (state, action) => {
         state.entities[action.payload.id] = action.payload;
       })
       .addCase(addProperty.fulfilled, (state, action) => {
         propertiesAdapter.addOne(state, action.payload);
+      })
+      .addCase(editProperty.fulfilled, (state, action) => {
+        state.entities[action.payload.id] = action.payload;
       });
   },
 });

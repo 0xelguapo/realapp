@@ -18,7 +18,8 @@ import { AntDesign, Ionicons } from "@expo/vector-icons";
 
 export default function EditClient(props) {
   const { clientId, clientDetailsState } = props.route.params;
-  const [fullName, setFullName] = useState(clientDetailsState.name);
+  const [firstName, setFirstName] = useState(clientDetailsState.firstName);
+  const [lastName, setLastName] = useState(clientDetailsState.lastName)
   const [company, setCompany] = useState(clientDetailsState.company);
   const [phoneInputs, setPhoneInputs] = useState(
     clientDetailsState.phone.split(",")
@@ -87,12 +88,13 @@ export default function EditClient(props) {
   const handleSubmit = async () => {
     const clientDetails = {
       id: clientId,
-      name: fullName,
+      firstName: firstName,
+      lastName: lastName,
       phone: phoneInputs.toString(),
       email: emailInputs.toString(),
       notes: notes,
     };
-    if (fullName.length !== 0) {
+    if (firstName.length !== 0) {
       dispatch(editClient(clientDetails));
       props.navigation.navigate({
         name: "ClientDetails",
@@ -100,7 +102,7 @@ export default function EditClient(props) {
         merge: true,
       });
     } else {
-      Alert.alert("Please enter a valid name");
+      Alert.alert("Please enter a first name.");
     }
   };
 
@@ -122,14 +124,19 @@ export default function EditClient(props) {
       >
         <ScrollView style={styles.detailsContainer}>
           <View style={styles.avatar}>
-            <Text style={styles.avatarText}>{fullName[0].toUpperCase()}</Text>
+            <Text style={styles.avatarText}>{clientDetailsState.firstName[0].toUpperCase()}</Text>
           </View>
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldTitle}>FULL NAME</Text>
             <TextInput
               style={styles.fieldInput}
-              value={fullName}
-              onChangeText={setFullName}
+              value={firstName}
+              onChangeText={setFirstName}
+            />
+            <TextInput
+              style={styles.fieldInput}
+              value={lastName}
+              onChangeText={setLastName}
             />
           </View>
           <View style={styles.fieldContainer}>

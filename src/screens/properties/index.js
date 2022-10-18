@@ -1,6 +1,7 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AddProperty from "./AddProperty";
 import AllProperties from "./AllProperties";
+import EditProperty from "./EditProperty";
 import PropertyDetails from "./PropertyDetails";
 
 const Stack = createNativeStackNavigator();
@@ -13,15 +14,20 @@ export default function PropertiesNavigator() {
         name="AllProperties"
         component={AllProperties}
       />
-       <Stack.Screen
+      <Stack.Screen
         options={{ headerShown: false, presentation: "modal" }}
         name="AddProperty"
         component={AddProperty}
       />
       <Stack.Screen
-        options={{ headerShown: false, presentation: "modal" }}
+        options={{ headerShown: false }}
         name="PropertyDetails"
         component={PropertyDetails}
+      />
+      <Stack.Screen
+        options={{ headerShown: false, presentation: "modal" }}
+        name="EditProperty"
+        component={EditProperty}
       />
     </Stack.Navigator>
   );

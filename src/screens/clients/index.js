@@ -25,7 +25,7 @@ export default function ClientsNavigator() {
         component={AddClient}
       />
       <Stack.Screen
-        options={{ presentation: "modal", headerShown: false }}
+        options={{ headerShown: false }}
         name="ClientDetails"
         component={ClientDetails}
       />
