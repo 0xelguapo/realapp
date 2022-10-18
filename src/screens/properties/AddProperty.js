@@ -33,10 +33,12 @@ export default function AddProperty({ navigation }) {
   const [city, setCity] = useState("");
   const [stateAbbr, setStateAbbr] = useState("");
   const [zipCode, setZipCode] = useState("");
+  const [price, setPrice] = useState('')
   const [note, setNote] = useState("");
   const cityRef = useRef();
   const stateRef = useRef();
   const zipRef = useRef();
+  const priceRef = useRef()
 
   const filteredData = useMemo(() => {
     return allClients.filter((c) => {
@@ -87,6 +89,7 @@ export default function AddProperty({ navigation }) {
       city: city,
       state: stateAbbr,
       zip: zipCode,
+      price: price,
       note: note,
       clientId: selectedClient.id
     };
@@ -173,6 +176,24 @@ export default function AddProperty({ navigation }) {
               autoCapitalize="words"
               ref={zipRef}
               keyboardType="numeric"
+              blurOnSubmit={false}
+              onSubmitEditing={() => priceRef.current.focus()}
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <Feather
+              name="dollar-sign"
+              size={20}
+              color="black"
+            />
+            <TextInput
+              style={styles.textInput}
+              placeholder={"Price"}
+              placeholderTextColor="#757575"
+              value={price}
+              onChangeText={setPrice}
+              keyboardType="numeric"
+              ref={priceRef}             
             />
           </View>
 
@@ -232,7 +253,7 @@ export default function AddProperty({ navigation }) {
               </View>
             </>
           )}
-          <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }} keyboardVerticalOffset={65}>
+          <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }} keyboardVerticalOffset={100}>
             <View style={styles.addNoteContainer}>
               <Text style={styles.addNoteHeader}>Add a note</Text>
               <TextInput
@@ -343,7 +364,7 @@ const styles = StyleSheet.create({
   },
   addClientContainer: {
     display: "flex",
-    flex: 1,
+    flex: 2,
   },
   listViewContainer: {
     flex: 1,
