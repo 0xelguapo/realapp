@@ -10,6 +10,7 @@ import {
   createGroupsProperty,
 } from "../graphql/mutations";
 import { listPropertyGroups, getPropertyGroup } from "../graphql/queries";
+import { listPropertyGroupsWithProperties } from "../graphql/customQueries";
 
 const propertyGroupsAdapter = createEntityAdapter({
   sortComparer: (a, b) => a.createdAt.localeCompare(b.createdAt),
@@ -25,7 +26,7 @@ export const fetchPropertyGroups = createAsyncThunk(
   async () => {
     let response;
     try {
-      response = await API.graphql(graphqlOperation(listPropertyGroups));
+      response = await API.graphql(graphqlOperation(listPropertyGroupsWithProperties));
     } catch (err) {
       console.error(err);
     }
@@ -80,9 +81,10 @@ export const propertyGroupsSlice = createSlice({
         propertyGroupsAdapter.addOne(state, action.payload);
       })
       .addCase(addPropertyToGroup.fulfilled, (state, action) => {
-        state.entities[action.payload.propertyGroupID].properties.items.push(
-          action.payload
-        );
+        console.log(state.entities[action.payload.propertyGroupID].properties.items)
+        // state.entities[action.payload.propertyGroupID].properties.items.push(
+        //   action.payload
+        // );
       });
   },
 });

@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { StyleSheet, View, Text, Pressable } from "react-native";
+import { useState, useMemo } from "react";
+import { StyleSheet, View, Text, Pressable, TouchableOpacity } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 import {
@@ -62,7 +62,7 @@ export default function ClientGroup({ el, clientId, clientGroupID }) {
   };
 
   return (
-    <Pressable style={styles.clientGroup} onPress={handlePress}>
+    <TouchableOpacity style={styles.clientGroup} onPress={handlePress}>
       <View>
         <Text style={styles.clientGroupTitle}>{el.title}</Text>
         <View style={styles.clientGroupDetails}>
@@ -78,7 +78,7 @@ export default function ClientGroup({ el, clientId, clientGroupID }) {
       <View>
         {checked && <Ionicons name="checkmark" size={20} color="#535353" />}
       </View>
-    </Pressable>
+    </TouchableOpacity>
   );
 }
 

@@ -8,7 +8,7 @@ import {
   TextInput,
 } from "react-native";
 import { useState, useRef } from "react";
-import ClientGroup from '../../components/client/ClientGroup'
+import ClientGroup from "../../components/client/ClientGroup";
 import { useDispatch, useSelector } from "react-redux";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import { useEffect } from "react";
@@ -16,6 +16,7 @@ import {
   addPropertyGroup,
   fetchPropertyGroups,
   selectAllPropertyGroups,
+  addPropertyToGroup,
 } from "../../redux/propertyGroups-slice";
 import PropertyGroup from "../../components/property/PropertyGroup";
 
@@ -26,8 +27,14 @@ export default function AddEditPropertyGroup(props) {
   const [allUpdatedGroups, setAllUpdatedGroups] = useState([]);
 
   const propertyGroups = propertyState.group.items;
-  const allPropertyGroups = useSelector(selectAllPropertyGroups)
+  const allPropertyGroups = useSelector(selectAllPropertyGroups);
 
+  const addToGroup = async (propertyGroupID) => {
+    const response = await dispatch(
+      addPropertyToGroup({ propertyID: propertyId, propertyGroupID: propertyGroupID })
+    ).unwrap();
+    console.log(response);
+  };
 
   const dispatch = useDispatch();
 
@@ -82,8 +89,12 @@ export default function AddEditPropertyGroup(props) {
           </View>
         )}
         <View style={styles.groupsContainer}>
-          {allPropertyGroups.map((property) => (
-            <PropertyGroup key={property.id} property={property} />
+          {allPropertyGroups.map((propertyGroup) => (
+            <PropertyGroup
+              key={propertyGroup.id}
+              propertyGroup={propertyGroup}
+              onPress={() => addToGroup(propertyGroup.id)}
+            />
           ))}
         </View>
       </ScrollView>
@@ -135,6 +146,6 @@ const styles = StyleSheet.create({
     borderColor: "#454545",
   },
   groupsContainer: {
-    marginTop: 10
-  }
+    marginTop: 10,
+  },
 });

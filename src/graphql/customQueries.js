@@ -146,3 +146,36 @@ export const listReminders = /* GraphQL */ `
     }
   }
 `;
+
+export const listPropertyGroupsWithProperties = /* GraphQL */ `
+  query ListPropertyGroups(
+    $filter: ModelPropertyGroupFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listPropertyGroups(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        title
+        description
+        properties {
+          items {
+            id
+            propertyID
+            propertyGroupID
+            createdAt
+              property {
+                id
+                street
+              }
+          }
+          nextToken
+        }
+        owner
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
