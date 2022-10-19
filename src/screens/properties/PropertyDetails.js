@@ -27,7 +27,7 @@ export default function PropertyDetails({ navigation, route }) {
   );
 
   const viewEditPropertyHandler = () => {
-    navigation.navigate("EditProperty", { propertyState: property });
+    navigation.navigate("EditProperty", { propertyState: property, id: id });
   };
 
   const fetchOwnerDetails = async () => {
@@ -70,7 +70,7 @@ export default function PropertyDetails({ navigation, route }) {
               {property.zip && property.zip}
             </Text>
           </View>
-          {property.price && (
+          {property.price?.length > 0 && (
             <Text style={styles.priceText}>
               <Feather name="dollar-sign" size={12} color="#6c6c6c" />
               {Number(property.price).toLocaleString()}

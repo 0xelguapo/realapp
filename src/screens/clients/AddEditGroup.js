@@ -5,6 +5,7 @@ import {
   Text,
   TouchableOpacity,
   TextInput,
+  ScrollView,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
@@ -80,7 +81,7 @@ export default function AddEditGroup(props) {
           <AntDesign name="close" size={24} color="#ababab" />
         </TouchableOpacity>
       </View>
-      <View style={styles.body}>
+      <ScrollView contentContainerStyle={[{paddingBottom: 70, paddingHorizontal: 30}]}>
         <TouchableOpacity
           style={styles.createButton}
           onPress={() => setShowInput(!showInput)}
@@ -114,27 +115,25 @@ export default function AddEditGroup(props) {
             />
           ))}
         </View>
-      </View>
+      </ScrollView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 25,
-    paddingVertical: 20,
+    paddingTop: 75,
   },
   headingContainer: {
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
+    paddingHorizontal: 30,
+    paddingBottom: 20
   },
   screenTitle: {
     fontWeight: "500",
     fontSize: 16,
-  },
-  body: {
-    paddingVertical: 30,
   },
   createButton: {
     backgroundColor: "#D9D9D9",

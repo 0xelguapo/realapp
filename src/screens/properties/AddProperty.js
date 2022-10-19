@@ -33,12 +33,12 @@ export default function AddProperty({ navigation }) {
   const [city, setCity] = useState("");
   const [stateAbbr, setStateAbbr] = useState("");
   const [zipCode, setZipCode] = useState("");
-  const [price, setPrice] = useState('')
+  const [price, setPrice] = useState("");
   const [note, setNote] = useState("");
   const cityRef = useRef();
   const stateRef = useRef();
   const zipRef = useRef();
-  const priceRef = useRef()
+  const priceRef = useRef();
 
   const filteredData = useMemo(() => {
     return allClients.filter((c) => {
@@ -91,7 +91,7 @@ export default function AddProperty({ navigation }) {
       zip: zipCode,
       price: price,
       note: note,
-      clientId: selectedClient.id
+      clientId: selectedClient.id,
     };
     const response = await dispatch(addProperty(propertyInputs)).unwrap();
     if (response) {
@@ -181,11 +181,7 @@ export default function AddProperty({ navigation }) {
             />
           </View>
           <View style={styles.inputContainer}>
-            <Feather
-              name="dollar-sign"
-              size={20}
-              color="black"
-            />
+            <Feather name="dollar-sign" size={20} color="black" />
             <TextInput
               style={styles.textInput}
               placeholder={"Price"}
@@ -193,7 +189,7 @@ export default function AddProperty({ navigation }) {
               value={price}
               onChangeText={setPrice}
               keyboardType="numeric"
-              ref={priceRef}             
+              ref={priceRef}
             />
           </View>
 
@@ -253,7 +249,11 @@ export default function AddProperty({ navigation }) {
               </View>
             </>
           )}
-          <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }} keyboardVerticalOffset={100}>
+          <KeyboardAvoidingView
+            behavior="padding"
+            style={{ flex: 1 }}
+            keyboardVerticalOffset={100}
+          >
             <View style={styles.addNoteContainer}>
               <Text style={styles.addNoteHeader}>Add a note</Text>
               <TextInput
@@ -261,6 +261,7 @@ export default function AddProperty({ navigation }) {
                 value={note}
                 onChangeText={setNote}
                 multiline={true}
+                onFocus={() => setClientsVisible(false)}
               />
             </View>
           </KeyboardAvoidingView>

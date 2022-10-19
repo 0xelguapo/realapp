@@ -27,7 +27,7 @@ export default function PropertyOptions({
       >
         <View style={styles.optionIconContainer}>
           <AntDesign name="contacts" size={24} color="#535353" />
-          <Text style={{...styles.optionText, marginTop: 7}}>CONTACT</Text>
+          <Text style={{...styles.optionText, marginTop: 7}}>OWNER</Text>
         </View>
       </TouchableOpacity>
       {!groupMode && (

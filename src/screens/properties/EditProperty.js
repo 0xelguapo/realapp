@@ -7,33 +7,46 @@ import {
   TouchableOpacity,
   FlatList,
   Keyboard,
-  SafeAreaView
+  SafeAreaView,
 } from "react-native";
 import { useState, useRef, useEffect, useMemo, useCallback } from "react";
-import { AntDesign, MaterialCommunityIcons, Feather, Ionicons } from "@expo/vector-icons";
+import {
+  AntDesign,
+  MaterialCommunityIcons,
+  Feather,
+  Ionicons,
+} from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
-import { selectAllClients, fetchClients, selectClientById } from "../../redux/clients-slice";
+import {
+  selectAllClients,
+  fetchClients,
+  selectClientById,
+} from "../../redux/clients-slice";
 import EachClient from "../../components/client/EachClient";
 import { editProperty } from "../../redux/properties-slice";
 
 export default function EditProperty(props) {
-  const { propertyState } = props.route.params;
+  const { propertyState, id } = props.route.params;
   const dispatch = useDispatch();
 
-  const propertyOwner = useSelector((state) => selectClientById(state, propertyState.clientId))
+  const propertyOwner = useSelector((state) =>
+    selectClientById(state, propertyState.clientId)
+  );
   const allClients = useSelector(selectAllClients);
   const clientStatus = useSelector((state) => state.clients.status);
 
   const [clientsVisible, setClientsVisible] = useState(false);
   const [searchInput, setSearchInput] = useState("");
-  const [selectedClient, setSelectedClient] = useState(propertyOwner);
+  const [selectedClient, setSelectedClient] = useState(propertyOwner || "");
 
-  const [streetAddress, setStreetAddress] = useState(propertyState.street);
-  const [city, setCity] = useState(propertyState.city);
-  const [stateAbbr, setStateAbbr] = useState(propertyState.state);
-  const [zipCode, setZipCode] = useState(propertyState.zip);
-  const [price, setPrice] = useState(propertyState.price);
-  const [note, setNote] = useState(propertyState.note);
+  const [streetAddress, setStreetAddress] = useState(
+    propertyState.street || ""
+  );
+  const [city, setCity] = useState(propertyState.city || "");
+  const [stateAbbr, setStateAbbr] = useState(propertyState.state || "");
+  const [zipCode, setZipCode] = useState(propertyState.zip || "");
+  const [price, setPrice] = useState(propertyState.price || "");
+  const [note, setNote] = useState(propertyState.note || "");
   const cityRef = useRef();
   const stateRef = useRef();
   const zipRef = useRef();
@@ -56,7 +69,7 @@ export default function EditProperty(props) {
     setClientsVisible(!clientsVisible);
     if (selectedClient) {
       setSearchInput("");
-      setSelectedClient("");
+      setSelectedClient(null);
     }
     Keyboard.dismiss();
   };
@@ -65,7 +78,6 @@ export default function EditProperty(props) {
     setSelectedClient(client);
     setSearchInput(client.firstName + " " + client?.lastName);
     setClientsVisible(false);
-    console.log(client);
   };
 
   const renderClient = useCallback(
@@ -84,19 +96,21 @@ export default function EditProperty(props) {
 
   const handleSubmit = async () => {
     const propertyInputs = {
+      id: id,
       street: streetAddress,
       city: city,
       state: stateAbbr,
       zip: zipCode,
       price: price,
-      clientId: selectedClient.id
+      note: note,
+      clientId: selectedClient?.id || null,
+    };
+    const response = await dispatch(editProperty(propertyInputs)).unwrap();
+    console.log(response);
+    if (response) {
+      props.navigation.goBack();
     }
-    const response = await dispatch(editProperty(propertyInputs)).unwrap()
-    console.log(response)
-    if(response) {
-      props.navigation.goBack()
-    }
-  }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -191,61 +205,69 @@ export default function EditProperty(props) {
           />
         </View>
         {!clientsVisible ? (
-            <>
-              {!selectedClient ? (
-                <TouchableOpacity
-                  style={styles.addAnotherButton}
-                  onPress={handleShowClients}
-                >
-                  <Ionicons name="md-add-sharp" size={24} color="#026bff" />
-                  <Text style={styles.addOwnershipText}>Add Ownership</Text>
-                </TouchableOpacity>
-              ) : (
-                <TouchableOpacity
-                  style={styles.addAnotherButton}
-                  onPress={handleShowClients}
-                >
-                  <Ionicons name="md-remove-circle" size={20} color="red" />
-                  <Text style={styles.ownedByText}>
-                    Owned by:{" "}
-                    <Text style={styles.selectedClientName}>
-                      {selectedClient.firstName +
-                        " " +
-                        selectedClient?.lastName}
-                    </Text>
+          <>
+            {!selectedClient ? (
+              <TouchableOpacity
+                style={styles.addAnotherButton}
+                onPress={handleShowClients}
+              >
+                <Ionicons name="md-add-sharp" size={24} color="#026bff" />
+                <Text style={styles.addOwnershipText}>Add Ownership</Text>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                style={styles.addAnotherButton}
+                onPress={handleShowClients}
+              >
+                <Ionicons name="md-remove-circle" size={20} color="red" />
+                <Text style={styles.ownedByText}>
+                  Owned by:
+                  <Text style={styles.selectedClientName}>
+                    {selectedClient.firstName + " " + selectedClient?.lastName}
                   </Text>
-                </TouchableOpacity>
-              )}
-            </>
-          ) : (
-            <>
-              <View style={styles.addClientContainer}>
-                <TouchableOpacity
-                  style={styles.addAnotherButton}
-                  onPress={handleShowClients}
-                >
-                  <Ionicons name="md-remove-circle" size={20} color="red" />
-                </TouchableOpacity>
-                <View style={styles.listViewContainer}>
-                  <TextInput
-                    style={styles.search}
-                    value={searchInput}
-                    onChangeText={setSearchInput}
-                    placeholder="Search..."
-                    placeholderTextColor="#7b7b7c"
-                    returnKeyType="done"
-                  />
-                  <FlatList
-                    keyboardShouldPersistTaps={"handled"}
-                    data={filteredData}
-                    renderItem={renderClient}
-                    refreshing={clientStatus !== "succeeded"}
-                    keyExtractor={(c) => c.id}
-                  />
-                </View>
+                </Text>
+              </TouchableOpacity>
+            )}
+          </>
+        ) : (
+          <>
+            <View style={styles.addClientContainer}>
+              <TouchableOpacity
+                style={styles.addAnotherButton}
+                onPress={handleShowClients}
+              >
+                <Ionicons name="md-remove-circle" size={20} color="red" />
+              </TouchableOpacity>
+              <View style={styles.listViewContainer}>
+                <TextInput
+                  style={styles.search}
+                  value={searchInput}
+                  onChangeText={setSearchInput}
+                  placeholder="Search..."
+                  placeholderTextColor="#7b7b7c"
+                  returnKeyType="done"
+                />
+                <FlatList
+                  keyboardShouldPersistTaps={"handled"}
+                  data={filteredData}
+                  renderItem={renderClient}
+                  refreshing={clientStatus !== "succeeded"}
+                  keyExtractor={(c) => c.id}
+                />
               </View>
-            </>
-          )}
+            </View>
+          </>
+        )}
+        <View style={styles.addNoteContainer}>
+          <Text style={styles.addNoteHeader}>Add a note</Text>
+          <TextInput
+            style={styles.addNoteInput}
+            value={note}
+            onChangeText={setNote}
+            multiline={true}
+            onFocus={() => setClientsVisible(false)}
+          />
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -345,5 +367,22 @@ const styles = StyleSheet.create({
   },
   selectedClientName: {
     fontWeight: "700",
+  },
+  addNoteContainer: {
+    paddingVertical: 20,
+    height: 150,
+  },
+  addNoteHeader: {
+    fontWeight: "500",
+    paddingHorizontal: 20,
+    marginBottom: 5,
+  },
+  addNoteInput: {
+    borderColor: "#dcdcdc",
+    backgroundColor: "white",
+    paddingLeft: 20,
+    flex: 1,
+    fontSize: 16,
+    height: 50,
   },
 });
