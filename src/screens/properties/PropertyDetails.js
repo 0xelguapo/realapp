@@ -27,7 +27,14 @@ export default function PropertyDetails({ navigation, route }) {
   );
 
   const viewEditPropertyHandler = () => {
-    navigation.navigate("EditProperty", { propertyState: property, id: id });
+    navigation.navigate("EditProperty", { propertyState: property, propertyId: id });
+  };
+
+  const viewEditPropertyGroupHandler = () => {
+    navigation.navigate("AddEditPropertyGroup", {
+      propertyId: id,
+      propertyState: property,
+    });
   };
 
   const fetchOwnerDetails = async () => {
@@ -79,7 +86,10 @@ export default function PropertyDetails({ navigation, route }) {
         </View>
       </View>
       <ScrollView style={styles.body}>
-        <PropertyOptions viewEditPropertyHandler={viewEditPropertyHandler} />
+        <PropertyOptions
+          viewEditPropertyHandler={viewEditPropertyHandler}
+          viewEditPropertyGroupHandler={viewEditPropertyGroupHandler}
+        />
         <View style={styles.ownedByContainer}>
           {propertyOwner ? (
             <>

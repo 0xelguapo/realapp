@@ -26,7 +26,7 @@ import EachClient from "../../components/client/EachClient";
 import { editProperty } from "../../redux/properties-slice";
 
 export default function EditProperty(props) {
-  const { propertyState, id } = props.route.params;
+  const { propertyState, propertyId } = props.route.params;
   const dispatch = useDispatch();
 
   const propertyOwner = useSelector((state) =>
@@ -96,7 +96,7 @@ export default function EditProperty(props) {
 
   const handleSubmit = async () => {
     const propertyInputs = {
-      id: id,
+      id: propertyId,
       street: streetAddress,
       city: city,
       state: stateAbbr,

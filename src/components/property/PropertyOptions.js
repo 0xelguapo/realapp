@@ -5,9 +5,7 @@ import {
   StyleSheet,
   ScrollView,
 } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
-import { Feather } from "@expo/vector-icons";
-import { Ionicons } from "@expo/vector-icons";
+import { AntDesign, Feather, Ionicons, MaterialIcons } from "@expo/vector-icons";
 
 export default function PropertyOptions({
   viewEditPropertyHandler,
@@ -37,8 +35,8 @@ export default function PropertyOptions({
           onPress={viewEditPropertyGroupHandler}
         >
           <View style={styles.optionIconContainer}>
-            <Ionicons name="people-outline" size={24} color="#535353" />
-            <Text style={styles.optionText}>GROUP</Text>
+            <MaterialIcons name="label-outline" size={24} color="#535353" />
+            <Text style={styles.optionText}>CATEGORY</Text>
           </View>
         </TouchableOpacity>
       )}

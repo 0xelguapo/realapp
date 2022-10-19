@@ -123,17 +123,19 @@ export default function AddEditGroup(props) {
 const styles = StyleSheet.create({
   container: {
     paddingTop: 75,
+    backgroundColor: "#f9f9f9"
   },
   headingContainer: {
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
     paddingHorizontal: 30,
-    paddingBottom: 20
+    paddingBottom: 20,
+    alignItems: 'center'
   },
   screenTitle: {
     fontWeight: "500",
-    fontSize: 16,
+    fontSize: 18,
   },
   createButton: {
     backgroundColor: "#D9D9D9",

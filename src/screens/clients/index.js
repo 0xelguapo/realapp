@@ -63,7 +63,7 @@ export default function ClientsNavigator() {
       />
       <Stack.Screen
         options={{
-          presentation: "containedModal",
+          presentation: "transparentModal",
           headerShown: false,
           cardOverlayEnabled: true,
         }}
