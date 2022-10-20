@@ -19,21 +19,37 @@ import {
   addPropertyToGroup,
 } from "../../redux/propertyGroups-slice";
 import PropertyGroup from "../../components/property/PropertyGroup";
+import { selectPropertyById } from "../../redux/properties-slice";
 
 export default function AddEditPropertyGroup(props) {
-  const { propertyId, propertyState } = props.route.params;
+  const { propertyId } = props.route.params;
   const [showInput, setShowInput] = useState(false);
   const [title, setTitle] = useState("");
   const [allUpdatedGroups, setAllUpdatedGroups] = useState([]);
 
-  const propertyGroups = propertyState.group.items;
+  const groupsOfProperty = useSelector((state) => selectPropertyById(state, propertyId)).group.items;
   const allPropertyGroups = useSelector(selectAllPropertyGroups);
 
-  const addToGroup = async (propertyGroupID) => {
-    const response = await dispatch(
-      addPropertyToGroup({ propertyID: propertyId, propertyGroupID: propertyGroupID })
-    ).unwrap();
-    console.log(response);
+  //move add to group and remove from group out of component and into here
+  //each time it's added to group, change the state of updatedgroups
+  //
+
+  const updatePropertyGroups = (allPropertyGroups, groupsOfProperty) => {
+    let allPropertyGroupsCopy = [...allPropertyGroups];
+    for (let i = 0; i < allPropertyGroupsCopy.length; i++) {
+      const propertyGroupsId = allPropertyGroupsCopy[i].id;
+      for (let j = 0; j < groupsOfProperty.length; j++) {
+        if (propertyGroupsId === groupsOfProperty[j].propertyGroupID) {
+          allPropertyGroupsCopy[i] = {
+            ...allPropertyGroupsCopy[i],
+            inGroup: true,
+            groupsPropertyID: groupsOfProperty[j].id,
+          };
+          continue;
+        }
+      }
+    }
+    return allPropertyGroupsCopy;
   };
 
   const dispatch = useDispatch();
@@ -51,7 +67,12 @@ export default function AddEditPropertyGroup(props) {
 
   useEffect(() => {
     dispatch(fetchPropertyGroups());
-  }, [dispatch]);
+  }, []);
+
+  useEffect(() => {
+    let finalArray = updatePropertyGroups(allPropertyGroups, groupsOfProperty);
+    setAllUpdatedGroups(finalArray);
+  }, [allPropertyGroups, groupsOfProperty, dispatch]);
 
   return (
     <View style={styles.container}>
@@ -89,11 +110,12 @@ export default function AddEditPropertyGroup(props) {
           </View>
         )}
         <View style={styles.groupsContainer}>
-          {allPropertyGroups.map((propertyGroup) => (
+          {allUpdatedGroups.map((propertyGroup, index) => (
             <PropertyGroup
-              key={propertyGroup.id}
+              key={index}
+              propertyId={propertyId}
               propertyGroup={propertyGroup}
-              onPress={() => addToGroup(propertyGroup.id)}
+              groupsPropertyID={propertyGroup.groupsPropertyID}
             />
           ))}
         </View>

@@ -1,22 +1,85 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import {
+  addPropertyToGroup,
+  removePropertyFromGroup,
+} from "../../redux/propertyGroups-slice";
+import {
+  handleAddPropertyToGroup,
+  handleRemovePropertyFromGroup,
+} from "../../redux/properties-slice";
 
-export default function PropertyGroup({ propertyGroup, onPress }) {
+export default function PropertyGroup({ propertyGroup, propertyId }) {
+  const dispatch = useDispatch();
+  const [checked, setChecked] = useState(propertyGroup.inGroup);
+  const [groupsPropertyIDState, setGroupsPropertyIDState] = useState(
+    propertyGroup.groupsPropertyID
+  );
+
+  const addToGroup = async () => {
+    const response = await dispatch(
+      addPropertyToGroup({
+        propertyID: propertyId,
+        propertyGroupID: propertyGroup.id,
+      })
+    ).unwrap();
+    if (response) {
+      dispatch(
+        handleAddPropertyToGroup({
+          propertyId: response.property.id,
+          propertyGroupID: response.propertyGroupID,
+        })
+      );
+      setGroupsPropertyIDState(response.id);
+    }
+  };
+
+  const removeFromGroup = async () => {
+    const response = await dispatch(
+      removePropertyFromGroup(groupsPropertyIDState)
+    ).unwrap();
+    if (response) {
+      handleRemovePropertyFromGroup({
+        propertyId: response.property.id,
+        propertyGroupID: response.propertyGroupID,
+      });
+    }
+  };
+
+  const handlePress = () => {
+    if (checked) {
+      removeFromGroup();
+      setChecked(false);
+    } else {
+      setChecked(true);
+      addToGroup();
+    }
+  };
+
   return (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity onPress={handlePress}>
       <View style={styles.container}>
-        <Text style={styles.title}>{propertyGroup.title}</Text>
-        {propertyGroup.properties?.length ? (
-          <View style={styles.lengthContainer}>
-            <Text style={styles.lengthText}>{propertyGroup.properties.length}</Text>
-            <FontAwesome name="building-o" size={10} color="#727272" />
-          </View>
-        ) : (
-          <View style={styles.lengthContainer}>
-            <Text style={styles.lengthText}>0</Text>
-            <FontAwesome name="building-o" size={10} color="#727272" />
-          </View>
-        )}
+        <View>
+          <Text style={styles.title}>{propertyGroup.title}</Text>
+          {propertyGroup.properties.items?.length ? (
+            <View style={styles.lengthContainer}>
+              <Text style={styles.lengthText}>
+                {propertyGroup.properties.items.length}
+              </Text>
+              <FontAwesome name="building-o" size={10} color="#727272" />
+            </View>
+          ) : (
+            <View style={styles.lengthContainer}>
+              <Text style={styles.lengthText}>0</Text>
+              <FontAwesome name="building-o" size={10} color="#727272" />
+            </View>
+          )}
+        </View>
+        <View>
+          {checked && <Ionicons name="checkmark" size={20} color="#535353" />}
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -28,10 +91,12 @@ const styles = StyleSheet.create({
     borderWidth: 0.8,
     height: 60,
     display: "flex",
-    justifyContent: "center",
+    justifyContent: "space-between",
+    alignItems: "center",
     borderRadius: 5,
     marginBottom: 10,
     paddingVertical: 5,
+    flexDirection: "row",
   },
   title: {
     fontWeight: "600",
@@ -39,7 +104,7 @@ const styles = StyleSheet.create({
   },
   lengthContainer: {
     flexDirection: "row",
-    alignItems: 'center'
+    alignItems: "center",
   },
   lengthText: {
     fontSize: 12,

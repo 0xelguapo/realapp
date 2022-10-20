@@ -33,7 +33,6 @@ export default function PropertyDetails({ navigation, route }) {
   const viewEditPropertyGroupHandler = () => {
     navigation.navigate("AddEditPropertyGroup", {
       propertyId: id,
-      propertyState: property,
     });
   };
 

@@ -186,7 +186,6 @@ export const groupsSlice = createSlice({
         const {clientGroupID, id} = action.payload
         const indexToRemove = state.entities[clientGroupID].clients.items.findIndex(item => item.id === id)
         state.entities[clientGroupID].clients.items.splice(indexToRemove, 1)
-        // const index = state.entities[clientGroupID].clients.items.findIndex(item => item.id === action.payload.id);
       })
       .addCase(removeMultipleClientsFromGroup.fulfilled, (state, action) => {
         const updatedClients = state.entities[

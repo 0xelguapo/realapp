@@ -49,17 +49,16 @@ export default function AddEditGroup(props) {
     return allGroupsCopy;
   };
 
-  const getAllGroupsAndUpdate = async () => {
-    dispatch(fetchGroups());
-    let finalArray = updateClientGroups(groups, clientsGroups);
-    setAllGroups(finalArray);
-  };
-
   useEffect(() => {
     let isMounted = true;
-    if (isMounted) getAllGroupsAndUpdate();
+    if (isMounted) dispatch(fetchGroups());
     return () => (isMounted = false);
-  }, [groups, clientsGroups, dispatch]);
+  }, []);
+
+  useEffect(() => {
+    let finalArray = updateClientGroups(groups, clientsGroups);
+    setAllGroups(finalArray);
+  }, [groups]);
 
   useEffect(() => {
     if (showInput) inputRef.current.focus();
@@ -81,7 +80,9 @@ export default function AddEditGroup(props) {
           <AntDesign name="close" size={24} color="#ababab" />
         </TouchableOpacity>
       </View>
-      <ScrollView contentContainerStyle={[{paddingBottom: 70, paddingHorizontal: 30}]}>
+      <ScrollView
+        contentContainerStyle={[{ paddingBottom: 70, paddingHorizontal: 30 }]}
+      >
         <TouchableOpacity
           style={styles.createButton}
           onPress={() => setShowInput(!showInput)}
@@ -123,7 +124,8 @@ export default function AddEditGroup(props) {
 const styles = StyleSheet.create({
   container: {
     paddingTop: 75,
-    backgroundColor: "#f9f9f9"
+    backgroundColor: "#f9f9f9",
+    flex: 1,
   },
   headingContainer: {
     display: "flex",
@@ -131,7 +133,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: 30,
     paddingBottom: 20,
-    alignItems: 'center'
+    alignItems: "center",
   },
   screenTitle: {
     fontWeight: "500",

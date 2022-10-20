@@ -8,6 +8,7 @@ import {
   createPropertyGroup,
   updatePropertyGroup,
   createGroupsProperty,
+  deleteGroupsProperty,
 } from "../graphql/mutations";
 import { listPropertyGroups, getPropertyGroup } from "../graphql/queries";
 import { listPropertyGroupsWithProperties } from "../graphql/customQueries";
@@ -26,7 +27,9 @@ export const fetchPropertyGroups = createAsyncThunk(
   async () => {
     let response;
     try {
-      response = await API.graphql(graphqlOperation(listPropertyGroupsWithProperties));
+      response = await API.graphql(
+        graphqlOperation(listPropertyGroupsWithProperties)
+      );
     } catch (err) {
       console.error(err);
     }
@@ -67,6 +70,23 @@ export const addPropertyToGroup = createAsyncThunk(
   }
 );
 
+export const removePropertyFromGroup = createAsyncThunk(
+  "propertyGroups/removePropertyFromGroup",
+  async (groupPropertyID) => {
+    let response;
+    try {
+      response = await API.graphql(
+        graphqlOperation(deleteGroupsProperty, {
+          input: { id: groupPropertyID },
+        })
+      );
+    } catch (err) {
+      console.error(err);
+    }
+    return response.data.deleteGroupsProperty;
+  }
+);
+
 export const propertyGroupsSlice = createSlice({
   name: "propertyGroups",
   initialState,
@@ -81,11 +101,14 @@ export const propertyGroupsSlice = createSlice({
         propertyGroupsAdapter.addOne(state, action.payload);
       })
       .addCase(addPropertyToGroup.fulfilled, (state, action) => {
-        console.log(state.entities[action.payload.propertyGroupID].properties.items)
-        // state.entities[action.payload.propertyGroupID].properties.items.push(
-        //   action.payload
-        // );
-      });
+        state.entities[action.payload.propertyGroupID].properties.items.push(
+          action.payload
+        );
+      }).addCase(removePropertyFromGroup.fulfilled, (state, action) => {
+        const { propertyGroupID, id } = action.payload;
+        const indexToRemove = state.entities[propertyGroupID].properties.items.findIndex(item => item.id === id);
+        state.entities[propertyGroupID].properties.items.splice(indexToRemove, 1)
+      })
   },
 });
 

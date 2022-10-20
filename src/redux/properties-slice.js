@@ -77,7 +77,16 @@ export const editProperty = createAsyncThunk(
 export const propertiesSlice = createSlice({
   name: "properties",
   initialState,
-  reducers: {},
+  reducers: {
+    handleAddPropertyToGroup: (state, action) => {
+      state.entities[action.payload.propertyId].group.items.push(action.payload)
+    },
+    handleRemovePropertyFromGroup: (state, action) => {
+      const { propertyId, propertyGroupID } = action.payload;
+      const indexToRemove = state.entities[propertyId].group.items.findIndex(item => item.propertyGroupID === propertyGroupID);
+      state.entities[propertyId].group.items.splice(indexToRemove, 1)
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchProperties.pending, (state, action) => {
@@ -104,5 +113,7 @@ export const {
   selectById: selectPropertyById,
   selectIds: selectPropertyIds,
 } = propertiesAdapter.getSelectors((state) => state.properties);
+
+export const { handleAddPropertyToGroup, handleRemovePropertyFromGroup } = propertiesSlice.actions;
 
 export default propertiesSlice.reducer;
