@@ -11,12 +11,16 @@ import {
   handleRemovePropertyFromGroup,
 } from "../../redux/properties-slice";
 
-export default function PropertyGroup({ propertyGroup, propertyId }) {
+export default function PropertyGroup({
+  propertyGroup,
+  propertyId,
+  groupsPropertyID,
+  inGroup,
+}) {
   const dispatch = useDispatch();
-  const [checked, setChecked] = useState(propertyGroup.inGroup);
-  const [groupsPropertyIDState, setGroupsPropertyIDState] = useState(
-    propertyGroup.groupsPropertyID
-  );
+  const [checked, setChecked] = useState(inGroup);
+  const [groupsPropertyIDState, setGroupsPropertyIDState] =
+    useState(groupsPropertyID);
 
   const addToGroup = async () => {
     const response = await dispatch(
@@ -30,6 +34,7 @@ export default function PropertyGroup({ propertyGroup, propertyId }) {
         handleAddPropertyToGroup({
           propertyId: response.property.id,
           propertyGroupID: response.propertyGroupID,
+          id: response.id,
         })
       );
       setGroupsPropertyIDState(response.id);
@@ -37,14 +42,17 @@ export default function PropertyGroup({ propertyGroup, propertyId }) {
   };
 
   const removeFromGroup = async () => {
+    // console.log(groupsPropertyID)
     const response = await dispatch(
-      removePropertyFromGroup(groupsPropertyIDState)
+      removePropertyFromGroup(groupsPropertyID)
     ).unwrap();
     if (response) {
-      handleRemovePropertyFromGroup({
-        propertyId: response.property.id,
-        propertyGroupID: response.propertyGroupID,
-      });
+      dispatch(
+        handleRemovePropertyFromGroup({
+          propertyId: response.property.id,
+          propertyGroupID: response.propertyGroupID,
+        })
+      );
     }
   };
 
@@ -53,8 +61,8 @@ export default function PropertyGroup({ propertyGroup, propertyId }) {
       removeFromGroup();
       setChecked(false);
     } else {
-      setChecked(true);
       addToGroup();
+      setChecked(true);
     }
   };
 

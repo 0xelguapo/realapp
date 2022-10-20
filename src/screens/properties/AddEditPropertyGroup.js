@@ -27,12 +27,10 @@ export default function AddEditPropertyGroup(props) {
   const [title, setTitle] = useState("");
   const [allUpdatedGroups, setAllUpdatedGroups] = useState([]);
 
-  const groupsOfProperty = useSelector((state) => selectPropertyById(state, propertyId)).group.items;
+  const groupsOfProperty = useSelector((state) =>
+    selectPropertyById(state, propertyId)
+  ).group.items;
   const allPropertyGroups = useSelector(selectAllPropertyGroups);
-
-  //move add to group and remove from group out of component and into here
-  //each time it's added to group, change the state of updatedgroups
-  //
 
   const updatePropertyGroups = (allPropertyGroups, groupsOfProperty) => {
     let allPropertyGroupsCopy = [...allPropertyGroups];
@@ -40,12 +38,19 @@ export default function AddEditPropertyGroup(props) {
       const propertyGroupsId = allPropertyGroupsCopy[i].id;
       for (let j = 0; j < groupsOfProperty.length; j++) {
         if (propertyGroupsId === groupsOfProperty[j].propertyGroupID) {
+          // console.log(groupsOfProperty[j])
           allPropertyGroupsCopy[i] = {
             ...allPropertyGroupsCopy[i],
             inGroup: true,
             groupsPropertyID: groupsOfProperty[j].id,
           };
-          continue;
+          break;
+        } else if (propertyGroupsId !== groupsOfProperty[j].propertyGroupID) {
+          allPropertyGroups[i] = {
+            ...allPropertyGroups[i],
+            inGroup: false,
+            groupsPropertyID: null,
+          };
         }
       }
     }
@@ -66,13 +71,15 @@ export default function AddEditPropertyGroup(props) {
   };
 
   useEffect(() => {
+    console.log("fetching groups");
     dispatch(fetchPropertyGroups());
   }, []);
 
   useEffect(() => {
+    console.log("updating Groups");
     let finalArray = updatePropertyGroups(allPropertyGroups, groupsOfProperty);
     setAllUpdatedGroups(finalArray);
-  }, [allPropertyGroups, groupsOfProperty, dispatch]);
+  }, [allPropertyGroups, groupsOfProperty]);
 
   return (
     <View style={styles.container}>
@@ -116,6 +123,8 @@ export default function AddEditPropertyGroup(props) {
               propertyId={propertyId}
               propertyGroup={propertyGroup}
               groupsPropertyID={propertyGroup.groupsPropertyID}
+              index={index}
+              inGroup={propertyGroup.inGroup}
             />
           ))}
         </View>

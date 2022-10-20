@@ -84,7 +84,7 @@ export const propertiesSlice = createSlice({
     handleRemovePropertyFromGroup: (state, action) => {
       const { propertyId, propertyGroupID } = action.payload;
       const indexToRemove = state.entities[propertyId].group.items.findIndex(item => item.propertyGroupID === propertyGroupID);
-      state.entities[propertyId].group.items.splice(indexToRemove, 1)
+      state.entities[propertyId].group.items.splice(indexToRemove, 1);
     }
   },
   extraReducers: (builder) => {
