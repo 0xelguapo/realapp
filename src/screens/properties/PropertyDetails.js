@@ -6,15 +6,18 @@ import {
   Text,
   TouchableOpacity,
   SafeAreaView,
+  Alert,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchOneClient, selectClientById } from "../../redux/clients-slice";
 import {
   fetchOneProperty,
+  removeProperty,
   selectPropertyById,
 } from "../../redux/properties-slice";
 import { Feather, Ionicons, AntDesign } from "@expo/vector-icons";
 import PropertyOptions from "../../components/property/PropertyOptions";
+import { handlePropertyGroupsOnDeleteProperty } from "../../redux/propertyGroups-slice";
 
 export default function PropertyDetails({ navigation, route }) {
   const { id } = route.params;
@@ -27,13 +30,41 @@ export default function PropertyDetails({ navigation, route }) {
   );
 
   const viewEditPropertyHandler = () => {
-    navigation.navigate("EditProperty", { propertyState: property, propertyId: id });
+    navigation.navigate("EditProperty", {
+      propertyState: property,
+      propertyId: id,
+    });
   };
 
   const viewEditPropertyGroupHandler = () => {
     navigation.navigate("AddEditPropertyGroup", {
       propertyId: id,
     });
+  };
+
+  const viewPropertyOwnerHandler = () => {
+    if (propertyOwnerId) {
+      navigation.navigate("ClientDetails", {
+        client: { id: propertyOwnerId },
+      });
+    } else {
+      navigation.navigate("AddOwner", { propertyId: id });
+    }
+  };
+
+  const deletePropertyHandler = () => {
+    Alert.alert("Are you sure you want to delete this property?", null, [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Delete",
+        style: "destructive",
+        onPress: async () => {
+          dispatch(removeProperty(id));
+          navigation.goBack();
+          dispatch(handlePropertyGroupsOnDeleteProperty(id));
+        },
+      },
+    ]);
   };
 
   const fetchOwnerDetails = async () => {
@@ -88,6 +119,8 @@ export default function PropertyDetails({ navigation, route }) {
         <PropertyOptions
           viewEditPropertyHandler={viewEditPropertyHandler}
           viewEditPropertyGroupHandler={viewEditPropertyGroupHandler}
+          viewPropertyOwnerHandler={viewPropertyOwnerHandler}
+          deletePropertyHandler={deletePropertyHandler}
         />
         <View style={styles.ownedByContainer}>
           {propertyOwner ? (

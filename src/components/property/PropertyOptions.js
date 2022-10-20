@@ -9,8 +9,9 @@ import { AntDesign, Feather, Ionicons, MaterialIcons } from "@expo/vector-icons"
 
 export default function PropertyOptions({
   viewEditPropertyHandler,
-  removePropertyHandler,
+  deletePropertyHandler,
   viewEditPropertyGroupHandler,
+  viewPropertyOwnerHandler,
   groupMode,
 }) {
   return (
@@ -22,6 +23,7 @@ export default function PropertyOptions({
       <TouchableOpacity
         underlayColor="#e8e8e8"
         style={styles.touchableOpacityStyle}
+        onPress={viewPropertyOwnerHandler}
       >
         <View style={styles.optionIconContainer}>
           <AntDesign name="contacts" size={24} color="#535353" />
@@ -53,7 +55,7 @@ export default function PropertyOptions({
       <TouchableOpacity
         underlayColor="#e8e8e8"
         style={styles.touchableOpacityStyle}
-        onPress={removePropertyHandler}
+        onPress={deletePropertyHandler}
       >
         <View style={styles.optionIconContainer}>
           <Ionicons name="remove-circle-outline" size={24} color="#535353" />

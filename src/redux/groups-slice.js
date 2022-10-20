@@ -156,6 +156,7 @@ export const groupsSlice = createSlice({
         for (let i = 0; i < clientsArray.length; i++) {
           if (clientsArray[i].client.id === action.payload) {
             state.entities[group].clients.items.splice(i, 1);
+            break;
           }
         }
       }

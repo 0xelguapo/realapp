@@ -26,6 +26,7 @@ import {
 import { handleGroupsOnDeleteClient } from "../../redux/groups-slice";
 import { handleRemindersOnDeleteClient } from "../../redux/reminders-slice";
 import { AntDesign } from "@expo/vector-icons";
+import DetailsProperties from "../../components/client/clientDetails/DetailsProperties";
 
 export default function ClientDetails(props) {
   const { id, phone } = props.route.params.client;
@@ -34,7 +35,6 @@ export default function ClientDetails(props) {
 
   const dispatch = useDispatch();
   const clientSelect = useSelector((state) => selectClientById(state, id));
-
   const fetchClientDetails = () => {
     dispatch(fetchOneClient(id));
   };
@@ -82,8 +82,8 @@ export default function ClientDetails(props) {
   const viewEditReminder = () => {
     props.navigation.navigate("EditReminder", {
       clientId: id,
-      clientFirstName: clientSelect.firstname,
-      clientLastName: clientSelect.lastname,
+      firstName: clientSelect.firstName,
+      lastName: clientSelect.lastName,
     });
   };
 
@@ -131,7 +131,7 @@ export default function ClientDetails(props) {
             </Text>
             <Text style={styles.company}>{clientSelect.company}</Text>
           </View>
-          <ScrollView style={styles.body}>
+          <ScrollView style={styles.body} contentContainerStyle={[{paddingBottom: 30}]}>
             <ClientOptions
               clientDetailsState={clientSelect}
               clientId={id}
@@ -192,6 +192,7 @@ export default function ClientDetails(props) {
                   clientDetailsState={clientSelect}
                   viewTaskHandler={viewTaskHandler}
                 />
+                <DetailsProperties clientDetailsState={clientSelect} />
               </View>
             )}
           </ScrollView>

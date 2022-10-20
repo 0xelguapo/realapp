@@ -4,6 +4,8 @@ import AllProperties from "./AllProperties";
 import EditProperty from "./EditProperty";
 import PropertyDetails from "./PropertyDetails";
 import AddEditPropertyGroup from "./AddEditPropertyGroup";
+import ClientDetails from "../clients/ClientDetails";
+import AddOwner from "./AddOwner";
 
 const Stack = createNativeStackNavigator();
 
@@ -38,6 +40,16 @@ export default function PropertiesNavigator() {
         }}
         name="AddEditPropertyGroup"
         component={AddEditPropertyGroup}
+      />
+       <Stack.Screen
+        options={{ headerShown: false, presentation: "transparentModal" }}
+        name="ClientDetails"
+        component={ClientDetails}
+      />
+       <Stack.Screen
+        options={{ headerShown: false, presentation: "modal" }}
+        name="AddOwner"
+        component={AddOwner}
       />
     </Stack.Navigator>
   );

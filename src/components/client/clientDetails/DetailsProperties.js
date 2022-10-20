@@ -1,26 +1,27 @@
 import { View, Text, Pressable, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-export default function DetailsTasks({ clientDetailsState, viewTaskHandler }) {
+export default function DetailsProperties({ clientDetailsState }) {
   return (
     <View style={styles.detailsContainer}>
       <View style={styles.blockHeadingContainer}>
-        <Text style={styles.blockHeadingText}>TASKS</Text>
-        <Pressable onPress={viewTaskHandler}>
-          <Ionicons name="add-circle-outline" size={20} color="#ababab" />
-        </Pressable>
+        <Text style={styles.blockHeadingText}>PROPERTIES</Text>
       </View>
       <View style={styles.detailContainer}>
-        {clientDetailsState.tasks.items?.length ? (
-          clientDetailsState.tasks.items.map((el) => (
-            <View style={styles.taskContainer} key={el.id}>
-              <Text style={styles.connectionTitle}>{el.title}</Text>
-              <Text style={styles.connectionDate}>{el.content}</Text>
+        {clientDetailsState.properties.items?.length ? (
+          clientDetailsState.properties.items.map((el) => (
+            <View style={styles.property} key={el.id}>
+              <Text style={styles.streetText}>{el.street}</Text>
+              <View style={styles.cityStateContainer}>
+                {el.city && <Text style={styles.cityStateText}>{el.city + ", "}</Text>}
+                {el.state && <Text style={styles.cityStateText}>{el.state + " "}</Text>}
+                {el.zip && <Text style={styles.cityStateText}>{el.zip}</Text>}
+              </View>
             </View>
           ))
         ) : (
           <View style={styles.emptyPlaceholderContainer}>
-            <Text style={styles.emptyPlaceholder}>Log your tasks...</Text>
+            <Text style={styles.emptyPlaceholder}>No properties logged...</Text>
           </View>
         )}
       </View>
@@ -51,20 +52,20 @@ const styles = StyleSheet.create({
     display: "flex",
     paddingVertical: 3,
   },
-  taskContainer: {
-    paddingVertical: 3,
-  },
-  connection: {
+  property: {
     paddingVertical: 5,
   },
-  connectionTitle: {
+  streetText: {
     fontWeight: "500",
     fontSize: 15,
     color: "#6c6c6c",
   },
-  connectionDate: {
+  cityStateText: {
     color: "#ababab",
     fontSize: 14,
+  },
+  cityStateContainer: {
+    flexDirection: "row",
   },
   emptyPlaceholderContainer: {
     justifyContent: "center",

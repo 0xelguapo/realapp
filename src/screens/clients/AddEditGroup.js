@@ -43,6 +43,13 @@ export default function AddEditGroup(props) {
             inGroup: true,
             clientGroupID: clientsGroups[j].id,
           };
+          break;
+        } else if (allGroupsId !== clientsGroups[j].clientGroupID) {
+          allGroupsCopy[i] = {
+            ...allGroupsCopy[i],
+            inGroup: false,
+            clientGroupID: null
+          }
         }
       }
     }
@@ -58,7 +65,7 @@ export default function AddEditGroup(props) {
   useEffect(() => {
     let finalArray = updateClientGroups(groups, clientsGroups);
     setAllGroups(finalArray);
-  }, [groups]);
+  }, [groups, clientsGroups]);
 
   useEffect(() => {
     if (showInput) inputRef.current.focus();

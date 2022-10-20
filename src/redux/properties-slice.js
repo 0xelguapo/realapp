@@ -4,7 +4,11 @@ import {
   createEntityAdapter,
 } from "@reduxjs/toolkit";
 import { API, graphqlOperation, grpahqlOperation } from "aws-amplify";
-import { createProperty, updateProperty } from "../graphql/mutations";
+import {
+  createProperty,
+  deleteProperty,
+  updateProperty,
+} from "../graphql/mutations";
 import { listProperties, getProperty } from "../graphql/queries";
 
 const propertiesAdapter = createEntityAdapter({
@@ -74,18 +78,37 @@ export const editProperty = createAsyncThunk(
   }
 );
 
+export const removeProperty = createAsyncThunk(
+  "properties/removeProperty",
+  async (id) => {
+    let response;
+    try {
+      response = await API.graphql(
+        graphqlOperation(deleteProperty, { input: { id: id } })
+      );
+    } catch (err) {
+      console.error(err);
+    }
+    return response.data.deleteProperty;
+  }
+);
+
 export const propertiesSlice = createSlice({
   name: "properties",
   initialState,
   reducers: {
     handleAddPropertyToGroup: (state, action) => {
-      state.entities[action.payload.propertyId].group.items.push(action.payload)
+      state.entities[action.payload.propertyId].group.items.push(
+        action.payload
+      );
     },
     handleRemovePropertyFromGroup: (state, action) => {
       const { propertyId, propertyGroupID } = action.payload;
-      const indexToRemove = state.entities[propertyId].group.items.findIndex(item => item.propertyGroupID === propertyGroupID);
+      const indexToRemove = state.entities[propertyId].group.items.findIndex(
+        (item) => item.propertyGroupID === propertyGroupID
+      );
       state.entities[propertyId].group.items.splice(indexToRemove, 1);
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -104,6 +127,9 @@ export const propertiesSlice = createSlice({
       })
       .addCase(editProperty.fulfilled, (state, action) => {
         state.entities[action.payload.id] = action.payload;
+      })
+      .addCase(removeProperty.fulfilled, (state, action) => {
+        propertiesAdapter.removeOne(state, action.payload.id);
       });
   },
 });
@@ -114,6 +140,7 @@ export const {
   selectIds: selectPropertyIds,
 } = propertiesAdapter.getSelectors((state) => state.properties);
 
-export const { handleAddPropertyToGroup, handleRemovePropertyFromGroup } = propertiesSlice.actions;
+export const { handleAddPropertyToGroup, handleRemovePropertyFromGroup } =
+  propertiesSlice.actions;
 
 export default propertiesSlice.reducer;

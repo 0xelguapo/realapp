@@ -19,8 +19,6 @@ export default function PropertyGroup({
 }) {
   const dispatch = useDispatch();
   const [checked, setChecked] = useState(inGroup);
-  const [groupsPropertyIDState, setGroupsPropertyIDState] =
-    useState(groupsPropertyID);
 
   const addToGroup = async () => {
     const response = await dispatch(
@@ -37,12 +35,10 @@ export default function PropertyGroup({
           id: response.id,
         })
       );
-      setGroupsPropertyIDState(response.id);
     }
   };
 
   const removeFromGroup = async () => {
-    // console.log(groupsPropertyID)
     const response = await dispatch(
       removePropertyFromGroup(groupsPropertyID)
     ).unwrap();

@@ -90,7 +90,20 @@ export const removePropertyFromGroup = createAsyncThunk(
 export const propertyGroupsSlice = createSlice({
   name: "propertyGroups",
   initialState,
-  reducers: {},
+  reducers: {
+    handlePropertyGroupsOnDeleteProperty: (state, action) => {
+      for(const propertyGroup in state.entities) {
+        const propertiesArray = state.entities[propertyGroup].properties.items;
+        for(let i = 0; i < propertiesArray.length; i++) {
+          if(propertiesArray[i].property.id === action.payload) {
+            state.entities[propertyGroup].properties.items.splice(i, 1)
+            break;
+          }
+
+        }
+      }
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchPropertyGroups.fulfilled, (state, action) => {
@@ -117,5 +130,7 @@ export const {
   selectById: selectPropertyGroupById,
   selectIds: selectPropertyGroupIds,
 } = propertyGroupsAdapter.getSelectors((state) => state.propertyGroups);
+
+export const { handlePropertyGroupsOnDeleteProperty } = propertyGroupsSlice.actions
 
 export default propertyGroupsSlice.reducer;
