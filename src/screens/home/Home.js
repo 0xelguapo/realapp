@@ -13,6 +13,7 @@ import RemindersList from "../../components/home/RemindersList";
 import TasksList from "../../components/home/TasksList";
 import AddHome from "../../components/home/AddHome";
 import { MaterialIcons } from "@expo/vector-icons";
+import { useEffect } from "react";
 
 export default function Home(props) {
   const [refreshVisible, setRefreshVisible] = useState(true);
@@ -27,6 +28,10 @@ export default function Home(props) {
     dispatch(fetchTasks())
     dispatch(fetchReminders());
   };
+
+  useEffect(() => {
+    props.navigation.navigate('Paywall')
+  }, [])
 
   return (
     <View style={styles.container}>

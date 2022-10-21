@@ -1,24 +1,19 @@
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 import { useEffect, useState, useRef } from "react";
-import { Text } from "react-native";
+import { Text, Platform } from "react-native";
+// import Purchases, { PurchasesOffering } from "react-native-purchases";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Provider } from "react-redux";
 import store from "../redux/index";
-import SuccessMessage from "../components/UI/SuccessMessage";
 import { SuccessContextProvider } from "../context/success-context";
-import {
-  AntDesign,
-  Ionicons,
-  MaterialCommunityIcons,
-  Feather,
-  FontAwesome
-} from "@expo/vector-icons";
+import SuccessMessage from "../components/UI/SuccessMessage";
 import HomeNavigator from "../screens/home";
 import ClientsNavigator from "../screens/clients";
-import TasksNavigator from "../screens/tasks";
 import MoreNavigator from "../screens/more";
 import PropertiesNavigator from "../screens/properties";
+import { AntDesign, Ionicons, Feather, FontAwesome } from "@expo/vector-icons";
+// import TasksNavigator from "../screens/tasks";
 
 const Tab = createBottomTabNavigator();
 
@@ -30,11 +25,34 @@ Notifications.setNotificationHandler({
   }),
 });
 
+const APIKeys = {
+  apple: "appl_mLBkaAwmUUPAGwfSiSlnbNQoJFb",
+};
+
 export default function AppNavigator() {
   const [expoPushToken, setExpoPushToken] = useState("");
   const [notification, setNotification] = useState(false);
+  const [currentOffering, setCurrentOffering] = useState(null);
   const notificationListener = useRef();
   const responseListener = useRef();
+
+  // const fetchPurchaseData = async () => {
+  //   Purchases.setDebugLogsEnabled(true);
+  //   const offerings = await Purchases.getOfferings();
+  //   console.log(offerings);
+  //   if (offerings) {
+  //     setCurrentOffering(offerings.current);
+  //   }
+  //   if (Platform.OS === "ios") {
+  //     await Purchases.configure({ apiKey: APIKeys.apple });
+  //   } else {
+  //     return
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   fetchPurchaseData().catch(console.error);
+  // }, []);
 
   useEffect(() => {
     registerForPushNotificationsAsync().then((token) =>
@@ -168,21 +186,21 @@ const optionsHandler = ({ route }) => {
     case "Properties":
       return {
         tabBarLabel: ({ focused }) =>
-        focused ? (
-          <Text style={{ fontSize: 11, color: "#0064e5", fontWeight: "600" }}>
-            {route.name}
-          </Text>
-        ) : (
-          <Text style={{ fontSize: 11, color: "#727272" }}>{route.name}</Text>
-        ),
-      tabBarIcon: ({ focused }) =>
-        focused ? (
-          <FontAwesome name="building-o" size={21} color="#0064e5" />
-        ) : (
-          <FontAwesome name="building-o" size={21} color="#727272" />
-        ),
-      headerShown: false,
-      }
+          focused ? (
+            <Text style={{ fontSize: 11, color: "#0064e5", fontWeight: "600" }}>
+              {route.name}
+            </Text>
+          ) : (
+            <Text style={{ fontSize: 11, color: "#727272" }}>{route.name}</Text>
+          ),
+        tabBarIcon: ({ focused }) =>
+          focused ? (
+            <FontAwesome name="building-o" size={21} color="#0064e5" />
+          ) : (
+            <FontAwesome name="building-o" size={21} color="#727272" />
+          ),
+        headerShown: false,
+      };
     // case "Tasks":
     //   return {
     //     tabBarLabel: ({ focused }) =>

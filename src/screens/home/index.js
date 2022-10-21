@@ -4,6 +4,7 @@ import AddReminder from "./AddReminder";
 import AddTask from "../tasks/AddTask";
 import Home from "./Home";
 import EditReminder from "../clients/EditReminder";
+import Paywall from "../../components/UI/Paywall";
 
 const Stack = createNativeStackNavigator();
 
@@ -14,6 +15,11 @@ export default function HomeNavigator() {
         options={{ headerShown: false }}
         name="HomeScreen"
         component={Home}
+      />
+      <Stack.Screen
+        options={{ headerShown: false, presentation: "transparentModal" }}
+        name="Paywall"
+        component={Paywall}
       />
       <Stack.Screen
         options={{ presentation: "modal", headerShown: false }}
@@ -39,7 +45,7 @@ export default function HomeNavigator() {
           presentation: "transparentModal",
           headerShown: false,
           cardOverlayEnabled: true,
-          animation: 'fade'
+          animation: "fade",
         }}
         name="EditReminder"
         component={EditReminder}
