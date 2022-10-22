@@ -10,8 +10,12 @@ import {
 import { useEffect, useState } from "react";
 import { Feather, Ionicons } from "@expo/vector-icons";
 
+// remove go back after setting up payments
+
 export default function Paywall(props) {
   const [showMonthly, setShowMonthly] = useState(false);
+
+  
   return (
     <View style={styles.container}>
       <TouchableOpacity

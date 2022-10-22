@@ -36,7 +36,6 @@ export const getClient = /* GraphQL */ `
           state
           zip
           price
-          capRate
           note
           clientId
           owner
@@ -144,7 +143,6 @@ export const getProperty = /* GraphQL */ `
       state
       zip
       price
-      capRate
       note
       tasks {
         items {
@@ -194,7 +192,6 @@ export const listProperties = /* GraphQL */ `
         state
         zip
         price
-        capRate
         note
         tasks {
           nextToken
@@ -702,7 +699,6 @@ export const getGroupsProperty = /* GraphQL */ `
         state
         zip
         price
-        capRate
         note
         tasks {
           nextToken
@@ -754,7 +750,6 @@ export const listGroupsProperties = /* GraphQL */ `
           state
           zip
           price
-          capRate
           note
           clientId
           owner

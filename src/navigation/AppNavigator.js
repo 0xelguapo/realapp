@@ -2,7 +2,6 @@ import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 import { useEffect, useState, useRef } from "react";
 import { Text, Platform } from "react-native";
-// import Purchases, { PurchasesOffering } from "react-native-purchases";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Provider } from "react-redux";
 import store from "../redux/index";
@@ -32,27 +31,8 @@ const APIKeys = {
 export default function AppNavigator() {
   const [expoPushToken, setExpoPushToken] = useState("");
   const [notification, setNotification] = useState(false);
-  const [currentOffering, setCurrentOffering] = useState(null);
   const notificationListener = useRef();
   const responseListener = useRef();
-
-  // const fetchPurchaseData = async () => {
-  //   Purchases.setDebugLogsEnabled(true);
-  //   const offerings = await Purchases.getOfferings();
-  //   console.log(offerings);
-  //   if (offerings) {
-  //     setCurrentOffering(offerings.current);
-  //   }
-  //   if (Platform.OS === "ios") {
-  //     await Purchases.configure({ apiKey: APIKeys.apple });
-  //   } else {
-  //     return
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchPurchaseData().catch(console.error);
-  // }, []);
 
   useEffect(() => {
     registerForPushNotificationsAsync().then((token) =>

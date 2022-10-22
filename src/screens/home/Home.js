@@ -14,9 +14,29 @@ import TasksList from "../../components/home/TasksList";
 import AddHome from "../../components/home/AddHome";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useEffect } from "react";
+import Purchases from "react-native-purchases";
+import { ENTITLEMENT_ID } from "../../constants";
 
 export default function Home(props) {
   const [refreshVisible, setRefreshVisible] = useState(true);
+
+  const displayPaywall = async () => {
+    try {
+      const customerInfo = await Purchases.getCustomerInfo();
+      console.log('customerInfo,', customerInfo)
+      if (
+        typeof customerInfo.entitlements.active[ENTITLEMENT_ID] === "undefined"
+      ) {
+        props.navigation.navigate("Paywall");
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    displayPaywall()
+  }, [])
 
   const dispatch = useDispatch();
 
@@ -25,13 +45,13 @@ export default function Home(props) {
     setTimeout(() => {
       setRefreshVisible(true);
     }, 2000);
-    dispatch(fetchTasks())
+    dispatch(fetchTasks());
     dispatch(fetchReminders());
   };
 
-  useEffect(() => {
-    props.navigation.navigate('Paywall')
-  }, [])
+  // useEffect(() => {
+  //   props.navigation.navigate("Paywall");
+  // }, []);
 
   return (
     <View style={styles.container}>

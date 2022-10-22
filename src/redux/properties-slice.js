@@ -3,7 +3,7 @@ import {
   createAsyncThunk,
   createEntityAdapter,
 } from "@reduxjs/toolkit";
-import { API, graphqlOperation, grpahqlOperation } from "aws-amplify";
+import { API, graphqlOperation } from "aws-amplify";
 import {
   createProperty,
   deleteProperty,

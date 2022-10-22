@@ -2,8 +2,11 @@
 // this is an auto generated file. This will be overwritten
 
 export const onCreateClient = /* GraphQL */ `
-  subscription OnCreateClient($owner: String) {
-    onCreateClient(owner: $owner) {
+  subscription OnCreateClient(
+    $filter: ModelSubscriptionClientFilterInput
+    $owner: String
+  ) {
+    onCreateClient(filter: $filter, owner: $owner) {
       id
       firstName
       lastName
@@ -36,7 +39,6 @@ export const onCreateClient = /* GraphQL */ `
           state
           zip
           price
-          capRate
           note
           clientId
           owner
@@ -93,8 +95,11 @@ export const onCreateClient = /* GraphQL */ `
   }
 `;
 export const onUpdateClient = /* GraphQL */ `
-  subscription OnUpdateClient($owner: String) {
-    onUpdateClient(owner: $owner) {
+  subscription OnUpdateClient(
+    $filter: ModelSubscriptionClientFilterInput
+    $owner: String
+  ) {
+    onUpdateClient(filter: $filter, owner: $owner) {
       id
       firstName
       lastName
@@ -127,7 +132,6 @@ export const onUpdateClient = /* GraphQL */ `
           state
           zip
           price
-          capRate
           note
           clientId
           owner
@@ -184,8 +188,11 @@ export const onUpdateClient = /* GraphQL */ `
   }
 `;
 export const onDeleteClient = /* GraphQL */ `
-  subscription OnDeleteClient($owner: String) {
-    onDeleteClient(owner: $owner) {
+  subscription OnDeleteClient(
+    $filter: ModelSubscriptionClientFilterInput
+    $owner: String
+  ) {
+    onDeleteClient(filter: $filter, owner: $owner) {
       id
       firstName
       lastName
@@ -218,7 +225,6 @@ export const onDeleteClient = /* GraphQL */ `
           state
           zip
           price
-          capRate
           note
           clientId
           owner
@@ -275,15 +281,17 @@ export const onDeleteClient = /* GraphQL */ `
   }
 `;
 export const onCreateProperty = /* GraphQL */ `
-  subscription OnCreateProperty($owner: String) {
-    onCreateProperty(owner: $owner) {
+  subscription OnCreateProperty(
+    $filter: ModelSubscriptionPropertyFilterInput
+    $owner: String
+  ) {
+    onCreateProperty(filter: $filter, owner: $owner) {
       id
       street
       city
       state
       zip
       price
-      capRate
       note
       tasks {
         items {
@@ -320,15 +328,17 @@ export const onCreateProperty = /* GraphQL */ `
   }
 `;
 export const onUpdateProperty = /* GraphQL */ `
-  subscription OnUpdateProperty($owner: String) {
-    onUpdateProperty(owner: $owner) {
+  subscription OnUpdateProperty(
+    $filter: ModelSubscriptionPropertyFilterInput
+    $owner: String
+  ) {
+    onUpdateProperty(filter: $filter, owner: $owner) {
       id
       street
       city
       state
       zip
       price
-      capRate
       note
       tasks {
         items {
@@ -365,15 +375,17 @@ export const onUpdateProperty = /* GraphQL */ `
   }
 `;
 export const onDeleteProperty = /* GraphQL */ `
-  subscription OnDeleteProperty($owner: String) {
-    onDeleteProperty(owner: $owner) {
+  subscription OnDeleteProperty(
+    $filter: ModelSubscriptionPropertyFilterInput
+    $owner: String
+  ) {
+    onDeleteProperty(filter: $filter, owner: $owner) {
       id
       street
       city
       state
       zip
       price
-      capRate
       note
       tasks {
         items {
@@ -410,8 +422,11 @@ export const onDeleteProperty = /* GraphQL */ `
   }
 `;
 export const onCreatePropertyGroup = /* GraphQL */ `
-  subscription OnCreatePropertyGroup($owner: String) {
-    onCreatePropertyGroup(owner: $owner) {
+  subscription OnCreatePropertyGroup(
+    $filter: ModelSubscriptionPropertyGroupFilterInput
+    $owner: String
+  ) {
+    onCreatePropertyGroup(filter: $filter, owner: $owner) {
       id
       title
       description
@@ -433,8 +448,11 @@ export const onCreatePropertyGroup = /* GraphQL */ `
   }
 `;
 export const onUpdatePropertyGroup = /* GraphQL */ `
-  subscription OnUpdatePropertyGroup($owner: String) {
-    onUpdatePropertyGroup(owner: $owner) {
+  subscription OnUpdatePropertyGroup(
+    $filter: ModelSubscriptionPropertyGroupFilterInput
+    $owner: String
+  ) {
+    onUpdatePropertyGroup(filter: $filter, owner: $owner) {
       id
       title
       description
@@ -456,8 +474,11 @@ export const onUpdatePropertyGroup = /* GraphQL */ `
   }
 `;
 export const onDeletePropertyGroup = /* GraphQL */ `
-  subscription OnDeletePropertyGroup($owner: String) {
-    onDeletePropertyGroup(owner: $owner) {
+  subscription OnDeletePropertyGroup(
+    $filter: ModelSubscriptionPropertyGroupFilterInput
+    $owner: String
+  ) {
+    onDeletePropertyGroup(filter: $filter, owner: $owner) {
       id
       title
       description
@@ -479,8 +500,11 @@ export const onDeletePropertyGroup = /* GraphQL */ `
   }
 `;
 export const onCreateReminder = /* GraphQL */ `
-  subscription OnCreateReminder($owner: String) {
-    onCreateReminder(owner: $owner) {
+  subscription OnCreateReminder(
+    $filter: ModelSubscriptionReminderFilterInput
+    $owner: String
+  ) {
+    onCreateReminder(filter: $filter, owner: $owner) {
       id
       date
       recurring
@@ -526,8 +550,11 @@ export const onCreateReminder = /* GraphQL */ `
   }
 `;
 export const onUpdateReminder = /* GraphQL */ `
-  subscription OnUpdateReminder($owner: String) {
-    onUpdateReminder(owner: $owner) {
+  subscription OnUpdateReminder(
+    $filter: ModelSubscriptionReminderFilterInput
+    $owner: String
+  ) {
+    onUpdateReminder(filter: $filter, owner: $owner) {
       id
       date
       recurring
@@ -573,8 +600,11 @@ export const onUpdateReminder = /* GraphQL */ `
   }
 `;
 export const onDeleteReminder = /* GraphQL */ `
-  subscription OnDeleteReminder($owner: String) {
-    onDeleteReminder(owner: $owner) {
+  subscription OnDeleteReminder(
+    $filter: ModelSubscriptionReminderFilterInput
+    $owner: String
+  ) {
+    onDeleteReminder(filter: $filter, owner: $owner) {
       id
       date
       recurring
@@ -620,8 +650,11 @@ export const onDeleteReminder = /* GraphQL */ `
   }
 `;
 export const onCreateClientGroup = /* GraphQL */ `
-  subscription OnCreateClientGroup($owner: String) {
-    onCreateClientGroup(owner: $owner) {
+  subscription OnCreateClientGroup(
+    $filter: ModelSubscriptionClientGroupFilterInput
+    $owner: String
+  ) {
+    onCreateClientGroup(filter: $filter, owner: $owner) {
       id
       title
       clients {
@@ -642,8 +675,11 @@ export const onCreateClientGroup = /* GraphQL */ `
   }
 `;
 export const onUpdateClientGroup = /* GraphQL */ `
-  subscription OnUpdateClientGroup($owner: String) {
-    onUpdateClientGroup(owner: $owner) {
+  subscription OnUpdateClientGroup(
+    $filter: ModelSubscriptionClientGroupFilterInput
+    $owner: String
+  ) {
+    onUpdateClientGroup(filter: $filter, owner: $owner) {
       id
       title
       clients {
@@ -664,8 +700,11 @@ export const onUpdateClientGroup = /* GraphQL */ `
   }
 `;
 export const onDeleteClientGroup = /* GraphQL */ `
-  subscription OnDeleteClientGroup($owner: String) {
-    onDeleteClientGroup(owner: $owner) {
+  subscription OnDeleteClientGroup(
+    $filter: ModelSubscriptionClientGroupFilterInput
+    $owner: String
+  ) {
+    onDeleteClientGroup(filter: $filter, owner: $owner) {
       id
       title
       clients {
@@ -686,8 +725,11 @@ export const onDeleteClientGroup = /* GraphQL */ `
   }
 `;
 export const onCreateConnectionHistory = /* GraphQL */ `
-  subscription OnCreateConnectionHistory($owner: String) {
-    onCreateConnectionHistory(owner: $owner) {
+  subscription OnCreateConnectionHistory(
+    $filter: ModelSubscriptionConnectionHistoryFilterInput
+    $owner: String
+  ) {
+    onCreateConnectionHistory(filter: $filter, owner: $owner) {
       id
       title
       date
@@ -731,8 +773,11 @@ export const onCreateConnectionHistory = /* GraphQL */ `
   }
 `;
 export const onUpdateConnectionHistory = /* GraphQL */ `
-  subscription OnUpdateConnectionHistory($owner: String) {
-    onUpdateConnectionHistory(owner: $owner) {
+  subscription OnUpdateConnectionHistory(
+    $filter: ModelSubscriptionConnectionHistoryFilterInput
+    $owner: String
+  ) {
+    onUpdateConnectionHistory(filter: $filter, owner: $owner) {
       id
       title
       date
@@ -776,8 +821,11 @@ export const onUpdateConnectionHistory = /* GraphQL */ `
   }
 `;
 export const onDeleteConnectionHistory = /* GraphQL */ `
-  subscription OnDeleteConnectionHistory($owner: String) {
-    onDeleteConnectionHistory(owner: $owner) {
+  subscription OnDeleteConnectionHistory(
+    $filter: ModelSubscriptionConnectionHistoryFilterInput
+    $owner: String
+  ) {
+    onDeleteConnectionHistory(filter: $filter, owner: $owner) {
       id
       title
       date
@@ -821,8 +869,11 @@ export const onDeleteConnectionHistory = /* GraphQL */ `
   }
 `;
 export const onCreateTask = /* GraphQL */ `
-  subscription OnCreateTask($owner: String) {
-    onCreateTask(owner: $owner) {
+  subscription OnCreateTask(
+    $filter: ModelSubscriptionTaskFilterInput
+    $owner: String
+  ) {
+    onCreateTask(filter: $filter, owner: $owner) {
       id
       clientId
       propertyId
@@ -870,8 +921,11 @@ export const onCreateTask = /* GraphQL */ `
   }
 `;
 export const onUpdateTask = /* GraphQL */ `
-  subscription OnUpdateTask($owner: String) {
-    onUpdateTask(owner: $owner) {
+  subscription OnUpdateTask(
+    $filter: ModelSubscriptionTaskFilterInput
+    $owner: String
+  ) {
+    onUpdateTask(filter: $filter, owner: $owner) {
       id
       clientId
       propertyId
@@ -919,8 +973,11 @@ export const onUpdateTask = /* GraphQL */ `
   }
 `;
 export const onDeleteTask = /* GraphQL */ `
-  subscription OnDeleteTask($owner: String) {
-    onDeleteTask(owner: $owner) {
+  subscription OnDeleteTask(
+    $filter: ModelSubscriptionTaskFilterInput
+    $owner: String
+  ) {
+    onDeleteTask(filter: $filter, owner: $owner) {
       id
       clientId
       propertyId
@@ -968,8 +1025,11 @@ export const onDeleteTask = /* GraphQL */ `
   }
 `;
 export const onCreateNote = /* GraphQL */ `
-  subscription OnCreateNote($owner: String) {
-    onCreateNote(owner: $owner) {
+  subscription OnCreateNote(
+    $filter: ModelSubscriptionNoteFilterInput
+    $owner: String
+  ) {
+    onCreateNote(filter: $filter, owner: $owner) {
       id
       title
       content
@@ -980,8 +1040,11 @@ export const onCreateNote = /* GraphQL */ `
   }
 `;
 export const onUpdateNote = /* GraphQL */ `
-  subscription OnUpdateNote($owner: String) {
-    onUpdateNote(owner: $owner) {
+  subscription OnUpdateNote(
+    $filter: ModelSubscriptionNoteFilterInput
+    $owner: String
+  ) {
+    onUpdateNote(filter: $filter, owner: $owner) {
       id
       title
       content
@@ -992,8 +1055,11 @@ export const onUpdateNote = /* GraphQL */ `
   }
 `;
 export const onDeleteNote = /* GraphQL */ `
-  subscription OnDeleteNote($owner: String) {
-    onDeleteNote(owner: $owner) {
+  subscription OnDeleteNote(
+    $filter: ModelSubscriptionNoteFilterInput
+    $owner: String
+  ) {
+    onDeleteNote(filter: $filter, owner: $owner) {
       id
       title
       content
@@ -1004,8 +1070,11 @@ export const onDeleteNote = /* GraphQL */ `
   }
 `;
 export const onCreateGroupsClients = /* GraphQL */ `
-  subscription OnCreateGroupsClients($owner: String) {
-    onCreateGroupsClients(owner: $owner) {
+  subscription OnCreateGroupsClients(
+    $filter: ModelSubscriptionGroupsClientsFilterInput
+    $owner: String
+  ) {
+    onCreateGroupsClients(filter: $filter, owner: $owner) {
       id
       clientID
       clientGroupID
@@ -1058,8 +1127,11 @@ export const onCreateGroupsClients = /* GraphQL */ `
   }
 `;
 export const onUpdateGroupsClients = /* GraphQL */ `
-  subscription OnUpdateGroupsClients($owner: String) {
-    onUpdateGroupsClients(owner: $owner) {
+  subscription OnUpdateGroupsClients(
+    $filter: ModelSubscriptionGroupsClientsFilterInput
+    $owner: String
+  ) {
+    onUpdateGroupsClients(filter: $filter, owner: $owner) {
       id
       clientID
       clientGroupID
@@ -1112,8 +1184,11 @@ export const onUpdateGroupsClients = /* GraphQL */ `
   }
 `;
 export const onDeleteGroupsClients = /* GraphQL */ `
-  subscription OnDeleteGroupsClients($owner: String) {
-    onDeleteGroupsClients(owner: $owner) {
+  subscription OnDeleteGroupsClients(
+    $filter: ModelSubscriptionGroupsClientsFilterInput
+    $owner: String
+  ) {
+    onDeleteGroupsClients(filter: $filter, owner: $owner) {
       id
       clientID
       clientGroupID
@@ -1166,8 +1241,11 @@ export const onDeleteGroupsClients = /* GraphQL */ `
   }
 `;
 export const onCreateGroupsProperty = /* GraphQL */ `
-  subscription OnCreateGroupsProperty($owner: String) {
-    onCreateGroupsProperty(owner: $owner) {
+  subscription OnCreateGroupsProperty(
+    $filter: ModelSubscriptionGroupsPropertyFilterInput
+    $owner: String
+  ) {
+    onCreateGroupsProperty(filter: $filter, owner: $owner) {
       id
       propertyID
       propertyGroupID
@@ -1178,7 +1256,6 @@ export const onCreateGroupsProperty = /* GraphQL */ `
         state
         zip
         price
-        capRate
         note
         tasks {
           nextToken
@@ -1209,8 +1286,11 @@ export const onCreateGroupsProperty = /* GraphQL */ `
   }
 `;
 export const onUpdateGroupsProperty = /* GraphQL */ `
-  subscription OnUpdateGroupsProperty($owner: String) {
-    onUpdateGroupsProperty(owner: $owner) {
+  subscription OnUpdateGroupsProperty(
+    $filter: ModelSubscriptionGroupsPropertyFilterInput
+    $owner: String
+  ) {
+    onUpdateGroupsProperty(filter: $filter, owner: $owner) {
       id
       propertyID
       propertyGroupID
@@ -1221,7 +1301,6 @@ export const onUpdateGroupsProperty = /* GraphQL */ `
         state
         zip
         price
-        capRate
         note
         tasks {
           nextToken
@@ -1252,8 +1331,11 @@ export const onUpdateGroupsProperty = /* GraphQL */ `
   }
 `;
 export const onDeleteGroupsProperty = /* GraphQL */ `
-  subscription OnDeleteGroupsProperty($owner: String) {
-    onDeleteGroupsProperty(owner: $owner) {
+  subscription OnDeleteGroupsProperty(
+    $filter: ModelSubscriptionGroupsPropertyFilterInput
+    $owner: String
+  ) {
+    onDeleteGroupsProperty(filter: $filter, owner: $owner) {
       id
       propertyID
       propertyGroupID
@@ -1264,7 +1346,6 @@ export const onDeleteGroupsProperty = /* GraphQL */ `
         state
         zip
         price
-        capRate
         note
         tasks {
           nextToken
