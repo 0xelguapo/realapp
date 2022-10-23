@@ -6,16 +6,72 @@ import {
   TouchableOpacity,
   ScrollView,
   Pressable,
+  Alert,
+  FlatList,
 } from "react-native";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Feather, Ionicons } from "@expo/vector-icons";
+import Purchases from "react-native-purchases";
+import PackageItem from "../purchase/PackageItem";
 
 // remove go back after setting up payments
 
 export default function Paywall(props) {
   const [showMonthly, setShowMonthly] = useState(false);
+  const [packages, setPackages] = useState([]);
+  const [isPurchasing, setIsPurchasing] = useState(false);
+  const [currentPackage, setCurrentPackage] = useState(null)
 
-  
+  const handlePurchase = () => {
+    console.log(currentPackage)
+  }
+
+
+  const renderYearly = useCallback(({ item, index }) => {
+    if (item.packageType === "ANNUAL") {
+      return (
+        <PackageItem
+          monthly={false}
+          purchasePackage={item}
+          setIsPurchasing={setIsPurchasing}
+          setCurrentPackage={setCurrentPackage}
+        />
+      );
+    }
+  }, []);
+
+  const renderMonthly = useCallback(({ item, index }) => {
+    if (item.packageType === "MONTHLY") {
+      return (
+        <PackageItem
+          monthly={true}
+          purchasePackage={item}
+          setIsPurchasing={setIsPurchasing}
+          setCurrentPackage={setCurrentPackage}
+        />
+      );
+    }
+  }, []);
+
+  useEffect(() => {
+    const getPackages = async () => {
+      try {
+        const offerings = await Purchases.getOfferings();
+        if (
+          offerings.current !== null &&
+          offerings.current.availablePackages.length !== 0
+        ) {
+          setPackages(offerings.current.availablePackages);
+          // console.log(offerings.current.availablePackages);
+        }
+      } catch (e) {
+        Alert.alert("Error getting offers", e.message);
+      }
+    };
+
+    getPackages();
+  }, []);
+
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -51,75 +107,25 @@ export default function Paywall(props) {
           </Pressable>
         </View>
       </View>
-      <ScrollView style={styles.bodyContainer}>
-        <View style={styles.offerContainer}>
-          <View style={styles.offerTitleContainer}>
-            <Text style={styles.offerTitle}>CoAgent Pro</Text>
-            <View style={styles.bestValueContainer}>
-              <Text style={styles.bestValueText}>{showMonthly ? 'Great Value' : 'Best Value'}</Text>
-            </View>
-            <View style={styles.checkMark}>
-              <Ionicons name="checkmark-circle" size={40} color="white" />
-            </View>
-          </View>
-          <View style={styles.priceContainer}>
-            {!showMonthly && (
-              <View style={styles.strikeThroughContainer}>
-                <Text style={styles.strikeThroughText}>$24.99 USD</Text>
-                <Text style={styles.saveText}>(Save $50/year)</Text>
-              </View>
-            )}
-            <Text style={styles.priceText}>{showMonthly ? ('$24.99') : '$20.84'}</Text>
-            <Text style={styles.subtext}>{showMonthly ? ('Per month, billed monthly') : ('Per month, billed annually')}</Text>
-          </View>
-          <View style={styles.allBulletsContainer}>
-            <View style={styles.bulletContainer}>
-              <View style={styles.bulletCircle} />
-              <Text style={styles.bulletText}>
-                Unlimited contacts and properties
-              </Text>
-            </View>
-            <View style={styles.bulletContainer}>
-              <View style={styles.bulletCircle} />
-              <Text style={styles.bulletText}>
-                Lead, calendar, and relationship management
-              </Text>
-            </View>
-            <View style={styles.bulletContainer}>
-              <View style={styles.bulletCircle} />
-              <Text style={styles.bulletText}>
-                Easy data import from excel or .csv
-              </Text>
-            </View>
-            <View style={styles.bulletContainer}>
-              <View style={styles.bulletCircle} />
-              <Text style={styles.bulletText}>
-                Reminders, to-dos, notifications, all in one place
-              </Text>
-            </View>
-            <View style={styles.bulletContainer}>
-              <View style={styles.bulletCircle} />
-              <Text style={styles.bulletText}>
-                Customize properties and contacts into categories
-              </Text>
-            </View>
-            <View style={styles.bulletContainer}>
-              <View style={styles.bulletCircle} />
-              <Text style={styles.bulletText}>
-                Live customer support by phone, email, or video
-              </Text>
-            </View>
-            <View style={styles.bulletContainer}>
-              <View style={styles.bulletCircle} />
-              <Text style={styles.bulletText}>
-                Full access to web app (in progress)
-              </Text>
-            </View>
-          </View>
-        </View>
-      </ScrollView>
+      {showMonthly ? (
+        <FlatList
+          data={packages}
+          keyExtractor={(item) => item.identifier}
+          renderItem={renderMonthly}
+        />
+      ) : (
+        <FlatList
+          data={packages}
+          keyExtractor={(item) => item.identifier}
+          renderItem={renderYearly}
+        />
+      )}
+
+      {/* <ScrollView style={styles.bodyContainer}>
+        <PackageItem monthly={showMonthly} />
+      </ScrollView> */}
       <View style={styles.footerContainer}>
-        <TouchableOpacity style={styles.ctaButton}>
+        <TouchableOpacity style={styles.ctaButton} onPress={handlePurchase}>
           <Text style={styles.buttonText}>Try it free</Text>
         </TouchableOpacity>
         <Text style={styles.subtext}>7-day free trial, cancel anytime.</Text>

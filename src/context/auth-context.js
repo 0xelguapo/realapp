@@ -1,4 +1,5 @@
 import { createContext, useState, useCallback, useEffect } from "react";
+import Purchases from "react-native-purchases";
 import { Auth } from "aws-amplify";
 import { Alert } from "react-native";
 
@@ -13,14 +14,25 @@ function AuthProvider({ children }) {
     try {
       await Auth.currentAuthenticatedUser().then((u) => {
         setUser(u);
+        loginPurchaserUser(u.attributes.sub)
       });
     } catch (err) {
       console.error(err);
     } finally {
       setAppIsReady(true);
     }
-    console.log(user)
+    console.log(user);
   }, []);
+
+  const loginPurchaserUser = useCallback(async (userId) => {
+    let response;
+    try {
+      response = await Purchases.logIn(userId)
+    } catch (err) {
+      console.error(err)
+    }
+    return response
+  })
 
   useEffect(() => {
     checkUser();
@@ -28,15 +40,15 @@ function AuthProvider({ children }) {
 
   const signup = useCallback(async (username, password) => {
     let user;
-    setIsLoading(true)
+    setIsLoading(true);
     try {
       user = await Auth.signUp(username, password);
     } catch (err) {
       console.error(err);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-    return user
+    return user;
   }, []);
 
   const confirmation = useCallback(async (username, confirmation) => {
@@ -76,12 +88,18 @@ function AuthProvider({ children }) {
     } finally {
       setIsLoading(false);
     }
-    if (signedInUser) setUser(signedInUser);
+    if (signedInUser) {
+      let userId = signedInUser.attributes.sub;
+      const { purchaserInfo, created } = await Purchases.logIn(userId)
+      setUser(signedInUser);
+    }
     return signedInUser;
   }, []);
 
   const signOut = useCallback(async () => {
+
     try {
+      await Purchases.logOut();
       await Auth.signOut();
     } catch (err) {
       console.error(err);

@@ -1,6 +1,7 @@
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 import { useEffect, useState, useRef } from "react";
+import { RC_API_KEY } from "../constants";
 import { Text, Platform } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Provider } from "react-redux";
@@ -23,10 +24,6 @@ Notifications.setNotificationHandler({
     shouldSetBadge: true,
   }),
 });
-
-const APIKeys = {
-  apple: "appl_mLBkaAwmUUPAGwfSiSlnbNQoJFb",
-};
 
 export default function AppNavigator() {
   const [expoPushToken, setExpoPushToken] = useState("");
@@ -108,7 +105,7 @@ async function registerForPushNotificationsAsync() {
     if (finalStatus !== "granted") {
       return;
     }
-    token = (await Notifications.getExpoPushTokenAsync()).data;
+    token = (await Notifications.getExpoPushTokenAsync({ projectId: null, experienceId: null })).data;
   }
   return token;
 }

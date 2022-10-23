@@ -4,10 +4,10 @@ import { useContext, useCallback } from "react";
 import { AuthContext } from "../context/auth-context";
 import AppNavigator from "./AppNavigator";
 import AuthNavigator from "./AuthNavigator";
-// import SplashScreen from "../components/UI/SplashScreen";
+import SplashScreen from "../components/UI/SplashScreen";
 import * as SplashScreenDefault from "expo-splash-screen";
 
-SplashScreenDefault.preventAutoHideAsync();
+// SplashScreenDefault.preventAutoHideAsync();
 
 export default function Navigation() {
   const { user, appIsReady } = useContext(AuthContext);
@@ -19,7 +19,7 @@ export default function Navigation() {
   }, [appIsReady]);
 
   if (!appIsReady) {
-    return null;
+    return <SplashScreen />;
   }
 
   return (
