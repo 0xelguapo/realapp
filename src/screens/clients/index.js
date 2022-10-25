@@ -31,27 +31,30 @@ export default function ClientsNavigator() {
       />
       <Stack.Screen
         options={{
-          presentation: "transparentModal",
           headerShown: false,
+          presentation: "transparentModal",
           cardOverlayEnabled: true,
+          animation: "fade",
         }}
         name="AddConnectionHistory"
         component={AddConnectionHistory}
       />
       <Stack.Screen
         options={{
-          presentation: "transparentModal",
           headerShown: false,
+          presentation: "transparentModal",
           cardOverlayEnabled: true,
+          animation: "fade",
         }}
         name="AddEditNote"
         component={AddEditNote}
       />
       <Stack.Screen
         options={{
-          presentation: "transparentModal",
           headerShown: false,
+          presentation: "transparentModal",
           cardOverlayEnabled: true,
+          animation: "fade",
         }}
         name="AddClientTask"
         component={AddClientTask}

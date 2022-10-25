@@ -6,6 +6,7 @@ import {
 import { API, graphqlOperation } from "aws-amplify";
 import {
   createProperty,
+  createTask,
   deleteProperty,
   updateProperty,
 } from "../graphql/mutations";
@@ -93,6 +94,21 @@ export const removeProperty = createAsyncThunk(
   }
 );
 
+export const addPropertyTask = createAsyncThunk(
+  "properties/addTask",
+  async (taskInputs) => {
+    let response;
+    try {
+      response = await API.graphql(
+        graphqlOperation(createTask, { input: taskInputs })
+      );
+    } catch (err) {
+      console.error(err);
+    }
+    return response.data.createTask;
+  }
+);
+
 export const propertiesSlice = createSlice({
   name: "properties",
   initialState,
@@ -130,7 +146,9 @@ export const propertiesSlice = createSlice({
       })
       .addCase(removeProperty.fulfilled, (state, action) => {
         propertiesAdapter.removeOne(state, action.payload.id);
-      });
+      }).addCase(addPropertyTask.fulfilled, (state, action) => {
+        state.entities[action.payload.propertyId].tasks.items.push(action.payload)
+      })
   },
 });
 

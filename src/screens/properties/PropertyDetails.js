@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Alert,
+  FlatList,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchOneClient, selectClientById } from "../../redux/clients-slice";
@@ -18,6 +19,7 @@ import {
 import { Feather, Ionicons, AntDesign } from "@expo/vector-icons";
 import PropertyOptions from "../../components/property/PropertyOptions";
 import { handlePropertyGroupsOnDeleteProperty } from "../../redux/propertyGroups-slice";
+import PropertyTask from "../../components/property/PropertyTask";
 
 export default function PropertyDetails({ navigation, route }) {
   const { id } = route.params;
@@ -53,8 +55,8 @@ export default function PropertyDetails({ navigation, route }) {
   };
 
   const viewPropertyTaskHandler = () => {
-    navigation.navigate("AddPropertyTask", { propertyId: id })
-  }
+    navigation.navigate("AddPropertyTask", { propertyId: id });
+  };
 
   const deletePropertyHandler = () => {
     Alert.alert("Are you sure you want to delete this property?", null, [
@@ -77,7 +79,6 @@ export default function PropertyDetails({ navigation, route }) {
     }
   };
 
-
   const fetchPropertyDetails = () => {
     dispatch(fetchOneProperty(id)).unwrap();
   };
@@ -91,7 +92,7 @@ export default function PropertyDetails({ navigation, route }) {
   }, [dispatch]);
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.container}>
       <TouchableOpacity
         style={styles.backButtonContainer}
         onPress={navigation.goBack}
@@ -120,78 +121,88 @@ export default function PropertyDetails({ navigation, route }) {
           )}
         </View>
       </View>
-      <ScrollView style={styles.body}>
+      <ScrollView
+        contentContainerStyle={[
+          { display: "flex", paddingBottom: 50 },
+        ]}
+      >
         <PropertyOptions
           viewEditPropertyHandler={viewEditPropertyHandler}
           viewEditPropertyGroupHandler={viewEditPropertyGroupHandler}
           viewPropertyOwnerHandler={viewPropertyOwnerHandler}
           deletePropertyHandler={deletePropertyHandler}
         />
-        <View style={styles.ownedByContainer}>
-          {propertyOwner ? (
-            <>
-              <Text style={styles.ownedByPlaceholder}>Owned by: </Text>
-              <Text style={styles.propertyOwnerName}>
-                {propertyOwner.firstName + " " + propertyOwner?.lastName}
-              </Text>
-            </>
-          ) : (
-            <Text style={styles.ownedByPlaceholder}>No owner assigned</Text>
-          )}
-        </View>
+          <View style={styles.ownedByContainer}>
+            {propertyOwner ? (
+              <>
+                <Text style={styles.ownedByPlaceholder}>Owned by: </Text>
+                <Text style={styles.propertyOwnerName}>
+                  {propertyOwner.firstName + " " + propertyOwner?.lastName}
+                </Text>
+              </>
+            ) : (
+              <Text style={styles.ownedByPlaceholder}>No owner assigned</Text>
+            )}
+          </View>
 
-        <View style={styles.notesContainer}>
-          <Text style={styles.noteHeading}>NOTES</Text>
-          {property.note ? (
-            <Text style={styles.noteText}>{property.note}</Text>
-          ) : (
-            <Text style={styles.noteText}>Nothing here yet...</Text>
-          )}
-        </View>
+          <View style={styles.notesContainer}>
+            <Text style={styles.noteHeading}>NOTES</Text>
+            {property.note ? (
+              <Text style={styles.noteText}>{property.note}</Text>
+            ) : (
+              <Text style={styles.noteText}>Nothing here yet...</Text>
+            )}
+          </View>
 
-        <View style={styles.tasksContainer}>
-          <Text style={styles.taskHeading}>PLANNED</Text>
-          {property.tasks.items?.length > 0 ? (
-            <Text>hi</Text>
-          ) : (
-            <View style={styles.placeholderTaskContainer}>
-              <Text style={styles.placeholderTaskText}>
-                Nothing planned so far
-              </Text>
-              <TouchableOpacity style={styles.scheduleButton} onPress={viewPropertyTaskHandler}>
-                {/* <Ionicons name="add" size={16} color="#0064e5" /> */}
-                <Text style={styles.scheduleText}>Schedule a task</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-        </View>
+          <View style={styles.tasksContainer}>
+            <Text style={styles.taskHeading}>PLANNED</Text>
+            {property.tasks.items?.length > 0 ? (
+              property.tasks.items.map((task) => (
+                <PropertyTask
+                  key={task.id}
+                  title={task.title}
+                  description={task.content}
+                  date={task.date}
+                />
+              ))
+            ) : (
+              <View style={styles.placeholderTaskContainer}>
+                <Text style={styles.placeholderTaskText}>
+                  Nothing planned so far
+                </Text>
+                <TouchableOpacity
+                  style={styles.scheduleButton}
+                  onPress={viewPropertyTaskHandler}
+                >
+                  {/* <Ionicons name="add" size={16} color="#0064e5" /> */}
+                  <Text style={styles.scheduleText}>Schedule a task</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+            {property.tasks.items?.length > 0 && (
+              <View style={{ ...styles.placeholderTaskContainer, height: 50 }}>
+                <TouchableOpacity
+                  style={styles.scheduleButton}
+                  onPress={viewPropertyTaskHandler}
+                >
+                  <Text style={styles.scheduleText}>Schedule another task</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          </View>
       </ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  container: { flex: 1 },
   header: {
     paddingBottom: 20,
   },
   backButtonContainer: {
     paddingVertical: 10,
     paddingHorizontal: 20,
-  },
-  rectangleContainer: {
-    display: "flex",
-    position: "",
-    alignItems: "center",
-    height: 25,
-    width: "100%",
-    marginBottom: 15,
-  },
-  rectangle: {
-    justifyContent: "center",
-    width: 75,
-    height: 7,
-    borderRadius: 10,
-    backgroundColor: "#c7c7c7",
   },
   headingContainer: {
     paddingTop: 10,
@@ -215,9 +226,8 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: "#454545",
   },
-  body: {
-    height: "100%",
-    paddingBottom: 100,
+  detailsContainer: {
+
   },
   ownedByContainer: {
     display: "flex",
@@ -250,20 +260,21 @@ const styles = StyleSheet.create({
     color: "#6c6c6c",
   },
   tasksContainer: {
+    display: "flex",
+    height: "auto",
     paddingVertical: 20,
-    flex: 0.2,
   },
   taskHeading: {
     color: "#ababab",
     letterSpacing: 2,
     fontSize: 12,
     paddingHorizontal: 30,
+    marginBottom: 20,
   },
   placeholderTaskContainer: {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 20,
     height: 65,
     paddingHorizontal: 30,
     backgroundColor: "white",

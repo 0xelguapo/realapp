@@ -24,7 +24,7 @@ export default function AddEditNote(props) {
   };
 
   return (
-    <AddSimple goBack={props.navigation.goBack} title="NOTE">
+    <AddSimple goBack={props.navigation.goBack} title="NOTE" enableOverlayGoBack={false}>
       <TextInput
         style={styles.titleInput}
         value={note}

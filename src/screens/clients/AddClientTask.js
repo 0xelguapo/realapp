@@ -5,8 +5,8 @@ import AddSimple from "../../components/AddSimple";
 import useClient from "../../hooks/client-hook";
 
 export default function AddConnectionHistory(props) {
-  const [title, setTitle] = useState(null);
-  const [description, setDescription] = useState(null);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
   const [date, setDate] = useState(new Date());
   const { addTask } = useClient();
   const { clientId } = props.route.params;
@@ -41,7 +41,7 @@ export default function AddConnectionHistory(props) {
   }, []);
 
   return (
-    <AddSimple goBack={props.navigation.goBack} withDescription={true} title="CREATE A TASK">
+    <AddSimple goBack={props.navigation.goBack} withDescription={true} title="CREATE A TASK" enableOverlayGoBack={false}>
       <TextInput
         style={styles.titleInput}
         value={title}

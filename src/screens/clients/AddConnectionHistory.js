@@ -36,7 +36,7 @@ export default function AddConnectionHistory(props) {
   }, []);
 
   return (
-    <AddSimple goBack={props.navigation.goBack} title="LOG A CONNECTION">
+    <AddSimple goBack={props.navigation.goBack} title="LOG A CONNECTION" enableOverlayGoBack={false}>
       <TextInput
         style={styles.titleInput}
         value={title}

@@ -42,18 +42,23 @@ export default function PropertiesNavigator() {
         name="AddEditPropertyGroup"
         component={AddEditPropertyGroup}
       />
-       <Stack.Screen
+      <Stack.Screen
         options={{ headerShown: false, presentation: "transparentModal" }}
         name="ClientDetails"
         component={ClientDetails}
       />
-       <Stack.Screen
+      <Stack.Screen
         options={{ headerShown: false, presentation: "modal" }}
         name="AddOwner"
         component={AddOwner}
       />
       <Stack.Screen
-        options={{ headerShown: false, presentation: "transparentModal", cardOverlayEnabled: true, animation: "fade",  }}
+        options={{
+          headerShown: false,
+          presentation: "transparentModal",
+          cardOverlayEnabled: true,
+          animation: "fade",
+        }}
         name="AddPropertyTask"
         component={AddPropertyTask}
       />

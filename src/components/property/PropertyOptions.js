@@ -74,6 +74,8 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     justifyContent: "space-between",
     width: "100%",
+    height: 55,
+
   },
   optionIconContainer: {
     display: "flex",
