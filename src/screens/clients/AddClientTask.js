@@ -87,18 +87,6 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     zIndex: 3,
   },
-  titleHeaderContainer: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  titleHeader: {
-    fontSize: 13,
-    fontWeight: "500",
-    color: "#ababab",
-    letterSpacing: 1.8,
-    paddingVertical: 5,
-  },
   titleInput: {
     height: 40,
     fontSize: 15,

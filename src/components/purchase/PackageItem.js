@@ -3,10 +3,8 @@ import { Feather, Ionicons } from "@expo/vector-icons";
 import { useEffect } from "react";
 
 export default function PackageItem({
-  children,
   monthly,
   purchasePackage,
-  setIsPurchasing,
   setCurrentPackage
 }) {
 
@@ -83,12 +81,12 @@ export default function PackageItem({
               Live customer support by phone, email, or video
             </Text>
           </View>
-          {/* <View style={styles.bulletContainer}>
+          <View style={styles.bulletContainer}>
             <View style={styles.bulletCircle} />
             <Text style={styles.bulletText}>
-              Full access to web app (in progress)
+              Early access to cross-platform web app
             </Text>
-          </View> */}
+          </View>
         </View>
       </View>
     </View>

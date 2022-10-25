@@ -49,10 +49,6 @@ export default function Home(props) {
     dispatch(fetchReminders());
   };
 
-  // useEffect(() => {
-  //   props.navigation.navigate("Paywall");
-  // }, []);
-
   return (
     <View style={styles.container}>
       {refreshVisible && (

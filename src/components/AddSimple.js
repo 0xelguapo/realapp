@@ -7,10 +7,10 @@ import {
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 
-function AddSimple({ title, goBack, children, withDescription = false }) {
+function AddSimple({ title, goBack, children, withDescription = false, enableOverlayGoBack = true }) {
   return (
     <View style={styles.container}>
-      <Pressable onPress={goBack} style={styles.backdrop}></Pressable>
+      <Pressable onPress={enableOverlayGoBack ? goBack : null} style={styles.backdrop}></Pressable>
       <View style={styles.modalContainer}>
         <View style={styles.titleHeaderContainer}>
           <Text style={styles.titleHeader}>{title}</Text>

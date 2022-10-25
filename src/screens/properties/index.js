@@ -6,6 +6,7 @@ import PropertyDetails from "./PropertyDetails";
 import AddEditPropertyGroup from "./AddEditPropertyGroup";
 import ClientDetails from "../clients/ClientDetails";
 import AddOwner from "./AddOwner";
+import AddPropertyTask from "./AddPropertyTask";
 
 const Stack = createNativeStackNavigator();
 
@@ -50,6 +51,11 @@ export default function PropertiesNavigator() {
         options={{ headerShown: false, presentation: "modal" }}
         name="AddOwner"
         component={AddOwner}
+      />
+      <Stack.Screen
+        options={{ headerShown: false, presentation: "transparentModal", cardOverlayEnabled: true, animation: "fade",  }}
+        name="AddPropertyTask"
+        component={AddPropertyTask}
       />
     </Stack.Navigator>
   );

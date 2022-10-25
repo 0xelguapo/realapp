@@ -2,7 +2,7 @@
 // this is an auto generated file. This will be overwritten
 
 export const batchCreateClients = /* GraphQL */ `
-  mutation BatchCreateClients($data: AWSJSON, $mappedFields: [String]) {
+  mutation BatchCreateClients($data: [AWSJSON], $mappedFields: [String]) {
     batchCreateClients(data: $data, mappedFields: $mappedFields)
   }
 `;
@@ -25,72 +25,18 @@ export const deleteClient = /* GraphQL */ `
       clientState
       clientZip
       connectionHistory {
-        items {
-          id
-          title
-          date
-          clientId
-          owner
-          createdAt
-          updatedAt
-        }
         nextToken
       }
       properties {
-        items {
-          id
-          street
-          city
-          state
-          zip
-          price
-          note
-          clientId
-          owner
-          createdAt
-          updatedAt
-        }
         nextToken
       }
       tasks {
-        items {
-          id
-          clientId
-          propertyId
-          title
-          content
-          completed
-          date
-          notificationId
-          owner
-          createdAt
-          updatedAt
-        }
         nextToken
       }
       group {
-        items {
-          id
-          clientID
-          clientGroupID
-          createdAt
-          updatedAt
-          owner
-        }
         nextToken
       }
       reminder {
-        items {
-          id
-          date
-          recurring
-          recurDate
-          notificationId
-          clientId
-          owner
-          createdAt
-          updatedAt
-        }
         nextToken
       }
       owner
@@ -113,30 +59,9 @@ export const deleteProperty = /* GraphQL */ `
       price
       note
       tasks {
-        items {
-          id
-          clientId
-          propertyId
-          title
-          content
-          completed
-          date
-          notificationId
-          owner
-          createdAt
-          updatedAt
-        }
         nextToken
       }
       group {
-        items {
-          id
-          propertyID
-          propertyGroupID
-          createdAt
-          updatedAt
-          owner
-        }
         nextToken
       }
       clientId
@@ -156,14 +81,6 @@ export const deletePropertyGroup = /* GraphQL */ `
       title
       description
       properties {
-        items {
-          id
-          propertyID
-          propertyGroupID
-          createdAt
-          updatedAt
-          owner
-        }
         nextToken
       }
       owner
@@ -197,21 +114,6 @@ export const deleteReminder = /* GraphQL */ `
         clientCity
         clientState
         clientZip
-        connectionHistory {
-          nextToken
-        }
-        properties {
-          nextToken
-        }
-        tasks {
-          nextToken
-        }
-        group {
-          nextToken
-        }
-        reminder {
-          nextToken
-        }
         owner
         createdAt
         updatedAt
@@ -231,14 +133,6 @@ export const deleteClientGroup = /* GraphQL */ `
       id
       title
       clients {
-        items {
-          id
-          clientID
-          clientGroupID
-          createdAt
-          updatedAt
-          owner
-        }
         nextToken
       }
       owner
@@ -270,21 +164,6 @@ export const deleteConnectionHistory = /* GraphQL */ `
         clientCity
         clientState
         clientZip
-        connectionHistory {
-          nextToken
-        }
-        properties {
-          nextToken
-        }
-        tasks {
-          nextToken
-        }
-        group {
-          nextToken
-        }
-        reminder {
-          nextToken
-        }
         owner
         createdAt
         updatedAt
@@ -322,21 +201,6 @@ export const deleteTask = /* GraphQL */ `
         clientCity
         clientState
         clientZip
-        connectionHistory {
-          nextToken
-        }
-        properties {
-          nextToken
-        }
-        tasks {
-          nextToken
-        }
-        group {
-          nextToken
-        }
-        reminder {
-          nextToken
-        }
         owner
         createdAt
         updatedAt
@@ -384,21 +248,6 @@ export const updateGroupsClients = /* GraphQL */ `
         clientCity
         clientState
         clientZip
-        connectionHistory {
-          nextToken
-        }
-        properties {
-          nextToken
-        }
-        tasks {
-          nextToken
-        }
-        group {
-          nextToken
-        }
-        reminder {
-          nextToken
-        }
         owner
         createdAt
         updatedAt
@@ -406,9 +255,6 @@ export const updateGroupsClients = /* GraphQL */ `
       clientGroup {
         id
         title
-        clients {
-          nextToken
-        }
         owner
         createdAt
         updatedAt
@@ -441,21 +287,6 @@ export const deleteGroupsClients = /* GraphQL */ `
         clientCity
         clientState
         clientZip
-        connectionHistory {
-          nextToken
-        }
-        properties {
-          nextToken
-        }
-        tasks {
-          nextToken
-        }
-        group {
-          nextToken
-        }
-        reminder {
-          nextToken
-        }
         owner
         createdAt
         updatedAt
@@ -463,9 +294,6 @@ export const deleteGroupsClients = /* GraphQL */ `
       clientGroup {
         id
         title
-        clients {
-          nextToken
-        }
         owner
         createdAt
         updatedAt
@@ -493,12 +321,6 @@ export const updateGroupsProperty = /* GraphQL */ `
         zip
         price
         note
-        tasks {
-          nextToken
-        }
-        group {
-          nextToken
-        }
         clientId
         owner
         createdAt
@@ -508,9 +330,6 @@ export const updateGroupsProperty = /* GraphQL */ `
         id
         title
         description
-        properties {
-          nextToken
-        }
         owner
         createdAt
         updatedAt
@@ -538,12 +357,6 @@ export const deleteGroupsProperty = /* GraphQL */ `
         zip
         price
         note
-        tasks {
-          nextToken
-        }
-        group {
-          nextToken
-        }
         clientId
         owner
         createdAt
@@ -553,9 +366,6 @@ export const deleteGroupsProperty = /* GraphQL */ `
         id
         title
         description
-        properties {
-          nextToken
-        }
         owner
         createdAt
         updatedAt
@@ -585,72 +395,18 @@ export const createClient = /* GraphQL */ `
       clientState
       clientZip
       connectionHistory {
-        items {
-          id
-          title
-          date
-          clientId
-          owner
-          createdAt
-          updatedAt
-        }
         nextToken
       }
       properties {
-        items {
-          id
-          street
-          city
-          state
-          zip
-          price
-          note
-          clientId
-          owner
-          createdAt
-          updatedAt
-        }
         nextToken
       }
       tasks {
-        items {
-          id
-          clientId
-          propertyId
-          title
-          content
-          completed
-          date
-          notificationId
-          owner
-          createdAt
-          updatedAt
-        }
         nextToken
       }
       group {
-        items {
-          id
-          clientID
-          clientGroupID
-          createdAt
-          updatedAt
-          owner
-        }
         nextToken
       }
       reminder {
-        items {
-          id
-          date
-          recurring
-          recurDate
-          notificationId
-          clientId
-          owner
-          createdAt
-          updatedAt
-        }
         nextToken
       }
       owner
@@ -678,72 +434,18 @@ export const updateClient = /* GraphQL */ `
       clientState
       clientZip
       connectionHistory {
-        items {
-          id
-          title
-          date
-          clientId
-          owner
-          createdAt
-          updatedAt
-        }
         nextToken
       }
       properties {
-        items {
-          id
-          street
-          city
-          state
-          zip
-          price
-          note
-          clientId
-          owner
-          createdAt
-          updatedAt
-        }
         nextToken
       }
       tasks {
-        items {
-          id
-          clientId
-          propertyId
-          title
-          content
-          completed
-          date
-          notificationId
-          owner
-          createdAt
-          updatedAt
-        }
         nextToken
       }
       group {
-        items {
-          id
-          clientID
-          clientGroupID
-          createdAt
-          updatedAt
-          owner
-        }
         nextToken
       }
       reminder {
-        items {
-          id
-          date
-          recurring
-          recurDate
-          notificationId
-          clientId
-          owner
-          createdAt
-          updatedAt
-        }
         nextToken
       }
       owner
@@ -766,30 +468,9 @@ export const createProperty = /* GraphQL */ `
       price
       note
       tasks {
-        items {
-          id
-          clientId
-          propertyId
-          title
-          content
-          completed
-          date
-          notificationId
-          owner
-          createdAt
-          updatedAt
-        }
         nextToken
       }
       group {
-        items {
-          id
-          propertyID
-          propertyGroupID
-          createdAt
-          updatedAt
-          owner
-        }
         nextToken
       }
       clientId
@@ -813,30 +494,9 @@ export const updateProperty = /* GraphQL */ `
       price
       note
       tasks {
-        items {
-          id
-          clientId
-          propertyId
-          title
-          content
-          completed
-          date
-          notificationId
-          owner
-          createdAt
-          updatedAt
-        }
         nextToken
       }
       group {
-        items {
-          id
-          propertyID
-          propertyGroupID
-          createdAt
-          updatedAt
-          owner
-        }
         nextToken
       }
       clientId
@@ -856,14 +516,6 @@ export const createPropertyGroup = /* GraphQL */ `
       title
       description
       properties {
-        items {
-          id
-          propertyID
-          propertyGroupID
-          createdAt
-          updatedAt
-          owner
-        }
         nextToken
       }
       owner
@@ -882,14 +534,6 @@ export const updatePropertyGroup = /* GraphQL */ `
       title
       description
       properties {
-        items {
-          id
-          propertyID
-          propertyGroupID
-          createdAt
-          updatedAt
-          owner
-        }
         nextToken
       }
       owner
@@ -923,21 +567,6 @@ export const createReminder = /* GraphQL */ `
         clientCity
         clientState
         clientZip
-        connectionHistory {
-          nextToken
-        }
-        properties {
-          nextToken
-        }
-        tasks {
-          nextToken
-        }
-        group {
-          nextToken
-        }
-        reminder {
-          nextToken
-        }
         owner
         createdAt
         updatedAt
@@ -973,21 +602,6 @@ export const updateReminder = /* GraphQL */ `
         clientCity
         clientState
         clientZip
-        connectionHistory {
-          nextToken
-        }
-        properties {
-          nextToken
-        }
-        tasks {
-          nextToken
-        }
-        group {
-          nextToken
-        }
-        reminder {
-          nextToken
-        }
         owner
         createdAt
         updatedAt
@@ -1007,14 +621,6 @@ export const createClientGroup = /* GraphQL */ `
       id
       title
       clients {
-        items {
-          id
-          clientID
-          clientGroupID
-          createdAt
-          updatedAt
-          owner
-        }
         nextToken
       }
       owner
@@ -1032,14 +638,6 @@ export const updateClientGroup = /* GraphQL */ `
       id
       title
       clients {
-        items {
-          id
-          clientID
-          clientGroupID
-          createdAt
-          updatedAt
-          owner
-        }
         nextToken
       }
       owner
@@ -1071,21 +669,6 @@ export const createConnectionHistory = /* GraphQL */ `
         clientCity
         clientState
         clientZip
-        connectionHistory {
-          nextToken
-        }
-        properties {
-          nextToken
-        }
-        tasks {
-          nextToken
-        }
-        group {
-          nextToken
-        }
-        reminder {
-          nextToken
-        }
         owner
         createdAt
         updatedAt
@@ -1119,21 +702,6 @@ export const updateConnectionHistory = /* GraphQL */ `
         clientCity
         clientState
         clientZip
-        connectionHistory {
-          nextToken
-        }
-        properties {
-          nextToken
-        }
-        tasks {
-          nextToken
-        }
-        group {
-          nextToken
-        }
-        reminder {
-          nextToken
-        }
         owner
         createdAt
         updatedAt
@@ -1171,21 +739,6 @@ export const createTask = /* GraphQL */ `
         clientCity
         clientState
         clientZip
-        connectionHistory {
-          nextToken
-        }
-        properties {
-          nextToken
-        }
-        tasks {
-          nextToken
-        }
-        group {
-          nextToken
-        }
-        reminder {
-          nextToken
-        }
         owner
         createdAt
         updatedAt
@@ -1223,21 +776,6 @@ export const updateTask = /* GraphQL */ `
         clientCity
         clientState
         clientZip
-        connectionHistory {
-          nextToken
-        }
-        properties {
-          nextToken
-        }
-        tasks {
-          nextToken
-        }
-        group {
-          nextToken
-        }
-        reminder {
-          nextToken
-        }
         owner
         createdAt
         updatedAt
@@ -1300,21 +838,6 @@ export const createGroupsClients = /* GraphQL */ `
         clientCity
         clientState
         clientZip
-        connectionHistory {
-          nextToken
-        }
-        properties {
-          nextToken
-        }
-        tasks {
-          nextToken
-        }
-        group {
-          nextToken
-        }
-        reminder {
-          nextToken
-        }
         owner
         createdAt
         updatedAt
@@ -1322,9 +845,6 @@ export const createGroupsClients = /* GraphQL */ `
       clientGroup {
         id
         title
-        clients {
-          nextToken
-        }
         owner
         createdAt
         updatedAt
@@ -1352,12 +872,6 @@ export const createGroupsProperty = /* GraphQL */ `
         zip
         price
         note
-        tasks {
-          nextToken
-        }
-        group {
-          nextToken
-        }
         clientId
         owner
         createdAt
@@ -1367,9 +881,6 @@ export const createGroupsProperty = /* GraphQL */ `
         id
         title
         description
-        properties {
-          nextToken
-        }
         owner
         createdAt
         updatedAt

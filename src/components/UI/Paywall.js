@@ -1,10 +1,8 @@
 import {
   View,
   Text,
-  SafeAreaView,
   StyleSheet,
   TouchableOpacity,
-  ScrollView,
   Pressable,
   Alert,
   FlatList,
@@ -20,12 +18,26 @@ export default function Paywall(props) {
   const [showMonthly, setShowMonthly] = useState(false);
   const [packages, setPackages] = useState([]);
   const [isPurchasing, setIsPurchasing] = useState(false);
-  const [currentPackage, setCurrentPackage] = useState(null)
+  const [currentPackage, setCurrentPackage] = useState(null);
 
-  const handlePurchase = () => {
-    console.log(currentPackage)
-  }
+  const handlePurchase = async () => {
+    setIsPurchasing(true);
+    try {
+      const { purchaserInfo } = await Purchases.purchasePackage(currentPackage);
 
+      if (
+        typeof purchaserInfo.entitlements.active[ENTITLEMENT_ID] !== "undefined"
+      ) {
+        navigation.goBack();
+      }
+    } catch (e) {
+      if (!e.userCancelled) {
+        Alert.alert("Error purchasing package", e.message);
+      }
+    } finally {
+      setIsPurchasing(false);
+    }
+  };
 
   const renderYearly = useCallback(({ item, index }) => {
     if (item.packageType === "ANNUAL") {
@@ -62,13 +74,11 @@ export default function Paywall(props) {
           offerings.current.availablePackages.length !== 0
         ) {
           setPackages(offerings.current.availablePackages);
-          // console.log(offerings.current.availablePackages);
         }
       } catch (e) {
         Alert.alert("Error getting offers", e.message);
       }
     };
-
     getPackages();
   }, []);
 
@@ -128,8 +138,9 @@ export default function Paywall(props) {
         <TouchableOpacity style={styles.ctaButton} onPress={handlePurchase}>
           <Text style={styles.buttonText}>Try it free</Text>
         </TouchableOpacity>
-        <Text style={styles.subtext}>7-day free trial, cancel anytime.</Text>
+        <Text style={styles.subtext}>3-day free trial, cancel anytime.</Text>
       </View>
+      {isPurchasing && <View style={styles.overlay} />}
     </View>
   );
 }
@@ -290,5 +301,15 @@ const styles = StyleSheet.create({
     fontSize: 25,
     color: "black",
     fontWeight: "700",
+  },
+  overlay: {
+    flex: 1,
+    position: "absolute",
+    left: 0,
+    top: 0,
+    right: 0,
+    bottom: 0,
+    opacity: 0.6,
+    backgroundColor: "black",
   },
 });

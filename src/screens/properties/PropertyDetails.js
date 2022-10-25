@@ -52,6 +52,10 @@ export default function PropertyDetails({ navigation, route }) {
     }
   };
 
+  const viewPropertyTaskHandler = () => {
+    navigation.navigate("AddPropertyTask", { propertyId: id })
+  }
+
   const deletePropertyHandler = () => {
     Alert.alert("Are you sure you want to delete this property?", null, [
       { text: "Cancel", style: "cancel" },
@@ -72,6 +76,7 @@ export default function PropertyDetails({ navigation, route }) {
       const response = await dispatch(fetchOneClient(propertyOwnerId)).unwrap();
     }
   };
+
 
   const fetchPropertyDetails = () => {
     dispatch(fetchOneProperty(id)).unwrap();
@@ -153,7 +158,7 @@ export default function PropertyDetails({ navigation, route }) {
               <Text style={styles.placeholderTaskText}>
                 Nothing planned so far
               </Text>
-              <TouchableOpacity style={styles.scheduleButton}>
+              <TouchableOpacity style={styles.scheduleButton} onPress={viewPropertyTaskHandler}>
                 {/* <Ionicons name="add" size={16} color="#0064e5" /> */}
                 <Text style={styles.scheduleText}>Schedule a task</Text>
               </TouchableOpacity>

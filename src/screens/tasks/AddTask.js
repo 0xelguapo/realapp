@@ -107,9 +107,9 @@ export default function AddTask({ navigation }) {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <AntDesign name="left" size={25} color="#6c6c6c" />
         </TouchableOpacity>
-        <Text style={styles.screenTitle}>Add a Task</Text>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <AntDesign name="check" size={28} color="#6c6c6c" />
+        <Text style={styles.screenTitle}>New Task</Text>
+        <TouchableOpacity onPress={handleAddTask}>
+          <Text style={styles.saveText}>Save</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.formContainer}>
@@ -193,9 +193,9 @@ export default function AddTask({ navigation }) {
             </View>
           </View>
         )}
-        <View style={styles.save}>
+        {/* <View style={styles.save}>
           <CustomPressable onPress={handleAddTask}>Save Task</CustomPressable>
-        </View>
+        </View> */}
       </View>
     </View>
   );
@@ -208,7 +208,6 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   headingContainer: {
-    display: "flex",
     flexDirection: "row",
     paddingVertical: 20,
     paddingHorizontal: 20,
@@ -220,6 +219,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "600",
     color: "#6c6c6c",
+  },
+  saveText: {
+    fontSize: 16,
+    fontWeight: "500",
+    color: "#0064e5",
   },
   formContainer: {
     flex: 1,
