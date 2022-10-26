@@ -32,7 +32,6 @@ function TaskContextProvider({ children }) {
         variables: { filter: completedFilter },
       });
     } catch (err) {
-      console.log("error fetching tasks", err);
     }
     setIsLoading(false);
     setTasksArray(response.data.listTasks.items);
@@ -46,10 +45,9 @@ function TaskContextProvider({ children }) {
         variables: { input: taskDetails },
       });
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
     if (response) {
-      console.log("success", response.data.createTask);
       let updatedTasksArray = [response.data.createTask, ...tasksArray];
       setTasksArray(updatedTasksArray);
       onSuccess();

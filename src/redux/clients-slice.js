@@ -123,7 +123,6 @@ export const removeClient = createAsyncThunk(
 
     try {
       deleteGroupClientResponse = await Promise.all(groupPromises);
-      console.log(deleteGroupClientResponse);
     } catch (err) {
       console.error("error delete group clients", err);
       return err;
@@ -152,7 +151,6 @@ export const removeClient = createAsyncThunk(
       } catch (err) {
         console.error("error removing client", err);
       }
-      console.log(response.data.deleteClient);
     }
     return response.data.deleteClient;
   }
@@ -193,7 +191,6 @@ export const clientsSlice = createSlice({
         clientsAdapter.removeOne(state, action.payload.id);
       })
       .addCase(editClient.fulfilled, (state, action) => {
-        console.log(action.payload);
         state.entities[action.payload.id] = action.payload;
       });
   },

@@ -125,6 +125,11 @@ export const propertiesSlice = createSlice({
       );
       state.entities[propertyId].group.items.splice(indexToRemove, 1);
     },
+    handleRemoveTaskFromProperty: (state, action) => {
+      const { propertyId, taskId } = action.payload;
+      const indexToRemove = state.entities[propertyId].tasks.items.findIndex(item => item.id === taskId)
+      state.entities[propertyId].tasks.items.splice(indexToRemove, 1)
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -158,7 +163,7 @@ export const {
   selectIds: selectPropertyIds,
 } = propertiesAdapter.getSelectors((state) => state.properties);
 
-export const { handleAddPropertyToGroup, handleRemovePropertyFromGroup } =
+export const { handleAddPropertyToGroup, handleRemovePropertyFromGroup, handleRemoveTaskFromProperty } =
   propertiesSlice.actions;
 
 export default propertiesSlice.reducer;

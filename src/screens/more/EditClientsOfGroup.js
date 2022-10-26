@@ -51,7 +51,6 @@ export default function EditClientsOfGroup(props) {
     if (groupTitleInput !== groupTitle) {
       dispatch(editGroupName({ id: groupID, title: groupTitleInput }));
     }
-    console.log('blur')
   };
 
   return (

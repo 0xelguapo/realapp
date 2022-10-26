@@ -5,8 +5,8 @@ import AddSimple from "../../components/AddSimple";
 import useClient from "../../hooks/client-hook";
 
 export default function AddConnectionHistory(props) {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
   const [date, setDate] = useState(new Date());
   const { addTask } = useClient();
   const { clientId } = props.route.params;
@@ -32,8 +32,6 @@ export default function AddConnectionHistory(props) {
       params: { id: clientId },
       merge: true,
     });
-
-    if (task) console.log(task);
   };
 
   useEffect(() => {
@@ -41,7 +39,12 @@ export default function AddConnectionHistory(props) {
   }, []);
 
   return (
-    <AddSimple goBack={props.navigation.goBack} withDescription={true} title="CREATE A TASK" enableOverlayGoBack={false}>
+    <AddSimple
+      goBack={props.navigation.goBack}
+      withDescription={true}
+      title="CREATE A TASK"
+      enableOverlayGoBack={false}
+    >
       <TextInput
         style={styles.titleInput}
         value={title}
@@ -94,6 +97,6 @@ const styles = StyleSheet.create({
   descriptionInput: {
     height: 50,
     fontSize: 15,
-    marginBottom: 5
+    marginBottom: 5,
   },
 });

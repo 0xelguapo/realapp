@@ -3,6 +3,7 @@ import {
   Text,
   View,
   TouchableHighlight,
+  TouchableOpacity,
 } from "react-native";
 import LottieView from "lottie-react-native";
 
@@ -25,9 +26,9 @@ export default function Welcome({ navigation }) {
       >
         <Text style={styles.buttonText}>Create an Account</Text>
       </TouchableHighlight>
-      <Text style={styles.login} onPress={() => navigation.navigate("Login")}>
-        Existing User? Log In here
-      </Text>
+      <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+        <Text style={styles.login}>Existing User? Log In here</Text>
+      </TouchableOpacity>
     </View>
   );
 }

@@ -64,14 +64,14 @@ export default function Input(props) {
 const styles = StyleSheet.create({
   container: {
     paddingTop: 10,
-    paddingBottom: 15,
+    paddingBottom: 10,
   },
   textInput: {
     height: 40,
     borderWidth: 1,
     borderColor: "#dcdcdc",
     backgroundColor: "#f7f7f7",
-    borderRadius: 10,
+    borderRadius: 8,
     paddingLeft: 10,
   },
   helperText: {

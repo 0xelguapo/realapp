@@ -11,6 +11,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import Purchases from "react-native-purchases";
 import PackageItem from "../purchase/PackageItem";
+import { ENTITLEMENT_ID } from "../../constants";
 
 // remove go back after setting up payments
 
@@ -23,16 +24,16 @@ export default function Paywall(props) {
   const handlePurchase = async () => {
     setIsPurchasing(true);
     try {
-      const { purchaserInfo } = await Purchases.purchasePackage(currentPackage);
-
+      const { customerInfo, productIdentifier } =
+        await Purchases.purchasePackage(currentPackage);
       if (
-        typeof purchaserInfo.entitlements.active[ENTITLEMENT_ID] !== "undefined"
+        typeof customerInfo.entitlements.active[ENTITLEMENT_ID] !== "undefined"
       ) {
-        navigation.goBack();
+        props.navigation.goBack();
       }
     } catch (e) {
       if (!e.userCancelled) {
-        Alert.alert("Error purchasing package", e.message);
+        console.error(e);
       }
     } finally {
       setIsPurchasing(false);
@@ -84,12 +85,12 @@ export default function Paywall(props) {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={styles.exitButton}
         onPress={() => props.navigation.goBack()}
       >
         <Feather name="x" size={24} color="#6f6f6f" />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       <View style={styles.headingContainer}>
         <Text style={styles.headingText}>
           Build Better Relationships with CoAgent

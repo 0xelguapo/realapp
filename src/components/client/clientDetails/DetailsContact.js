@@ -18,7 +18,6 @@ export default function DetailsContact({ clientDetailsState }) {
     if (canCompose) {
       try {
         sendEmail = await MailComposer.composeAsync({ recipients: [email] });
-        console.log(sendEmail);
       } catch (err) {
         console.error(err);
       }

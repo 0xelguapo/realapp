@@ -10,29 +10,28 @@ function AuthProvider({ children }) {
   const [isLoading, setIsLoading] = useState(false);
   const [appIsReady, setAppIsReady] = useState(false);
 
+  const loginPurchaserUser = useCallback(async (userId) => {
+    let response;
+    try {
+      response = await Purchases.logIn(userId);
+    } catch (err) {
+      console.error(err);
+    }
+    return response;
+  });
+
   const checkUser = useCallback(async () => {
     try {
       await Auth.currentAuthenticatedUser().then((u) => {
         setUser(u);
-        loginPurchaserUser(u.attributes.sub)
+        loginPurchaserUser(u.attributes.sub);
       });
     } catch (err) {
       console.error(err);
     } finally {
       setAppIsReady(true);
     }
-    console.log(user);
   }, []);
-
-  const loginPurchaserUser = useCallback(async (userId) => {
-    let response;
-    try {
-      response = await Purchases.logIn(userId)
-    } catch (err) {
-      console.error(err)
-    }
-    return response
-  })
 
   useEffect(() => {
     checkUser();
@@ -90,14 +89,37 @@ function AuthProvider({ children }) {
     }
     if (signedInUser) {
       let userId = signedInUser.attributes.sub;
-      const { purchaserInfo, created } = await Purchases.logIn(userId)
+      const { purchaserInfo, created } = await Purchases.logIn(userId);
       setUser(signedInUser);
     }
     return signedInUser;
   }, []);
 
-  const signOut = useCallback(async () => {
+  const handleForgotPassword = async (email) => {
+    let response;
+    setIsLoading(true)
+    try {
+      response = await Auth.forgotPassword(email);
+    } catch (err) {
+      console.error(err)
+    }
+    setIsLoading(false)
+    return response
+  }
 
+  const handleCodeForForgotPassword = async (email, code, newPassword) => {
+    let response;
+    setIsLoading(true)
+    try {
+      response = await Auth.forgotPasswordSubmit(email, code, newPassword);
+    } catch(err) {
+      console.error(err)
+    }
+    setIsLoading(false)
+    return response
+  }
+
+  const signOut = useCallback(async () => {
     try {
       await Purchases.logOut();
       await Auth.signOut();
@@ -118,6 +140,8 @@ function AuthProvider({ children }) {
         resend,
         signin,
         confirmation,
+        handleForgotPassword,
+        handleCodeForForgotPassword,
         signOut,
       }}
     >

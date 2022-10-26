@@ -7,6 +7,7 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   ActivityIndicator,
+  TouchableOpacity,
 } from "react-native";
 import {
   VALIDATOR_EMAIL,
@@ -61,7 +62,7 @@ export default function Login({ navigation }) {
         <Input
           nativeID="password"
           onInput={inputHandler}
-          helperText={"Password (min. 8 char)"}
+          helperText={"Password"}
           validators={[VALIDATOR_REQUIRE(), VALIDATOR_MINLENGTH(8)]}
           errorText={"Please enter a password longer than 8 characters"}
           secureTextEntry={true}
@@ -82,9 +83,14 @@ export default function Login({ navigation }) {
                 : { ...styles.buttonText, ...styles.buttonTextDisabled }
             }
           >
-            {!isLoading ? ('Continue') : (<ActivityIndicator size="small" />)}
+            {!isLoading ? "Continue" : <ActivityIndicator size="small" />}
           </Text>
         </Pressable>
+        <View style={styles.forgotPasswordContainer}>
+          <TouchableOpacity style={styles.forgotPasswordButton} onPress={() => navigation.navigate("ResetPassword", { emailValue: formState.inputs.email.value })}>
+            <Text style={styles.forgotPasswordText}>Forgot password?</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </TouchableWithoutFeedback>
   );
@@ -116,7 +122,7 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 20,
+    marginTop: 15,
     marginBottom: 10,
   },
   buttonText: {
@@ -150,5 +156,17 @@ const styles = StyleSheet.create({
     backgroundColor: "#f7f7f7",
     borderRadius: 10,
     paddingLeft: 10,
+  },
+  forgotPasswordContainer: {
+    marginTop: 10,
+    display: 'flex',
+    alignItems: 'center'
+  },
+  forgotPasswordButton: {
+    width: "50%",
+  },
+  forgotPasswordText: {
+    textAlign: "center",
+    color: "#0064e5"
   },
 });

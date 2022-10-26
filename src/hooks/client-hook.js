@@ -26,8 +26,6 @@ function useClient() {
     return response;
   };
 
-
-
   const addConnection = async (inputDetails) => {
     let response;
     try {
@@ -39,7 +37,6 @@ function useClient() {
     } catch (err) {
       console.error("error adding connection", err);
     }
-    console.log(response);
     return response;
   };
 
@@ -71,7 +68,6 @@ function useClient() {
       console.error(err);
     }
     if (response) {
-      console.log("success", response.data.createTask);
       return response;
     }
   };
@@ -131,7 +127,6 @@ function useClient() {
     } catch (err) {
       console.error(err);
     }
-    console.log(response);
     return response;
   };
 
@@ -149,7 +144,7 @@ function useClient() {
     return response;
   };
 
-    // const removeClient = async (clientId, index) => {
+  // const removeClient = async (clientId, index) => {
   //   //remove client from all groups first before deleting
   //   let response;
   //   let deleteGroupClientResponse;
@@ -165,7 +160,6 @@ function useClient() {
   //   //delete associations to groups
   //   try {
   //     deleteGroupClientResponse = await Promise.all(promises);
-  //     console.log(deleteGroupClientResponse);
   //   } catch (err) {
   //     console.error(err);
   //     return;
@@ -188,7 +182,7 @@ function useClient() {
   //   return response;
   // };
 
-    // const updateFavorite = async (id, favorite, index) => {
+  // const updateFavorite = async (id, favorite, index) => {
   //   let response;
   //   try {
   //     response = await API.graphql(

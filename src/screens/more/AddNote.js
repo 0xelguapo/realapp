@@ -27,9 +27,6 @@ export default function AddNote(props) {
     } catch (err) {
       console.error(err);
     }
-    if (response) {
-      console.log(response);
-    }
     props.navigation.navigate("MoreHome", { note: response.data.createNote });
     return response;
   };

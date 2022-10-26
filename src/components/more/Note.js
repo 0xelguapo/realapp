@@ -14,7 +14,6 @@ export default function Note(props) {
       console.error(err);
     }
     props.deleteNoteFromNotesArray(props.index);
-    console.log(response);
   };
 
   return (

@@ -20,7 +20,6 @@ export default function AddEditNote(props) {
       params: { note: note },
       merge: true
     });
-    if(response) console.log(response)
   };
 
   return (

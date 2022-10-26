@@ -17,7 +17,6 @@ import { SuccessContext } from "../../context/success-context";
 export default function AddOwner(props) {
   const { onStatusChange } = useContext(SuccessContext)
   const { propertyId } = props.route.params;
-  console.log(propertyId);
   const [searchInput, setSearchInput] = useState("");
 
   const dispatch = useDispatch();

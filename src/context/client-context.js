@@ -36,7 +36,6 @@ function ClientContextProvider({ children }) {
     } catch (err) {
       console.error(err);
     }
-    console.log("gettingOneClient");
     return response;
   }, []);
 
@@ -68,7 +67,7 @@ function ClientContextProvider({ children }) {
         graphqlOperation(mutations.createClient, { input: clientDetails })
       );
     } catch (err) {
-      console.log("error creating client", err);
+      console.error("error creating client", err);
     }
 
     if (response) {
@@ -77,7 +76,6 @@ function ClientContextProvider({ children }) {
       onSuccess();
       return response;
     }
-    console.log(response);
   };
 
   const getFavoriteClients = async () => {
@@ -98,7 +96,6 @@ function ClientContextProvider({ children }) {
     if (response.data.listClients.items) {
       setFavoriteClients(response.data.listClients.items);
     }
-    console.log("gettingFavoriteClients");
     return response;
   };
 

@@ -66,7 +66,6 @@ export default function AddProperty({ navigation }) {
     setSelectedClient(client);
     setSearchInput(client.firstName + " " + client?.lastName);
     setClientsVisible(false);
-    console.log(client);
   };
 
   const renderClient = useCallback(

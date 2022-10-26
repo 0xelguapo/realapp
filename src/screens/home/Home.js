@@ -23,7 +23,6 @@ export default function Home(props) {
   const displayPaywall = async () => {
     try {
       const customerInfo = await Purchases.getCustomerInfo();
-      console.log('customerInfo,', customerInfo)
       if (
         typeof customerInfo.entitlements.active[ENTITLEMENT_ID] === "undefined"
       ) {

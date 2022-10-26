@@ -106,7 +106,6 @@ export default function EditProperty(props) {
       clientId: selectedClient?.id || null,
     };
     const response = await dispatch(editProperty(propertyInputs)).unwrap();
-    console.log(response);
     if (response) {
       props.navigation.goBack();
     }

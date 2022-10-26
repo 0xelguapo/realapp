@@ -38,7 +38,6 @@ export default function AddEditPropertyGroup(props) {
       const propertyGroupsId = allPropertyGroupsCopy[i].id;
       for (let j = 0; j < groupsOfProperty.length; j++) {
         if (propertyGroupsId === groupsOfProperty[j].propertyGroupID) {
-          // console.log(groupsOfProperty[j])
           allPropertyGroupsCopy[i] = {
             ...allPropertyGroupsCopy[i],
             inGroup: true,
@@ -71,12 +70,10 @@ export default function AddEditPropertyGroup(props) {
   };
 
   useEffect(() => {
-    console.log("fetching groups");
     dispatch(fetchPropertyGroups());
   }, []);
 
   useEffect(() => {
-    console.log("updating Groups");
     let finalArray = updatePropertyGroups(allPropertyGroups, groupsOfProperty);
     setAllUpdatedGroups(finalArray);
   }, [allPropertyGroups, groupsOfProperty]);

@@ -45,7 +45,6 @@ export default function AddTask({ navigation }) {
   const onChange = (e, selectedDate) => {
     const currentDate = selectedDate || date;
     setDate(currentDate);
-    console.log(currentDate);
   };
 
   const showPickers = () => {
@@ -79,7 +78,6 @@ export default function AddTask({ navigation }) {
     setSelectedClient(client);
     setSearchInput(client.firstName + " ", client?.lastName);
     setClientsVisible(false);
-    console.log(client);
   };
 
   const handleAddTask = async () => {

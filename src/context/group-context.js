@@ -43,7 +43,6 @@ function GroupsContextProvider({ children }) {
     const indexOfClient = copyOfClientsOfGroup.findIndex(
       (client) => client.client.id === clientId
     );
-    console.log("indexOfclient", indexOfClient);
     copyOfClientsOfGroup.splice(indexOfClient, 1);
     setClientsOfGroup(copyOfClientsOfGroup);
   };

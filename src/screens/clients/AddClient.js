@@ -13,15 +13,15 @@ import { useDispatch } from "react-redux";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import { addClient } from "../../redux/clients-slice";
 import { SuccessContext } from "../../context/success-context";
-import  {phoneFormat} from '../../utility/phone-format'
+import { phoneFormat } from "../../utility/phone-format";
 
 export default function AddClient({ navigation }) {
   const { onStatusChange } = useContext(SuccessContext);
   const phoneInputRef = useRef(null);
-  const emailInputRef = useRef(null)
+  const emailInputRef = useRef(null);
   const dispatch = useDispatch();
   const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState('')
+  const [lastName, setLastName] = useState("");
   const [company, setCompany] = useState("");
   const [emailInputs, setEmailInputs] = useState([]);
   const [phoneInputs, setPhoneInputs] = useState([]);
@@ -83,15 +83,13 @@ export default function AddClient({ navigation }) {
     if (phoneInputs.length > 0) {
       phoneInputRef.current.focus();
     }
-    console.log('phoneref')
   }, [phoneInputs.length]);
 
   useEffect(() => {
-    if(emailInputs.length > 0) {
+    if (emailInputs.length > 0) {
       emailInputRef.current.focus();
     }
-    console.log('emailRef')
-  }, [emailInputs.length])
+  }, [emailInputs.length]);
 
   return (
     <View style={styles.container}>
@@ -110,7 +108,10 @@ export default function AddClient({ navigation }) {
         behavior="padding"
         keyboardVerticalOffset={75}
       >
-        <ScrollView keyboardShouldPersistTaps="always" keyboardDismissMode="on-drag">
+        <ScrollView
+          keyboardShouldPersistTaps="always"
+          keyboardDismissMode="on-drag"
+        >
           <View style={styles.avatar}>
             <Text style={styles.avatarText}>{firstName[0]}</Text>
           </View>
@@ -292,7 +293,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     flex: 1,
     fontSize: 16,
-    height: '90%',
+    height: "90%",
   },
   inputContainerTwo: {
     paddingVertical: 10,
@@ -315,9 +316,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: "#cccccc",
     borderColor: "#dcdcdc",
-    borderWidth: .2,
+    borderWidth: 0.2,
     height: 40,
-    alignItems: 'center',
+    alignItems: "center",
   },
   removeInput: {
     width: 40,
