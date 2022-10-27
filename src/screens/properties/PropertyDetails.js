@@ -27,7 +27,7 @@ export default function PropertyDetails({ navigation, route }) {
   const { id } = route.params;
   const dispatch = useDispatch();
   const property = useSelector((state) => selectPropertyById(state, id));
-  const propertyOwnerId = property?.clientId; 
+  const propertyOwnerId = property?.clientId;
 
   const propertyOwner = useSelector((state) =>
     selectClientById(state, propertyOwnerId)
@@ -202,7 +202,7 @@ export default function PropertyDetails({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
+  container: { flex: 1, backgroundColor: "#f4f4f4" },
   header: {
     paddingBottom: 20,
   },

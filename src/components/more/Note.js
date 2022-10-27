@@ -40,18 +40,22 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    height: 60,
+    height: 70,
     paddingHorizontal: 10,
-    borderWidth: 1,
-    marginBottom: 7,
+    borderWidth: .5,
+    borderColor: '#454545',
+    marginBottom: 10,
     borderRadius: 5,
   },
   noteTitle: {
     fontSize: 16,
     fontWeight: "500",
+    color: "#454545",
+    marginBottom: 5
   },
   noteContent: {
     fontSize: 14,
+    color: '#6c6c6c',
   },
   deleteContainer: {},
 });

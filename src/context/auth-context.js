@@ -23,8 +23,8 @@ function AuthProvider({ children }) {
   const checkUser = useCallback(async () => {
     try {
       await Auth.currentAuthenticatedUser().then((u) => {
-        setUser(u);
         loginPurchaserUser(u.attributes.sub);
+        setUser(u);
       });
     } catch (err) {
       console.error(err);

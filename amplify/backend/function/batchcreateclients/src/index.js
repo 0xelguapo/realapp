@@ -46,12 +46,8 @@ const clientMutationQuery = /* GraphQL */ `
 /**
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
  */
-
-export const handler = async (event) => {
-  /** @type {import('node-fetch').RequestInit} */
-  // console.log(`EVENT: ${JSON.stringify(event)}`);
-
-  const DUMMY_DATA = [
+ 
+   const DUMMY_DATA = [
   ['First Name', 'Last Name', 'company', 'email', 'phone', 'Address', 'City', 'State', 'Zip Code'],
   ['Lambert', 'Beckhouse', 'StackOverflow', 'lbeckhouse0@stackoverflow.com', '512-555-1738', '316 Arapahoe Way', 'Austin', 'TX', '78721'],
   ['Maryanna', 'Vassman', 'CDBABY', 'mvassman1@cdbaby.com', '479-204-8976', '1126 Troy Way', 'Fort Smith', 'AR', '72916']
@@ -59,19 +55,24 @@ export const handler = async (event) => {
 
   const MAPPED_FIELDS = ['firstName', 'lastName', 'company', 'email', 'phone', null, null, null, 'clientZip']
 
-  // let userId = event.request.userAttributes.sub;
-  let userId = "1283acf9-98cb-4582-b19e-52659493fe4f"
+export const handler = async (event) => {
+  /** @type {import('node-fetch').RequestInit} */
+  // console.log(`EVENT: ${JSON.stringify(event)}`);
+  const {data, mappedFields} = event.arguments;
+  let userId = event.identity.claims.sub;
+  // let userId = "1283acf9-98cb-4582-b19e-52659493fe4f"
 
   //all client fields will be smaller than or equal to index 8.
-  const clientObjectsToUpload = DUMMY_DATA.slice(1).map((data) =>
+  const clientObjectsToUpload = data.slice(1).map((data) =>
     Object.fromEntries(
-      MAPPED_FIELDS.map((key, idx) => {
+      mappedFields.map((key, idx) => {
         if (idx <= 8) return [key, data[idx]];
         else return [null, null];
       }).filter((a) => a[0])
     )
   );
   
+  console.log(clientObjectsToUpload)
   //   const propertyObjectsToUpload = DUMMY_DATA.slice(1).map((data) =>
   //   Object.fromEntries(
   //     MAPPED_FIELDS.map((key, idx) => {
@@ -113,8 +114,8 @@ export const handler = async (event) => {
   let response;
   
   try {
-       response = await Promise.all(requests)
-       console.log(response)
+      response = await Promise.all(requests)
+      console.log(response)
       // body = await response.json()
   //   response = await fetch(request);
   //   body = await response.json()
@@ -135,7 +136,8 @@ export const handler = async (event) => {
 
   return {
     statusCode,
-    body: JSON.stringify(event.arguments),
+    body: JSON.stringify(body)
+    // body: JSON.stringify(data),
     //  Uncomment below to enable CORS requests
     //  headers: {
     //      "Access-Control-Allow-Origin": "*",

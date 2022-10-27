@@ -1,10 +1,5 @@
 import * as Notifications from "expo-notifications";
-import {
-  View,
-  Pressable,
-  Text,
-  StyleSheet,
-} from "react-native";
+import { View, Pressable, Text, StyleSheet } from "react-native";
 import { useState } from "react";
 import { formatDistanceToNowStrict, parseISO } from "date-fns";
 import { AntDesign } from "@expo/vector-icons";
@@ -12,8 +7,14 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { deleteOneReminder } from "../../redux/reminders-slice";
 
-export default function Reminder({ id, firstName, lastName, date, notificationId }) {
-  const fullName = lastName ? (firstName + ' ' + lastName) : firstName
+export default function Reminder({
+  id,
+  firstName,
+  lastName,
+  date,
+  notificationId,
+}) {
+  const fullName = lastName ? firstName + " " + lastName : firstName;
 
   const dispatch = useDispatch();
 
@@ -27,8 +28,15 @@ export default function Reminder({ id, firstName, lastName, date, notificationId
 
   const handleDeleteReminder = async () => {
     setChecked(true);
-    await Notifications.cancelScheduledNotificationAsync(notificationId);
-    dispatch(deleteOneReminder(id));
+    if (notificationId) {
+      try {
+        await Notifications.cancelScheduledNotificationAsync(notificationId);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    const response = await dispatch(deleteOneReminder(id)).unwrap()
+    console.log(response)
   };
 
   const handleDateFormat = () => {

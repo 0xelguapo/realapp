@@ -92,6 +92,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 25,
     paddingTop: 65,
     paddingBottom: 40,
+    backgroundColor: '#f4f4f4',
+    flex: 1
   },
   headingContainer: {
     display: "flex",
