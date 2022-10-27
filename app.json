@@ -17,8 +17,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "co.coagent"
+      "supportsTablet": false,
+      "bundleIdentifier": "co.coagent.coagent"
     },
     "android": {
       "adaptiveIcon": {
