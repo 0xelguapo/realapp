@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
   subtext: {
     color: "#6c6c6c",
     fontWeight: "700",
-    fontSize: 20
+    fontSize: 21
   },
   allBulletsContainer: {
     flex: 1,

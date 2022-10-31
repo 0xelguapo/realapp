@@ -31,7 +31,7 @@
         },
         "deleteUserData": {
           "deploymentBucketName": "amplify-realapp-dev-142224-deployment",
-          "s3Key": "amplify-builds/deleteUserData-39744564366b6566612f-build.zip"
+          "s3Key": "amplify-builds/deleteUserData-424f7a716f684f7a7541-build.zip"
         }
       },
       "api": {

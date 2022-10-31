@@ -1,6 +1,7 @@
 const { getDefaultConfig } = require("expo/metro-config");
 const config = getDefaultConfig(__dirname);
 const blacklist = require("metro-config/src/defaults/exclusionList");
+
 config.resolver.blacklistRE = blacklist([/#current-cloud-backend\/.*/]);
 config.transformer.getTransformOptions.transform = {
   ...config.transformer.getTransformOptions.transform,
