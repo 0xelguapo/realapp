@@ -71,8 +71,8 @@ export const handler = async (event, context, callback) => {
 
   //---- create client ----//
   let userId = event.request.userAttributes.sub;
-  // let userId = "2612aa2f-e76d-4c3d-a077-2da27797313b"
   // let userId = "1283acf9-98cb-4582-b19e-52659493fe4f"
+  // let userId = "2612aa2f-e76d-4c3d-a077-2da27797313b"
 
   const createClientVariables = { input: { firstName: "Jon Snow", lastName: "Sample", favorite: true, company: "CoAgent Team", phone: "3105558592,2125559912", email: "eric@coagent.co,emailMeAnytime@youremail.com", notes: "You can import your existing clients from an excel sheet or .csv on our website, https://coagent.co/", clientStreet: "5422 Nights Watch Blvd", clientState: "CA", clientCity: "Thrones", clientZip: "88228", owner: userId } };
   const createClientVariablesTwo = { input: { firstName: "First", lastName: "Contact", favorite: true, company: "CoAgent Team", phone: "1215552151,4245559421", email: "eric@coagent.co,emailMeAnytime@youremail.com", notes: "Welcome to your first contact! Browse around this screen and get a feel of things. Create reminders, log your call/connection histories, and set up tasks.", clientStreet: "54221 Jon Snow Avenue", clientState: "CA", clientCity: "Thrones", clientZip: "512142", owner: userId } };

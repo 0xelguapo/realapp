@@ -13,7 +13,7 @@ export default function PackageItem({
   }, [])
   
   return (
-    <View>
+    <View style={styles.container}>
       <View style={styles.offerContainer}>
         <View style={styles.offerTitleContainer}>
           <Text style={styles.offerTitle}>CoAgent Pro</Text>
@@ -23,7 +23,7 @@ export default function PackageItem({
             </Text>
           </View>
           <View style={styles.checkMark}>
-            <Ionicons name="checkmark-circle" size={40} color="white" />
+            <Ionicons name="checkmark-circle" size={40} color="#454545" />
           </View>
         </View>
         <View style={styles.priceContainer}>
@@ -94,15 +94,18 @@ export default function PackageItem({
 }
 
 const styles = StyleSheet.create({
+  container: {
+    paddingHorizontal: 10
+  },
   checkMark: {
     position: "absolute",
     right: 0,
     top: -10,
   },
   offerContainer: {
-    borderWidth: 1,
+    borderWidth: 2,
     borderRadius: 10,
-    borderColor: "white",
+    borderColor: "#454545",
     flex: 1,
     paddingHorizontal: 20,
     paddingVertical: 20,
@@ -113,7 +116,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   offerTitle: {
-    color: "white",
+    color: "#454545",
     fontSize: 24,
     fontWeight: "700",
   },
@@ -134,14 +137,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   strikeThroughText: {
-    color: "white",
+    color: "#6c6c6c",
     fontSize: 16,
     textDecorationLine: "line-through",
-    textDecorationColor: "white",
+    textDecorationColor: "#454545",
     fontWeight: "500",
   },
   saveText: {
-    color: "white",
+    color: "#454545",
     marginLeft: 10,
     fontWeight: "700",
     fontSize: 16,
@@ -149,14 +152,15 @@ const styles = StyleSheet.create({
   },
   priceText: {
     marginTop: 5,
-    paddingVertical: 5,
+    paddingVertical: 3,
     fontSize: 24,
     fontWeight: "700",
-    color: "white",
+    color: "#454545",
   },
   subtext: {
-    color: "#d0d0d0",
+    color: "#6c6c6c",
     fontWeight: "700",
+    fontSize: 20
   },
   allBulletsContainer: {
     flex: 1,
@@ -170,12 +174,12 @@ const styles = StyleSheet.create({
   bulletCircle: {
     width: 5,
     height: 5,
-    backgroundColor: "white",
+    backgroundColor: "#454545",
     borderRadius: 50,
     marginRight: 10,
   },
   bulletText: {
-    color: "white",
+    color: "#454545",
     fontSize: 16,
   },
 });

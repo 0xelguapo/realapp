@@ -9,8 +9,8 @@ import { deleteOneReminder } from "../../redux/reminders-slice";
 
 export default function Reminder({
   id,
-  firstName,
-  lastName,
+  firstName = '',
+  lastName = '',
   date,
   notificationId,
 }) {
@@ -68,7 +68,7 @@ export default function Reminder({
               : styles.checkedReminderClientName
           }
         >
-          {fullName}
+          {fullName ? fullName : 'Deleted Client'}
         </Text>
         <Text
           style={[

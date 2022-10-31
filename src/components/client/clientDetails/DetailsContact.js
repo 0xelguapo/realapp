@@ -33,7 +33,7 @@ export default function DetailsContact({ clientDetailsState }) {
     <View style={styles.container}>
       <BlockHeading title={"PHONE NUMBERS"} />
       <View style={styles.detailsContainer}>
-        {clientDetailsState.phone.length > 1 ? (
+        {clientDetailsState.phone?.length > 1 ? (
           clientDetailsState.phone.split(",").map((number, index) => (
             <View style={styles.phoneEmailContainer} key={index}>
               <Text style={styles.detailText}>{number}</Text>
@@ -59,7 +59,7 @@ export default function DetailsContact({ clientDetailsState }) {
       </View>
       <BlockHeading title="EMAILS" />
       <View style={styles.detailsContainer}>
-        {clientDetailsState.email.length > 1 ? (
+        {clientDetailsState.email?.length > 1 ? (
           clientDetailsState.email.split(",").map((email, index) => (
             <View style={styles.phoneEmailContainer} key={index}>
               <Text style={styles.detailText}>{email}</Text>
@@ -79,17 +79,17 @@ export default function DetailsContact({ clientDetailsState }) {
       </View>
       <View style={styles.addressContainer}>
         <BlockHeading title="CONTACT ADDRESS" />
-        {clientDetailsState.clientStreet.length > 0 && (
+        {clientDetailsState.clientStreet?.length > 0 && (
           <Text style={{ ...styles.addressDetail, marginTop: 8 }}>
             {clientDetailsState.clientStreet}
           </Text>
         )}
-        {clientDetailsState.clientCity.length > 0 && (
+        {clientDetailsState.clientCity?.length > 0 && (
           <Text style={styles.addressDetail}>
             {clientDetailsState.clientCity}
           </Text>
         )}
-        {clientDetailsState.clientState.length > 0 && (
+        {clientDetailsState.clientState?.length > 0 && (
           <Text style={styles.addressDetail}>
             {clientDetailsState.clientState +
               " " +

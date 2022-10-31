@@ -23,6 +23,7 @@ export const onCreateClient = /* GraphQL */ `
         items {
           id
           title
+          content
           date
           clientId
           owner
@@ -116,6 +117,7 @@ export const onUpdateClient = /* GraphQL */ `
         items {
           id
           title
+          content
           date
           clientId
           owner
@@ -209,6 +211,7 @@ export const onDeleteClient = /* GraphQL */ `
         items {
           id
           title
+          content
           date
           clientId
           owner
@@ -732,6 +735,7 @@ export const onCreateConnectionHistory = /* GraphQL */ `
     onCreateConnectionHistory(filter: $filter, owner: $owner) {
       id
       title
+      content
       date
       clientId
       client {
@@ -780,6 +784,7 @@ export const onUpdateConnectionHistory = /* GraphQL */ `
     onUpdateConnectionHistory(filter: $filter, owner: $owner) {
       id
       title
+      content
       date
       clientId
       client {
@@ -828,6 +833,7 @@ export const onDeleteConnectionHistory = /* GraphQL */ `
     onDeleteConnectionHistory(filter: $filter, owner: $owner) {
       id
       title
+      content
       date
       clientId
       client {

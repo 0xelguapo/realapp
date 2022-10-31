@@ -27,7 +27,11 @@
         },
         "postsignup": {
           "deploymentBucketName": "amplify-realapp-dev-142224-deployment",
-          "s3Key": "amplify-builds/postsignup-525463646d2f74317179-build.zip"
+          "s3Key": "amplify-builds/postsignup-4874492b577374424279-build.zip"
+        },
+        "deleteUserData": {
+          "deploymentBucketName": "amplify-realapp-dev-142224-deployment",
+          "s3Key": "amplify-builds/deleteUserData-39744564366b6566612f-build.zip"
         }
       },
       "api": {

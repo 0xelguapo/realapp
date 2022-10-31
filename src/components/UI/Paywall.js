@@ -8,12 +8,75 @@ import {
   FlatList,
 } from "react-native";
 import { useCallback, useEffect, useState } from "react";
-import { Feather, Ionicons } from "@expo/vector-icons";
+import * as Linking from "expo-linking";
 import Purchases from "react-native-purchases";
 import PackageItem from "../purchase/PackageItem";
 import { ENTITLEMENT_ID } from "../../constants";
+import { useNavigation } from "@react-navigation/native";
 
 // remove go back after setting up payments
+
+const TermsOfUse = () => {
+  const navigation = useNavigation();
+  const restorePurchase = async () => {
+    let restoreResponse;
+    try {
+      restoreResponse = await Purchases.restorePurchases();
+    } catch (err) {
+      Alert.alert(
+        "Error restoring purchases, please contact us at https://coagent.co/contact"
+      );
+      console.error(err);
+    }
+    if (restoreResponse.entitlements.active[ENTITLEMENT_ID] !== "undefined") {
+      navigation.navigate("HomeScreen");
+    }
+  };
+  return (
+    <>
+      <View style={{ display: "flex", alignItems: "center", marginTop: 20 }}>
+        <TouchableOpacity
+          style={{
+            display: "flex",
+            alignItems: "center",
+            borderRadius: 10,
+            borderColor: "black",
+            borderWidth: 1,
+            paddingHorizontal: 20,
+            paddingVertical: 5,
+          }}
+          onPress={restorePurchase}
+        >
+          <Text style={{ color: "black", fontWeight: "700" }}>
+            Restore Purchases
+          </Text>
+        </TouchableOpacity>
+      </View>
+      <View
+        style={{
+          marginTop: 30,
+          paddingHorizontal: 10,
+          display: "flex",
+          justifyContent: "space-evenly",
+          flexDirection: "row",
+        }}
+      >
+        <Text
+          style={{ color: "#454545", textDecorationLine: "underline" }}
+          onPress={() => Linking.openURL("https://coagent.co/terms-of-use")}
+        >
+          Terms of Use
+        </Text>
+        <Text
+          style={{ color: "#454545", textDecorationLine: "underline" }}
+          onPress={() => Linking.openURL("https://coagent.co/privacy-policy")}
+        >
+          Privacy Policy
+        </Text>
+      </View>
+    </>
+  );
+};
 
 export default function Paywall(props) {
   const [showMonthly, setShowMonthly] = useState(false);
@@ -100,7 +163,7 @@ export default function Paywall(props) {
             style={[
               showMonthly
                 ? styles.monthToggleButton
-                : { ...styles.monthToggleButton, backgroundColor: "#84bfff" },
+                : { ...styles.monthToggleButton, backgroundColor: "#0064e5" },
             ]}
             onPress={() => setShowMonthly(false)}
           >
@@ -109,7 +172,7 @@ export default function Paywall(props) {
           <Pressable
             style={[
               showMonthly
-                ? { ...styles.monthToggleButton, backgroundColor: "#84bfff" }
+                ? { ...styles.monthToggleButton, backgroundColor: "#0064e5" }
                 : styles.monthToggleButton,
             ]}
             onPress={() => setShowMonthly(true)}
@@ -123,18 +186,16 @@ export default function Paywall(props) {
           data={packages}
           keyExtractor={(item) => item.identifier}
           renderItem={renderMonthly}
+          ListFooterComponent={<TermsOfUse />}
         />
       ) : (
         <FlatList
           data={packages}
           keyExtractor={(item) => item.identifier}
           renderItem={renderYearly}
+          ListFooterComponent={<TermsOfUse />}
         />
       )}
-
-      {/* <ScrollView style={styles.bodyContainer}>
-        <PackageItem monthly={showMonthly} />
-      </ScrollView> */}
       <View style={styles.footerContainer}>
         <TouchableOpacity style={styles.ctaButton} onPress={handlePurchase}>
           <Text style={styles.buttonText}>Try it free</Text>
@@ -150,7 +211,7 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: 50,
     flex: 1,
-    backgroundColor: "#101010",
+    backgroundColor: "#f6f6f6",
   },
   exitButton: {
     position: "absolute",
@@ -166,7 +227,7 @@ const styles = StyleSheet.create({
   headingText: {
     textAlign: "center",
     fontSize: 30,
-    color: "white",
+    color: "black",
     fontWeight: "700",
   },
   checkMark: {
@@ -180,98 +241,20 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   monthToggleButton: {
-    backgroundColor: "white",
+    backgroundColor: "black",
     paddingVertical: 10,
     width: 160,
     borderRadius: 10,
   },
   monthlyText: {
     fontSize: 18,
-    color: "black",
+    color: "white",
     textAlign: "center",
     fontWeight: "500",
   },
   bodyContainer: {
     flex: 1,
     paddingHorizontal: 20,
-  },
-  offerContainer: {
-    borderWidth: 1,
-    borderRadius: 10,
-    borderColor: "white",
-    flex: 1,
-    paddingHorizontal: 20,
-    paddingVertical: 20,
-  },
-  offerTitleContainer: {
-    flexDirection: "row",
-    marginBottom: 15,
-  },
-  offerTitle: {
-    color: "white",
-    fontSize: 24,
-    fontWeight: "700",
-  },
-  bestValueContainer: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    marginLeft: 10,
-    backgroundColor: "#84bfff",
-    paddingHorizontal: 10,
-    borderRadius: 5,
-  },
-  bestValueText: {
-    fontWeight: "500",
-  },
-  priceContainer: {},
-  strikeThroughContainer: {
-    flexDirection: "row",
-  },
-  strikeThroughText: {
-    color: "white",
-    fontSize: 16,
-    textDecorationLine: "line-through",
-    textDecorationColor: "white",
-    fontWeight: "500",
-  },
-  saveText: {
-    color: "white",
-    marginLeft: 10,
-    fontWeight: "700",
-    fontSize: 16,
-    color: "#84bfff",
-  },
-  priceText: {
-    marginTop: 5,
-    paddingVertical: 5,
-    fontSize: 24,
-    fontWeight: "700",
-    color: "white",
-  },
-  subtext: {
-    color: "#d0d0d0",
-    fontWeight: "700",
-  },
-  allBulletsContainer: {
-    flex: 1,
-    paddingVertical: 10,
-  },
-  bulletContainer: {
-    flexDirection: "row",
-    paddingVertical: 10,
-    alignItems: "center",
-  },
-  bulletCircle: {
-    width: 5,
-    height: 5,
-    backgroundColor: "white",
-    borderRadius: 50,
-    marginRight: 10,
-  },
-  bulletText: {
-    color: "white",
-    fontSize: 16,
   },
   footerContainer: {
     display: "flex",
@@ -293,14 +276,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     width: "85%",
-    backgroundColor: "white",
+    backgroundColor: "black",
     borderRadius: 30,
     paddingVertical: 15,
     marginBottom: 10,
   },
   buttonText: {
     fontSize: 25,
-    color: "black",
+    color: "white",
     fontWeight: "700",
   },
   overlay: {

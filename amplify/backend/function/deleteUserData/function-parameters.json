@@ -1,0 +1,55 @@
+{
+  "permissions": {
+    "storage": {
+      "Client:@model(appsync)": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "Property:@model(appsync)": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "PropertyGroup:@model(appsync)": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "Reminder:@model(appsync)": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "ClientGroup:@model(appsync)": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "ConnectionHistory:@model(appsync)": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "Task:@model(appsync)": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "Note:@model(appsync)": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}

@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -6,10 +6,8 @@ import {
   TouchableOpacity,
   ScrollView,
   Pressable,
-  Alert,
 } from "react-native";
 import { API, Auth, graphqlOperation } from "aws-amplify";
-import { AuthContext } from "../../context/auth-context";
 import { Feather, Ionicons, SimpleLineIcons } from "@expo/vector-icons";
 import * as queries from "../../graphql/queries";
 import Note from "../../components/more/Note";
@@ -17,20 +15,6 @@ import Note from "../../components/more/Note";
 export default function More(props) {
   const [modalVisible, setModalVisible] = useState(false);
   const [notesArray, setNotesArray] = useState([]);
-  const { signOut } = useContext(AuthContext);
-
-  const handleSignOut = () => {
-    Alert.alert("Sign Out", "Are you sure you want to sign out?", [
-      { text: "Cancel", style: "cancel" },
-      {
-        text: "Sign Out",
-        style: "destructive",
-        onPress: () => {
-          signOut();
-        },
-      },
-    ]);
-  };
 
   const fetchNotes = async () => {
     let response;
@@ -51,6 +35,11 @@ export default function More(props) {
   useEffect(() => {
     fetchNotes();
   }, [props.route.params]);
+
+  const handleNavigateSettings = () => {
+    setModalVisible(false)
+    props.navigation.navigate('Settings')
+  }
 
   const handleAddNote = () => {
     props.navigation.navigate("AddNote");
@@ -79,8 +68,8 @@ export default function More(props) {
         </TouchableOpacity>
         {modalVisible && (
           <View style={styles.menuContainer}>
-            <TouchableOpacity style={styles.menuOption} onPress={handleSignOut}>
-              <Text style={styles.menuOptionText}>Sign Out</Text>
+            <TouchableOpacity style={styles.menuOption} onPress={handleNavigateSettings}>
+              <Text style={styles.menuOptionText}>Settings</Text>
               <Ionicons name="exit-outline" size={24} color="#333333" />
             </TouchableOpacity>
           </View>

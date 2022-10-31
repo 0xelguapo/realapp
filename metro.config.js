@@ -1,24 +1,25 @@
-// // Learn more https://docs.expo.io/guides/customizing-metro
-// const { getDefaultConfig } = require('expo/metro-config');
-
-// module.exports = getDefaultConfig(__dirname);
-
-//above is the default previous code.
-
 const { getDefaultConfig } = require("expo/metro-config");
-const exclusionList = require("metro-config/src/defaults/exclusionList");
-
-module.exports = {
-  ...getDefaultConfig(__dirname),
-  resolver: {
-    blacklistRE: exclusionList([/#current-cloud-backend\/.*/]),
-  },
-  transformer: {
-    getTransformOptions: async () => ({
-      transform: {
-        experimentalImportSupport: false,
-        inlineRequires: false,
-      },
-    }),
-  },
+const config = getDefaultConfig(__dirname);
+const blacklist = require("metro-config/src/defaults/exclusionList");
+config.resolver.blacklistRE = blacklist([/#current-cloud-backend\/.*/]);
+config.transformer.getTransformOptions.transform = {
+  ...config.transformer.getTransformOptions.transform,
+  experimentalImportSupport: false,
+  inlineRequires: false,
 };
+
+module.exports = config;
+
+// module.exports = {
+//   resolver: {
+//     blacklistRE: blacklist([/#current-cloud-backend\/.*/]),
+//   },
+//   transformer: {
+//     getTransformOptions: async () => ({
+//       transform: {
+//         experimentalImportSupport: false,
+//         inlineRequires: false,
+//       },
+//     }),
+//   },
+// };

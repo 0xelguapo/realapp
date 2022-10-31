@@ -69,6 +69,7 @@ type ClientGroup @model @auth(rules: [{ allow: owner }, { allow: public, provide
 type ConnectionHistory @model @auth(rules: [{ allow: owner }, { allow: public, provider: apiKey, operations: [create] }]) {
   id: ID!
   title: String!
+  content: String
   date: String
   clientId: ID! @index(name: "byConnectionHistory", sortKeyFields: ["title"])
   client: Client @belongsTo(fields: ["clientId"])
@@ -98,4 +99,5 @@ type Note @model @auth(rules: [{ allow: owner }, { allow: public, provider: apiK
 type Mutation {
   batchCreateClients(data: AWSJSON, mappedFields: [String]): String
     @function(name: "batchcreateclients-dev")
+  deleteUserData: Boolean! @function(name: "deleteUserData-dev")
 }
