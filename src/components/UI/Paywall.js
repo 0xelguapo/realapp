@@ -148,12 +148,6 @@ export default function Paywall(props) {
 
   return (
     <View style={styles.container}>
-      {/* <TouchableOpacity
-        style={styles.exitButton}
-        onPress={() => props.navigation.goBack()}
-      >
-        <Feather name="x" size={24} color="#6f6f6f" />
-      </TouchableOpacity> */}
       <View style={styles.headingContainer}>
         <Text style={styles.headingText}>
           Build Better Relationships with CoAgent

@@ -21,7 +21,13 @@ export default function AddConnectionHistory(props) {
     const connection = await addConnection({
       clientId: clientId,
       title: title,
-      date: date.toLocaleString(),
+      date: date.toLocaleString(undefined, {
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
     });
 
     props.navigation.navigate({
@@ -36,7 +42,11 @@ export default function AddConnectionHistory(props) {
   }, []);
 
   return (
-    <AddSimple goBack={props.navigation.goBack} title="LOG A CONNECTION" enableOverlayGoBack={false}>
+    <AddSimple
+      goBack={props.navigation.goBack}
+      title="LOG A CONNECTION"
+      enableOverlayGoBack={false}
+    >
       <TextInput
         style={styles.titleInput}
         value={title}
