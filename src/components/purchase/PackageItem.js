@@ -34,14 +34,15 @@ export default function PackageItem({
             </View>
           )}
           <Text style={styles.priceText}>
-            {monthly
+            {purchasePackage.product.priceString}
+            {/* {monthly
               ? purchasePackage.product.priceString
-              : "$" + Math.max(purchasePackage.product.price / 12).toFixed(2)}
+              : "$" + Math.max(purchasePackage.product.price / 12).toFixed(2)} */}
           </Text>
           <Text style={styles.subtext}>
             {monthly
               ? "Per month, billed monthly"
-              : "Per month, billed annually"}
+              : `12 months at $${Math.max(purchasePackage.product.price / 12).toFixed(2)} per month`}
           </Text>
         </View>
         <View style={styles.allBulletsContainer}>
@@ -160,7 +161,7 @@ const styles = StyleSheet.create({
   subtext: {
     color: "#6c6c6c",
     fontWeight: "700",
-    fontSize: 21
+    fontSize: 18
   },
   allBulletsContainer: {
     flex: 1,

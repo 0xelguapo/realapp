@@ -146,41 +146,46 @@ export default function Paywall(props) {
     getPackages();
   }, []);
 
+  function HeaderComponent () {
+    return (<View style={styles.headingContainer}>
+      <Text style={styles.headingText}>
+        Build Better Relationships with CoAgent
+      </Text>
+      <View style={styles.monthlyContainer}>
+        <Pressable
+          style={[
+            showMonthly
+              ? styles.monthToggleButton
+              : { ...styles.monthToggleButton, backgroundColor: "#0064e5" },
+          ]}
+          onPress={() => setShowMonthly(false)}
+        >
+          <Text style={styles.monthlyText}>Yearly</Text>
+        </Pressable>
+        <Pressable
+          style={[
+            showMonthly
+              ? { ...styles.monthToggleButton, backgroundColor: "#0064e5" }
+              : styles.monthToggleButton,
+          ]}
+          onPress={() => setShowMonthly(true)}
+        >
+          <Text style={styles.monthlyText}>Monthly</Text>
+        </Pressable>
+      </View>
+    </View>)
+  }
+
   return (
     <View style={styles.container}>
-      <View style={styles.headingContainer}>
-        <Text style={styles.headingText}>
-          Build Better Relationships with CoAgent
-        </Text>
-        <View style={styles.monthlyContainer}>
-          <Pressable
-            style={[
-              showMonthly
-                ? styles.monthToggleButton
-                : { ...styles.monthToggleButton, backgroundColor: "#0064e5" },
-            ]}
-            onPress={() => setShowMonthly(false)}
-          >
-            <Text style={styles.monthlyText}>Yearly (Discount)</Text>
-          </Pressable>
-          <Pressable
-            style={[
-              showMonthly
-                ? { ...styles.monthToggleButton, backgroundColor: "#0064e5" }
-                : styles.monthToggleButton,
-            ]}
-            onPress={() => setShowMonthly(true)}
-          >
-            <Text style={styles.monthlyText}>Monthly</Text>
-          </Pressable>
-        </View>
-      </View>
+      
       {showMonthly ? (
         <FlatList
           data={packages}
           keyExtractor={(item) => item.identifier}
           renderItem={renderMonthly}
           ListFooterComponent={<TermsOfUse />}
+          ListHeaderComponent={<HeaderComponent />}
         />
       ) : (
         <FlatList
@@ -188,11 +193,12 @@ export default function Paywall(props) {
           keyExtractor={(item) => item.identifier}
           renderItem={renderYearly}
           ListFooterComponent={<TermsOfUse />}
+          ListHeaderComponent={<HeaderComponent />}
         />
       )}
       <View style={styles.footerContainer}>
         <TouchableOpacity style={styles.ctaButton} onPress={handlePurchase}>
-          <Text style={styles.buttonText}>Try it free</Text>
+          <Text style={styles.buttonText}>Continue</Text>
         </TouchableOpacity>
         <Text style={styles.subtext}>3-day free trial, cancel anytime.</Text>
       </View>
