@@ -42,7 +42,7 @@ export default function PackageItem({
           <Text style={styles.subtext}>
             {monthly
               ? "Per month, billed monthly"
-              : `12 months at $${Math.max(purchasePackage.product.price / 12).toFixed(2)} per month`}
+              : `12 months at $${(Math.ceil(purchasePackage.product.price) / 12).toFixed(2)} per month`}
           </Text>
         </View>
         <View style={styles.allBulletsContainer}>
