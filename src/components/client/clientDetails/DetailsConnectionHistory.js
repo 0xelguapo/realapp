@@ -18,7 +18,10 @@ export default function DetailsConnectionHistory({
           clientDetailsState.connectionHistory.items.map((el) => (
             <View style={styles.connection} key={el.id}>
               <Text style={styles.connectionTitle}>{el.title}</Text>
-              {el.date && (
+              {el.content.length > 0 && (
+                <Text style={styles.connectionContent}>{el.content}</Text>
+              )}
+              {el.date.length > 0 && (
                 <Text style={styles.connectionDate}>
                   {el.date.replace(",", " •")}
                 </Text>
@@ -65,6 +68,10 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     fontSize: 15,
     color: "#6c6c6c",
+  },
+  connectionContent: {
+    fontSize: 14,
+    color: '#6c6c6c'
   },
   connectionDate: {
     color: "#ababab",

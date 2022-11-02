@@ -6,6 +6,7 @@ import useClient from "../../hooks/client-hook";
 
 export default function AddConnectionHistory(props) {
   const [title, setTitle] = useState(null);
+  const [content, setContent] = useState(null)
   const [date, setDate] = useState(new Date());
   const { addConnection } = useClient();
   const { clientId } = props.route.params;
@@ -21,6 +22,7 @@ export default function AddConnectionHistory(props) {
     const connection = await addConnection({
       clientId: clientId,
       title: title,
+      content: content,
       date: date.toLocaleString(undefined, {
         year: "numeric",
         month: "numeric",
@@ -55,7 +57,15 @@ export default function AddConnectionHistory(props) {
         placeholder="Reached, Left Voicemail, Sent Email..."
         placeholderTextColor="#d6d6d6"
       />
-      <View style={{ marginTop: 50 }}>
+      <TextInput
+        style={styles.descriptionInput}
+        multiline={true}
+        value={content}
+        onChangeText={setContent}
+        placeholder="Optional description..."
+        placeholderTextColor="#d6d6d6"
+      />
+      <View style={{ }}>
         <AddSimple.Actions handleSubmit={handlePress}>
           <DateTimePicker
             mode="datetime"
@@ -87,25 +97,14 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     zIndex: 3,
   },
-  titleHeaderContainer: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  titleHeader: {
-    fontSize: 13,
-    fontWeight: "500",
-    color: "#ababab",
-    letterSpacing: 1.8,
-    paddingVertical: 5,
-  },
   titleInput: {
     height: 40,
     fontSize: 15,
   },
   descriptionInput: {
-    height: 50,
+    height: 60,
     fontSize: 15,
+    marginBottom: 5,
   },
   controlsContainer: {},
   controlOptions: {},

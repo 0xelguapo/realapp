@@ -59,6 +59,7 @@ export default function AddConnectionHistory(props) {
         onChangeText={setDescription}
         placeholder="Optional description..."
         placeholderTextColor="#d6d6d6"
+        value={description}
       />
       <AddSimple.Actions handleSubmit={handlePress}>
         <DateTimePicker
