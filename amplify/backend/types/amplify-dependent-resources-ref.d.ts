@@ -23,6 +23,8 @@ export type AmplifyDependentResourcesAttributes = {
         "realapp8e8e08f1": {
             "IdentityPoolId": "string",
             "IdentityPoolName": "string",
+            "HostedUIDomain": "string",
+            "OAuthMetadata": "string",
             "UserPoolId": "string",
             "UserPoolArn": "string",
             "UserPoolName": "string",

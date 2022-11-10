@@ -414,6 +414,7 @@ export const onCreateConnectionHistory = /* GraphQL */ `
     onCreateConnectionHistory(filter: $filter, owner: $owner) {
       id
       title
+      content
       date
       clientId
       client {
@@ -447,6 +448,7 @@ export const onUpdateConnectionHistory = /* GraphQL */ `
     onUpdateConnectionHistory(filter: $filter, owner: $owner) {
       id
       title
+      content
       date
       clientId
       client {
@@ -480,6 +482,7 @@ export const onDeleteConnectionHistory = /* GraphQL */ `
     onDeleteConnectionHistory(filter: $filter, owner: $owner) {
       id
       title
+      content
       date
       clientId
       client {

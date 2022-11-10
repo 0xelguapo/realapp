@@ -3,6 +3,14 @@
 
 # input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
 
+type User @model {
+  id: ID!
+  name: String
+  email: String
+  google_access_token: String
+  google_refresh_token: String
+}
+
 type Client @model @auth(rules: [{ allow: owner }, { allow: public, provider: apiKey, operations: [create] }]) {
   id: ID!
   firstName: String!

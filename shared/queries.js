@@ -237,6 +237,7 @@ export const getConnectionHistory = /* GraphQL */ `
     getConnectionHistory(id: $id) {
       id
       title
+      content
       date
       clientId
       client {
@@ -276,6 +277,7 @@ export const listConnectionHistories = /* GraphQL */ `
       items {
         id
         title
+        content
         date
         clientId
         owner

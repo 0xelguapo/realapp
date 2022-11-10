@@ -22,7 +22,7 @@
       "function": {
         "batchcreateclients": {
           "deploymentBucketName": "amplify-realapp-dev-142224-deployment",
-          "s3Key": "amplify-builds/batchcreateclients-4d54357a614931426d57-build.zip",
+          "s3Key": "amplify-builds/batchcreateclients-4f5146496c6433495131-build.zip",
           "secretsPathAmplifyAppId": "d3m1z9i4a8u83m"
         },
         "postsignup": {

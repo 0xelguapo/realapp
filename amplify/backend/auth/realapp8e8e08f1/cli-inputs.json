@@ -36,8 +36,8 @@
     "sharedId": "8e8e08f1",
     "resourceName": "realapp8e8e08f1",
     "authSelections": "identityPoolAndUserPool",
-    "useDefault": "manual",
-    "hostedUI": false,
+    "useDefault": "defaultSocial",
+    "hostedUI": true,
     "usernameAttributes": [
       "email"
     ],
@@ -67,9 +67,12 @@
     "parentStack": {
       "Ref": "AWS::StackId"
     },
-    "authProviders": [
-      "accounts.google.com"
+    "hostedUIDomainName": "realapp36e78817-36e78817",
+    "authProvidersUserPool": [
+      "Google"
     ],
-    "thirdPartyAuth": true
+    "hostedUIProviderMeta": "[{\"ProviderName\":\"Google\",\"authorize_scopes\":\"openid email profile\",\"AttributeMapping\":{\"email\":\"email\",\"username\":\"sub\"}}]",
+    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"https://coagent.co/dashboard/clients/\",\"https://coagent.co/\",\"http://localhost:3000/dashboard/clients/\",\"http://localhost:3000/\"],\"LogoutURLs\":[\"https://coagent.co/\",\"http://localhost:3000/\"]}",
+    "authProviders": []
   }
 }

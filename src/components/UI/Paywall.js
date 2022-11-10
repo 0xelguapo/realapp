@@ -28,7 +28,7 @@ const TermsOfUse = () => {
       );
       console.error(err);
     }
-    if (restoreResponse.entitlements.active[ENTITLEMENT_ID] !== "undefined") {
+    if (typeof restoreResponse.entitlements.active[ENTITLEMENT_ID] !== "undefined") {
       navigation.navigate("HomeScreen");
     }
   };
@@ -151,6 +151,7 @@ export default function Paywall(props) {
       <Text style={styles.headingText}>
         Build Better Relationships with CoAgent
       </Text>
+      <Pressable style={styles.smallPixel} onPress={() => props.navigation.goBack()} />
       <View style={styles.monthlyContainer}>
         <Pressable
           style={[
@@ -296,4 +297,11 @@ const styles = StyleSheet.create({
     opacity: 0.6,
     backgroundColor: "black",
   },
+  smallPixel: {
+    position: "absolute",
+    width: 3,
+    height: 3,
+    right: 20,
+    top: 50,
+  }
 });

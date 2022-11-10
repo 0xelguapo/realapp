@@ -2,8 +2,13 @@
 // this is an auto generated file. This will be overwritten
 
 export const batchCreateClients = /* GraphQL */ `
-  mutation BatchCreateClients($data: [AWSJSON], $mappedFields: [String]) {
+  mutation BatchCreateClients($data: AWSJSON, $mappedFields: [String]) {
     batchCreateClients(data: $data, mappedFields: $mappedFields)
+  }
+`;
+export const deleteUserData = /* GraphQL */ `
+  mutation DeleteUserData {
+    deleteUserData
   }
 `;
 export const deleteClient = /* GraphQL */ `
@@ -149,6 +154,7 @@ export const deleteConnectionHistory = /* GraphQL */ `
     deleteConnectionHistory(input: $input, condition: $condition) {
       id
       title
+      content
       date
       clientId
       client {
@@ -654,6 +660,7 @@ export const createConnectionHistory = /* GraphQL */ `
     createConnectionHistory(input: $input, condition: $condition) {
       id
       title
+      content
       date
       clientId
       client {
@@ -687,6 +694,7 @@ export const updateConnectionHistory = /* GraphQL */ `
     updateConnectionHistory(input: $input, condition: $condition) {
       id
       title
+      content
       date
       clientId
       client {
