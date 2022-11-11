@@ -12,8 +12,9 @@ import { useContext, useState } from "react";
 import { AuthContext } from "../../context/auth-context";
 import { API, graphqlOperation, Auth } from "aws-amplify";
 import { deleteUserData } from "../../graphql/mutations";
+import { AntDesign } from '@expo/vector-icons'
 
-export default function Settings() {
+export default function Settings(props) {
   const { signOut, user } = useContext(AuthContext);
   const [confirmDeleteText, setConfirmDeleteText] = useState();
 
@@ -62,6 +63,12 @@ export default function Settings() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.headingContainer}>
+        <TouchableOpacity
+          style={styles.backButtonContainer}
+          onPress={props.navigation.goBack}
+        >
+          <AntDesign name="left" size={24} color="black" />
+        </TouchableOpacity>
         <Text style={styles.headingText}>Settings</Text>
       </View>
       <View style={styles.bodyContainer}>
@@ -121,6 +128,9 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontWeight: "700",
     color: "#454545",
+  },
+  backButtonContainer: {
+    paddingBottom: 10
   },
   bodyContainer: {
     paddingHorizontal: 20,

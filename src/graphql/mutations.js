@@ -11,6 +11,89 @@ export const deleteUserData = /* GraphQL */ `
     deleteUserData
   }
 `;
+export const createUser = /* GraphQL */ `
+  mutation CreateUser(
+    $input: CreateUserInput!
+    $condition: ModelUserConditionInput
+  ) {
+    createUser(input: $input, condition: $condition) {
+      id
+      name
+      email
+      google_access_token
+      google_refresh_token
+      expo_token
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateUser = /* GraphQL */ `
+  mutation UpdateUser(
+    $input: UpdateUserInput!
+    $condition: ModelUserConditionInput
+  ) {
+    updateUser(input: $input, condition: $condition) {
+      id
+      name
+      email
+      google_access_token
+      google_refresh_token
+      expo_token
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteUser = /* GraphQL */ `
+  mutation DeleteUser(
+    $input: DeleteUserInput!
+    $condition: ModelUserConditionInput
+  ) {
+    deleteUser(input: $input, condition: $condition) {
+      id
+      name
+      email
+      google_access_token
+      google_refresh_token
+      expo_token
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateGoal = /* GraphQL */ `
+  mutation UpdateGoal(
+    $input: UpdateGoalInput!
+    $condition: ModelGoalConditionInput
+  ) {
+    updateGoal(input: $input, condition: $condition) {
+      id
+      title
+      content
+      recurring
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const deleteGoal = /* GraphQL */ `
+  mutation DeleteGoal(
+    $input: DeleteGoalInput!
+    $condition: ModelGoalConditionInput
+  ) {
+    deleteGoal(input: $input, condition: $condition) {
+      id
+      title
+      content
+      recurring
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
 export const deleteClient = /* GraphQL */ `
   mutation DeleteClient(
     $input: DeleteClientInput!
@@ -67,7 +150,9 @@ export const deleteClient = /* GraphQL */ `
           content
           completed
           date
+          endDate
           notificationId
+          type
           owner
           createdAt
           updatedAt
@@ -127,7 +212,9 @@ export const deleteProperty = /* GraphQL */ `
           content
           completed
           date
+          endDate
           notificationId
+          type
           owner
           createdAt
           updatedAt
@@ -315,7 +402,9 @@ export const deleteTask = /* GraphQL */ `
       content
       completed
       date
+      endDate
       notificationId
+      type
       client {
         id
         firstName
@@ -573,6 +662,22 @@ export const deleteGroupsProperty = /* GraphQL */ `
     }
   }
 `;
+export const createGoal = /* GraphQL */ `
+  mutation CreateGoal(
+    $input: CreateGoalInput!
+    $condition: ModelGoalConditionInput
+  ) {
+    createGoal(input: $input, condition: $condition) {
+      id
+      title
+      content
+      recurring
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
 export const createClient = /* GraphQL */ `
   mutation CreateClient(
     $input: CreateClientInput!
@@ -629,7 +734,9 @@ export const createClient = /* GraphQL */ `
           content
           completed
           date
+          endDate
           notificationId
+          type
           owner
           createdAt
           updatedAt
@@ -723,7 +830,9 @@ export const updateClient = /* GraphQL */ `
           content
           completed
           date
+          endDate
           notificationId
+          type
           owner
           createdAt
           updatedAt
@@ -783,7 +892,9 @@ export const createProperty = /* GraphQL */ `
           content
           completed
           date
+          endDate
           notificationId
+          type
           owner
           createdAt
           updatedAt
@@ -830,7 +941,9 @@ export const updateProperty = /* GraphQL */ `
           content
           completed
           date
+          endDate
           notificationId
+          type
           owner
           createdAt
           updatedAt
@@ -1168,7 +1281,9 @@ export const createTask = /* GraphQL */ `
       content
       completed
       date
+      endDate
       notificationId
+      type
       client {
         id
         firstName
@@ -1220,7 +1335,9 @@ export const updateTask = /* GraphQL */ `
       content
       completed
       date
+      endDate
       notificationId
+      type
       client {
         id
         firstName

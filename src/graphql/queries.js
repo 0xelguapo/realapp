@@ -1,6 +1,74 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const getUser = /* GraphQL */ `
+  query GetUser($id: ID!) {
+    getUser(id: $id) {
+      id
+      name
+      email
+      google_access_token
+      google_refresh_token
+      expo_token
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listUsers = /* GraphQL */ `
+  query ListUsers(
+    $filter: ModelUserFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        name
+        email
+        google_access_token
+        google_refresh_token
+        expo_token
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getGoal = /* GraphQL */ `
+  query GetGoal($id: ID!) {
+    getGoal(id: $id) {
+      id
+      title
+      content
+      recurring
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const listGoals = /* GraphQL */ `
+  query ListGoals(
+    $filter: ModelGoalFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listGoals(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        title
+        content
+        recurring
+        createdAt
+        updatedAt
+        owner
+      }
+      nextToken
+    }
+  }
+`;
 export const getClient = /* GraphQL */ `
   query GetClient($id: ID!) {
     getClient(id: $id) {
@@ -54,7 +122,9 @@ export const getClient = /* GraphQL */ `
           content
           completed
           date
+          endDate
           notificationId
+          type
           owner
           createdAt
           updatedAt
@@ -154,7 +224,9 @@ export const getProperty = /* GraphQL */ `
           content
           completed
           date
+          endDate
           notificationId
+          type
           owner
           createdAt
           updatedAt
@@ -481,7 +553,9 @@ export const getTask = /* GraphQL */ `
       content
       completed
       date
+      endDate
       notificationId
+      type
       client {
         id
         firstName
@@ -535,7 +609,9 @@ export const listTasks = /* GraphQL */ `
         content
         completed
         date
+        endDate
         notificationId
+        type
         client {
           id
           firstName

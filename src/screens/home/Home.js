@@ -1,24 +1,60 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  Pressable,
 } from "react-native";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { fetchReminders } from "../../redux/reminders-slice";
-import { fetchTasks } from "../../redux/tasks-slice";
+import {
+  completeTask,
+  fetchTasks,
+  selectAllTasks,
+} from "../../redux/tasks-slice";
 import RemindersList from "../../components/home/RemindersList";
 import TasksList from "../../components/home/TasksList";
 import AddHome from "../../components/home/AddHome";
-import { MaterialIcons } from "@expo/vector-icons";
-import { useEffect } from "react";
+import {
+  MaterialIcons,
+  Entypo,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 import Purchases from "react-native-purchases";
 import { ENTITLEMENT_ID } from "../../constants";
+import { format, add, sub } from "date-fns";
+import EachTask from "../../components/EachTask";
+import HomeTask from "../../components/home/HomeTask";
 
 export default function Home(props) {
+  let date = new Date();
   const [refreshVisible, setRefreshVisible] = useState(true);
+  const [nextFiveDates, setNextFiveDates] = useState([
+    sub(new Date(), { days: 1 }),
+    date,
+    add(new Date(), { days: 1 }),
+    add(new Date(), { days: 2 }),
+    add(new Date(), { days: 3 }),
+    add(new Date(), { days: 4 }),
+  ]);
+  const [activeDate, setActiveDate] = useState(nextFiveDates[1]);
+  const allTasks = useSelector(selectAllTasks);
+  const tasksOfDate = allTasks.filter((task) => {
+    if (task.date.length > 1 && !task.completed) {
+      return format(new Date(task.date), "L, d") === format(activeDate, "L, d");
+    } else if (task.date.length < 1 && !task.completed) {
+      return true;
+    }
+  });
+  const completedTasksOfDate = allTasks.filter((task) => {
+    if (task.date.length > 1 && task.completed) {
+      return format(new Date(task.date), "L, d") === format(activeDate, "L, d");
+    } else if (task.date.length < 1 && task.completed) {
+      return true;
+    }
+  });
 
   const displayPaywall = async () => {
     try {
@@ -34,8 +70,8 @@ export default function Home(props) {
   };
 
   useEffect(() => {
-    displayPaywall()
-  }, [])
+    displayPaywall();
+  }, []);
 
   const dispatch = useDispatch();
 
@@ -46,6 +82,13 @@ export default function Home(props) {
     }, 2000);
     dispatch(fetchTasks());
     dispatch(fetchReminders());
+  };
+
+  const handleCompleteTask = async (id, completed) => {
+    const response = await dispatch(
+      completeTask({ id, completed: !completed })
+    ).unwrap();
+    console.log(response);
   };
 
   return (
@@ -62,19 +105,96 @@ export default function Home(props) {
       <View style={styles.headerContainer}>
         <Text style={styles.headerTitle}>Your Focus</Text>
       </View>
-      <ScrollView style={styles.bodyContainer}>
-        <View style={styles.remindersContainer}>
+
+      <ScrollView
+        style={styles.bodyContainer}
+        contentContainerStyle={[{ paddingBottom: 50 }]}
+      >
+        <View style={styles.datesContainer}>
+          {nextFiveDates.map((d, index) => {
+            return (
+              <Pressable
+                style={
+                  activeDate === d
+                    ? styles.activeIndividualDate
+                    : styles.individualDate
+                }
+                key={index}
+                onPress={() => setActiveDate(nextFiveDates[index])}
+              >
+                <Text
+                  style={
+                    activeDate === d ? styles.activeDayOfWeek : styles.dayOfWeek
+                  }
+                >
+                  {format(d, "EEEEEE").toUpperCase()}
+                </Text>
+                <Text
+                  style={
+                    activeDate === d
+                      ? styles.activeDayOfMonth
+                      : styles.dayOfMonth
+                  }
+                >
+                  {format(d, "d")}
+                </Text>
+              </Pressable>
+            );
+          })}
+        </View>
+
+        <View style={styles.progressContainer}>
+          <View style={styles.progressBox}>
+            <Text>Today's Progress</Text>
+            <Text></Text>
+          </View>
+        </View>
+
+        <View style={styles.tasksContainer}>
+          <View style={styles.titleContainer}>
+            <Text style={styles.titleHeader}>TO DO</Text>
+          </View>
+          {tasksOfDate.map((task, index) => {
+            return (
+              <HomeTask
+                key={task.id}
+                title={task.title}
+                index={index}
+                completed={task.completed}
+                content={task.content}
+                length={tasksOfDate.length}
+                date={task.date}
+                onPress={() => handleCompleteTask(task.id, task.completed)}
+              />
+            );
+          })}
+        </View>
+        <View style={styles.completedTasksContainer}>
+          <View style={styles.titleContainer}>
+            <Text style={styles.titleHeader}>COMPLETED</Text>
+          </View>
+          {completedTasksOfDate.map((task, index) => {
+            return (
+              <HomeTask
+                key={task.id}
+                title={task.title}
+                index={index}
+                completed={task.completed}
+                content={task.content}
+                length={tasksOfDate.length}
+                date={task.date}
+                onPress={() => handleCompleteTask(task.id, task.completed)}
+              />
+            );
+          })}
+        </View>
+        {/* <TasksList /> */}
+        {/* <View style={styles.remindersContainer}>
           <View style={styles.titleContainer}>
             <Text style={styles.titleHeader}>UPCOMING REMINDERS</Text>
           </View>
           <RemindersList homeMode={true} />
-        </View>
-        <View style={styles.tasksContainer}>
-          <View style={styles.titleContainer}>
-            <Text style={styles.titleHeader}>TASKS</Text>
-          </View>
-          <TasksList />
-        </View>
+        </View> */}
       </ScrollView>
     </View>
   );
@@ -104,15 +224,52 @@ const styles = StyleSheet.create({
     top: 55,
     zIndex: 3,
   },
+  datesContainer: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-around",
+  },
+  individualDate: {
+    display: "flex",
+    alignItems: "center",
+    paddingHorizontal: 8,
+    paddingVertical: 5,
+  },
+  dayOfWeek: {
+    fontWeight: "300",
+    color: "#6c6c6c",
+  },
+  dayOfMonth: {
+    color: "#454545",
+    marginTop: 5,
+  },
+  activeIndividualDate: {
+    display: "flex",
+    alignItems: "center",
+    backgroundColor: "#0071E3",
+    borderRadius: 50,
+    paddingHorizontal: 8,
+    paddingVertical: 5,
+  },
+  activeDayOfWeek: {
+    fontWeight: "600",
+    color: "white",
+  },
+  activeDayOfMonth: {
+    marginTop: 5,
+    color: "white",
+    fontWeight: "600",
+  },
   bodyContainer: {
     flex: 1,
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
     paddingVertical: 10,
   },
   titleContainer: {
     borderBottomColor: "#ababab",
-    borderBottomWidth: 0.2,
-    paddingBottom: 5,
+    // borderBottomWidth: 0.2,
+    // paddingBottom: 5,
+    marginBottom: 5,
   },
   titleHeader: {
     fontSize: 12,
@@ -120,13 +277,25 @@ const styles = StyleSheet.create({
     color: "#ababab",
     letterSpacing: 2,
   },
-  tasksContainer: { marginBottom: 10 },
+  tasksContainer: {
+    marginBottom: 10,
+  },
+  tasksOfDateContainer: {},
   remindersContainer: {
     marginBottom: 10,
     paddingVertical: 5,
   },
-  placeholder: {
-    color: "#ababab",
-    paddingVertical: 5,
+  progressContainer: {
+    paddingVertical: 15,
+    flexDirection: "row",
+  },
+  progressBox: {
+    flex: 1,
+    width: "100%",
+    height: 100,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 10,
+    backgroundColor: "#efefef",
   },
 });

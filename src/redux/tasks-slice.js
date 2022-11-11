@@ -4,7 +4,7 @@ import {
   createEntityAdapter,
 } from "@reduxjs/toolkit";
 import { API, graphqlOperation } from "aws-amplify";
-import { createTask, deleteTask } from "../graphql/mutations";
+import { createTask, deleteTask, updateTask } from "../graphql/mutations";
 import { listTasks } from "../graphql/queries";
 
 const tasksAdapter = createEntityAdapter({
@@ -41,6 +41,24 @@ export const addTask = createAsyncThunk(
   }
 );
 
+export const completeTask = createAsyncThunk(
+  "task/completeTask",
+  async (taskDetails) => {
+    const { id, completed } = taskDetails;
+    let response;
+    try {
+      response = await API.graphql(
+        graphqlOperation(updateTask, {
+          input: { id: id, completed: completed },
+        })
+      );
+    } catch (err) {
+      console.error(err);
+    }
+    return response.data.updateTask;
+  }
+);
+
 export const removeOneTask = createAsyncThunk(
   "task/removeOneTask",
   async (taskId) => {
@@ -74,6 +92,9 @@ export const tasksSlice = createSlice({
       })
       .addCase(removeOneTask.fulfilled, (state, action) => {
         tasksAdapter.removeOne(state, action.payload.id);
+      })
+      .addCase(completeTask.fulfilled, (state, action) => {
+        state.entities[action.payload.id] = action.payload;
       });
   },
 });

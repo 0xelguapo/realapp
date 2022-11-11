@@ -1,6 +1,96 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const onCreateUser = /* GraphQL */ `
+  subscription OnCreateUser($filter: ModelSubscriptionUserFilterInput) {
+    onCreateUser(filter: $filter) {
+      id
+      name
+      email
+      google_access_token
+      google_refresh_token
+      expo_token
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateUser = /* GraphQL */ `
+  subscription OnUpdateUser($filter: ModelSubscriptionUserFilterInput) {
+    onUpdateUser(filter: $filter) {
+      id
+      name
+      email
+      google_access_token
+      google_refresh_token
+      expo_token
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteUser = /* GraphQL */ `
+  subscription OnDeleteUser($filter: ModelSubscriptionUserFilterInput) {
+    onDeleteUser(filter: $filter) {
+      id
+      name
+      email
+      google_access_token
+      google_refresh_token
+      expo_token
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateGoal = /* GraphQL */ `
+  subscription OnCreateGoal(
+    $filter: ModelSubscriptionGoalFilterInput
+    $owner: String
+  ) {
+    onCreateGoal(filter: $filter, owner: $owner) {
+      id
+      title
+      content
+      recurring
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onUpdateGoal = /* GraphQL */ `
+  subscription OnUpdateGoal(
+    $filter: ModelSubscriptionGoalFilterInput
+    $owner: String
+  ) {
+    onUpdateGoal(filter: $filter, owner: $owner) {
+      id
+      title
+      content
+      recurring
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onDeleteGoal = /* GraphQL */ `
+  subscription OnDeleteGoal(
+    $filter: ModelSubscriptionGoalFilterInput
+    $owner: String
+  ) {
+    onDeleteGoal(filter: $filter, owner: $owner) {
+      id
+      title
+      content
+      recurring
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
 export const onCreateClient = /* GraphQL */ `
   subscription OnCreateClient(
     $filter: ModelSubscriptionClientFilterInput
@@ -57,7 +147,9 @@ export const onCreateClient = /* GraphQL */ `
           content
           completed
           date
+          endDate
           notificationId
+          type
           owner
           createdAt
           updatedAt
@@ -151,7 +243,9 @@ export const onUpdateClient = /* GraphQL */ `
           content
           completed
           date
+          endDate
           notificationId
+          type
           owner
           createdAt
           updatedAt
@@ -245,7 +339,9 @@ export const onDeleteClient = /* GraphQL */ `
           content
           completed
           date
+          endDate
           notificationId
+          type
           owner
           createdAt
           updatedAt
@@ -305,7 +401,9 @@ export const onCreateProperty = /* GraphQL */ `
           content
           completed
           date
+          endDate
           notificationId
+          type
           owner
           createdAt
           updatedAt
@@ -352,7 +450,9 @@ export const onUpdateProperty = /* GraphQL */ `
           content
           completed
           date
+          endDate
           notificationId
+          type
           owner
           createdAt
           updatedAt
@@ -399,7 +499,9 @@ export const onDeleteProperty = /* GraphQL */ `
           content
           completed
           date
+          endDate
           notificationId
+          type
           owner
           createdAt
           updatedAt
@@ -887,7 +989,9 @@ export const onCreateTask = /* GraphQL */ `
       content
       completed
       date
+      endDate
       notificationId
+      type
       client {
         id
         firstName
@@ -939,7 +1043,9 @@ export const onUpdateTask = /* GraphQL */ `
       content
       completed
       date
+      endDate
       notificationId
+      type
       client {
         id
         firstName
@@ -991,7 +1097,9 @@ export const onDeleteTask = /* GraphQL */ `
       content
       completed
       date
+      endDate
       notificationId
+      type
       client {
         id
         firstName

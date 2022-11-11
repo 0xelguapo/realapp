@@ -9,6 +9,14 @@ type User @model {
   email: String
   google_access_token: String
   google_refresh_token: String
+  expo_token: String
+}
+
+type Goal @model @auth(rules: [{ allow: owner }, { allow: public, provider: apiKey, operations: [create] }]) {
+  id: ID!
+  title: String!
+  content: String
+  recurring: String
 }
 
 type Client @model @auth(rules: [{ allow: owner }, { allow: public, provider: apiKey, operations: [create] }]) {
@@ -92,9 +100,17 @@ type Task @model @auth(rules: [{ allow: owner }, { allow: public, provider: apiK
   content: String
   completed: Boolean
   date: String
+  endDate: String
   notificationId: String
+  type: TaskType
   client: Client @belongsTo(fields: ["clientId"])
   owner: String @auth(rules: [{ allow: owner, operations: [read, delete] }, { allow: public, provider: apiKey, operations: [create, update]}])
+}
+
+enum TaskType {
+  Task
+  Meeting
+  Reminder
 }
 
 type Note @model @auth(rules: [{ allow: owner }, { allow: public, provider: apiKey, operations: [create] }]) {

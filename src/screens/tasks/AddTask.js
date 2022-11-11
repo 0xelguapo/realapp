@@ -85,11 +85,11 @@ export default function AddTask({ navigation }) {
       ? {
           title: title,
           content: description,
-          date: date,
+          date: pickerVisible ? date : '',
           clientId: selectedClient.id,
           completed: false,
         }
-      : { title: title, content: description, date: date, completed: false };
+      : { title: title, content: description, date: pickerVisible ? date : '', completed: false };
 
     const response = await dispatch(addTask(taskDetails));
     if (response) {
