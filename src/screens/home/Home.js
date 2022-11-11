@@ -41,20 +41,36 @@ export default function Home(props) {
   ]);
   const [activeDate, setActiveDate] = useState(nextFiveDates[1]);
   const allTasks = useSelector(selectAllTasks);
-  const tasksOfDate = allTasks.filter((task) => {
-    if (task.date.length > 1 && !task.completed) {
-      return format(new Date(task.date), "L, d") === format(activeDate, "L, d");
-    } else if (task.date.length < 1 && !task.completed) {
-      return true;
-    }
-  });
-  const completedTasksOfDate = allTasks.filter((task) => {
-    if (task.date.length > 1 && task.completed) {
-      return format(new Date(task.date), "L, d") === format(activeDate, "L, d");
-    } else if (task.date.length < 1 && task.completed) {
-      return true;
-    }
-  });
+  const tasksOfDate = allTasks
+    .filter((task) => {
+      if (task.date.length > 1) {
+        return (
+          format(new Date(task.date), "L, d") === format(activeDate, "L, d")
+        );
+      } else if (task.date.length < 1) {
+        return true;
+      }
+    })
+    .sort((a, b) => {
+      if (b.date.length < 1) return 2;
+      else return new Date(a.date) - new Date(b.date);
+    });
+
+  const lengthOfCompletedTasks = tasksOfDate.reduce(
+    (acc, el) => {
+      if (el.completed) acc++;
+      return acc;
+    },
+    [0]
+  );
+
+  // const completedTasksOfDate = allTasks.filter((task) => {
+  //   if (task.date.length > 1 && task.completed) {
+  //     return format(new Date(task.date), "L, d") === format(activeDate, "L, d");
+  //   } else if (task.date.length < 1 && task.completed) {
+  //     return true;
+  //   }
+  // });
 
   const displayPaywall = async () => {
     try {
@@ -145,47 +161,59 @@ export default function Home(props) {
 
         <View style={styles.progressContainer}>
           <View style={styles.progressBox}>
-            <Text>Today's Progress</Text>
-            <Text></Text>
+            <Text style={styles.progressTextTitle}>Today's Progress</Text>
+            <Text style={styles.progressRatio}>
+              {lengthOfCompletedTasks || "0"}/{tasksOfDate?.length || "0"}
+            </Text>
+            <Text style={styles.progressSubtext}>
+              {tasksOfDate?.length - lengthOfCompletedTasks || "0"} more to go!
+            </Text>
           </View>
         </View>
+
+        <TouchableOpacity style={styles.overdueContainer}>
+          <View style={styles.overdueCircle} />
+          <Text style={styles.overdueText}>View Overdue</Text>
+        </TouchableOpacity>
 
         <View style={styles.tasksContainer}>
           <View style={styles.titleContainer}>
             <Text style={styles.titleHeader}>TO DO</Text>
           </View>
           {tasksOfDate.map((task, index) => {
-            return (
-              <HomeTask
-                key={task.id}
-                title={task.title}
-                index={index}
-                completed={task.completed}
-                content={task.content}
-                length={tasksOfDate.length}
-                date={task.date}
-                onPress={() => handleCompleteTask(task.id, task.completed)}
-              />
-            );
+            if (!task.completed)
+              return (
+                <HomeTask
+                  key={task.id}
+                  title={task.title}
+                  index={index}
+                  completed={task.completed}
+                  content={task.content}
+                  length={tasksOfDate.length}
+                  date={task.date}
+                  onPress={() => handleCompleteTask(task.id, task.completed)}
+                />
+              );
           })}
         </View>
         <View style={styles.completedTasksContainer}>
           <View style={styles.titleContainer}>
             <Text style={styles.titleHeader}>COMPLETED</Text>
           </View>
-          {completedTasksOfDate.map((task, index) => {
-            return (
-              <HomeTask
-                key={task.id}
-                title={task.title}
-                index={index}
-                completed={task.completed}
-                content={task.content}
-                length={tasksOfDate.length}
-                date={task.date}
-                onPress={() => handleCompleteTask(task.id, task.completed)}
-              />
-            );
+          {tasksOfDate.map((task, index) => {
+            if (task.completed)
+              return (
+                <HomeTask
+                  key={task.id}
+                  title={task.title}
+                  index={index}
+                  completed={task.completed}
+                  content={task.content}
+                  length={tasksOfDate.length}
+                  date={task.date}
+                  onPress={() => handleCompleteTask(task.id, task.completed)}
+                />
+              );
           })}
         </View>
         {/* <TasksList /> */}
@@ -265,6 +293,29 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 10,
   },
+  overdueContainer: {
+    display: 'flex',
+    paddingHorizontal: 3,
+    paddingVertical: 5,
+    borderRadius: 5,
+    marginBottom: 10,
+    width: 120,
+    backgroundColor: 'white'
+  },
+  overdueText: {
+    textAlign: 'center',
+    fontWeight: '500',
+    color: '#F05252'
+  },
+  overdueCircle: {
+    position: 'absolute',
+    right: 8,
+    top: 5,
+    width: 10,
+    height: 10,
+    borderRadius: 50,
+    backgroundColor: '#F05252',
+  },
   titleContainer: {
     borderBottomColor: "#ababab",
     // borderBottomWidth: 0.2,
@@ -297,5 +348,19 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 10,
     backgroundColor: "#efefef",
+    justifyContent: 'space-around'
   },
+  progressTextTitle: {
+    color: '#6c6c6c',
+    fontWeight: '500',
+    fontSize: 15
+  },
+  progressRatio: {
+    color: '#454545',
+    fontSize: 24,
+    fontWeight: '700'
+  },
+  progressSubtext: {
+    color: '#6c6c6c'
+  }
 });

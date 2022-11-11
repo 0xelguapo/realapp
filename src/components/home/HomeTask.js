@@ -68,7 +68,7 @@ export default function HomeTask({
             !completed
               ? !overdue
                 ? styles.taskTitle
-                : { ...styles.taskTitle, color: "red" }
+                : { ...styles.taskTitle, color: "#F05252" }
               : { ...styles.taskTitle, textDecorationLine: "line-through" }
           }
         >
@@ -80,7 +80,7 @@ export default function HomeTask({
               !completed
                 ? !overdue
                   ? styles.taskContent
-                  : { ...styles.taskContent, color: "red" }
+                  : { ...styles.taskContent, color: "#F05252" }
                 : { ...styles.taskContent, textDecorationLine: "line-through" }
             }
           >
@@ -93,11 +93,11 @@ export default function HomeTask({
               !completed
                 ? !overdue
                   ? styles.taskTime
-                  : { ...styles.taskTime, color: "red" }
+                  : { ...styles.taskTime, color: "#F05252" }
                 : { ...styles.taskTime, textDecorationLine: "line-through" }
             }
           >
-            {format(new Date(date), "p")}
+            {format(new Date(date), "MMM dd • p")}
           </Text>
         )}
       </View>
@@ -140,6 +140,7 @@ const styles = StyleSheet.create({
   },
   taskTime: {
     color: "#6c6c6c",
+    marginTop: 3
   },
   circle: {
     width: 18,
