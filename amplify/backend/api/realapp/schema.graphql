@@ -120,6 +120,15 @@ type Note @model @auth(rules: [{ allow: owner }, { allow: public, provider: apiK
   owner: String @auth(rules: [{ allow: owner, operations: [read, delete] }, { allow: public, provider: apiKey, operations: [create, update]}])
 }
 
+type Deal @model @auth(rules: [{ allow: owner }, { allow: public, provider: apiKey, operations: [create] }]) { 
+  id: ID!
+  title: String
+  amount: String
+  stage: String
+  clientId: ID @index(name: "byClient")
+  client: Client @belongsTo(fields: ["clientId"])
+}
+
 type Mutation {
   batchCreateClients(data: AWSJSON, mappedFields: [String]): String
     @function(name: "batchcreateclients-dev")

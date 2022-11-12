@@ -5,6 +5,7 @@ import AddTask from "../tasks/AddTask";
 import Home from "./Home";
 import EditReminder from "../clients/EditReminder";
 import Paywall from "../../components/UI/Paywall";
+import Overdue from "./Overdue";
 
 const Stack = createNativeStackNavigator();
 
@@ -49,6 +50,14 @@ export default function HomeNavigator() {
         }}
         name="EditReminder"
         component={EditReminder}
+      />
+       <Stack.Screen
+        options={{
+          headerShown: false,
+          cardOverlayEnabled: true,
+        }}
+        name="Overdue"
+        component={Overdue}
       />
     </Stack.Navigator>
   );

@@ -8,6 +8,7 @@ import {
   Keyboard,
   FlatList,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import EachClient from "../../components/client/EachClient";
@@ -16,16 +17,27 @@ import CustomPressable from "../../components/CustomPressable";
 import { useDispatch, useSelector } from "react-redux";
 import { addTask } from "../../redux/tasks-slice";
 import { fetchClients, selectAllClients } from "../../redux/clients-slice";
+import { format, add } from "date-fns";
 
-export default function AddTask({ navigation }) {
+const coeff = 1000 * 60 * 5;
+
+export default function AddTask({ navigation, route }) {
+  let curDate = new Date();
   const dispatch = useDispatch();
   const allClients = useSelector(selectAllClients);
   const clientStatus = useSelector((state) => state.clients.status);
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [searchInput, setSearchInput] = useState("");
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(
+    new Date(Math.round(curDate.getTime() / coeff) * coeff)
+  );
+  const [endDate, setEndDate] = useState(add(new Date(date), { minutes: 30 }));
   const [pickerVisible, setPickerVisible] = useState(false);
+  const [startPickerVisible, setStartPickerVisible] = useState(false);
+  const [endPickerVisible, setEndPickerVisible] = useState(false);
+
   const [clientsVisible, setClientsVisible] = useState(false);
   const [selectedClient, setSelectedClient] = useState({});
 
@@ -42,9 +54,14 @@ export default function AddTask({ navigation }) {
     if (allClients.length < 1) dispatch(fetchClients());
   }, []);
 
-  const onChange = (e, selectedDate) => {
+  const onStartDateChange = (e, selectedDate) => {
     const currentDate = selectedDate || date;
     setDate(currentDate);
+  };
+
+  const onEndDateChange = (e, selectedDate) => {
+    const currentDate = selectedDate || endDate;
+    setEndDate(currentDate);
   };
 
   const showPickers = () => {
@@ -52,13 +69,20 @@ export default function AddTask({ navigation }) {
   };
 
   const showClients = () => {
-    setClientsVisible(!clientsVisible);
-    if (clientsVisible) {
-      setSearchInput("");
-      setSelectedClient({});
-    }
     Keyboard.dismiss();
+    navigation.navigate("AddReminder", { taskMode: true });
   };
+
+  const removeSelectedClient = () => {
+    setSelectedClient({});
+  };
+
+  const { params } = route;
+
+  useEffect(() => {
+    setSelectedClient(params);
+    setClientsVisible(true);
+  }, [params]);
 
   const renderClient = useCallback(
     ({ item }) => (
@@ -80,18 +104,35 @@ export default function AddTask({ navigation }) {
     setClientsVisible(false);
   };
 
+  const handleSetStartVisible = () => {
+    setStartPickerVisible(!startPickerVisible);
+    setEndPickerVisible(false);
+  };
+
+  const handleSetEndVisible = () => {
+    setEndPickerVisible(!endPickerVisible);
+    setStartPickerVisible(false);
+  };
+
   const handleAddTask = async () => {
     let taskDetails = selectedClient.id
       ? {
           title: title,
           content: description,
-          date: pickerVisible ? date : '',
+          date: pickerVisible ? date : "",
+          endDate: endDate,
           clientId: selectedClient.id,
           completed: false,
         }
-      : { title: title, content: description, date: pickerVisible ? date : '', completed: false };
+      : {
+          title: title,
+          content: description,
+          date: pickerVisible ? date : "",
+          endDate: endDate,
+          completed: false,
+        };
 
-    const response = await dispatch(addTask(taskDetails));
+    const response = await dispatch(addTask(taskDetails)).unwrap();
     if (response) {
       navigation.goBack();
     } else {
@@ -99,8 +140,8 @@ export default function AddTask({ navigation }) {
     }
   };
 
-  return (
-    <View style={styles.container}>
+  function StickyHeader() {
+    return (
       <View style={styles.headingContainer}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <AntDesign name="left" size={25} color="#6c6c6c" />
@@ -110,7 +151,16 @@ export default function AddTask({ navigation }) {
           <Text style={styles.saveText}>Save</Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.formContainer}>
+    );
+  }
+  return (
+    <ScrollView
+      // style={styles.formContainer}
+      stickyHeaderIndices={[0]}
+      contentContainerStyle={[{ flex: 1 }]}
+    >
+      <StickyHeader />
+      <View style={styles.container}>
         <TextInput
           onChangeText={(newText) => setTitle(newText)}
           style={styles.titleInput}
@@ -122,88 +172,120 @@ export default function AddTask({ navigation }) {
         <TextInput
           onChangeText={(newText) => setDescription(newText)}
           style={styles.descriptionInput}
-          placeholder="Add a note"
+          placeholder="Optional description"
           multiline={true}
           value={description}
         />
-        <View style={styles.secondContainer}>
-          <Pressable onPress={showPickers}>
-            {pickerVisible ? (
-              <FontAwesome name="calendar-times-o" size={24} color="#ff6b66" />
-            ) : (
-              <View style={styles.addDateContainer}>
-                <FontAwesome5 name="calendar-check" size={24} color="#0064e5" />
-                <Text style={styles.addDateText}>Add Date</Text>
-              </View>
-            )}
-          </Pressable>
-          {pickerVisible && (
+
+        <View style={styles.setDatesContainer}>
+          <TouchableOpacity
+            style={styles.timeTextContainer}
+            onPress={handleSetStartVisible}
+          >
+            <Text
+              style={
+                !startPickerVisible
+                  ? styles.startEndTimeTextTitle
+                  : { ...styles.startEndTimeTextTitle, color: "#0071e3" }
+              }
+            >
+              Start Time
+            </Text>
+            <Text
+              style={
+                !startPickerVisible
+                  ? styles.startEndTimeText
+                  : { ...styles.startEndTimeText, color: "#0071e3" }
+              }
+            >
+              {format(date, "MMM dd, p")}
+            </Text>
+          </TouchableOpacity>
+          {startPickerVisible && (
             <DateTimePicker
-              style={{ width: 220 }}
+              style={{}}
               value={date}
               mode="datetime"
               is24Hour={true}
-              onChange={onChange}
+              onChange={onStartDateChange}
               minimumDate={new Date()}
+              display="spinner"
+              minuteInterval={5}
+            />
+          )}
+          <TouchableOpacity
+            style={styles.timeTextContainer}
+            onPress={handleSetEndVisible}
+          >
+            <Text
+              style={
+                !endPickerVisible
+                  ? styles.startEndTimeTextTitle
+                  : { ...styles.startEndTimeTextTitle, color: "#0071e3" }
+              }
+            >
+              End Time
+            </Text>
+            <Text
+              style={
+                !endPickerVisible
+                  ? styles.startEndTimeText
+                  : { ...styles.startEndTimeText, color: "#0071e3" }
+              }
+            >
+              {format(endDate, "MMM dd, p")}
+            </Text>
+          </TouchableOpacity>
+          {endPickerVisible && (
+            <DateTimePicker
+              style={{}}
+              value={endDate}
+              mode="datetime"
+              is24Hour={true}
+              onChange={onEndDateChange}
+              minimumDate={date}
+              display="spinner"
+              minuteInterval={5}
             />
           )}
         </View>
-        <Pressable style={styles.pressableAddClient} onPress={showClients}>
-          {clientsVisible ? (
-            <View style={styles.closeClients}>
-              <FontAwesome name="remove" size={24} color="#ff6b66" />
-              {selectedClient.firstName && (
-                <View style={styles.selectedClientContainer}>
-                  <Text style={styles.selectedClientText}>
-                    {selectedClient.firstName + " " + selectedClient.lastName}
-                  </Text>
-                </View>
-              )}
-            </View>
-          ) : (
-            <View style={styles.addClientContainer}>
+
+        <View style={styles.associateClientContainer}>
+          {!selectedClient?.firstName ? (
+            <TouchableOpacity
+              style={styles.addClientContainer}
+              onPress={showClients}
+            >
               <FontAwesome name="address-book-o" size={24} color="#0064e5" />
-              <Text style={styles.addDateText}>
-                {selectedClient.firstName
-                  ? selectedClient.firstName + " " + selectedClient.lastName
-                  : "Associate Client"}
-              </Text>
+              <Text style={styles.addDateText}>Associate Client</Text>
+            </TouchableOpacity>
+          ) : (
+            <View style={styles.closeClients}>
+              <TouchableOpacity onPress={removeSelectedClient}>
+                <FontAwesome name="remove" size={24} color="#ff6b66" />
+              </TouchableOpacity>
+              <View style={styles.selectedClientContainer}>
+                <Text style={styles.selectedClientText}>
+                  {selectedClient.firstName + " " + selectedClient.lastName}
+                </Text>
+              </View>
             </View>
           )}
-        </Pressable>
-        {clientsVisible && (
-          <View style={styles.contactContainer}>
-            <TextInput
-              style={styles.search}
-              value={searchInput}
-              onChangeText={setSearchInput}
-              placeholder="Search..."
-              placeholderTextColor="#7b7b7c"
-              returnKeyType="done"
-            />
-            <View style={styles.listViewContainer}>
-              <FlatList
-                data={filteredData}
-                renderItem={renderClient}
-                refreshing={clientStatus !== "succeeded"}
-                keyExtractor={(c) => c.id}
-              />
-            </View>
-          </View>
-        )}
-        {/* <View style={styles.save}>
-          <CustomPressable onPress={handleAddTask}>Save Task</CustomPressable>
-        </View> */}
+        </View>
+
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    display: "flex",
     flex: 1,
+    backgroundColor: "#f9f9f9",
     height: "100%",
-    backgroundColor: "white",
+    paddingHorizontal: 20,
+    paddingVertical: 5,
   },
   headingContainer: {
     flexDirection: "row",
@@ -229,19 +311,40 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   titleInput: {
-    height: 45,
-    fontSize: 18,
+    height: 30,
+    fontSize: 16,
   },
   descriptionInput: {
     marginTop: 5,
-    height: 80,
+    height: 50,
     fontSize: 16,
-    borderBottomWidth: 0.3,
+    borderBottomWidth: 0.2,
+    borderColor: "#ababab",
   },
-  secondContainer: {
-    flex: 0.1,
+  setDatesContainer: {
+    borderBottomWidth: 0.2,
+    borderColor: "#ababab",
+  },
+  timeTextContainer: {
     flexDirection: "row",
-    borderBottomWidth: 0.3,
+    justifyContent: "space-between",
+    height: 50,
+    alignItems: "center",
+  },
+  startEndTimeTextTitle: {
+    fontSize: 16,
+    color: '#cacacb'
+  },
+  startEndTimeText: {
+    fontSize: 16,
+    fontWeight: "600",
+  },
+
+  secondContainer: {
+    width: "100%",
+    flexDirection: "row",
+    borderBottomWidth: 0.2,
+    borderColor: "#ababab",
     justifyContent: "space-between",
     alignItems: "center",
   },
@@ -257,13 +360,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#cacacb",
   },
+  associateClientContainer: {
+    paddingVertical: 10,
+  },
   addClientContainer: {
     flexDirection: "row",
     alignItems: "center",
-  },
-  pressableAddClient: {
-    flex: 0.1,
-    justifyContent: "center",
   },
   closeClients: {
     flexDirection: "row",

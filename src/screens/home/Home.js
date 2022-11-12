@@ -64,13 +64,14 @@ export default function Home(props) {
     [0]
   );
 
-  // const completedTasksOfDate = allTasks.filter((task) => {
-  //   if (task.date.length > 1 && task.completed) {
-  //     return format(new Date(task.date), "L, d") === format(activeDate, "L, d");
-  //   } else if (task.date.length < 1 && task.completed) {
-  //     return true;
-  //   }
-  // });
+  const lengthOfOverdueTasks = allTasks.reduce(
+    (acc, el) => {
+      if (format(new Date(el.date), 'L, d') < format(date, 'L, d')) acc++;
+      return acc;
+    },
+    [0]
+  );
+
 
   const displayPaywall = async () => {
     try {
@@ -171,8 +172,13 @@ export default function Home(props) {
           </View>
         </View>
 
-        <TouchableOpacity style={styles.overdueContainer}>
-          <View style={styles.overdueCircle} />
+        <TouchableOpacity
+          style={styles.overdueContainer}
+          onPress={() => props.navigation.navigate("Overdue")}
+        >
+          <View style={styles.overdueCircle}>
+            <Text style={styles.overdueLength}>{lengthOfOverdueTasks}</Text>
+          </View>
           <Text style={styles.overdueText}>View Overdue</Text>
         </TouchableOpacity>
 
@@ -294,27 +300,35 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   overdueContainer: {
-    display: 'flex',
-    paddingHorizontal: 3,
-    paddingVertical: 5,
+    display: "flex",
+    paddingHorizontal: 5,
+    paddingVertical: 10,
     borderRadius: 5,
     marginBottom: 10,
-    width: 120,
-    backgroundColor: 'white'
+    width: 130,
+    backgroundColor: "white",
   },
   overdueText: {
-    textAlign: 'center',
-    fontWeight: '500',
-    color: '#F05252'
+    textAlign: "center",
+    fontWeight: "500",
+    color: "#F05252",
   },
   overdueCircle: {
-    position: 'absolute',
-    right: 8,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: "absolute",
+    right: 5,
     top: 5,
-    width: 10,
-    height: 10,
+    width: 15,
+    height: 15,
     borderRadius: 50,
-    backgroundColor: '#F05252',
+    backgroundColor: "#F05252",
+  },
+  overdueLength: {
+    fontSize: 12,
+    color: 'white',
+    fontWeight: '500'
   },
   titleContainer: {
     borderBottomColor: "#ababab",
@@ -348,19 +362,19 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 10,
     backgroundColor: "#efefef",
-    justifyContent: 'space-around'
+    justifyContent: "space-around",
   },
   progressTextTitle: {
-    color: '#6c6c6c',
-    fontWeight: '500',
-    fontSize: 15
+    color: "#6c6c6c",
+    fontWeight: "500",
+    fontSize: 15,
   },
   progressRatio: {
-    color: '#454545',
+    color: "#454545",
     fontSize: 24,
-    fontWeight: '700'
+    fontWeight: "700",
   },
   progressSubtext: {
-    color: '#6c6c6c'
-  }
+    color: "#6c6c6c",
+  },
 });
