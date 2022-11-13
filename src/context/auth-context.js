@@ -31,6 +31,7 @@ function AuthProvider({ children }) {
     } finally {
       setAppIsReady(true);
     }
+    
   }, []);
 
   useEffect(() => {

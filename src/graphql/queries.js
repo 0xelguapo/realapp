@@ -7,11 +7,14 @@ export const getUser = /* GraphQL */ `
       id
       name
       email
+      streakDate
+      streakCount
       google_access_token
       google_refresh_token
       expo_token
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -26,11 +29,14 @@ export const listUsers = /* GraphQL */ `
         id
         name
         email
+        streakDate
+        streakCount
         google_access_token
         google_refresh_token
         expo_token
         createdAt
         updatedAt
+        owner
       }
       nextToken
     }
@@ -156,6 +162,20 @@ export const getClient = /* GraphQL */ `
         }
         nextToken
       }
+      deal {
+        items {
+          id
+          title
+          amount
+          stage
+          clientId
+          createdAt
+          updatedAt
+          clientDealId
+          owner
+        }
+        nextToken
+      }
       owner
       createdAt
       updatedAt
@@ -195,6 +215,9 @@ export const listClients = /* GraphQL */ `
           nextToken
         }
         reminder {
+          nextToken
+        }
+        deal {
           nextToken
         }
         owner
@@ -363,6 +386,9 @@ export const getReminder = /* GraphQL */ `
         reminder {
           nextToken
         }
+        deal {
+          nextToken
+        }
         owner
         createdAt
         updatedAt
@@ -491,6 +517,9 @@ export const getConnectionHistory = /* GraphQL */ `
         reminder {
           nextToken
         }
+        deal {
+          nextToken
+        }
         owner
         createdAt
         updatedAt
@@ -584,6 +613,9 @@ export const getTask = /* GraphQL */ `
         reminder {
           nextToken
         }
+        deal {
+          nextToken
+        }
         owner
         createdAt
         updatedAt
@@ -668,6 +700,95 @@ export const listNotes = /* GraphQL */ `
     }
   }
 `;
+export const getDeal = /* GraphQL */ `
+  query GetDeal($id: ID!) {
+    getDeal(id: $id) {
+      id
+      title
+      amount
+      stage
+      clientId
+      client {
+        id
+        firstName
+        lastName
+        company
+        phone
+        email
+        notes
+        favorite
+        clientStreet
+        clientCity
+        clientState
+        clientZip
+        connectionHistory {
+          nextToken
+        }
+        properties {
+          nextToken
+        }
+        tasks {
+          nextToken
+        }
+        group {
+          nextToken
+        }
+        reminder {
+          nextToken
+        }
+        deal {
+          nextToken
+        }
+        owner
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      clientDealId
+      owner
+    }
+  }
+`;
+export const listDeals = /* GraphQL */ `
+  query ListDeals(
+    $filter: ModelDealFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listDeals(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        title
+        amount
+        stage
+        clientId
+        client {
+          id
+          firstName
+          lastName
+          company
+          phone
+          email
+          notes
+          favorite
+          clientStreet
+          clientCity
+          clientState
+          clientZip
+          owner
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+        clientDealId
+        owner
+      }
+      nextToken
+    }
+  }
+`;
 export const getGroupsClients = /* GraphQL */ `
   query GetGroupsClients($id: ID!) {
     getGroupsClients(id: $id) {
@@ -700,6 +821,9 @@ export const getGroupsClients = /* GraphQL */ `
           nextToken
         }
         reminder {
+          nextToken
+        }
+        deal {
           nextToken
         }
         owner
@@ -892,6 +1016,9 @@ export const clientByFirstName = /* GraphQL */ `
           nextToken
         }
         reminder {
+          nextToken
+        }
+        deal {
           nextToken
         }
         owner

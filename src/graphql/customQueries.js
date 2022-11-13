@@ -1,3 +1,24 @@
+export const getUserStreak = /* GraphQL */ `
+  query GetUser($id: ID!) {
+    getUser(id: $id) {
+      streakDate
+      streakCount
+    }
+  }
+`;
+
+export const updateUserStreak = /* GraphQL */ `
+  mutation UpdateUser(
+    $input: UpdateUserInput!
+    $condition: ModelUserConditionInput
+  ) {
+    updateUser(input: $input, condition: $condition) {
+      streakDate
+      streakCount
+    }
+  }
+`;
+
 export const getClientGroups = /* GraphQL */ `
   query GetClient($id: ID!) {
     getClient(id: $id) {

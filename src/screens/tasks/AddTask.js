@@ -25,13 +25,14 @@ export default function AddTask({ navigation, route }) {
   let curDate = new Date();
   const dispatch = useDispatch();
   const allClients = useSelector(selectAllClients);
-  const clientStatus = useSelector((state) => state.clients.status);
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [searchInput, setSearchInput] = useState("");
   const [date, setDate] = useState(
-    new Date(Math.round(curDate.getTime() / coeff) * coeff)
+    add(new Date(Math.round(curDate.getTime() / coeff) * coeff), {
+      minutes: 10,
+    })
   );
   const [endDate, setEndDate] = useState(add(new Date(date), { minutes: 30 }));
   const [pickerVisible, setPickerVisible] = useState(false);
@@ -84,26 +85,6 @@ export default function AddTask({ navigation, route }) {
     setClientsVisible(true);
   }, [params]);
 
-  const renderClient = useCallback(
-    ({ item }) => (
-      <EachClient
-        onPress={() => handleChooseClient(item)}
-        taskMode={true}
-        firstName={item.firstName}
-        lastName={item.lastName}
-        phone={item.phone}
-        company={item.company}
-      />
-    ),
-    []
-  );
-
-  const handleChooseClient = (client) => {
-    setSelectedClient(client);
-    setSearchInput(client.firstName + " ", client?.lastName);
-    setClientsVisible(false);
-  };
-
   const handleSetStartVisible = () => {
     setStartPickerVisible(!startPickerVisible);
     setEndPickerVisible(false);
@@ -113,21 +94,20 @@ export default function AddTask({ navigation, route }) {
     setEndPickerVisible(!endPickerVisible);
     setStartPickerVisible(false);
   };
-
   const handleAddTask = async () => {
-    let taskDetails = selectedClient.id
+    let taskDetails = selectedClient.clientId
       ? {
           title: title,
           content: description,
-          date: pickerVisible ? date : "",
+          date: date,
           endDate: endDate,
-          clientId: selectedClient.id,
+          clientId: selectedClient.clientId,
           completed: false,
         }
       : {
           title: title,
           content: description,
-          date: pickerVisible ? date : "",
+          date: date,
           endDate: endDate,
           completed: false,
         };
@@ -272,7 +252,6 @@ export default function AddTask({ navigation, route }) {
             </View>
           )}
         </View>
-
       </View>
     </ScrollView>
   );
@@ -333,7 +312,7 @@ const styles = StyleSheet.create({
   },
   startEndTimeTextTitle: {
     fontSize: 16,
-    color: '#cacacb'
+    color: "#cacacb",
   },
   startEndTimeText: {
     fontSize: 16,

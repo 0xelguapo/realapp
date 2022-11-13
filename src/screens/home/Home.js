@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import {
   View,
   Text,
@@ -14,8 +14,6 @@ import {
   fetchTasks,
   selectAllTasks,
 } from "../../redux/tasks-slice";
-import RemindersList from "../../components/home/RemindersList";
-import TasksList from "../../components/home/TasksList";
 import AddHome from "../../components/home/AddHome";
 import {
   MaterialIcons,
@@ -24,13 +22,26 @@ import {
 } from "@expo/vector-icons";
 import Purchases from "react-native-purchases";
 import { ENTITLEMENT_ID } from "../../constants";
-import { format, add, sub } from "date-fns";
-import EachTask from "../../components/EachTask";
+import {
+  format,
+  add,
+  sub,
+  formatDistanceToNow,
+  formatDistanceToNowStrict,
+} from "date-fns";
 import HomeTask from "../../components/home/HomeTask";
+import { API, graphqlOperation } from "aws-amplify";
+import { getUserStreak, updateUserStreak } from "../../graphql/customQueries";
+import { AuthContext } from "../../context/auth-context";
+
+let isMounted = false;
 
 export default function Home(props) {
   let date = new Date();
+  const { user } = useContext(AuthContext);
   const [refreshVisible, setRefreshVisible] = useState(true);
+  const [streakCount, setStreakCount] = useState(0);
+  const [streakDate, setStreakDate] = useState(new Date());
   const [nextFiveDates, setNextFiveDates] = useState([
     sub(new Date(), { days: 1 }),
     date,
@@ -66,12 +77,15 @@ export default function Home(props) {
 
   const lengthOfOverdueTasks = allTasks.reduce(
     (acc, el) => {
-      if (format(new Date(el.date), 'L, d') < format(date, 'L, d')) acc++;
+      if (
+        format(new Date(el.date), "L, d") < format(date, "L, d") &&
+        !el.completed
+      )
+        acc++;
       return acc;
     },
     [0]
   );
-
 
   const displayPaywall = async () => {
     try {
@@ -85,6 +99,60 @@ export default function Home(props) {
       console.error(err);
     }
   };
+
+  useEffect(() => {
+    let streakResponse;
+    let streakDate;
+
+    const getStreak = async () => {
+      streakResponse = await API.graphql(
+        graphqlOperation(getUserStreak, { id: user.attributes.sub })
+      );
+      setStreakCount(parseInt(streakResponse.data.getUser.streakCount));
+      streakDate = new Date(streakResponse.data.getUser.streakDate);
+      setStreakDate(streakDate);
+      return streakResponse.data.getUser;
+    };
+    getStreak();
+  }, []);
+
+  useEffect(() => {
+    const incrementStreak = async () => {
+      await API.graphql(
+        graphqlOperation(updateUserStreak, {
+          input: {
+            id: user.attributes.sub,
+            streakCount: (streakCount + 1).toString(),
+            streakDate: new Date(),
+          },
+        })
+      );
+    };
+
+    const diffDays = Math.floor(
+      (new Date() - streakDate) / (1000 * 60 * 60 * 24)
+    );
+
+    const lastUpdated = formatDistanceToNowStrict(streakDate, {
+      unit: "day",
+      addSuffix: false,
+    });
+
+    if (
+      tasksOfDate.length > 0 &&
+      tasksOfDate.length - lengthOfCompletedTasks === 0 &&
+      diffDays < 2 &&
+      lastUpdated !== "0 days"
+    ) {
+      incrementStreak();
+      setStreakCount((prev) => prev++);
+    }
+  }, [lengthOfCompletedTasks]);
+
+  useEffect(() => {
+    dispatch(fetchTasks());
+    dispatch(fetchReminders());
+  }, []);
 
   useEffect(() => {
     displayPaywall();
@@ -105,7 +173,6 @@ export default function Home(props) {
     const response = await dispatch(
       completeTask({ id, completed: !completed })
     ).unwrap();
-    console.log(response);
   };
 
   return (
@@ -161,26 +228,56 @@ export default function Home(props) {
         </View>
 
         <View style={styles.progressContainer}>
-          <View style={styles.progressBox}>
-            <Text style={styles.progressTextTitle}>Today's Progress</Text>
-            <Text style={styles.progressRatio}>
-              {lengthOfCompletedTasks || "0"}/{tasksOfDate?.length || "0"}
-            </Text>
-            <Text style={styles.progressSubtext}>
-              {tasksOfDate?.length - lengthOfCompletedTasks || "0"} more to go!
-            </Text>
+          <View style={styles.progressBoxContainer}>
+            <View style={styles.progressBox}>
+              <View style={styles.progressTitleContainer}>
+                <Text style={styles.progressTextTitle}>Today's Progress</Text>
+              </View>
+              <View style={styles.progressRatioContainer}>
+                <Text style={styles.progressRatio}>
+                  {lengthOfCompletedTasks || "0"}/{tasksOfDate?.length || "0"}
+                </Text>
+              </View>
+              <View style={styles.progressSubtextContainer}>
+                <Text style={styles.progressSubtext}>
+                  {tasksOfDate?.length - lengthOfCompletedTasks || "0"} more
+                  tasks to complete!
+                </Text>
+              </View>
+            </View>
+            <View style={styles.progressBox}>
+              <View style={styles.progressTitleContainer}>
+                <Text style={styles.progressTextTitle}>Streak Count</Text>
+              </View>
+              <View style={styles.progressRatioContainer}>
+                <Text style={styles.progressRatio}>{streakCount}</Text>
+              </View>
+              <View style={styles.progressSubtextContainer}>
+                {streakCount === 0 ? (
+                  <Text style={styles.progressSubtext}>
+                    Complete your tasks to start your streak!
+                  </Text>
+                ) : (
+                  <Text style={styles.progressSubtext}>
+                    You've completed all your tasks for {streakCount} days!
+                  </Text>
+                )}
+              </View>
+            </View>
           </View>
         </View>
 
-        <TouchableOpacity
-          style={styles.overdueContainer}
-          onPress={() => props.navigation.navigate("Overdue")}
-        >
-          <View style={styles.overdueCircle}>
-            <Text style={styles.overdueLength}>{lengthOfOverdueTasks}</Text>
-          </View>
-          <Text style={styles.overdueText}>View Overdue</Text>
-        </TouchableOpacity>
+        {lengthOfOverdueTasks > 0 && (
+          <TouchableOpacity
+            style={styles.overdueContainer}
+            onPress={() => props.navigation.navigate("Overdue")}
+          >
+            <View style={styles.overdueCircle}>
+              <Text style={styles.overdueLength}>{lengthOfOverdueTasks}</Text>
+            </View>
+            <Text style={styles.overdueText}>View Overdue</Text>
+          </TouchableOpacity>
+        )}
 
         <View style={styles.tasksContainer}>
           <View style={styles.titleContainer}>
@@ -197,6 +294,7 @@ export default function Home(props) {
                   content={task.content}
                   length={tasksOfDate.length}
                   date={task.date}
+                  clientId={task.clientId}
                   onPress={() => handleCompleteTask(task.id, task.completed)}
                 />
               );
@@ -314,9 +412,9 @@ const styles = StyleSheet.create({
     color: "#F05252",
   },
   overdueCircle: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
     position: "absolute",
     right: 5,
     top: 5,
@@ -327,8 +425,8 @@ const styles = StyleSheet.create({
   },
   overdueLength: {
     fontSize: 12,
-    color: 'white',
-    fontWeight: '500'
+    color: "white",
+    fontWeight: "500",
   },
   titleContainer: {
     borderBottomColor: "#ababab",
@@ -352,17 +450,31 @@ const styles = StyleSheet.create({
   },
   progressContainer: {
     paddingVertical: 15,
+  },
+  progressBoxContainer: {
+    flex: 1,
     flexDirection: "row",
+    height: 110,
+    backgroundColor: "#efefef",
+    borderRadius: 10,
   },
   progressBox: {
     flex: 1,
-    width: "100%",
-    height: 100,
-    paddingHorizontal: 20,
+    paddingHorizontal: 25,
     paddingVertical: 10,
-    borderRadius: 10,
-    backgroundColor: "#efefef",
-    justifyContent: "space-around",
+    justifyContent: "center",
+  },
+  progressTitleContainer: {
+    height: 20,
+    justifyContent: "center",
+  },
+  progressRatioContainer: {
+    display: "flex",
+    justifyContent: "center",
+    height: 40,
+  },
+  progressSubtextContainer: {
+    height: 30,
   },
   progressTextTitle: {
     color: "#6c6c6c",
@@ -376,5 +488,6 @@ const styles = StyleSheet.create({
   },
   progressSubtext: {
     color: "#6c6c6c",
+    fontSize: 12,
   },
 });

@@ -11,23 +11,6 @@ export const deleteUserData = /* GraphQL */ `
     deleteUserData
   }
 `;
-export const createUser = /* GraphQL */ `
-  mutation CreateUser(
-    $input: CreateUserInput!
-    $condition: ModelUserConditionInput
-  ) {
-    createUser(input: $input, condition: $condition) {
-      id
-      name
-      email
-      google_access_token
-      google_refresh_token
-      expo_token
-      createdAt
-      updatedAt
-    }
-  }
-`;
 export const updateUser = /* GraphQL */ `
   mutation UpdateUser(
     $input: UpdateUserInput!
@@ -37,11 +20,14 @@ export const updateUser = /* GraphQL */ `
       id
       name
       email
+      streakDate
+      streakCount
       google_access_token
       google_refresh_token
       expo_token
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -54,11 +40,14 @@ export const deleteUser = /* GraphQL */ `
       id
       name
       email
+      streakDate
+      streakCount
       google_access_token
       google_refresh_token
       expo_token
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -184,6 +173,20 @@ export const deleteClient = /* GraphQL */ `
         }
         nextToken
       }
+      deal {
+        items {
+          id
+          title
+          amount
+          stage
+          clientId
+          createdAt
+          updatedAt
+          clientDealId
+          owner
+        }
+        nextToken
+      }
       owner
       createdAt
       updatedAt
@@ -305,6 +308,9 @@ export const deleteReminder = /* GraphQL */ `
         reminder {
           nextToken
         }
+        deal {
+          nextToken
+        }
         owner
         createdAt
         updatedAt
@@ -379,6 +385,9 @@ export const deleteConnectionHistory = /* GraphQL */ `
         reminder {
           nextToken
         }
+        deal {
+          nextToken
+        }
         owner
         createdAt
         updatedAt
@@ -433,6 +442,9 @@ export const deleteTask = /* GraphQL */ `
         reminder {
           nextToken
         }
+        deal {
+          nextToken
+        }
         owner
         createdAt
         updatedAt
@@ -455,6 +467,112 @@ export const deleteNote = /* GraphQL */ `
       owner
       createdAt
       updatedAt
+    }
+  }
+`;
+export const updateDeal = /* GraphQL */ `
+  mutation UpdateDeal(
+    $input: UpdateDealInput!
+    $condition: ModelDealConditionInput
+  ) {
+    updateDeal(input: $input, condition: $condition) {
+      id
+      title
+      amount
+      stage
+      clientId
+      client {
+        id
+        firstName
+        lastName
+        company
+        phone
+        email
+        notes
+        favorite
+        clientStreet
+        clientCity
+        clientState
+        clientZip
+        connectionHistory {
+          nextToken
+        }
+        properties {
+          nextToken
+        }
+        tasks {
+          nextToken
+        }
+        group {
+          nextToken
+        }
+        reminder {
+          nextToken
+        }
+        deal {
+          nextToken
+        }
+        owner
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      clientDealId
+      owner
+    }
+  }
+`;
+export const deleteDeal = /* GraphQL */ `
+  mutation DeleteDeal(
+    $input: DeleteDealInput!
+    $condition: ModelDealConditionInput
+  ) {
+    deleteDeal(input: $input, condition: $condition) {
+      id
+      title
+      amount
+      stage
+      clientId
+      client {
+        id
+        firstName
+        lastName
+        company
+        phone
+        email
+        notes
+        favorite
+        clientStreet
+        clientCity
+        clientState
+        clientZip
+        connectionHistory {
+          nextToken
+        }
+        properties {
+          nextToken
+        }
+        tasks {
+          nextToken
+        }
+        group {
+          nextToken
+        }
+        reminder {
+          nextToken
+        }
+        deal {
+          nextToken
+        }
+        owner
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      clientDealId
+      owner
     }
   }
 `;
@@ -493,6 +611,9 @@ export const updateGroupsClients = /* GraphQL */ `
           nextToken
         }
         reminder {
+          nextToken
+        }
+        deal {
           nextToken
         }
         owner
@@ -550,6 +671,9 @@ export const deleteGroupsClients = /* GraphQL */ `
           nextToken
         }
         reminder {
+          nextToken
+        }
+        deal {
           nextToken
         }
         owner
@@ -662,6 +786,26 @@ export const deleteGroupsProperty = /* GraphQL */ `
     }
   }
 `;
+export const createUser = /* GraphQL */ `
+  mutation CreateUser(
+    $input: CreateUserInput!
+    $condition: ModelUserConditionInput
+  ) {
+    createUser(input: $input, condition: $condition) {
+      id
+      name
+      email
+      streakDate
+      streakCount
+      google_access_token
+      google_refresh_token
+      expo_token
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
 export const createGoal = /* GraphQL */ `
   mutation CreateGoal(
     $input: CreateGoalInput!
@@ -768,6 +912,20 @@ export const createClient = /* GraphQL */ `
         }
         nextToken
       }
+      deal {
+        items {
+          id
+          title
+          amount
+          stage
+          clientId
+          createdAt
+          updatedAt
+          clientDealId
+          owner
+        }
+        nextToken
+      }
       owner
       createdAt
       updatedAt
@@ -861,6 +1019,20 @@ export const updateClient = /* GraphQL */ `
           owner
           createdAt
           updatedAt
+        }
+        nextToken
+      }
+      deal {
+        items {
+          id
+          title
+          amount
+          stage
+          clientId
+          createdAt
+          updatedAt
+          clientDealId
+          owner
         }
         nextToken
       }
@@ -1060,6 +1232,9 @@ export const createReminder = /* GraphQL */ `
         reminder {
           nextToken
         }
+        deal {
+          nextToken
+        }
         owner
         createdAt
         updatedAt
@@ -1108,6 +1283,9 @@ export const updateReminder = /* GraphQL */ `
           nextToken
         }
         reminder {
+          nextToken
+        }
+        deal {
           nextToken
         }
         owner
@@ -1209,6 +1387,9 @@ export const createConnectionHistory = /* GraphQL */ `
         reminder {
           nextToken
         }
+        deal {
+          nextToken
+        }
         owner
         createdAt
         updatedAt
@@ -1256,6 +1437,9 @@ export const updateConnectionHistory = /* GraphQL */ `
           nextToken
         }
         reminder {
+          nextToken
+        }
+        deal {
           nextToken
         }
         owner
@@ -1312,6 +1496,9 @@ export const createTask = /* GraphQL */ `
         reminder {
           nextToken
         }
+        deal {
+          nextToken
+        }
         owner
         createdAt
         updatedAt
@@ -1366,6 +1553,9 @@ export const updateTask = /* GraphQL */ `
         reminder {
           nextToken
         }
+        deal {
+          nextToken
+        }
         owner
         createdAt
         updatedAt
@@ -1406,6 +1596,59 @@ export const updateNote = /* GraphQL */ `
     }
   }
 `;
+export const createDeal = /* GraphQL */ `
+  mutation CreateDeal(
+    $input: CreateDealInput!
+    $condition: ModelDealConditionInput
+  ) {
+    createDeal(input: $input, condition: $condition) {
+      id
+      title
+      amount
+      stage
+      clientId
+      client {
+        id
+        firstName
+        lastName
+        company
+        phone
+        email
+        notes
+        favorite
+        clientStreet
+        clientCity
+        clientState
+        clientZip
+        connectionHistory {
+          nextToken
+        }
+        properties {
+          nextToken
+        }
+        tasks {
+          nextToken
+        }
+        group {
+          nextToken
+        }
+        reminder {
+          nextToken
+        }
+        deal {
+          nextToken
+        }
+        owner
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      clientDealId
+      owner
+    }
+  }
+`;
 export const createGroupsClients = /* GraphQL */ `
   mutation CreateGroupsClients(
     $input: CreateGroupsClientsInput!
@@ -1441,6 +1684,9 @@ export const createGroupsClients = /* GraphQL */ `
           nextToken
         }
         reminder {
+          nextToken
+        }
+        deal {
           nextToken
         }
         owner

@@ -24,6 +24,13 @@ export default function Overdue(props) {
       else return new Date(a.date) - new Date(b.date);
     });
 
+  const handleCompleteTask = async (id, completed) => {
+    const response = await dispatch(
+      completeTask({ id, completed: !completed })
+    ).unwrap();
+    console.log(response);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.headingContainer}>

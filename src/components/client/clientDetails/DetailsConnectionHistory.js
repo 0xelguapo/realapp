@@ -1,5 +1,6 @@
 import { View, Text, Pressable, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { format } from "date-fns";
 
 export default function DetailsConnectionHistory({
   clientDetailsState,
@@ -18,12 +19,12 @@ export default function DetailsConnectionHistory({
           clientDetailsState.connectionHistory.items.map((el) => (
             <View style={styles.connection} key={el.id}>
               <Text style={styles.connectionTitle}>{el.title}</Text>
-              {el.content.length > 0 && (
+              {el.content?.length > 0 && (
                 <Text style={styles.connectionContent}>{el.content}</Text>
               )}
               {el.date.length > 0 && (
                 <Text style={styles.connectionDate}>
-                  {el.date.replace(",", " •")}
+                  {format(new Date(el.date), 'MMM dd, yyyy • p')}
                 </Text>
               )}
             </View>

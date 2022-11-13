@@ -11,8 +11,10 @@ import {
   Entypo,
   AntDesign,
   MaterialCommunityIcons,
+  Ionicons,
 } from "@expo/vector-icons";
 import { format, differenceInMinutes } from "date-fns";
+import { useNavigation } from "@react-navigation/native";
 
 export default function HomeTask({
   title,
@@ -21,10 +23,17 @@ export default function HomeTask({
   completed,
   index,
   length,
+  clientId,
   onPress,
 }) {
+  const navigation = useNavigation();
   const [overdue, setOverdue] = useState(false);
 
+  const handleViewClient = () => {
+    if (clientId) {
+      navigation.navigate("ClientDetails", { client: { id: clientId } });
+    }
+  };
   useEffect(() => {
     if (differenceInMinutes(new Date(date), new Date()) < 0) {
       setOverdue(true);
@@ -102,11 +111,21 @@ export default function HomeTask({
         )}
       </View>
       <View style={styles.iconContainer}>
-        <MaterialCommunityIcons
-          name="clipboard-list-outline"
-          size={15}
-          color="#6c6c6c"
-        />
+        {clientId ? (
+          <Pressable
+            style={styles.clientIconContainer}
+            onPress={handleViewClient}
+          >
+            <Ionicons name="person-outline" size={15} color="#6c6c6c" />
+            <Entypo name="chevron-right" size={15} color="#6c6c6c" />
+          </Pressable>
+        ) : (
+          <MaterialCommunityIcons
+            name="clipboard-list-outline"
+            size={15}
+            color="#6c6c6c"
+          />
+        )}
       </View>
     </View>
   );
@@ -140,7 +159,7 @@ const styles = StyleSheet.create({
   },
   taskTime: {
     color: "#6c6c6c",
-    marginTop: 3
+    marginTop: 3,
   },
   circle: {
     width: 18,
@@ -156,5 +175,9 @@ const styles = StyleSheet.create({
   },
   checkedTitle: {
     textDecorationLine: "line-through",
+  },
+  clientIconContainer: {
+    display: "flex",
+    flexDirection: "row",
   },
 });

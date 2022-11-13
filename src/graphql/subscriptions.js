@@ -2,44 +2,62 @@
 // this is an auto generated file. This will be overwritten
 
 export const onCreateUser = /* GraphQL */ `
-  subscription OnCreateUser($filter: ModelSubscriptionUserFilterInput) {
-    onCreateUser(filter: $filter) {
+  subscription OnCreateUser(
+    $filter: ModelSubscriptionUserFilterInput
+    $owner: String
+  ) {
+    onCreateUser(filter: $filter, owner: $owner) {
       id
       name
       email
+      streakDate
+      streakCount
       google_access_token
       google_refresh_token
       expo_token
       createdAt
       updatedAt
+      owner
     }
   }
 `;
 export const onUpdateUser = /* GraphQL */ `
-  subscription OnUpdateUser($filter: ModelSubscriptionUserFilterInput) {
-    onUpdateUser(filter: $filter) {
+  subscription OnUpdateUser(
+    $filter: ModelSubscriptionUserFilterInput
+    $owner: String
+  ) {
+    onUpdateUser(filter: $filter, owner: $owner) {
       id
       name
       email
+      streakDate
+      streakCount
       google_access_token
       google_refresh_token
       expo_token
       createdAt
       updatedAt
+      owner
     }
   }
 `;
 export const onDeleteUser = /* GraphQL */ `
-  subscription OnDeleteUser($filter: ModelSubscriptionUserFilterInput) {
-    onDeleteUser(filter: $filter) {
+  subscription OnDeleteUser(
+    $filter: ModelSubscriptionUserFilterInput
+    $owner: String
+  ) {
+    onDeleteUser(filter: $filter, owner: $owner) {
       id
       name
       email
+      streakDate
+      streakCount
       google_access_token
       google_refresh_token
       expo_token
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -181,6 +199,20 @@ export const onCreateClient = /* GraphQL */ `
         }
         nextToken
       }
+      deal {
+        items {
+          id
+          title
+          amount
+          stage
+          clientId
+          createdAt
+          updatedAt
+          clientDealId
+          owner
+        }
+        nextToken
+      }
       owner
       createdAt
       updatedAt
@@ -277,6 +309,20 @@ export const onUpdateClient = /* GraphQL */ `
         }
         nextToken
       }
+      deal {
+        items {
+          id
+          title
+          amount
+          stage
+          clientId
+          createdAt
+          updatedAt
+          clientDealId
+          owner
+        }
+        nextToken
+      }
       owner
       createdAt
       updatedAt
@@ -370,6 +416,20 @@ export const onDeleteClient = /* GraphQL */ `
           owner
           createdAt
           updatedAt
+        }
+        nextToken
+      }
+      deal {
+        items {
+          id
+          title
+          amount
+          stage
+          clientId
+          createdAt
+          updatedAt
+          clientDealId
+          owner
         }
         nextToken
       }
@@ -644,6 +704,9 @@ export const onCreateReminder = /* GraphQL */ `
         reminder {
           nextToken
         }
+        deal {
+          nextToken
+        }
         owner
         createdAt
         updatedAt
@@ -694,6 +757,9 @@ export const onUpdateReminder = /* GraphQL */ `
         reminder {
           nextToken
         }
+        deal {
+          nextToken
+        }
         owner
         createdAt
         updatedAt
@@ -742,6 +808,9 @@ export const onDeleteReminder = /* GraphQL */ `
           nextToken
         }
         reminder {
+          nextToken
+        }
+        deal {
           nextToken
         }
         owner
@@ -868,6 +937,9 @@ export const onCreateConnectionHistory = /* GraphQL */ `
         reminder {
           nextToken
         }
+        deal {
+          nextToken
+        }
         owner
         createdAt
         updatedAt
@@ -917,6 +989,9 @@ export const onUpdateConnectionHistory = /* GraphQL */ `
         reminder {
           nextToken
         }
+        deal {
+          nextToken
+        }
         owner
         createdAt
         updatedAt
@@ -964,6 +1039,9 @@ export const onDeleteConnectionHistory = /* GraphQL */ `
           nextToken
         }
         reminder {
+          nextToken
+        }
+        deal {
           nextToken
         }
         owner
@@ -1020,6 +1098,9 @@ export const onCreateTask = /* GraphQL */ `
         reminder {
           nextToken
         }
+        deal {
+          nextToken
+        }
         owner
         createdAt
         updatedAt
@@ -1074,6 +1155,9 @@ export const onUpdateTask = /* GraphQL */ `
         reminder {
           nextToken
         }
+        deal {
+          nextToken
+        }
         owner
         createdAt
         updatedAt
@@ -1126,6 +1210,9 @@ export const onDeleteTask = /* GraphQL */ `
           nextToken
         }
         reminder {
+          nextToken
+        }
+        deal {
           nextToken
         }
         owner
@@ -1183,6 +1270,165 @@ export const onDeleteNote = /* GraphQL */ `
     }
   }
 `;
+export const onCreateDeal = /* GraphQL */ `
+  subscription OnCreateDeal(
+    $filter: ModelSubscriptionDealFilterInput
+    $owner: String
+  ) {
+    onCreateDeal(filter: $filter, owner: $owner) {
+      id
+      title
+      amount
+      stage
+      clientId
+      client {
+        id
+        firstName
+        lastName
+        company
+        phone
+        email
+        notes
+        favorite
+        clientStreet
+        clientCity
+        clientState
+        clientZip
+        connectionHistory {
+          nextToken
+        }
+        properties {
+          nextToken
+        }
+        tasks {
+          nextToken
+        }
+        group {
+          nextToken
+        }
+        reminder {
+          nextToken
+        }
+        deal {
+          nextToken
+        }
+        owner
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      clientDealId
+      owner
+    }
+  }
+`;
+export const onUpdateDeal = /* GraphQL */ `
+  subscription OnUpdateDeal(
+    $filter: ModelSubscriptionDealFilterInput
+    $owner: String
+  ) {
+    onUpdateDeal(filter: $filter, owner: $owner) {
+      id
+      title
+      amount
+      stage
+      clientId
+      client {
+        id
+        firstName
+        lastName
+        company
+        phone
+        email
+        notes
+        favorite
+        clientStreet
+        clientCity
+        clientState
+        clientZip
+        connectionHistory {
+          nextToken
+        }
+        properties {
+          nextToken
+        }
+        tasks {
+          nextToken
+        }
+        group {
+          nextToken
+        }
+        reminder {
+          nextToken
+        }
+        deal {
+          nextToken
+        }
+        owner
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      clientDealId
+      owner
+    }
+  }
+`;
+export const onDeleteDeal = /* GraphQL */ `
+  subscription OnDeleteDeal(
+    $filter: ModelSubscriptionDealFilterInput
+    $owner: String
+  ) {
+    onDeleteDeal(filter: $filter, owner: $owner) {
+      id
+      title
+      amount
+      stage
+      clientId
+      client {
+        id
+        firstName
+        lastName
+        company
+        phone
+        email
+        notes
+        favorite
+        clientStreet
+        clientCity
+        clientState
+        clientZip
+        connectionHistory {
+          nextToken
+        }
+        properties {
+          nextToken
+        }
+        tasks {
+          nextToken
+        }
+        group {
+          nextToken
+        }
+        reminder {
+          nextToken
+        }
+        deal {
+          nextToken
+        }
+        owner
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      clientDealId
+      owner
+    }
+  }
+`;
 export const onCreateGroupsClients = /* GraphQL */ `
   subscription OnCreateGroupsClients(
     $filter: ModelSubscriptionGroupsClientsFilterInput
@@ -1218,6 +1464,9 @@ export const onCreateGroupsClients = /* GraphQL */ `
           nextToken
         }
         reminder {
+          nextToken
+        }
+        deal {
           nextToken
         }
         owner
@@ -1277,6 +1526,9 @@ export const onUpdateGroupsClients = /* GraphQL */ `
         reminder {
           nextToken
         }
+        deal {
+          nextToken
+        }
         owner
         createdAt
         updatedAt
@@ -1332,6 +1584,9 @@ export const onDeleteGroupsClients = /* GraphQL */ `
           nextToken
         }
         reminder {
+          nextToken
+        }
+        deal {
           nextToken
         }
         owner
