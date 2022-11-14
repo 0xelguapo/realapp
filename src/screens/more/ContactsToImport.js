@@ -8,25 +8,42 @@ import {
   Alert,
   FlatList,
   TextInput,
+  ScrollView,
 } from "react-native";
 import { useState, useEffect, useMemo } from "react";
 import * as Contacts from "expo-contacts";
 import * as Linking from "expo-linking";
 import { AntDesign, Feather, Ionicons } from "@expo/vector-icons";
 import { useCallback } from "react";
+import PhoneContact from "../../components/more/PhoneContact";
 
 export default function ContactsToImport(props) {
   const [contactsArray, setContactsArray] = useState([]);
   const [searchInput, setSearchInput] = useState("");
 
   const filteredContacts = useMemo(() => {
-    return contactsArray.filter((c) => {
-      const fullName = c.firstName + " " + c?.lastName;
-      const clientData = fullName ? fullName.toUpperCase() : "".toUpperCase();
-      const textData = searchInput.toUpperCase();
-      return clientData.indexOf(textData) > -1;
-    }).sort((a,b) => a.firstName > b.firstName);
+    return contactsArray
+      .filter((c) => {
+        const fullName = c.firstName + " " + c?.lastName;
+        const contactName = fullName
+          ? fullName.toLowerCase()
+          : "".toLowerCase();
+        const contactCompany = c.company ? c.company.toLowerCase() : "";
+        const textData = searchInput.toLowerCase();
+        return (
+          contactName.indexOf(textData) > -1 ||
+          contactCompany.indexOf(textData) > -1
+        );
+      })
+      .sort((a, b) => a.firstName > b.firstName);
   }, [searchInput, contactsArray]);
+
+  const suggestedContacts = useMemo(() => {
+    return contactsArray.slice(0).filter((c) => {
+      if (c.emails) return true;
+      else return false;
+    });
+  }, [contactsArray]);
 
   const getContactPermissions = async () => {
     const { status } = await Contacts.requestPermissionsAsync();
@@ -43,7 +60,6 @@ export default function ContactsToImport(props) {
       });
       if (data.length > 0) {
         setContactsArray(data);
-        const contact = data[5];
       }
     } else {
       Alert.alert("Please Allow CoAgent to Access Contacts", "", [
@@ -56,11 +72,16 @@ export default function ContactsToImport(props) {
     }
   };
 
-  const renderContact = useCallback(({ item, index }) => (
-    <View>
-      <Text>{item.firstName}</Text>
-    </View>
-  ), []);
+  const renderContact = useCallback(
+    ({ item, index }) => (
+      <PhoneContact
+        firstName={item.firstName}
+        lastName={item.lastName}
+        company={item.company}
+      />
+    ),
+    []
+  );
 
   useEffect(() => {
     getContactPermissions();
@@ -81,27 +102,37 @@ export default function ContactsToImport(props) {
         <View style={styles.flexPlaceholder} />
       </View>
       <View style={styles.bodyContainer}>
-        <View style={styles.inputContainer}>
-          <Ionicons name="ios-search" size={20} color="black" />
-          <TextInput
-            style={styles.input}
-            placeholderTextColor="#7b7b7c"
-            placeholder="Search by name"
-            returnKeyType="done"
-            onChangeText={setSearchInput}
-            value={searchInput}
-          />
-          {searchInput.length !== 0 && (
-            <TouchableOpacity onPress={() => handleSearch("")}>
-              <Feather name="x-circle" size={20} color="#7b7b7c" />
-            </TouchableOpacity>
-          )}
+        <View style={styles.searchContainer}>
+          <View style={styles.inputContainer}>
+            <Ionicons name="ios-search" size={20} color="black" />
+            <TextInput
+              style={styles.input}
+              placeholderTextColor="#7b7b7c"
+              placeholder="Search by name, company"
+              returnKeyType="done"
+              onChangeText={setSearchInput}
+              value={searchInput}
+            />
+            {searchInput.length !== 0 && (
+              <TouchableOpacity onPress={() => setSearchInput("")}>
+                <Feather name="x-circle" size={20} color="#7b7b7c" />
+              </TouchableOpacity>
+            )}
+          </View>
         </View>
+        {/* <Text>Suggested Contacts</Text>
+        <ScrollView contentContainerStyle={[{ borderWidth: 1 }]}>
+          {suggestedContacts.map((el, index) => (
+            <PhoneContact key={el.id} firstName={el.firstName} company={el.company} />
+          ))}
+        </ScrollView> */}
         <FlatList
           data={filteredContacts}
           renderItem={renderContact}
           keyExtractor={(c) => c.id}
-          contentContainerStyle={[{paddingBottom: 120}]}
+          contentContainerStyle={[
+            { paddingBottom: 120, paddingHorizontal: 20 },
+          ]}
         />
       </View>
     </SafeAreaView>
@@ -137,13 +168,15 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     flex: 1,
   },
-  bodyContainer: {
+  bodyContainer: {},
+  searchContainer: {
     paddingHorizontal: 20,
   },
   inputContainer: {
     alignItems: "center",
     flexDirection: "row",
     paddingHorizontal: 8,
+    marginBottom: 20,
     borderColor: "#e9e9e9",
     backgroundColor: "#f1f1f3",
     borderRadius: 5,

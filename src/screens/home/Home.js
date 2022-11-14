@@ -1,3 +1,5 @@
+import Purchases from "react-native-purchases";
+import { ENTITLEMENT_ID } from "../../constants";
 import { useState, useEffect, useContext } from "react";
 import {
   View,
@@ -9,30 +11,23 @@ import {
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchReminders } from "../../redux/reminders-slice";
+import { API, graphqlOperation } from "aws-amplify";
+import { getUserStreak, updateUserStreak } from "../../graphql/customQueries";
 import {
   completeTask,
   fetchTasks,
   selectAllTasks,
 } from "../../redux/tasks-slice";
-import AddHome from "../../components/home/AddHome";
 import {
   MaterialIcons,
   Entypo,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
-import Purchases from "react-native-purchases";
-import { ENTITLEMENT_ID } from "../../constants";
-import {
-  format,
-  add,
-  sub,
-  formatDistanceToNow,
-  formatDistanceToNowStrict,
-} from "date-fns";
+import { format, add, sub, formatDistanceToNowStrict } from "date-fns";
 import HomeTask from "../../components/home/HomeTask";
-import { API, graphqlOperation } from "aws-amplify";
-import { getUserStreak, updateUserStreak } from "../../graphql/customQueries";
+import AddHome from "../../components/home/AddHome";
 import { AuthContext } from "../../context/auth-context";
+import Goal from "../../components/gesture/Goal";
 
 let isMounted = false;
 
@@ -278,6 +273,10 @@ export default function Home(props) {
             <Text style={styles.overdueText}>View Overdue</Text>
           </TouchableOpacity>
         )}
+        
+        <View>
+          <Goal />
+        </View>
 
         <View style={styles.tasksContainer}>
           <View style={styles.titleContainer}>

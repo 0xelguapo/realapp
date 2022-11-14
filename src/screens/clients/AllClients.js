@@ -98,7 +98,7 @@ export default function Clients({ navigation }) {
                 value={searchInput}
               />
               {searchInput.length !== 0 && (
-                <TouchableOpacity onPress={() => handleSearch("")}>
+                <TouchableOpacity onPress={() => setSearchInput("")}>
                   <Feather name="x-circle" size={20} color="#7b7b7c" />
                 </TouchableOpacity>
               )}
