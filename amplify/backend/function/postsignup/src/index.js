@@ -9,6 +9,14 @@ Amplify Params - DO NOT EDIT */
 
 import { default as fetch, Request } from "node-fetch";
 
+const createUserQuery = /* GraphQL */ `
+  mutation createUser($input: CreateUserInput!) {
+    createUser(input: $input) {
+      id
+    }
+  }
+`;
+
 const createClientQuery = /* GraphQL */ `
   mutation createClient($input: CreateClientInput!) {
     createClient(input: $input) {
@@ -69,10 +77,44 @@ const GRAPHQL_ENDPOINT = process.env.API_REALAPP_GRAPHQLAPIENDPOINTOUTPUT;
 export const handler = async (event, context, callback) => {
   /** @type {import('node-fetch').RequestInit} */
 
-  //---- create client ----//
   let userId = event.request.userAttributes.sub;
+  let userEmail = event.request.userAttributes.email;
+  // let userId = "205cc55a-dc30-4237-a03b-1c33951c8865";
+  // let userEmail = "fractionalape@gmail.com"
+  // let userEmail = 'thatoneventure@gmail.com'
   // let userId = "1283acf9-98cb-4582-b19e-52659493fe4f"
-  // let userId = "2612aa2f-e76d-4c3d-a077-2da27797313b"
+  
+  const createUserVariables = { input: { id: userId, email: userEmail, streakCount: '0', streakDate: new Date(), owner: userId }}
+  
+  const createUserOptions = {
+    method: "POST",
+    headers: {
+      'x-api-key': GRAPHQL_APIKEY
+    },
+    body: JSON.stringify({ query: createUserQuery, variables: createUserVariables })
+  }
+  
+  const createUserRequest = new Request(GRAPHQL_ENDPOINT, createUserOptions);
+  
+  let createUserStatusCode = 200;
+  let createUserResponse;
+  let createUserBody;
+  
+  try {
+    createUserResponse = await fetch(createUserRequest);
+    createUserBody = await createUserResponse.json()
+  } catch (error) {
+    createUserStatusCode = 400;
+    createUserBody = {
+      errors: [{
+        status: createUserResponse.status,
+        message: error.message,
+        stack: error.stack
+      }]
+    }
+    console.log(error)
+  }
+  
 
   const createClientVariables = { input: { firstName: "Jon Snow", lastName: "Sample", favorite: true, company: "CoAgent Team", phone: "3105558592,2125559912", email: "eric@coagent.co,emailMeAnytime@youremail.com", notes: "You can import your existing clients from an excel sheet or .csv on our website, https://coagent.co/", clientStreet: "5422 Nights Watch Blvd", clientState: "CA", clientCity: "Thrones", clientZip: "88228", owner: userId } };
   const createClientVariablesTwo = { input: { firstName: "First", lastName: "Contact", favorite: true, company: "CoAgent Team", phone: "1215552151,4245559421", email: "eric@coagent.co,emailMeAnytime@youremail.com", notes: "Welcome to your first contact! Browse around this screen and get a feel of things. Create reminders, log your call/connection histories, and set up tasks.", clientStreet: "54221 Jon Snow Avenue", clientState: "CA", clientCity: "Thrones", clientZip: "512142", owner: userId } };
@@ -111,9 +153,6 @@ export const handler = async (event, context, callback) => {
   
   //  ---- create reminder for first client ---- //
   let date = new Date();
-  date.setDate(date.getDate() + 1);
-  date.setHours(8);
-  date.setMinutes(0);
 
   const createReminderVariables = {input: {clientId: firstCreatedClientId, date, owner: userId }}
 
@@ -134,7 +173,7 @@ export const handler = async (event, context, callback) => {
   }
   
   // ---- create connection history for first client ---- //
-  const createConnectionHistoryVariables = {input: {title: 'Reached Cell Phone', date: date.toLocaleString(), clientId: firstCreatedClientId , owner: userId}}
+  const createConnectionHistoryVariables = {input: {title: 'Reached Cell Phone', date: date, clientId: firstCreatedClientId , owner: userId}}
   const createConnectionHistoryOptions = {
     method: "POST",
     headers: {
@@ -205,7 +244,7 @@ export const handler = async (event, context, callback) => {
   
   // ---- create second connection history for second client ---- //
   
-  const createSecondConnectionHistoryVariables = {input: {title: 'Left Voicemail (LVM)', date: date.toLocaleString(), clientId: secondCreatedClientId , owner: userId}}
+  const createSecondConnectionHistoryVariables = {input: {title: 'Left Voicemail (LVM)', date: date, clientId: secondCreatedClientId , owner: userId}}
   const createSecondConnectionHistoryOptions = {
     method: "POST",
     headers: {

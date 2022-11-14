@@ -12,6 +12,7 @@ type User @model @auth(rules: [{ allow: owner }, { allow: public, provider: apiK
   google_access_token: String
   google_refresh_token: String
   expo_token: String
+  owner: String @auth(rules: [{ allow: owner, operations: [read, delete] }, { allow: public, provider: apiKey, operations: [create, update]}])
 }
 
 type Goal @model @auth(rules: [{ allow: owner }, { allow: public, provider: apiKey, operations: [create] }]) {

@@ -15,9 +15,9 @@ export const onCreateUser = /* GraphQL */ `
       google_access_token
       google_refresh_token
       expo_token
+      owner
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -35,9 +35,9 @@ export const onUpdateUser = /* GraphQL */ `
       google_access_token
       google_refresh_token
       expo_token
+      owner
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -55,9 +55,9 @@ export const onDeleteUser = /* GraphQL */ `
       google_access_token
       google_refresh_token
       expo_token
+      owner
       createdAt
       updatedAt
-      owner
     }
   }
 `;

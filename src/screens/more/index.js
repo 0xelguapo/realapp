@@ -8,6 +8,7 @@ import ClientDetails from "../clients/ClientDetails";
 import EditClientsOfGroup from "./EditClientsOfGroup";
 import ViewAllReminders from "./ViewAllReminders";
 import Settings from "./Settings";
+import ContactsToImport from "./ContactsToImport";
 
 const Stack = createNativeStackNavigator();
 
@@ -66,6 +67,11 @@ export default function MoreNavigator() {
         options={{ headerShown: false }}
         name="Settings"
         component={Settings}
+      />
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name="ContactsToImport"
+        component={ContactsToImport}
       />
     </Stack.Navigator>
   );

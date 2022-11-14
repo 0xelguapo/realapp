@@ -11,26 +11,6 @@ export const deleteUserData = /* GraphQL */ `
     deleteUserData
   }
 `;
-export const updateUser = /* GraphQL */ `
-  mutation UpdateUser(
-    $input: UpdateUserInput!
-    $condition: ModelUserConditionInput
-  ) {
-    updateUser(input: $input, condition: $condition) {
-      id
-      name
-      email
-      streakDate
-      streakCount
-      google_access_token
-      google_refresh_token
-      expo_token
-      createdAt
-      updatedAt
-      owner
-    }
-  }
-`;
 export const deleteUser = /* GraphQL */ `
   mutation DeleteUser(
     $input: DeleteUserInput!
@@ -45,9 +25,9 @@ export const deleteUser = /* GraphQL */ `
       google_access_token
       google_refresh_token
       expo_token
+      owner
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -800,9 +780,29 @@ export const createUser = /* GraphQL */ `
       google_access_token
       google_refresh_token
       expo_token
+      owner
       createdAt
       updatedAt
+    }
+  }
+`;
+export const updateUser = /* GraphQL */ `
+  mutation UpdateUser(
+    $input: UpdateUserInput!
+    $condition: ModelUserConditionInput
+  ) {
+    updateUser(input: $input, condition: $condition) {
+      id
+      name
+      email
+      streakDate
+      streakCount
+      google_access_token
+      google_refresh_token
+      expo_token
       owner
+      createdAt
+      updatedAt
     }
   }
 `;

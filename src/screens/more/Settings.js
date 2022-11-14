@@ -72,7 +72,16 @@ export default function Settings(props) {
         <Text style={styles.headingText}>Settings</Text>
       </View>
       <View style={styles.bodyContainer}>
-        <View style={{ ...styles.buttonsBlock, marginTop: 0 }}>
+      <View style={{ ...styles.buttonsBlock, marginTop: 0,}}>
+          <TouchableOpacity
+            style={{ ...styles.buttonContainer, marginTop: 0 }}
+            onPress={() => props.navigation.navigate('ContactsToImport')}
+          >
+            <Text style={styles.buttonText}>Import Contacts</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={{ ...styles.buttonsBlock }}>
           <TouchableOpacity
             style={{ ...styles.buttonContainer, marginTop: 0 }}
             onPress={() => Linking.openURL("https://coagent.co")}

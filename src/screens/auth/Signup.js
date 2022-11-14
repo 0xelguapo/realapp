@@ -26,6 +26,7 @@ export default function Signup({ navigation }) {
     useContext(AuthContext);
   const [showModal, setShowModal] = useState(false);
   const [confirmationText, setConfirmationText] = useState("");
+  let userId;
   const [formState, inputHandler] = useForm(
     {
       email: {
@@ -45,16 +46,24 @@ export default function Signup({ navigation }) {
       formState.inputs.email.value,
       formState.inputs.password.value
     );
+    userId = result.userSub;
     setShowModal(!showModal);
   };
 
   const handleConfirmation = async () => {
     let result;
     result = await confirmation(formState.inputs.email.value, confirmationText);
-    result = await signin(
-      formState.inputs.email.value,
-      formState.inputs.password.value
-    );
+    if (result) {
+      navigation.goBack();
+      navigation.navigate("ImportContacts", {
+        formState: formState.inputs,
+        userId: userId,
+      });
+    }
+    // result = await signin(
+    //   formState.inputs.email.value,
+    //   formState.inputs.password.value
+    // );
   };
 
   const handleResend = async () => {

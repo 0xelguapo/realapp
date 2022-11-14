@@ -154,9 +154,9 @@ export default function Home(props) {
     dispatch(fetchReminders());
   }, []);
 
-  useEffect(() => {
-    displayPaywall();
-  }, []);
+  // useEffect(() => {
+  //   displayPaywall();
+  // }, []);
 
   const dispatch = useDispatch();
 

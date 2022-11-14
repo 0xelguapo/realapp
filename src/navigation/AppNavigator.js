@@ -17,14 +17,6 @@ import { AntDesign, Ionicons, Feather, FontAwesome } from "@expo/vector-icons";
 
 const Tab = createBottomTabNavigator();
 
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: true,
-  }),
-});
-
 export default function AppNavigator() {
   const [expoPushToken, setExpoPushToken] = useState("");
   const [notification, setNotification] = useState(false);
@@ -32,10 +24,6 @@ export default function AppNavigator() {
   const responseListener = useRef();
 
   useEffect(() => {
-    registerForPushNotificationsAsync().then((token) =>
-      setExpoPushToken(token)
-    );
-
     //when app is foregrounded
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) =>
@@ -76,11 +64,6 @@ export default function AppNavigator() {
             component={PropertiesNavigator}
             options={optionsHandler}
           />
-          {/* <Tab.Screen
-            name="Tasks"
-            component={TasksNavigator}
-            options={optionsHandler}
-          /> */}
           <Tab.Screen
             name="More"
             component={MoreNavigator}
@@ -92,23 +75,6 @@ export default function AppNavigator() {
   );
 }
 
-async function registerForPushNotificationsAsync() {
-  let token;
-  if (Device.isDevice) {
-    const { status: existingStatus } =
-      await Notifications.getPermissionsAsync();
-    let finalStatus = existingStatus;
-    if (existingStatus !== "granted") {
-      const { status } = await Notifications.requestPermissionsAsync();
-      finalStatus = status;
-    }
-    if (finalStatus !== "granted") {
-      return;
-    }
-    token = (await Notifications.getExpoPushTokenAsync({ projectId: null, experienceId: null })).data;
-  }
-  return token;
-}
 
 const styles = {
   paddingVertical: 5,

@@ -1,7 +1,8 @@
 import { createContext, useState, useCallback, useEffect } from "react";
 import Purchases from "react-native-purchases";
-import { Auth } from "aws-amplify";
+import { API, Auth, graphqlOperation } from "aws-amplify";
 import { Alert } from "react-native";
+import { updateUser } from "../graphql/mutations";
 
 const AuthContext = createContext();
 
@@ -31,7 +32,6 @@ function AuthProvider({ children }) {
     } finally {
       setAppIsReady(true);
     }
-    
   }, []);
 
   useEffect(() => {
@@ -98,27 +98,41 @@ function AuthProvider({ children }) {
 
   const handleForgotPassword = async (email) => {
     let response;
-    setIsLoading(true)
+    setIsLoading(true);
     try {
       response = await Auth.forgotPassword(email);
     } catch (err) {
-      console.error(err)
+      console.error(err);
     }
-    setIsLoading(false)
-    return response
-  }
+    setIsLoading(false);
+    return response;
+  };
 
   const handleCodeForForgotPassword = async (email, code, newPassword) => {
     let response;
-    setIsLoading(true)
+    setIsLoading(true);
     try {
       response = await Auth.forgotPasswordSubmit(email, code, newPassword);
-    } catch(err) {
-      console.error(err)
+    } catch (err) {
+      console.error(err);
     }
-    setIsLoading(false)
-    return response
-  }
+    setIsLoading(false);
+    return response;
+  };
+
+  const handleSetExpoToken = async (userId, expoToken) => {
+    let response;
+    try {
+      response = await API.graphql(
+        graphqlOperation(updateUser, {
+          input: { id: userId, expo_token: expoToken },
+        })
+      );
+    } catch (err) {
+      console.error(err);
+    }
+    return response;
+  };
 
   const signOut = useCallback(async () => {
     try {
@@ -143,6 +157,7 @@ function AuthProvider({ children }) {
         confirmation,
         handleForgotPassword,
         handleCodeForForgotPassword,
+        handleSetExpoToken,
         signOut,
       }}
     >

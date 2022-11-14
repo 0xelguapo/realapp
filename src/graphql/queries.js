@@ -12,9 +12,9 @@ export const getUser = /* GraphQL */ `
       google_access_token
       google_refresh_token
       expo_token
+      owner
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -34,9 +34,9 @@ export const listUsers = /* GraphQL */ `
         google_access_token
         google_refresh_token
         expo_token
+        owner
         createdAt
         updatedAt
-        owner
       }
       nextToken
     }
