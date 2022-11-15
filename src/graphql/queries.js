@@ -48,10 +48,13 @@ export const getGoal = /* GraphQL */ `
       id
       title
       content
+      curDate
+      timesPerDay
+      timesCompleted
       recurring
+      owner
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -66,10 +69,13 @@ export const listGoals = /* GraphQL */ `
         id
         title
         content
+        curDate
+        timesPerDay
+        timesCompleted
         recurring
+        owner
         createdAt
         updatedAt
-        owner
       }
       nextToken
     }

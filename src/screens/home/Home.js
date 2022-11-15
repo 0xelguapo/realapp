@@ -27,7 +27,7 @@ import { format, add, sub, formatDistanceToNowStrict } from "date-fns";
 import HomeTask from "../../components/home/HomeTask";
 import AddHome from "../../components/home/AddHome";
 import { AuthContext } from "../../context/auth-context";
-import Goal from "../../components/gesture/SwipeableRow";
+import Goal from "../../components/gesture/Goal";
 
 let isMounted = false;
 

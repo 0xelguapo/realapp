@@ -30,19 +30,23 @@ export default function AddHome() {
 
   const handleViewAddClient = () => {
     navigation.navigate("AddClient");
-    setVisible(false)
+    setVisible(false);
   };
 
   const handleViewAddTask = () => {
     navigation.navigate("AddTask");
-    setVisible(false)
+    setVisible(false);
   };
 
   const handleViewAddReminder = () => {
     navigation.navigate("AddReminder");
-    setVisible(false)
-  }
+    setVisible(false);
+  };
 
+  const handleViewAddGoal = () => {
+    navigation.navigate("AddGoal")
+    setVisible(false);
+  };
 
   return (
     <>
@@ -55,8 +59,11 @@ export default function AddHome() {
             <OptionIcon onPress={handleViewAddTask} text={"Add Task"}>
               <Entypo name="add-to-list" size={28} color="black" />
             </OptionIcon>
-            <OptionIcon onPress={handleViewAddReminder} text={"Add Reminder"}>
+            {/* <OptionIcon onPress={handleViewAddReminder} text={"Add Reminder"}>
               <Feather name="bell" size={28} color="black" />
+            </OptionIcon> */}
+            <OptionIcon onPress={handleViewAddGoal} text={"Add Goal"}>
+              <Entypo name="flag" size={28} color="black" />
             </OptionIcon>
           </View>
           <TouchableWithoutFeedback onPress={() => setVisible(false)}>

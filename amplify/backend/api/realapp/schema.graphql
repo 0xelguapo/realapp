@@ -19,7 +19,12 @@ type Goal @model @auth(rules: [{ allow: owner }, { allow: public, provider: apiK
   id: ID!
   title: String!
   content: String
+  curDate: String
+  timesPerDay: String
+  timesCompleted: String
   recurring: String
+  owner: String @auth(rules: [{ allow: owner, operations: [read, delete] }, { allow: public, provider: apiKey, operations: [create, update]}])
+
 }
 
 type Client @model @auth(rules: [{ allow: owner }, { allow: public, provider: apiKey, operations: [create] }]) {

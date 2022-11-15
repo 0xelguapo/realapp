@@ -9,6 +9,7 @@ import {
   FlatList,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import EachClient from "../../components/client/EachClient";
@@ -95,7 +96,11 @@ export default function AddTask({ navigation, route }) {
     setStartPickerVisible(false);
   };
   const handleAddTask = async () => {
-    let taskDetails = selectedClient.clientId
+    if(!title) {
+      Alert.alert('Please enter a title');
+      return
+    }
+    const taskDetails = selectedClient?.clientId
       ? {
           title: title,
           content: description,

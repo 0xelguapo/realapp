@@ -70,10 +70,13 @@ export const onCreateGoal = /* GraphQL */ `
       id
       title
       content
+      curDate
+      timesPerDay
+      timesCompleted
       recurring
+      owner
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -86,10 +89,13 @@ export const onUpdateGoal = /* GraphQL */ `
       id
       title
       content
+      curDate
+      timesPerDay
+      timesCompleted
       recurring
+      owner
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -102,10 +108,13 @@ export const onDeleteGoal = /* GraphQL */ `
       id
       title
       content
+      curDate
+      timesPerDay
+      timesCompleted
       recurring
+      owner
       createdAt
       updatedAt
-      owner
     }
   }
 `;

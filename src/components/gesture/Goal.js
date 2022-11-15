@@ -2,20 +2,9 @@ import React, { Component, useRef } from "react";
 import { Animated, StyleSheet, View, Text, I18nManager } from "react-native";
 import { RectButton } from "react-native-gesture-handler";
 import Swipeable from "react-native-gesture-handler/Swipeable";
+import { Row } from "./GoalRow";
 
-const Row = ({ item }) => (
-  <RectButton style={styles.rectButton} onPress={() => alert(item.from)}>
-    <Text style={styles.fromText}>{item.from}</Text>
-    <Text numberOfLines={2} style={styles.messageText}>
-      {item.message}
-    </Text>
-    <Text style={styles.dateText}>
-      {item.when} {"❭"}
-    </Text>
-  </RectButton>
-);
-
-export default function SwipeableRow() {
+export default function Goal({children}) {
   const updateRef = useRef(null);
 
   const renderLeftAction = (text, color, x, progress) => {
@@ -30,27 +19,11 @@ export default function SwipeableRow() {
 
     return (
       <Animated.View style={{ flex: 1, transform: [{ translateX: 0 }] }}>
-        <RectButton style={[styles.rightAction, { backgroundColor: color }]}>
+        <RectButton style={[styles.leftAction, { backgroundColor: color }]}>
           <Text style={styles.actionText}>{text}</Text>
         </RectButton>
       </Animated.View>
     );
-  };
-
-  const renderRightActions = (progress, dragX) => {
-    const trans = dragX.interpolate({
-      inputRange: [0, 50, 100, 101],
-      outputRange: [-20, 0, 0, 1],
-    });
-    return (
-      <RectButton style={styles.leftAction} onPress={close}>
-        <Animated.Text style={[styles.actionText]}>Delete</Animated.Text>
-      </RectButton>
-    );
-  };
-
-  const close = () => {
-    updateRef.current.close();
   };
 
   const renderLeftActions = (progress) => (
@@ -60,11 +33,27 @@ export default function SwipeableRow() {
         flexDirection: I18nManager.isRTL ? "row-reverse" : "row",
       }}
     >
-      {renderLeftAction("More", "#c8c7cd", 192, progress)}
-      {renderLeftAction("Flag", "#ffab00", 128, progress)}
-      {renderLeftAction("More", "#dd2c00", 64, progress)}
+      {renderLeftAction("Done", "#0e9f6e", 128, progress)}
+      {renderLeftAction("+1", "#31c48d", 64, progress)}
     </View>
   );
+
+  const renderRightActions = (progress, dragX) => {
+    const trans = dragX.interpolate({
+      inputRange: [0, 50, 100, 101],
+      outputRange: [-20, 0, 0, 1],
+    });
+    
+    return (
+      <RectButton style={styles.rightAction} onPress={close}>
+        <Animated.Text style={[styles.actionText]}>Delete</Animated.Text>
+      </RectButton>
+    );
+  };
+
+  const close = () => {
+    updateRef.current.close();
+  };
 
   return (
     <Swipeable
@@ -75,13 +64,19 @@ export default function SwipeableRow() {
       renderLeftActions={renderLeftActions}
       renderRightActions={renderRightActions}
     >
-      <Row item={{ from: "doctor", when: "3:11PM", message: "fuck you" }} />
+      {<Row item={{ from: "doctor", message: "3:11PM", times: "1/4" }} />}
+      {children}
     </Swipeable>
   );
 }
 
 const styles = StyleSheet.create({
   leftAction: {
+    alignItems: "center",
+    flex: 1,
+    justifyContent: "center",
+  },
+  rightAction: {
     flex: 1,
     backgroundColor: "#dd2c00",
     justifyContent: "center",
@@ -92,11 +87,6 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
     padding: 10,
     textAlign: "right",
-  },
-  rightAction: {
-    alignItems: "center",
-    flex: 1,
-    justifyContent: "center",
   },
 
   rectButton: {

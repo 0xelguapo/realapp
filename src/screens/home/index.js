@@ -7,6 +7,7 @@ import EditReminder from "../clients/EditReminder";
 import Paywall from "../../components/UI/Paywall";
 import Overdue from "./Overdue";
 import ClientDetails from "../clients/ClientDetails";
+import AddGoal from "./AddGoal";
 
 const Stack = createNativeStackNavigator();
 
@@ -64,6 +65,15 @@ export default function HomeNavigator() {
         options={{ headerShown: false }}
         name="ClientDetails"
         component={ClientDetails}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: false,
+          presentation: "modal",
+          cardOverlayEnabled: true,
+        }}
+        name="AddGoal"
+        component={AddGoal}
       />
     </Stack.Navigator>
   );

@@ -31,22 +31,6 @@ export const deleteUser = /* GraphQL */ `
     }
   }
 `;
-export const updateGoal = /* GraphQL */ `
-  mutation UpdateGoal(
-    $input: UpdateGoalInput!
-    $condition: ModelGoalConditionInput
-  ) {
-    updateGoal(input: $input, condition: $condition) {
-      id
-      title
-      content
-      recurring
-      createdAt
-      updatedAt
-      owner
-    }
-  }
-`;
 export const deleteGoal = /* GraphQL */ `
   mutation DeleteGoal(
     $input: DeleteGoalInput!
@@ -56,10 +40,13 @@ export const deleteGoal = /* GraphQL */ `
       id
       title
       content
+      curDate
+      timesPerDay
+      timesCompleted
       recurring
+      owner
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -823,10 +810,32 @@ export const createGoal = /* GraphQL */ `
       id
       title
       content
+      curDate
+      timesPerDay
+      timesCompleted
       recurring
+      owner
       createdAt
       updatedAt
+    }
+  }
+`;
+export const updateGoal = /* GraphQL */ `
+  mutation UpdateGoal(
+    $input: UpdateGoalInput!
+    $condition: ModelGoalConditionInput
+  ) {
+    updateGoal(input: $input, condition: $condition) {
+      id
+      title
+      content
+      curDate
+      timesPerDay
+      timesCompleted
+      recurring
       owner
+      createdAt
+      updatedAt
     }
   }
 `;
