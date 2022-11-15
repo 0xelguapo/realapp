@@ -10,16 +10,21 @@ import {
   TextInput,
   ScrollView,
 } from "react-native";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useContext } from "react";
 import * as Contacts from "expo-contacts";
 import * as Linking from "expo-linking";
+import { SuccessContext } from "../../context/success-context";
 import { AntDesign, Feather, Ionicons } from "@expo/vector-icons";
 import { useCallback } from "react";
 import PhoneContact from "../../components/more/PhoneContact";
+import { addClient } from "../../redux/clients-slice";
+import { useDispatch } from "react-redux";
 
 export default function ContactsToImport(props) {
+  const { onStatusChange } = useContext(SuccessContext);
   const [contactsArray, setContactsArray] = useState([]);
   const [searchInput, setSearchInput] = useState("");
+  const dispatch = useDispatch();
 
   const filteredContacts = useMemo(() => {
     return contactsArray
@@ -35,7 +40,7 @@ export default function ContactsToImport(props) {
           contactCompany.indexOf(textData) > -1
         );
       })
-      .sort((a, b) => a.firstName > b.firstName);
+      .sort((a, b) => a.firstName?.toLowerCase() > b.firstName?.toLowerCase());
   }, [searchInput, contactsArray]);
 
   const suggestedContacts = useMemo(() => {
@@ -44,6 +49,57 @@ export default function ContactsToImport(props) {
       else return false;
     });
   }, [contactsArray]);
+
+  const handleAddContact = async (item, index) => {
+    const { company, firstName, lastName, id } = item;
+    let phoneNumbers;
+    let emails;
+    let firstAddress;
+    let birthdayDate;
+
+    if (item.birthday) {
+      const { year, month, day } = item.birthday || {};
+      birthdayDate = new Date(year, month, day);
+    }
+
+    if (item.addresses) {
+      firstAddress = item.addresses[0];
+    }
+
+    if (item.phoneNumbers) {
+      phoneNumbers = item.phoneNumbers
+        .reduce((acc, el) => {
+          const formatted = /^[0-9]*$/;
+          acc.push(el.digits.replace(/\D/g, ""));
+          return acc;
+        }, [])
+        .join(",");
+    }
+    if (item.emails) {
+      emails = item.emails
+        .reduce((acc, el) => {
+          acc.push(el.email);
+          return acc;
+        }, [])
+        .join(",");
+    }
+
+    const clientObject = {
+      id: id,
+      firstName: firstName,
+      lastName: lastName || "",
+      company: company || "",
+      phone: phoneNumbers || "",
+      email: emails || "",
+      birthday: birthdayDate || "",
+      clientStreet: firstAddress?.street || "",
+      clientCity: firstAddress?.city || "",
+      clientState: firstAddress?.region || "",
+      clientZip: firstAddress?.postalCode || "",
+    };
+    const response = await dispatch(addClient(clientObject)).unwrap();
+    if (response) onStatusChange("CONTACT ADDED");
+  };
 
   const getContactPermissions = async () => {
     const { status } = await Contacts.requestPermissionsAsync();
@@ -78,6 +134,8 @@ export default function ContactsToImport(props) {
         firstName={item.firstName}
         lastName={item.lastName}
         company={item.company}
+        added={item.added}
+        onPress={() => handleAddContact(item, index)}
       />
     ),
     []

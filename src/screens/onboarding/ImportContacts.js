@@ -42,7 +42,7 @@ export default function ImportContacts(props) {
     <View style={styles.container}>
       <View style={styles.innerContainer}>
         <View style={styles.headingContainer}>
-          <Text style={styles.headingTitle}>Import Contacts?</Text>
+          <Text style={styles.headingTitle}>Securely Import Contacts</Text>
 
           <Text style={styles.headingSubtext}>
             {" "}

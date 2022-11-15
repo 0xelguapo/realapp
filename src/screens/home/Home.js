@@ -27,7 +27,7 @@ import { format, add, sub, formatDistanceToNowStrict } from "date-fns";
 import HomeTask from "../../components/home/HomeTask";
 import AddHome from "../../components/home/AddHome";
 import { AuthContext } from "../../context/auth-context";
-import Goal from "../../components/gesture/Goal";
+import Goal from "../../components/gesture/SwipeableRow";
 
 let isMounted = false;
 
@@ -273,52 +273,67 @@ export default function Home(props) {
             <Text style={styles.overdueText}>View Overdue</Text>
           </TouchableOpacity>
         )}
-        
+
         <View>
           <Goal />
         </View>
 
-        <View style={styles.tasksContainer}>
-          <View style={styles.titleContainer}>
-            <Text style={styles.titleHeader}>TO DO</Text>
-          </View>
-          {tasksOfDate.map((task, index) => {
-            if (!task.completed)
-              return (
-                <HomeTask
-                  key={task.id}
-                  title={task.title}
-                  index={index}
-                  completed={task.completed}
-                  content={task.content}
-                  length={tasksOfDate.length}
-                  date={task.date}
-                  clientId={task.clientId}
-                  onPress={() => handleCompleteTask(task.id, task.completed)}
-                />
-              );
-          })}
+        <View style={styles.titleContainer}>
+          <Text style={styles.titleHeader}>TO DO</Text>
         </View>
-        <View style={styles.completedTasksContainer}>
-          <View style={styles.titleContainer}>
-            <Text style={styles.titleHeader}>COMPLETED</Text>
+
+        {tasksOfDate.length === 0 ? (
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyText}>No tasks for today!</Text>
+            <Text style={styles.emptySubtext}>Click the + button to start planning...</Text>
           </View>
-          {tasksOfDate.map((task, index) => {
-            if (task.completed)
-              return (
-                <HomeTask
-                  key={task.id}
-                  title={task.title}
-                  index={index}
-                  completed={task.completed}
-                  content={task.content}
-                  length={tasksOfDate.length}
-                  date={task.date}
-                  onPress={() => handleCompleteTask(task.id, task.completed)}
-                />
-              );
-          })}
-        </View>
+        ) : (
+          <>
+            <View style={styles.tasksContainer}>
+              {tasksOfDate.map((task, index) => {
+                if (!task.completed)
+                  return (
+                    <HomeTask
+                      key={task.id}
+                      title={task.title}
+                      index={index}
+                      completed={task.completed}
+                      content={task.content}
+                      length={tasksOfDate.length}
+                      date={task.date}
+                      clientId={task.clientId}
+                      onPress={() =>
+                        handleCompleteTask(task.id, task.completed)
+                      }
+                    />
+                  );
+              })}
+            </View>
+            <View style={styles.completedTasksContainer}>
+              <View style={styles.titleContainer}>
+                <Text style={styles.titleHeader}>COMPLETED</Text>
+              </View>
+              {tasksOfDate.map((task, index) => {
+                if (task.completed)
+                  return (
+                    <HomeTask
+                      key={task.id}
+                      title={task.title}
+                      index={index}
+                      completed={task.completed}
+                      content={task.content}
+                      length={tasksOfDate.length}
+                      date={task.date}
+                      onPress={() =>
+                        handleCompleteTask(task.id, task.completed)
+                      }
+                    />
+                  );
+              })}
+            </View>
+          </>
+        )}
+
         {/* <TasksList /> */}
         {/* <View style={styles.remindersContainer}>
           <View style={styles.titleContainer}>
@@ -432,6 +447,7 @@ const styles = StyleSheet.create({
     // borderBottomWidth: 0.2,
     // paddingBottom: 5,
     marginBottom: 5,
+    marginTop: 10,
   },
   titleHeader: {
     fontSize: 12,
@@ -489,4 +505,18 @@ const styles = StyleSheet.create({
     color: "#6c6c6c",
     fontSize: 12,
   },
+  emptyContainer: {
+    height: "50%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  emptyText: {
+    fontSize: 20,
+    fontWeight: "500",
+    color: "#ababab",
+  },
+  emptySubtext: {
+    fontWeight: '300',
+    color: '#ababab'
+  }
 });

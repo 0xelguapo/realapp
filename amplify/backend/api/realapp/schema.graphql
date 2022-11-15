@@ -31,6 +31,7 @@ type Client @model @auth(rules: [{ allow: owner }, { allow: public, provider: ap
   phone: String
   email: String
   notes: String
+  birthday: String
   favorite: Boolean @default(value: "false")
   clientStreet: String
   clientCity: String

@@ -76,6 +76,7 @@ export const deleteClient = /* GraphQL */ `
       phone
       email
       notes
+      birthday
       favorite
       clientStreet
       clientCity
@@ -268,6 +269,7 @@ export const deleteReminder = /* GraphQL */ `
         phone
         email
         notes
+        birthday
         favorite
         clientStreet
         clientCity
@@ -345,6 +347,7 @@ export const deleteConnectionHistory = /* GraphQL */ `
         phone
         email
         notes
+        birthday
         favorite
         clientStreet
         clientCity
@@ -402,6 +405,7 @@ export const deleteTask = /* GraphQL */ `
         phone
         email
         notes
+        birthday
         favorite
         clientStreet
         clientCity
@@ -469,6 +473,7 @@ export const updateDeal = /* GraphQL */ `
         phone
         email
         notes
+        birthday
         favorite
         clientStreet
         clientCity
@@ -522,6 +527,7 @@ export const deleteDeal = /* GraphQL */ `
         phone
         email
         notes
+        birthday
         favorite
         clientStreet
         clientCity
@@ -573,6 +579,7 @@ export const updateGroupsClients = /* GraphQL */ `
         phone
         email
         notes
+        birthday
         favorite
         clientStreet
         clientCity
@@ -633,6 +640,7 @@ export const deleteGroupsClients = /* GraphQL */ `
         phone
         email
         notes
+        birthday
         favorite
         clientStreet
         clientCity
@@ -835,6 +843,7 @@ export const createClient = /* GraphQL */ `
       phone
       email
       notes
+      birthday
       favorite
       clientStreet
       clientCity
@@ -945,6 +954,7 @@ export const updateClient = /* GraphQL */ `
       phone
       email
       notes
+      birthday
       favorite
       clientStreet
       clientCity
@@ -1212,6 +1222,7 @@ export const createReminder = /* GraphQL */ `
         phone
         email
         notes
+        birthday
         favorite
         clientStreet
         clientCity
@@ -1265,6 +1276,7 @@ export const updateReminder = /* GraphQL */ `
         phone
         email
         notes
+        birthday
         favorite
         clientStreet
         clientCity
@@ -1367,6 +1379,7 @@ export const createConnectionHistory = /* GraphQL */ `
         phone
         email
         notes
+        birthday
         favorite
         clientStreet
         clientCity
@@ -1419,6 +1432,7 @@ export const updateConnectionHistory = /* GraphQL */ `
         phone
         email
         notes
+        birthday
         favorite
         clientStreet
         clientCity
@@ -1476,6 +1490,7 @@ export const createTask = /* GraphQL */ `
         phone
         email
         notes
+        birthday
         favorite
         clientStreet
         clientCity
@@ -1533,6 +1548,7 @@ export const updateTask = /* GraphQL */ `
         phone
         email
         notes
+        birthday
         favorite
         clientStreet
         clientCity
@@ -1615,6 +1631,7 @@ export const createDeal = /* GraphQL */ `
         phone
         email
         notes
+        birthday
         favorite
         clientStreet
         clientCity
@@ -1666,6 +1683,7 @@ export const createGroupsClients = /* GraphQL */ `
         phone
         email
         notes
+        birthday
         favorite
         clientStreet
         clientCity

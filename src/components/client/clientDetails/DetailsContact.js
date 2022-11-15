@@ -4,6 +4,7 @@ import * as Linking from "expo-linking";
 import { AntDesign, Feather } from "@expo/vector-icons";
 import * as MailComposer from "expo-mail-composer";
 import { useEffect } from "react";
+import { phoneFormatRegex } from "../../../utility/phone-format";
 
 export default function DetailsContact({ clientDetailsState }) {
   const handleSendEmail = async (email) => {
@@ -36,7 +37,7 @@ export default function DetailsContact({ clientDetailsState }) {
         {clientDetailsState.phone?.length > 1 ? (
           clientDetailsState.phone.split(",").map((number, index) => (
             <View style={styles.phoneEmailContainer} key={index}>
-              <Text style={styles.detailText}>{number}</Text>
+              <Text style={styles.detailText}>{phoneFormatRegex(number)}</Text>
               <View style={styles.actions}>
                 <TouchableOpacity
                   style={styles.iconContainer}

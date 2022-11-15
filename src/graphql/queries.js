@@ -85,6 +85,7 @@ export const getClient = /* GraphQL */ `
       phone
       email
       notes
+      birthday
       favorite
       clientStreet
       clientCity
@@ -197,6 +198,7 @@ export const listClients = /* GraphQL */ `
         phone
         email
         notes
+        birthday
         favorite
         clientStreet
         clientCity
@@ -366,6 +368,7 @@ export const getReminder = /* GraphQL */ `
         phone
         email
         notes
+        birthday
         favorite
         clientStreet
         clientCity
@@ -421,6 +424,7 @@ export const listReminders = /* GraphQL */ `
           phone
           email
           notes
+          birthday
           favorite
           clientStreet
           clientCity
@@ -497,6 +501,7 @@ export const getConnectionHistory = /* GraphQL */ `
         phone
         email
         notes
+        birthday
         favorite
         clientStreet
         clientCity
@@ -555,6 +560,7 @@ export const listConnectionHistories = /* GraphQL */ `
           phone
           email
           notes
+          birthday
           favorite
           clientStreet
           clientCity
@@ -593,6 +599,7 @@ export const getTask = /* GraphQL */ `
         phone
         email
         notes
+        birthday
         favorite
         clientStreet
         clientCity
@@ -652,6 +659,7 @@ export const listTasks = /* GraphQL */ `
           phone
           email
           notes
+          birthday
           favorite
           clientStreet
           clientCity
@@ -716,6 +724,7 @@ export const getDeal = /* GraphQL */ `
         phone
         email
         notes
+        birthday
         favorite
         clientStreet
         clientCity
@@ -771,6 +780,7 @@ export const listDeals = /* GraphQL */ `
           phone
           email
           notes
+          birthday
           favorite
           clientStreet
           clientCity
@@ -803,6 +813,7 @@ export const getGroupsClients = /* GraphQL */ `
         phone
         email
         notes
+        birthday
         favorite
         clientStreet
         clientCity
@@ -865,6 +876,7 @@ export const listGroupsClients = /* GraphQL */ `
           phone
           email
           notes
+          birthday
           favorite
           clientStreet
           clientCity
@@ -998,6 +1010,7 @@ export const clientByFirstName = /* GraphQL */ `
         phone
         email
         notes
+        birthday
         favorite
         clientStreet
         clientCity

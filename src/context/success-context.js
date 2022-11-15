@@ -6,21 +6,24 @@ const SuccessContext = createContext();
 function SuccessContextProvider({ children }) {
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const [text, setText] = useState("SUCCESS");
+  let timeoutId;
 
   const onStatusChange = (textInput) => {
+    clearTimeout(timeoutId);
+
     setText(textInput);
     Animated.timing(fadeAnim, {
       toValue: 1,
       duration: 300,
       useNativeDriver: true,
     }).start();
-    setTimeout(() => {
+    timeoutId = setTimeout(() => {
       Animated.timing(fadeAnim, {
         toValue: 0,
         duration: 300,
         useNativeDriver: true,
       }).start();
-    }, 2800);
+    }, 1000);
   };
 
   return (
