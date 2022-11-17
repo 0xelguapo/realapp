@@ -48,10 +48,10 @@ export const getGoal = /* GraphQL */ `
       id
       title
       content
-      curDate
       timesPerDay
       timesCompleted
-      recurring
+      recurRule
+      notificationId
       owner
       createdAt
       updatedAt
@@ -69,10 +69,10 @@ export const listGoals = /* GraphQL */ `
         id
         title
         content
-        curDate
         timesPerDay
         timesCompleted
-        recurring
+        recurRule
+        notificationId
         owner
         createdAt
         updatedAt

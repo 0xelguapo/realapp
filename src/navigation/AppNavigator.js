@@ -15,6 +15,14 @@ import PropertiesNavigator from "../screens/properties";
 import { AntDesign, Ionicons, Feather, FontAwesome } from "@expo/vector-icons";
 // import TasksNavigator from "../screens/tasks";
 
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+  }),
+});
+
 const Tab = createBottomTabNavigator();
 
 export default function AppNavigator() {

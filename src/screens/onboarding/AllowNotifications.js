@@ -6,14 +6,6 @@ import LottieView from "lottie-react-native";
 import { useContext } from "react";
 import { AuthContext } from "../../context/auth-context";
 
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: true,
-  }),
-});
-
 export default function AllowNotifications(props) {
   const [expoPushToken, setExpoPushToken] = useState("");
   const { handleSetExpoToken, signin } = useContext(AuthContext);

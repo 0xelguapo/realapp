@@ -70,10 +70,10 @@ export const onCreateGoal = /* GraphQL */ `
       id
       title
       content
-      curDate
       timesPerDay
       timesCompleted
-      recurring
+      recurRule
+      notificationId
       owner
       createdAt
       updatedAt
@@ -89,10 +89,10 @@ export const onUpdateGoal = /* GraphQL */ `
       id
       title
       content
-      curDate
       timesPerDay
       timesCompleted
-      recurring
+      recurRule
+      notificationId
       owner
       createdAt
       updatedAt
@@ -108,10 +108,10 @@ export const onDeleteGoal = /* GraphQL */ `
       id
       title
       content
-      curDate
       timesPerDay
       timesCompleted
-      recurring
+      recurRule
+      notificationId
       owner
       createdAt
       updatedAt
