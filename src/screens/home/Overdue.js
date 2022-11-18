@@ -1,7 +1,13 @@
-import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
-import { selectAllTasks } from "../../redux/tasks-slice";
+import { completeTask, selectAllTasks } from "../../redux/tasks-slice";
 import { format } from "date-fns";
 import HomeTask from "../../components/home/HomeTask";
 
@@ -28,8 +34,9 @@ export default function Overdue(props) {
     const response = await dispatch(
       completeTask({ id, completed: !completed })
     ).unwrap();
-    console.log(response);
   };
+
+
 
   return (
     <View style={styles.container}>
@@ -43,7 +50,7 @@ export default function Overdue(props) {
         <Text style={styles.screenTitle}>Overdue</Text>
       </View>
 
-      <ScrollView contentContainerStyle={[{  paddingBottom: 20}]}>
+      <ScrollView contentContainerStyle={[{ paddingBottom: 20 }]}>
         {overdueTasks.map((task, index) => (
           <HomeTask
             key={task.id}
@@ -72,14 +79,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     flexDirection: "row",
     paddingHorizontal: 25,
-    paddingBottom: 10
+    paddingBottom: 10,
   },
   backButtonContainer: { position: "absolute", left: 20 },
   screenTitle: {
     fontWeight: "500",
     fontSize: 20,
   },
-  tasksContainer: {
-    
-  },
+  tasksContainer: {},
 });

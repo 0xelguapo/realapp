@@ -17,8 +17,12 @@ import { createGoal } from "../../graphql/mutations";
 import { datetime, RRule, RRuleSet, rrulestr } from "rrule";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import useNotifications from "../../hooks/notification-hook";
+import { useDispatch } from "react-redux";
+import { addGoal } from "../../redux/goals-slice";
 
 export default function AddGoal(props) {
+  const dispatch = useDispatch();
+
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [repeatIsEnabled, setRepeatIsEnabled] = useState(true);
@@ -102,26 +106,17 @@ export default function AddGoal(props) {
       console.error(err);
     }
 
-
     const goalDetails = {
       title: title,
       content: content,
       timesPerDay: timesPerDay,
       timesCompleted: "0",
       recurRule: rule.toString(),
-      notificationId: notificationIdsArray.toString()
+      notificationId: notificationIdsArray.toString(),
     };
 
-    try {
-      response = await API.graphql(
-        graphqlOperation(createGoal, { input: goalDetails })
-      );
-    } catch (err) {
-      console.error(err);
-    }
-    props.navigation.goBack()
-
-    return response.data.createGoal;
+    const response = await dispatch(addGoal(goalDetails)).unwrap();
+    if (response) props.navigation.goBack();
   };
 
   function StickyHeader() {

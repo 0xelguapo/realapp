@@ -1,14 +1,15 @@
 import { RectButton } from "react-native-gesture-handler";
 import { Animated, StyleSheet, View, Text, I18nManager } from "react-native";
 
-export const Row = ({ item }) => (
-  <RectButton style={styles.rectButton} onPress={() => alert(item.from)}>
-    <Text style={styles.fromText}>{item.from}</Text>
+
+export const GoalRow = ({ title, content, timesPerDay, timesCompleted }) => (
+  <RectButton style={styles.rectButton}>
+    <Text style={styles.fromText}>{title}</Text>
     <Text numberOfLines={2} style={styles.messageText}>
-      {item.message}
+      {content}
     </Text>
     <Text style={styles.dateText}>
-      {item.times}
+      {`${timesCompleted}/${timesPerDay}`}
     </Text>
   </RectButton>
 );

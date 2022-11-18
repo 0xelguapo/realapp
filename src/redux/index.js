@@ -5,6 +5,7 @@ import remindersReducer from "./reminders-slice";
 import tasksReducer from "./tasks-slice";
 import propertiesReducer from "./properties-slice";
 import propertyGroupsReducer from "./propertyGroups-slice";
+import goalsReducer from './goals-slice'
 
 const store = configureStore({
   reducer: {
@@ -13,7 +14,8 @@ const store = configureStore({
     reminders: remindersReducer,
     tasks: tasksReducer,
     properties: propertiesReducer,
-    propertyGroups: propertyGroupsReducer
+    propertyGroups: propertyGroupsReducer,
+    goals: goalsReducer
   },
 });
 

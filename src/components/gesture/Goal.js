@@ -2,23 +2,45 @@ import React, { Component, useRef } from "react";
 import { Animated, StyleSheet, View, Text, I18nManager } from "react-native";
 import { RectButton } from "react-native-gesture-handler";
 import Swipeable from "react-native-gesture-handler/Swipeable";
-import { Row } from "./GoalRow";
+import { useDispatch } from "react-redux";
+import { GoalRow } from "./GoalRow";
 
-export default function Goal({children}) {
+export default function SwipeableGoal({ children, timesPerDay }) {
   const updateRef = useRef(null);
+  const dispatch = useDispatch();
+  const timesPerDayInt = parseInt(timesPerDay);
+  const incrementAmount =
+    timesPerDayInt > 5 ? Math.round(timesPerDayInt * 0.1) : timesPerDayInt;
 
-  const renderLeftAction = (text, color, x, progress) => {
+  const incrementGoal = () => {
+    
+  };
+
+  const renderLeftAction = (
+    text,
+    color,
+    x,
+    progress,
+    onPress,
+    first = false
+  ) => {
     const trans = progress.interpolate({
       inputRange: [0, 1],
       outputRange: [x, 0],
     });
+
     const pressHandler = () => {
       close();
       alert(text);
     };
 
     return (
-      <Animated.View style={{ flex: 1, transform: [{ translateX: 0 }] }}>
+      <Animated.View
+        style={[
+          first && styles.rounded,
+          { flex: 1, overflow: "hidden", transform: [{ translateX: 0 }] },
+        ]}
+      >
         <RectButton style={[styles.leftAction, { backgroundColor: color }]}>
           <Text style={styles.actionText}>{text}</Text>
         </RectButton>
@@ -33,8 +55,14 @@ export default function Goal({children}) {
         flexDirection: I18nManager.isRTL ? "row-reverse" : "row",
       }}
     >
-      {renderLeftAction("Done", "#0e9f6e", 128, progress)}
-      {renderLeftAction("+1", "#31c48d", 64, progress)}
+      {renderLeftAction("Done", "#0e9f6e", 128, progress, null, true)}
+      {renderLeftAction(
+        `+${timesPerDay > 5 ? Math.round(timesPerDay * 0.1) : +1}`,
+        "#31c48d",
+        64,
+        progress,
+        null
+      )}
     </View>
   );
 
@@ -43,7 +71,7 @@ export default function Goal({children}) {
       inputRange: [0, 50, 100, 101],
       outputRange: [-20, 0, 0, 1],
     });
-    
+
     return (
       <RectButton style={styles.rightAction} onPress={close}>
         <Animated.Text style={[styles.actionText]}>Delete</Animated.Text>
@@ -60,11 +88,10 @@ export default function Goal({children}) {
       ref={updateRef}
       friction={2}
       leftThreshold={50}
-      rightThreshold={120}
+      rightThreshold={130}
       renderLeftActions={renderLeftActions}
       renderRightActions={renderRightActions}
     >
-      {<Row item={{ from: "doctor", message: "3:11PM", times: "1/4" }} />}
       {children}
     </Swipeable>
   );
@@ -80,6 +107,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#dd2c00",
     justifyContent: "center",
+    borderRadius: 5,
   },
   actionText: {
     color: "white",
@@ -118,5 +146,9 @@ const styles = StyleSheet.create({
     top: 10,
     color: "#999",
     fontWeight: "bold",
+  },
+  rounded: {
+    borderTopLeftRadius: 5,
+    borderBottomLeftRadius: 5,
   },
 });

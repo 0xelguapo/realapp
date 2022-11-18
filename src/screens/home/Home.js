@@ -27,7 +27,9 @@ import { format, add, sub, formatDistanceToNowStrict } from "date-fns";
 import HomeTask from "../../components/home/HomeTask";
 import AddHome from "../../components/home/AddHome";
 import { AuthContext } from "../../context/auth-context";
-import Goal from "../../components/gesture/Goal";
+import SwipeableGoal from "../../components/gesture/Goal";
+import { selectAllGoals } from "../../redux/goals-slice";
+import { GoalRow } from "../../components/gesture/GoalRow";
 
 let isMounted = false;
 
@@ -46,7 +48,10 @@ export default function Home(props) {
     add(new Date(), { days: 4 }),
   ]);
   const [activeDate, setActiveDate] = useState(nextFiveDates[1]);
+
   const allTasks = useSelector(selectAllTasks);
+  const allGoals = useSelector(selectAllGoals);
+
   const tasksOfDate = allTasks
     .filter((task) => {
       if (task.date.length > 1) {
@@ -275,7 +280,16 @@ export default function Home(props) {
         )}
 
         <View>
-          <Goal />
+          {allGoals.map((goal) => (
+            <SwipeableGoal key={goal.id} timesPerDay={goal.timesPerDay}>
+              <GoalRow
+                title={goal.title}
+                content={goal.content}
+                timesPerDay={goal.timesPerDay}
+                timesCompleted={goal.timesCompleted}
+              />
+            </SwipeableGoal>
+          ))}
         </View>
 
         <View style={styles.titleContainer}>
@@ -285,7 +299,9 @@ export default function Home(props) {
         {tasksOfDate.length === 0 ? (
           <View style={styles.emptyContainer}>
             <Text style={styles.emptyText}>No tasks for today!</Text>
-            <Text style={styles.emptySubtext}>Click the + button to start planning...</Text>
+            <Text style={styles.emptySubtext}>
+              Click the + button to start planning...
+            </Text>
           </View>
         ) : (
           <>
@@ -516,7 +532,7 @@ const styles = StyleSheet.create({
     color: "#ababab",
   },
   emptySubtext: {
-    fontWeight: '300',
-    color: '#ababab'
-  }
+    fontWeight: "300",
+    color: "#ababab",
+  },
 });
