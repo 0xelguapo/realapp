@@ -23,10 +23,13 @@ function propertyReducer(state, action) {
         [action.key]: action.value,
       };
       return state;
+    case "ADD_INPUT":
+      return [...state, { street: "", city: "", zip: "", price: "", note: "" }];
+    case "REMOVE_INPUT":
+      state.splice(action.index, 1);
+      return [...state];
   }
 }
-
-const emptyProperty = {};
 
 export default function AddClient({ navigation }) {
   const { onStatusChange } = useContext(SuccessContext);
@@ -39,14 +42,10 @@ export default function AddClient({ navigation }) {
   const [emailInputs, setEmailInputs] = useState([]);
   const [phoneInputs, setPhoneInputs] = useState([]);
 
-  const [propertyInputs, propertyInputsDispatch] = useReducer(propertyReducer, [
-    { street: "", city: "", state: "", zip: "", price: "", note: "" },
-  ]);
-  // propertyInputsDispatch({type: 'INPUT_CHANGE', key: 'street', value: 'test', index: 0})
-
-  useEffect(() => {
-    console.log(propertyInputs);
-  }, []);
+  const [propertyInputs, propertyInputsDispatch] = useReducer(
+    propertyReducer,
+    []
+  );
 
   const handleAddClient = async () => {
     const clientInputs = {
@@ -101,7 +100,9 @@ export default function AddClient({ navigation }) {
     setEmailInputs(newEmailInputs);
   };
 
-  const handleAddAnotherPropertyInput = () => {};
+  const handleAddAnotherPropertyInput = () => {
+    propertyInputsDispatch({ type: "ADD_INPUT" });
+  };
 
   useEffect(() => {
     if (phoneInputs.length > 0) {
@@ -134,9 +135,9 @@ export default function AddClient({ navigation }) {
       >
         <ScrollView
           keyboardShouldPersistTaps="always"
-          keyboardDismissMode="on-drag"
+          keyboardDismissMode="interactive"
           contentContainerStyle={[
-            { backgroundColor: "#f2f1f6", paddingVertical: 20 },
+            { backgroundColor: "#f2f1f6", paddingTop: 20, paddingBottom: 40 },
           ]}
         >
           <View style={styles.avatar}>
@@ -259,31 +260,94 @@ export default function AddClient({ navigation }) {
           <View style={styles.inputContainerTwo}>
             {propertyInputs.map((input, index) => {
               return (
-                <View key={index} style={styles.extraInput}>
-                  <TouchableOpacity style={styles.removeInput}>
-                    <Ionicons
-                      name="md-remove-circle"
-                      size={24}
-                      color="#fe3d30"
+                <>
+                  <View key={index} style={styles.extraInput}>
+                    <TouchableOpacity
+                      style={styles.removeInput}
+                      onPress={() =>
+                        propertyInputsDispatch({
+                          type: "REMOVE_INPUT",
+                          index: index,
+                        })
+                      }
+                    >
+                      <Ionicons
+                        name="md-remove-circle"
+                        size={24}
+                        color="#fe3d30"
+                      />
+                    </TouchableOpacity>
+                    <TextInput
+                      style={styles.textInputOne}
+                      returnKeyType="done"
+                      placeholder="Street"
+                      placeholderTextColor="#8c8b90"
+                      autoFocus={true}
+                      onChangeText={(val) =>
+                        propertyInputsDispatch({
+                          type: "INPUT_CHANGE",
+                          index: index,
+                          key: "street",
+                          value: val,
+                        })
+                      }
                     />
-                  </TouchableOpacity>
-                  <TextInput
-                    style={styles.textInputOne}
-                    returnKeyType="done"
-                    placeholder="Street"
-                    placeholderTextColor="#8c8b90"
-                  />
-                  <TextInput
-                    style={styles.textInputOne}
-                    returnKeyType="done"
-                    placeholder="Street"
-                    placeholderTextColor="#8c8b90"
-                  />
-                </View>
+                  </View>
+                  <View style={{ ...styles.extraInput, paddingLeft: 40 }}>
+                    <TextInput
+                      style={styles.textInputOne}
+                      returnKeyType="done"
+                      placeholder="City"
+                      placeholderTextColor="#8c8b90"
+                      onChangeText={(val) =>
+                        propertyInputsDispatch({
+                          type: "INPUT_CHANGE",
+                          index: index,
+                          key: "city",
+                          value: val,
+                        })
+                      }
+                    />
+                  </View>
+                  <View style={{ ...styles.extraInput, paddingLeft: 40 }}>
+                    <TextInput
+                      style={styles.textInputOne}
+                      returnKeyType="done"
+                      placeholder="State"
+                      placeholderTextColor="#8c8b90"
+                      onChangeText={(val) =>
+                        propertyInputsDispatch({
+                          type: "INPUT_CHANGE",
+                          index: index,
+                          key: "state",
+                          value: val,
+                        })
+                      }
+                    />
+                    <TextInput
+                      style={styles.textInputOne}
+                      returnKeyType="done"
+                      placeholder="Zip Code"
+                      placeholderTextColor="#8c8b90"
+                      keyboardType="number-pad"
+                      onChangeText={(val) =>
+                        propertyInputsDispatch({
+                          type: "INPUT_CHANGE",
+                          index: index,
+                          key: "zip",
+                          value: val,
+                        })
+                      }
+                    />
+                  </View>
+                </>
               );
             })}
 
-            <TouchableOpacity style={styles.addAnotherButton}>
+            <TouchableOpacity
+              style={styles.addAnotherButton}
+              onPress={handleAddAnotherPropertyInput}
+            >
               <Ionicons name="md-add-sharp" size={24} color="#0064e5" />
               <Text style={styles.addAnotherText}>Add Property Address</Text>
             </TouchableOpacity>

@@ -53,7 +53,7 @@ type Client @model @auth(rules: [{ allow: owner }, { allow: public, provider: ap
 
 type Property @model @auth(rules: [{ allow: owner }, { allow: public, provider: apiKey, operations: [create] }]) {
   id: ID!
-  type: PropertyType @default(value: Home)
+  type: PropertyType
   street: String!
   city: String
   state: String
