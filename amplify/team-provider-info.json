@@ -38,7 +38,8 @@
         "realapp": {}
       },
       "geo": {
-        "coagentplaceindex": {}
+        "coagentplaceindex": {},
+        "coagentmap": {}
       }
     }
   }

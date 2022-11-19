@@ -325,5 +325,6 @@
         ]
       }
     }
-  }
+  },
+  "Description": "{\"createdOn\":\"Mac\",\"createdBy\":\"Amplify\",\"createdWith\":\"10.4.0\",\"stackType\":\"geo-Map\",\"metadata\":{}}"
 }
