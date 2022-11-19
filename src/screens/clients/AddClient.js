@@ -260,8 +260,8 @@ export default function AddClient({ navigation }) {
           <View style={styles.inputContainerTwo}>
             {propertyInputs.map((input, index) => {
               return (
-                <>
-                  <View key={index} style={styles.extraInput}>
+                <View key={index}>
+                  <View style={styles.extraInput}>
                     <TouchableOpacity
                       style={styles.removeInput}
                       onPress={() =>
@@ -340,7 +340,7 @@ export default function AddClient({ navigation }) {
                       }
                     />
                   </View>
-                </>
+                </View>
               );
             })}
 
