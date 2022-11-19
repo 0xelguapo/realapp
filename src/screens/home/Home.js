@@ -18,20 +18,14 @@ import {
   fetchTasks,
   selectAllTasks,
 } from "../../redux/tasks-slice";
-import {
-  MaterialIcons,
-  Entypo,
-  MaterialCommunityIcons,
-} from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 import { format, add, sub, formatDistanceToNowStrict } from "date-fns";
 import HomeTask from "../../components/home/HomeTask";
 import AddHome from "../../components/home/AddHome";
 import { AuthContext } from "../../context/auth-context";
-import SwipeableGoal from "../../components/gesture/Goal";
-import { selectAllGoals } from "../../redux/goals-slice";
+import SwipeableGoal from "../../components/gesture/SwipeableGoal";
+import { fetchGoals, selectAllGoals } from "../../redux/goals-slice";
 import { GoalRow } from "../../components/gesture/GoalRow";
-
-let isMounted = false;
 
 export default function Home(props) {
   let date = new Date();
@@ -154,6 +148,10 @@ export default function Home(props) {
     dispatch(fetchReminders());
   }, []);
 
+  useEffect(() => {
+    dispatch(fetchGoals())
+  }, [])
+
   // useEffect(() => {
   //   displayPaywall();
   // }, []);
@@ -173,6 +171,11 @@ export default function Home(props) {
     const response = await dispatch(
       completeTask({ id, completed: !completed })
     ).unwrap();
+  };
+
+  const getGoalIncrementAmount = (timesPerDay) => {
+    let timeInt = parseInt(timesPerDay);
+    return timeInt > 5 ? Math.round(timeInt * 0.25).toString() : "1";
   };
 
   return (
@@ -281,7 +284,10 @@ export default function Home(props) {
 
         <View>
           {allGoals.map((goal) => (
-            <SwipeableGoal key={goal.id} timesPerDay={goal.timesPerDay}>
+            <SwipeableGoal
+              key={goal.id}
+              incrementAmount={getGoalIncrementAmount(goal.timesPerDay)}
+            >
               <GoalRow
                 title={goal.title}
                 content={goal.content}
@@ -349,14 +355,6 @@ export default function Home(props) {
             </View>
           </>
         )}
-
-        {/* <TasksList /> */}
-        {/* <View style={styles.remindersContainer}>
-          <View style={styles.titleContainer}>
-            <Text style={styles.titleHeader}>UPCOMING REMINDERS</Text>
-          </View>
-          <RemindersList homeMode={true} />
-        </View> */}
       </ScrollView>
     </View>
   );
@@ -473,6 +471,7 @@ const styles = StyleSheet.create({
   },
   tasksContainer: {
     marginBottom: 10,
+    flex: 1,
   },
   tasksOfDateContainer: {},
   remindersContainer: {
@@ -522,7 +521,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   emptyContainer: {
-    height: "50%",
+    minHeight: 200,
     alignItems: "center",
     justifyContent: "center",
   },

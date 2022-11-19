@@ -3,18 +3,15 @@ import { Animated, StyleSheet, View, Text, I18nManager } from "react-native";
 import { RectButton } from "react-native-gesture-handler";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 import { useDispatch } from "react-redux";
-import { GoalRow } from "./GoalRow";
 
-export default function SwipeableGoal({ children, timesPerDay }) {
+export default function SwipeableGoal({
+  children,
+  timesPerDay,
+  incrementAmount,
+}) {
   const updateRef = useRef(null);
   const dispatch = useDispatch();
-  const timesPerDayInt = parseInt(timesPerDay);
-  const incrementAmount =
-    timesPerDayInt > 5 ? Math.round(timesPerDayInt * 0.1) : timesPerDayInt;
 
-  const incrementGoal = () => {
-    
-  };
 
   const renderLeftAction = (
     text,
@@ -56,13 +53,7 @@ export default function SwipeableGoal({ children, timesPerDay }) {
       }}
     >
       {renderLeftAction("Done", "#0e9f6e", 128, progress, null, true)}
-      {renderLeftAction(
-        `+${timesPerDay > 5 ? Math.round(timesPerDay * 0.1) : +1}`,
-        "#31c48d",
-        64,
-        progress,
-        null
-      )}
+      {renderLeftAction("+" + incrementAmount, "#31c48d", 64, progress, null)}
     </View>
   );
 

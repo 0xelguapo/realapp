@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useReducer, useRef, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -15,6 +15,19 @@ import { addClient } from "../../redux/clients-slice";
 import { SuccessContext } from "../../context/success-context";
 import { phoneFormat } from "../../utility/phone-format";
 
+function propertyReducer(state, action) {
+  switch (action.type) {
+    case "INPUT_CHANGE":
+      state[action.index] = {
+        ...state[action.index],
+        [action.key]: action.value,
+      };
+      return state;
+  }
+}
+
+const emptyProperty = {};
+
 export default function AddClient({ navigation }) {
   const { onStatusChange } = useContext(SuccessContext);
   const phoneInputRef = useRef(null);
@@ -25,6 +38,15 @@ export default function AddClient({ navigation }) {
   const [company, setCompany] = useState("");
   const [emailInputs, setEmailInputs] = useState([]);
   const [phoneInputs, setPhoneInputs] = useState([]);
+
+  const [propertyInputs, propertyInputsDispatch] = useReducer(propertyReducer, [
+    { street: "", city: "", state: "", zip: "", price: "", note: "" },
+  ]);
+  // propertyInputsDispatch({type: 'INPUT_CHANGE', key: 'street', value: 'test', index: 0})
+
+  useEffect(() => {
+    console.log(propertyInputs);
+  }, []);
 
   const handleAddClient = async () => {
     const clientInputs = {
@@ -79,6 +101,8 @@ export default function AddClient({ navigation }) {
     setEmailInputs(newEmailInputs);
   };
 
+  const handleAddAnotherPropertyInput = () => {};
+
   useEffect(() => {
     if (phoneInputs.length > 0) {
       phoneInputRef.current.focus();
@@ -111,16 +135,20 @@ export default function AddClient({ navigation }) {
         <ScrollView
           keyboardShouldPersistTaps="always"
           keyboardDismissMode="on-drag"
+          contentContainerStyle={[
+            { backgroundColor: "#f2f1f6", paddingVertical: 20 },
+          ]}
         >
           <View style={styles.avatar}>
             <Text style={styles.avatarText}>{firstName[0]}</Text>
           </View>
+
           <View style={styles.inputContainerOne}>
             <Ionicons name="person-outline" size={20} color="black" />
             <TextInput
               style={styles.textInputOne}
               placeholder={"First Name"}
-              placeholderTextColor="#454545"
+              placeholderTextColor="#8c8b90"
               value={firstName}
               onChangeText={setFirstName}
               autoCapitalize="words"
@@ -132,7 +160,7 @@ export default function AddClient({ navigation }) {
             <TextInput
               style={styles.textInputOne}
               placeholder={"Last Name"}
-              placeholderTextColor="#454545"
+              placeholderTextColor="#8c8b90"
               value={lastName}
               onChangeText={setLastName}
               autoCapitalize="words"
@@ -143,7 +171,7 @@ export default function AddClient({ navigation }) {
             <TextInput
               style={styles.textInputOne}
               placeholder="Company"
-              placeholderTextColor="#454545"
+              placeholderTextColor="#8c8b90"
               value={company}
               onChangeText={setCompany}
               autoCapitalize="words"
@@ -161,7 +189,7 @@ export default function AddClient({ navigation }) {
                     <Ionicons
                       name="md-remove-circle"
                       size={24}
-                      color="#7b7b7c"
+                      color="#fe3d30"
                     />
                   </TouchableOpacity>
                   <TextInput
@@ -171,7 +199,7 @@ export default function AddClient({ navigation }) {
                     value={phoneFormat(phoneInputs[index])}
                     onChangeText={(text) => handlePhoneInputChange(text, index)}
                     placeholder="Phone"
-                    placeholderTextColor="#454545"
+                    placeholderTextColor="#8c8b90"
                     ref={phoneInputRef}
                   />
                 </View>
@@ -182,7 +210,7 @@ export default function AddClient({ navigation }) {
                 style={styles.addAnotherButton}
                 onPress={handleAddAnotherPhoneInput}
               >
-                <Ionicons name="md-add-sharp" size={24} color="#7b7b7c" />
+                <Ionicons name="md-add-sharp" size={24} color="#0064e5" />
                 <Text style={styles.addAnotherText}>Add Phone Number</Text>
               </TouchableOpacity>
             )}
@@ -199,7 +227,7 @@ export default function AddClient({ navigation }) {
                     <Ionicons
                       name="md-remove-circle"
                       size={24}
-                      color="#7b7b7c"
+                      color="#fe3d30"
                     />
                   </TouchableOpacity>
                   <TextInput
@@ -211,7 +239,7 @@ export default function AddClient({ navigation }) {
                     value={emailInputs[index]}
                     onChangeText={(text) => handleEmailInputChange(text, index)}
                     placeholder="Email"
-                    placeholderTextColor="#454545"
+                    placeholderTextColor="#8c8b90"
                     ref={emailInputRef}
                   />
                 </View>
@@ -222,10 +250,43 @@ export default function AddClient({ navigation }) {
                 style={styles.addAnotherButton}
                 onPress={handleAddAnotherEmailInput}
               >
-                <Ionicons name="md-add-sharp" size={24} color="#7b7b7c" />
+                <Ionicons name="md-add-sharp" size={24} color="#0064e5" />
                 <Text style={styles.addAnotherText}>Add Email</Text>
               </TouchableOpacity>
             )}
+          </View>
+
+          <View style={styles.inputContainerTwo}>
+            {propertyInputs.map((input, index) => {
+              return (
+                <View key={index} style={styles.extraInput}>
+                  <TouchableOpacity style={styles.removeInput}>
+                    <Ionicons
+                      name="md-remove-circle"
+                      size={24}
+                      color="#fe3d30"
+                    />
+                  </TouchableOpacity>
+                  <TextInput
+                    style={styles.textInputOne}
+                    returnKeyType="done"
+                    placeholder="Street"
+                    placeholderTextColor="#8c8b90"
+                  />
+                  <TextInput
+                    style={styles.textInputOne}
+                    returnKeyType="done"
+                    placeholder="Street"
+                    placeholderTextColor="#8c8b90"
+                  />
+                </View>
+              );
+            })}
+
+            <TouchableOpacity style={styles.addAnotherButton}>
+              <Ionicons name="md-add-sharp" size={24} color="#0064e5" />
+              <Text style={styles.addAnotherText}>Add Property Address</Text>
+            </TouchableOpacity>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -236,7 +297,6 @@ export default function AddClient({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingBottom: 100,
   },
   headingContainer: {
     flexDirection: "row",
@@ -260,7 +320,7 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "column",
     flex: 1,
-    paddingVertical: 15,
+    backgroundColor: "#f2f1f6",
   },
   avatar: {
     display: "flex",
@@ -278,7 +338,7 @@ const styles = StyleSheet.create({
     fontSize: 50,
   },
   inputContainerOne: {
-    backgroundColor: "#cccccc",
+    backgroundColor: "white",
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 10,
@@ -288,7 +348,6 @@ const styles = StyleSheet.create({
   },
   textInputOne: {
     borderColor: "#dcdcdc",
-    backgroundColor: "#cccccc",
     borderRadius: 5,
     paddingLeft: 10,
     flex: 1,
@@ -301,7 +360,7 @@ const styles = StyleSheet.create({
   },
   addAnotherButton: {
     height: 40,
-    backgroundColor: "#cccccc",
+    backgroundColor: "white",
     paddingVertical: 3,
     flexDirection: "row",
     alignItems: "center",
@@ -310,11 +369,11 @@ const styles = StyleSheet.create({
   },
   addAnotherText: {
     fontWeight: "500",
-    color: "#7b7b7c",
+    color: "#0064e5",
   },
   extraInput: {
     flexDirection: "row",
-    backgroundColor: "#cccccc",
+    backgroundColor: "white",
     borderColor: "#dcdcdc",
     borderWidth: 0.2,
     height: 40,

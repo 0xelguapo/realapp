@@ -15,7 +15,7 @@ export default function EachClient({
   company,
   email,
   onPress,
-  taskMode,
+  taskMode = false,
   index,
 }) {
   const fullName = lastName ? (firstName + ' ' + lastName) : firstName
@@ -88,8 +88,3 @@ const styles = StyleSheet.create({
     borderBottomColor: "#e6e6e6",
   },
 });
-
-EachClient.defaultProps = {
-  taskMode: false,
-  checked: false,
-};

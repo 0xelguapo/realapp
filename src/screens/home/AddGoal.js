@@ -12,9 +12,7 @@ import {
   Alert,
 } from "react-native";
 import { AntDesign, Entypo } from "@expo/vector-icons";
-import { API, graphqlOperation } from "aws-amplify";
-import { createGoal } from "../../graphql/mutations";
-import { datetime, RRule, RRuleSet, rrulestr } from "rrule";
+import { RRule } from "rrule";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import useNotifications from "../../hooks/notification-hook";
 import { useDispatch } from "react-redux";
@@ -84,26 +82,28 @@ export default function AddGoal(props) {
       until: new Date(2026, 12, 31),
     });
 
-    const notificationPromises = daysActive.reduce((acc, el) => {
-      if (el.isActive) {
-        acc.push(
-          handleScheduleNotification(
-            title,
-            notificationTime.getHours(),
-            notificationTime.getMinutes(),
-            el.weekday
-          )
-        );
-      }
-      return acc;
-    }, []);
-
     let notificationIdsArray;
 
-    try {
-      notificationIdsArray = await Promise.all(notificationPromises);
-    } catch (err) {
-      console.error(err);
+    if (remindMeState) {
+      const notificationPromises = daysActive.reduce((acc, el) => {
+        if (el.isActive) {
+          acc.push(
+            handleScheduleNotification(
+              title,
+              notificationTime.getHours(),
+              notificationTime.getMinutes(),
+              el.weekday
+            )
+          );
+        }
+        return acc;
+      }, []);
+
+      try {
+        notificationIdsArray = await Promise.all(notificationPromises);
+      } catch (err) {
+        console.error(err);
+      }
     }
 
     const goalDetails = {
@@ -112,7 +112,7 @@ export default function AddGoal(props) {
       timesPerDay: timesPerDay,
       timesCompleted: "0",
       recurRule: rule.toString(),
-      notificationId: notificationIdsArray.toString(),
+      notificationId: notificationIdsArray.toString() || "",
     };
 
     const response = await dispatch(addGoal(goalDetails)).unwrap();

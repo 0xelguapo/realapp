@@ -53,6 +53,7 @@ type Client @model @auth(rules: [{ allow: owner }, { allow: public, provider: ap
 
 type Property @model @auth(rules: [{ allow: owner }, { allow: public, provider: apiKey, operations: [create] }]) {
   id: ID!
+  type: PropertyType @default(value: Home)
   street: String!
   city: String
   state: String
@@ -63,6 +64,12 @@ type Property @model @auth(rules: [{ allow: owner }, { allow: public, provider: 
   group: [PropertyGroup] @manyToMany(relationName: "GroupsProperty")
   clientId: ID @index(name: "byProperty")
   owner: String @auth(rules: [{ allow: owner, operations: [read, delete] }, { allow: public, provider: apiKey, operations: [create, update]}])
+}
+
+enum PropertyType {
+  Home
+  Owned
+  Other
 }
 
 type PropertyGroup @model @auth(rules: [{ allow: owner }, { allow: public, provider: apiKey, operations: [create] }]) {
