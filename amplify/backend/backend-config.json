@@ -137,6 +137,22 @@
           ]
         }
       ]
+    },
+    "coagentmap": {
+      "isDefault": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Map",
+      "mapStyle": "VectorHereExplore",
+      "accessType": "AuthorizedUsers",
+      "dependsOn": [
+        {
+          "category": "auth",
+          "resourceName": "realapp8e8e08f1",
+          "attributes": [
+            "UserPoolId"
+          ]
+        }
+      ]
     }
   }
 }

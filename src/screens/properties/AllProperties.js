@@ -21,7 +21,7 @@ import {
   selectAllProperties,
 } from "../../redux/properties-slice";
 import EachProperty from "../../components/property/EachProperty";
-import {Geo} from 'aws-amplify'
+import {Geo} from '@aws-amplify/geo'
 
 
 
@@ -58,13 +58,6 @@ export default function AllProperties({ navigation }) {
     dispatch(fetchProperties());
   }, [dispatch]);
 
-  useEffect(() => {
-    try {
-      Geo.searchByText("Amazon Go Store")
-    } catch (err) {
-      console.error(err)
-    }
-  }, [])
 
   return (
     <View style={styles.container}>

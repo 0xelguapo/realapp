@@ -45,6 +45,12 @@ export type AmplifyDependentResourcesAttributes = {
             "Name": "string",
             "Region": "string",
             "Arn": "string"
+        },
+        "coagentmap": {
+            "Name": "string",
+            "Style": "string",
+            "Region": "string",
+            "Arn": "string"
         }
     }
 }
