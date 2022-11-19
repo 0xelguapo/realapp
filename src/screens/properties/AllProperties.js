@@ -23,6 +23,7 @@ import {
 import EachProperty from "../../components/property/EachProperty";
 import {Geo} from '@aws-amplify/geo'
 
+Geo.searchByText("Amazon Go Store")
 
 
 export default function AllProperties({ navigation }) {

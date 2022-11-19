@@ -7,6 +7,8 @@ import Navigation from "./src/navigation/index";
 import { useEffect } from "react";
 import { RC_API_KEY } from "./src/constants/index";
 import * as SplashScreenDefault from "expo-splash-screen";
+import 'react-native-url-polyfill/auto';
+import 'react-native-get-random-values';
 
 SplashScreenDefault.preventAutoHideAsync();
 
