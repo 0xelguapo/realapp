@@ -6,7 +6,7 @@ import {
   TouchableHighlight,
   TouchableOpacity,
 } from "react-native";
-import { SimpleLineIcons } from "@expo/vector-icons";
+import { SimpleLineIcons, Ionicons } from "@expo/vector-icons";
 
 export default function EachClient({
   firstName,
@@ -45,7 +45,7 @@ export default function EachClient({
           <Text style={styles.name}>{fullName}</Text>
           {companyTrue && <Text style={styles.phone}>{company}</Text>}
           <View style={styles.goContainer}>
-            <SimpleLineIcons name="options" size={24} color="#dddddf" />
+            {/* <SimpleLineIcons name="options" size={24} color="#dddddf" /> */}
           </View>
         </View>
       </TouchableHighlight>
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
   },
   name: {
     fontWeight: "600",
-    fontSize: 18,
+    fontSize: 16,
     marginBottom: 3,
   },
   company: {

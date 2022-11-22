@@ -22,7 +22,7 @@ export default function DetailsConnectionHistory({
               {el.content?.length > 0 && (
                 <Text style={styles.connectionContent}>{el.content}</Text>
               )}
-              {el.date.length > 0 && (
+              {el?.date?.length > 0 && (
                 <Text style={styles.connectionDate}>
                   {format(new Date(el.date), 'MMM dd, yyyy • p')}
                 </Text>

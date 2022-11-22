@@ -36,9 +36,14 @@ export default function Clients({ navigation }) {
   const allClients = useSelector(selectAllClients);
   const allProperties = useSelector(selectAllProperties);
   const propertiesAndClients = [...allClients, ...allProperties];
-  const [suggestedLoading, setSuggestedLoading] = useState(false);
 
-  const [suggestedAddresses, setSuggestedAddresses] = useState([{}]);
+  const [suggestedAddresses, setSuggestedAddresses] = useState([]);
+
+  const allData = [
+    { title: "Contacts", data: allClients },
+    { title: "Properties", data: allProperties },
+    { title: "Suggested Addresses", data: suggestedAddresses },
+  ];
 
   const searchOptionContraints = {
     countries: ["USA"],
@@ -47,19 +52,13 @@ export default function Clients({ navigation }) {
 
   useEffect(() => {
     const delaySearch = setTimeout(async () => {
-      setSuggestedLoading(true);
       if (searchInput.length > 6) {
-        let result;
-        try {
-          result = await Geo.searchByText(searchInput, searchOptionContraints);
-        } catch (err) {
-          console.error(err);
-        } finally {
-          setSuggestedLoading(false);
-        }
-        if (result) {
-          setSuggestedAddresses(result);
-        }
+        const result = await Geo.searchByText(
+          searchInput,
+          searchOptionContraints
+        );
+        console.log(result);
+        setSuggestedAddresses(result);
       }
     }, 1500);
     return () => clearTimeout(delaySearch);
@@ -70,6 +69,22 @@ export default function Clients({ navigation }) {
       return c.favorite === true;
     });
   }, [allClients]);
+
+  const filteredContactsAndProperties = useMemo(() => {
+    return propertiesAndClients.filter((data) => {
+      const fullName = data.firstName + " " + data?.lastName;
+      const propertyName =
+        data.street + " " + data.city + " " + data.state + " " + data.zip;
+      const propertyData = propertyName.toLowerCase();
+      const clientData = fullName
+        ? fullName.toLowerCase()
+        : data.firstName.toLowerCase();
+      const textData = searchInput.toLowerCase();
+      return (
+        clientData.indexOf(textData) > -1 || propertyData.indexOf(textData) > -1
+      );
+    });
+  }, [searchInput, allClients, allProperties, status]);
 
   const scrollOffsetY = useRef(new Animated.Value(0)).current;
   const headerScrollHeight = scrollOffsetY.interpolate({
@@ -82,86 +97,32 @@ export default function Clients({ navigation }) {
     navigation.navigate("ClientDetails", { client: client, index: index });
   }, []);
 
-  const renderProperty = useCallback(({ item, index }) => {
-    return (
-      <EachProperty
-        street={item.street}
-        city={item.city}
-        state={item.state}
-        zipCode={item.zip}
-        handlePress={() =>
-          navigation.navigate("PropertyDetails", { id: item.id })
-        }
-      />
-    );
-  }, []);
-
-  const renderSuggested = useCallback(
-    ({ item, index }) => {
+  const renderClient = useCallback(({ item, index, section }) => {
+    if (item.firstName)
       return (
-        <View>
-          {!suggestedLoading ? (
-            <Text>{item.label}</Text>
-          ) : (
-            <View style={styles.loadingContainer}>
-              <ActivityIndicator size="small" />
-            </View>
-          )}
-        </View>
+        <EachClient
+          onPress={() => viewClientHandler(item, index)}
+          index={index}
+          firstName={item.firstName}
+          lastName={item.lastName}
+          phone={item.phone}
+          company={item.company}
+        />
       );
-    },
-    [suggestedLoading]
-  );
-
-  const renderClient = useCallback(({ item, index }) => {
-    return (
-      <EachClient
-        onPress={() => viewClientHandler(item, index)}
-        index={index}
-        firstName={item.firstName}
-        lastName={item.lastName}
-        phone={item.phone}
-        company={item.company}
-      />
-    );
+    else {
+      return (
+        <EachProperty
+          street={item.street}
+          city={item.city}
+          state={item.state}
+          zipCode={item.zip}
+          handlePress={() =>
+            navigation.navigate("PropertyDetails", { id: item.id })
+          }
+        />
+      );
+    }
   }, []);
-
-  const allData = [
-    { title: "Contacts", renderItem: renderClient, data: allClients },
-    { title: "Properties", renderItem: renderProperty, data: allProperties },
-    {
-      title: "Suggested Addresses",
-      renderItem: renderSuggested,
-      data: suggestedAddresses,
-    },
-  ];
-
-  const filteredAllData = useMemo(() => {
-    return allData.reduce((acc, section) => {
-      const { title, data, renderItem } = section;
-      const filtered = data.filter((el) => {
-        const textData = searchInput.toLowerCase();
-        if (title === "Contacts") {
-          const fullName = el.firstName + " " + el?.lastName;
-          const clientData = fullName
-            ? fullName.toLowerCase()
-            : data.firstName.toLowerCase();
-          return clientData.indexOf(textData) > -1;
-        } else if (title === "Properties") {
-          const propertyName =
-            el.street + " " + el.city + " " + el.state + " " + el.zip;
-          const propertyData = propertyName.toLowerCase();
-          return propertyData.indexOf(textData) > -1;
-        } else if (title === "Suggested Addresses") {
-          return true;
-        }
-      });
-      if (filtered.length !== 0) {
-        acc.push({ title, data: filtered, renderItem });
-      }
-      return acc;
-    }, []);
-  }, [searchInput, allClients, allProperties, status, allData]);
 
   const getAllProperties = async () => {
     dispatch(fetchProperties());
@@ -253,24 +214,48 @@ export default function Clients({ navigation }) {
           ) : (
             <>
               <Animated.SectionList
-                sections={filteredAllData}
-                renderItem={({ section: { renderItem } }) => (
-                  <View>{renderItem}</View>
-                )}
-                keyExtractor={(item, index) => item.id + index + item.label}
+                sections={allData}
+                renderItem={renderClient}
+                keyExtractor={(item) => item.id}
                 refreshing={status !== "succeeded"}
-                renderSectionHeader={({ section: { title } }) => (
-                  <View style={styles.sectionHeaderContainer}>
-                    <Text style={styles.sectionHeaderText}>{title}</Text>
-                  </View>
-                )}
+                renderSectionHeader={({ section: { title }}) => title!== 'Contacts' && <Text>{title}</Text>}
                 onScroll={Animated.event(
                   [{ nativeEvent: { contentOffset: { y: scrollOffsetY } } }],
                   { useNativeDriver: true }
                 )}
                 scrollEventThrottle={16}
-                contentContainerStyle={{ paddingVertical: 50 }}
+                contentContainerStyle={
+                  filteredContactsAndProperties.length > 0 && {
+                    paddingVertical: 50,
+                  }
+                }
               />
+              {/* <Animated.FlatList
+                data={filteredContactsAndProperties}
+                renderItem={renderClient}
+                keyExtractor={(c) => c.id}
+                onRefresh={getAllClients}
+                refreshing={status !== "succeeded"}
+                onScroll={Animated.event(
+                  [{ nativeEvent: { contentOffset: { y: scrollOffsetY } } }],
+                  { useNativeDriver: true }
+                )}
+                scrollEventThrottle={16}
+                style={{ marginTop: 5 }}
+                contentContainerStyle={filteredContactsAndProperties.length > 0 && {paddingVertical: 50}}
+              />
+              {suggestedAddresses.length > 0 &&
+                searchInput.length > 5 &&
+                suggestedAddresses.map((sug, index) => {
+                  if (filteredContactsAndProperties.length === 0)
+                    return (
+                      <View key={index} style={styles.suggestedContainer}>
+                        <View style={styles.suggestion}>
+                          <Text>{sug.label} </Text>
+                        </View>
+                      </View>
+                    );
+                })} */}
             </>
           )}
         </View>
@@ -307,14 +292,6 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontWeight: "700",
     color: "#454545",
-  },
-  sectionHeaderContainer: {
-    paddingHorizontal: 10,
-    backgroundColor: "white",
-    paddingVertical: 5,
-  },
-  sectionHeaderText: {
-    fontWeight: "600",
   },
   addIconContainer: {
     alignItems: "center",

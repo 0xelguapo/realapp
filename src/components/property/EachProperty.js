@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   streetText: {
-    fontWeight: "500",
+    fontWeight: "600",
     fontSize: 16,
   },
   detailsContainer: {

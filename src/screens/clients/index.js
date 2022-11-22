@@ -8,6 +8,7 @@ import AddClientTask from "./AddClientTask.js";
 import EditClient from "./EditClient";
 import AddEditGroup from "./AddEditGroup";
 import EditReminder from "./EditReminder";
+import PropertyDetails from "../properties/PropertyDetails";
 
 const Stack = createNativeStackNavigator();
 
@@ -82,6 +83,11 @@ export default function ClientsNavigator() {
         }}
         name="EditReminder"
         component={EditReminder}
+      />
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name="PropertyDetails"
+        component={PropertyDetails}
       />
     </Stack.Navigator>
   );
