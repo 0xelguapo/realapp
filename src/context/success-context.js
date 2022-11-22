@@ -23,7 +23,7 @@ function SuccessContextProvider({ children }) {
         duration: 300,
         useNativeDriver: true,
       }).start();
-    }, 1000);
+    }, 1500);
   };
 
   return (

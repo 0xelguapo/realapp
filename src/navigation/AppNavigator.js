@@ -63,15 +63,15 @@ export default function AppNavigator() {
             options={optionsHandler}
           />
           <Tab.Screen
-            name="Clients"
+            name="Data"
             component={ClientsNavigator}
             options={optionsHandler}
           />
-          <Tab.Screen
+          {/* <Tab.Screen
             name="Properties"
             component={PropertiesNavigator}
             options={optionsHandler}
-          />
+          /> */}
           <Tab.Screen
             name="More"
             component={MoreNavigator}
@@ -116,7 +116,7 @@ const optionsHandler = ({ route }) => {
           ),
         headerShown: false,
       };
-    case "Clients":
+    case "Data":
       return {
         tabBarLabel: ({ focused }) =>
           focused ? (
@@ -128,9 +128,9 @@ const optionsHandler = ({ route }) => {
           ),
         tabBarIcon: ({ focused }) =>
           focused ? (
-            <Ionicons name="person-outline" size={25} color="#0064e5" />
+            <Ionicons name="ios-search" size={25} color="#0064e5" />
           ) : (
-            <Ionicons name="person-outline" size={25} color="#727272" />
+            <Ionicons name="ios-search" size={25} color="#727272" />
           ),
         headerShown: false,
       };

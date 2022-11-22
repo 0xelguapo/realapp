@@ -24,10 +24,13 @@ import { Ionicons, Feather } from "@expo/vector-icons";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchClients, selectAllClients } from "../../redux/clients-slice";
 import {
+  addProperty,
   fetchProperties,
   selectAllProperties,
 } from "../../redux/properties-slice";
 import { Geo } from "aws-amplify";
+import { SuccessContext } from "../../context/success-context";
+import SuggestedProperty from "../../components/property/SuggestedProperty";
 
 export default function Clients({ navigation }) {
   const [searchInput, setSearchInput] = useState("");
@@ -35,21 +38,49 @@ export default function Clients({ navigation }) {
   const status = useSelector((state) => state.clients.status);
   const allClients = useSelector(selectAllClients);
   const allProperties = useSelector(selectAllProperties);
-  const propertiesAndClients = [...allClients, ...allProperties];
   const [suggestedLoading, setSuggestedLoading] = useState(false);
+  const [suggestedAddresses, setSuggestedAddresses] = useState([
+    {
+      addressNumber: "Type any address to quick add",
+      street: "",
+      municipality: "You can search anywhere",
+      region: "within the US!",
+      postalCode: "",
+      add: false,
+    },
+  ]);
 
-  const [suggestedAddresses, setSuggestedAddresses] = useState([{}]);
+  const { onStatusChange } = useContext(SuccessContext);
+
+  const quickAddProperty = async (item) => {
+    let propertyDetails = {
+      street: item.addressNumber ? item.addressNumber + ' ' + item.street : item.street,
+      city: item.municipality,
+      state: item.region,
+      zip: item.postalCode
+    }
+    const response = await dispatch(addProperty(propertyDetails)).unwrap()
+    if(response) {
+      console.log(response)
+      onStatusChange('PROPERTY CREATED')
+    }
+  };
 
   const searchOptionContraints = {
     countries: ["USA"],
     maxResults: 5,
   };
 
+  const handleClearSearch = () => {
+    setSearchInput("");
+    setSuggestedAddresses([]);
+  };
+
   useEffect(() => {
     const delaySearch = setTimeout(async () => {
-      setSuggestedLoading(true);
       if (searchInput.length > 6) {
         let result;
+        setSuggestedLoading(true);
         try {
           result = await Geo.searchByText(searchInput, searchOptionContraints);
         } catch (err) {
@@ -61,7 +92,7 @@ export default function Clients({ navigation }) {
           setSuggestedAddresses(result);
         }
       }
-    }, 1500);
+    }, 1200);
     return () => clearTimeout(delaySearch);
   }, [searchInput]);
 
@@ -99,15 +130,15 @@ export default function Clients({ navigation }) {
   const renderSuggested = useCallback(
     ({ item, index }) => {
       return (
-        <View>
+        <>
           {!suggestedLoading ? (
-            <Text>{item.label}</Text>
+            <SuggestedProperty item={item} handlePress={quickAddProperty} />
           ) : (
-            <View style={styles.loadingContainer}>
+            <View style={styles.searchResultLoading}>
               <ActivityIndicator size="small" />
             </View>
           )}
-        </View>
+        </>
       );
     },
     [suggestedLoading]
@@ -195,7 +226,7 @@ export default function Clients({ navigation }) {
                 value={searchInput}
               />
               {searchInput.length !== 0 && (
-                <TouchableOpacity onPress={() => setSearchInput("")}>
+                <TouchableOpacity onPress={handleClearSearch}>
                   <Feather name="x-circle" size={20} color="#7b7b7c" />
                 </TouchableOpacity>
               )}
@@ -215,7 +246,7 @@ export default function Clients({ navigation }) {
                 {
                   transform: [{ translateY: headerScrollHeight }],
                   position: "absolute",
-                  top: 10,
+                  top: 5,
                   width: "100%",
                 },
               ]}
@@ -299,7 +330,7 @@ const styles = StyleSheet.create({
   headerContainer: {
     display: "flex",
     paddingHorizontal: 20,
-    paddingBottom: 15,
+    paddingBottom: 20,
     zIndex: 3,
     paddingTop: 20,
   },
@@ -335,7 +366,7 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     alignItems: "center",
-    marginTop: 15,
+    marginTop: 10,
     flexDirection: "row",
     paddingHorizontal: 8,
     borderColor: "#e9e9e9",
@@ -362,13 +393,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderWidth: 1,
     borderRadius: 5,
-    height: 60,
+    height: 50,
     width: 70,
     flex: 1,
     marginRight: 20,
   },
   favoriteFirstLetter: {
-    fontSize: 25,
+    fontSize: 22,
     fontWeight: "600",
   },
   favoriteName: {
@@ -397,13 +428,36 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontSize: 15,
   },
-  suggestedContainer: {
-    display: "flex",
-  },
-  suggestion: {
+  searchResultContainer: {
     display: "flex",
     alignItems: "center",
-    borderWidth: 1,
-    height: 30,
+    justifyContent: "space-between",
+    flexDirection: "row",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+  },
+  searchResultTextContainer: {
+    flex: 1,
+  },
+  searchResultTitle: {
+    fontWeight: "500",
+    color: "#454545",
+  },
+  searchResultSubtitle: {
+    fontWeight: "300",
+    color: "#6c6c6c",
+  },
+  searchAddContainer: {
+    width: 40,
+  },
+  searchAddText: {
+    fontWeight: "500",
+    color: "#0064e5",
+  },
+  searchResultLoading: {
+    height: 40,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

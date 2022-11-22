@@ -60,6 +60,7 @@ type Property @model @auth(rules: [{ allow: owner }, { allow: public, provider: 
   zip: String
   price: String
   note: String
+  geometry: AWSJSON
   tasks: [Task] @hasMany(indexName: "byProperty", fields: ["id"])
   group: [PropertyGroup] @manyToMany(relationName: "GroupsProperty")
   clientId: ID @index(name: "byProperty")

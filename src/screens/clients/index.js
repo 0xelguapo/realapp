@@ -9,6 +9,11 @@ import EditClient from "./EditClient";
 import AddEditGroup from "./AddEditGroup";
 import EditReminder from "./EditReminder";
 import PropertyDetails from "../properties/PropertyDetails";
+import AddOwner from "../properties/AddOwner";
+import AddPropertyTask from "../properties/AddPropertyTask";
+import AddEditPropertyGroup from "../properties/AddEditPropertyGroup";
+import EditProperty from "../properties/EditProperty";
+import AddProperty from "../properties/AddProperty";
 
 const Stack = createNativeStackNavigator();
 
@@ -88,6 +93,40 @@ export default function ClientsNavigator() {
         options={{ headerShown: false }}
         name="PropertyDetails"
         component={PropertyDetails}
+      />
+      <Stack.Screen
+        options={{ headerShown: false, presentation: "modal" }}
+        name="AddProperty"
+        component={AddProperty}
+      />
+      <Stack.Screen
+        options={{ headerShown: false, presentation: "modal" }}
+        name="EditProperty"
+        component={EditProperty}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: false,
+          presentation: "transparentModal",
+          animation: "slide_from_bottom",
+        }}
+        name="AddEditPropertyGroup"
+        component={AddEditPropertyGroup}
+      />
+      <Stack.Screen
+        options={{ headerShown: false, presentation: "modal" }}
+        name="AddOwner"
+        component={AddOwner}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: false,
+          presentation: "transparentModal",
+          cardOverlayEnabled: true,
+          animation: "fade",
+        }}
+        name="AddPropertyTask"
+        component={AddPropertyTask}
       />
     </Stack.Navigator>
   );
