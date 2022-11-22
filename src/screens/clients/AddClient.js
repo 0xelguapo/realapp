@@ -14,6 +14,8 @@ import { AntDesign, Ionicons } from "@expo/vector-icons";
 import { addClient } from "../../redux/clients-slice";
 import { SuccessContext } from "../../context/success-context";
 import { phoneFormat } from "../../utility/phone-format";
+import { Geo } from "aws-amplify";
+import { addProperty } from "../../redux/properties-slice";
 
 function propertyReducer(state, action) {
   switch (action.type) {
@@ -24,10 +26,29 @@ function propertyReducer(state, action) {
       };
       return state;
     case "ADD_INPUT":
-      return [...state, { street: "", city: "", zip: "", price: "", note: "" }];
+      return [
+        ...state,
+        {
+          street: "",
+          city: "",
+          state: "",
+          zip: "",
+          price: "",
+          note: "",
+        },
+      ];
     case "REMOVE_INPUT":
       state.splice(action.index, 1);
       return [...state];
+    case "AUTOFILL":
+      state[action.index] = {
+        ...state[action.index],
+        street: action.street,
+        city: action.city,
+        state: action.state,
+        zip: action.zip,
+      };
+      return state;
   }
 }
 
@@ -41,6 +62,9 @@ export default function AddClient({ navigation }) {
   const [company, setCompany] = useState("");
   const [emailInputs, setEmailInputs] = useState([]);
   const [phoneInputs, setPhoneInputs] = useState([]);
+  const [streetSearch, setStreetSearch] = useState("");
+  const [suggestedAddresses, setSuggestedAddresses] = useState([]);
+  const [searchIndex, setSearchIndex] = useState(0);
 
   const [propertyInputs, propertyInputsDispatch] = useReducer(
     propertyReducer,
@@ -56,8 +80,15 @@ export default function AddClient({ navigation }) {
       email: emailInputs.toString(),
     };
     if (firstName.length !== 0) {
-      const response = await dispatch(addClient(clientInputs));
+      const response = await dispatch(addClient(clientInputs)).unwrap();
       if (response) {
+        const clientId = response.id;
+        for (const property of propertyInputs) {
+          let propertyDetails = { ...property, clientId: clientId };
+          const propertyResponse = await dispatch(
+            addProperty(propertyDetails)
+          ).unwrap();
+        }
         navigation.goBack();
         onStatusChange("CONTACT CREATED");
       }
@@ -102,7 +133,58 @@ export default function AddClient({ navigation }) {
 
   const handleAddAnotherPropertyInput = () => {
     propertyInputsDispatch({ type: "ADD_INPUT" });
+    setStreetSearch("");
+    setSuggestedAddresses([]);
   };
+
+  const handleStreetSearch = (value, index) => {
+    setSearchIndex(index);
+    setStreetSearch(value);
+    propertyInputsDispatch({
+      type: "INPUT_CHANGE",
+      index: index,
+      key: "street",
+      value: value,
+    });
+  };
+
+  const handleChooseProperty = (res, index) => {
+    const {
+      addressNumber,
+      street,
+      municipality: city,
+      region: state,
+      postalCode: zip,
+    } = res;
+    propertyInputsDispatch({
+      type: "AUTOFILL",
+      index: index,
+      street: addressNumber + " " + street,
+      city,
+      state,
+      zip,
+    });
+    setSuggestedAddresses([]);
+    setStreetSearch("");
+  };
+
+  const searchOptionContraints = {
+    countries: ["USA"],
+    maxResults: 4,
+  };
+
+  useEffect(() => {
+    const delaySearch = setTimeout(async () => {
+      if (streetSearch.length > 5) {
+        const result = await Geo.searchByText(
+          propertyInputs[searchIndex].street,
+          searchOptionContraints
+        );
+        setSuggestedAddresses(result);
+      }
+    }, 1500);
+    return () => clearTimeout(delaySearch);
+  }, [streetSearch]);
 
   useEffect(() => {
     if (phoneInputs.length > 0) {
@@ -278,26 +360,54 @@ export default function AddClient({ navigation }) {
                       />
                     </TouchableOpacity>
                     <TextInput
-                      style={styles.textInputOne}
+                      style={{ ...styles.textInputOne, paddingTop: 9 }}
                       returnKeyType="done"
                       placeholder="Street"
                       placeholderTextColor="#8c8b90"
                       autoFocus={true}
-                      onChangeText={(val) =>
-                        propertyInputsDispatch({
-                          type: "INPUT_CHANGE",
-                          index: index,
-                          key: "street",
-                          value: val,
-                        })
-                      }
+                      multiline
+                      value={propertyInputs[index].street}
+                      onChangeText={(value) => handleStreetSearch(value, index)}
                     />
                   </View>
+                  {suggestedAddresses.length > 0 && (
+                    <View style={styles.searchContainer}>
+                      {suggestedAddresses.map((result, i) => {
+                        return (
+                          <View key={i} style={styles.searchResultContainer}>
+                            <View style={styles.searchResultTextContainer}>
+                              <Text style={styles.searchResultTitle}>
+                                {(result?.addressNumber || "") +
+                                  " " +
+                                  result?.street}
+                              </Text>
+                              <Text style={styles.searchResultSubtitle}>
+                                {result?.municipality +
+                                  ", " +
+                                  result?.region +
+                                  " " +
+                                  result?.postalCode}
+                              </Text>
+                            </View>
+                            <TouchableOpacity
+                              style={styles.searchAddContainer}
+                              onPress={() =>
+                                handleChooseProperty(result, searchIndex)
+                              }
+                            >
+                              <Text>Add +</Text>
+                            </TouchableOpacity>
+                          </View>
+                        );
+                      })}
+                    </View>
+                  )}
                   <View style={{ ...styles.extraInput, paddingLeft: 40 }}>
                     <TextInput
                       style={styles.textInputOne}
                       returnKeyType="done"
                       placeholder="City"
+                      defaultValue={propertyInputs[index].city}
                       placeholderTextColor="#8c8b90"
                       onChangeText={(val) =>
                         propertyInputsDispatch({
@@ -315,6 +425,7 @@ export default function AddClient({ navigation }) {
                       returnKeyType="done"
                       placeholder="State"
                       placeholderTextColor="#8c8b90"
+                      defaultValue={propertyInputs[index].state}
                       onChangeText={(val) =>
                         propertyInputsDispatch({
                           type: "INPUT_CHANGE",
@@ -330,6 +441,7 @@ export default function AddClient({ navigation }) {
                       placeholder="Zip Code"
                       placeholderTextColor="#8c8b90"
                       keyboardType="number-pad"
+                      defaultValue={propertyInputs[index].zip}
                       onChangeText={(val) =>
                         propertyInputsDispatch({
                           type: "INPUT_CHANGE",
@@ -343,7 +455,6 @@ export default function AddClient({ navigation }) {
                 </View>
               );
             })}
-
             <TouchableOpacity
               style={styles.addAnotherButton}
               onPress={handleAddAnotherPropertyInput}
@@ -411,6 +522,7 @@ const styles = StyleSheet.create({
     height: 40,
   },
   textInputOne: {
+    display: "flex",
     borderColor: "#dcdcdc",
     borderRadius: 5,
     paddingLeft: 10,
@@ -430,6 +542,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderColor: "#dcdcdc",
     paddingLeft: 10,
+    zIndex: 3,
   },
   addAnotherText: {
     fontWeight: "500",
@@ -447,5 +560,36 @@ const styles = StyleSheet.create({
     width: 40,
     justifyContent: "center",
     alignItems: "center",
+  },
+  searchContainer: {
+    display: "flex",
+    flex: 1,
+    width: "100%",
+    minHeight: 50,
+    zIndex: 5,
+    backgroundColor: "#f9f9f9",
+  },
+  searchResultContainer: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    flexDirection: "row",
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+  },
+  searchResultTextContainer: {
+    paddingHorizontal: 30,
+    flex: 1,
+  },
+  searchResultTitle: {
+    fontWeight: "500",
+    color: "#454545",
+  },
+  searchResultSubtitle: {
+    fontWeight: "300",
+    color: "#6c6c6c",
+  },
+  searchAddContainer: {
+    width: 40,
   },
 });

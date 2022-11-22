@@ -21,10 +21,6 @@ import {
   selectAllProperties,
 } from "../../redux/properties-slice";
 import EachProperty from "../../components/property/EachProperty";
-import {Geo} from '@aws-amplify/geo'
-
-Geo.searchByText("Amazon Go Store")
-
 
 export default function AllProperties({ navigation }) {
   const dispatch = useDispatch();
@@ -59,7 +55,6 @@ export default function AllProperties({ navigation }) {
     dispatch(fetchProperties());
   }, [dispatch]);
 
-
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
@@ -75,7 +70,7 @@ export default function AllProperties({ navigation }) {
             value={searchInput}
           />
           {searchInput.length !== 0 && (
-            <TouchableOpacity onPress={() => handleSearch("")}>
+            <TouchableOpacity onPress={() => setSearchInput("")}>
               <Feather name="x-circle" size={20} color="#7b7b7c" />
             </TouchableOpacity>
           )}
