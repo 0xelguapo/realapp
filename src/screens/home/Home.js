@@ -24,7 +24,11 @@ import HomeTask from "../../components/home/HomeTask";
 import AddHome from "../../components/home/AddHome";
 import { AuthContext } from "../../context/auth-context";
 import SwipeableGoal from "../../components/gesture/SwipeableGoal";
-import { fetchGoals, selectAllGoals } from "../../redux/goals-slice";
+import {
+  fetchGoals,
+  selectAllGoals,
+  resetGoals,
+} from "../../redux/goals-slice";
 import { GoalRow } from "../../components/gesture/GoalRow";
 
 export default function Home(props) {
@@ -111,6 +115,25 @@ export default function Home(props) {
   }, []);
 
   useEffect(() => {
+    const handleResetGoals = async () => {
+      const arrayOfGoalIds = allGoals.reduce((acc, el) => {
+        if (
+          formatDistanceToNowStrict(new Date(el.updatedAt), {
+            unit: "day",
+          }) !== "0 days"
+        ) {
+          acc.push(el.id);
+        }
+        return acc;
+      }, []);
+      if(arrayOfGoalIds.length > 0) {
+        const response = await dispatch(resetGoals(arrayOfGoalIds)).unwrap()
+      }
+    };
+    handleResetGoals();
+  }, [allGoals]);
+
+  useEffect(() => {
     const incrementStreak = async () => {
       await API.graphql(
         graphqlOperation(updateUserStreak, {
@@ -146,11 +169,8 @@ export default function Home(props) {
   useEffect(() => {
     dispatch(fetchTasks());
     dispatch(fetchReminders());
+    dispatch(fetchGoals());
   }, []);
-
-  useEffect(() => {
-    dispatch(fetchGoals())
-  }, [])
 
   // useEffect(() => {
   //   displayPaywall();
@@ -164,7 +184,7 @@ export default function Home(props) {
       setRefreshVisible(true);
     }, 2000);
     dispatch(fetchTasks());
-    dispatch(fetchReminders());
+    dispatch(fetchGoals());
   };
 
   const handleCompleteTask = async (id, completed) => {

@@ -71,6 +71,27 @@ export const removeGoal = createAsyncThunk(
   }
 );
 
+export const resetGoals = createAsyncThunk(
+  "goals/resetGoals",
+  async (arrayOfIds) => {
+    let promiseResult;
+
+    const promises = arrayOfIds.map((id) =>
+      API.graphql(
+        graphqlOperation(updateGoal, { input: { id: id, timesCompleted: "0" } })
+      )
+    );
+
+    try {
+      promiseResult = await Promise.all(promises);
+    } catch (err) {
+      console.error(err);
+    }
+
+    return promiseResult
+  }
+);
+
 export const goalsSlice = createSlice({
   name: "goals",
   initialState,
@@ -92,6 +113,11 @@ export const goalsSlice = createSlice({
       })
       .addCase(removeGoal.fulfilled, (state, action) => {
         goalsAdapter.removeOne(state, action.payload.id);
+      })
+      .addCase(resetGoals.fulfilled, (state, action) => {
+        for(const obj of action.payload) {
+          state.entities[obj.data.updateGoal.id] = obj.data.updateGoal
+        }
       });
   },
 });

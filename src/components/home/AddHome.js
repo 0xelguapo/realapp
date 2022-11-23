@@ -62,7 +62,7 @@ export default function AddHome() {
             {/* <OptionIcon onPress={handleViewAddReminder} text={"Add Reminder"}>
               <Feather name="bell" size={28} color="black" />
             </OptionIcon> */}
-            <OptionIcon onPress={handleViewAddGoal} text={"Add Goal"}>
+            <OptionIcon onPress={handleViewAddGoal} text={"Add Daily Goal"}>
               <Entypo name="flag" size={28} color="black" />
             </OptionIcon>
           </View>
