@@ -2,15 +2,22 @@ import { RectButton } from "react-native-gesture-handler";
 import { Animated, StyleSheet, View, Text, I18nManager } from "react-native";
 import { Feather } from "@expo/vector-icons";
 
-export const GoalRow = ({ title, content, timesPerDay, timesCompleted }) => {
+export const GoalRow = ({
+  title,
+  content,
+  timesPerDay,
+  timesCompleted,
+  handlePress,
+}) => {
   let goalCompleted = parseInt(timesCompleted) - parseInt(timesPerDay) >= 0;
-
   return (
-    <RectButton style={styles.rectButton}>
+    <RectButton style={styles.rectButton} onPress={handlePress}>
       <Text style={styles.fromText}>{title}</Text>
-      <Text numberOfLines={2} style={styles.messageText}>
-        {content}
-      </Text>
+      {content.length > 0 && (
+        <Text numberOfLines={2} style={styles.messageText}>
+          {content}
+        </Text>
+      )}
       <Text style={styles.dateText}>
         {!goalCompleted ? (
           `${timesCompleted}/${timesPerDay}`

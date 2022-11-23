@@ -8,6 +8,7 @@ import Paywall from "../../components/UI/Paywall";
 import Overdue from "./Overdue";
 import ClientDetails from "../clients/ClientDetails";
 import AddGoal from "./AddGoal";
+import EditGoal from "./EditGoal";
 
 const Stack = createNativeStackNavigator();
 
@@ -74,6 +75,15 @@ export default function HomeNavigator() {
         }}
         name="AddGoal"
         component={AddGoal}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: false,
+          presentation: "modal",
+          cardOverlayEnabled: true,
+        }}
+        name="EditGoal"
+        component={EditGoal}
       />
     </Stack.Navigator>
   );

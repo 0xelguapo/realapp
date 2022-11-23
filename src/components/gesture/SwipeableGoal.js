@@ -3,6 +3,7 @@ import { Animated, StyleSheet, View, Text, I18nManager } from "react-native";
 import { RectButton } from "react-native-gesture-handler";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 import { useDispatch } from "react-redux";
+import useNotifications from "../../hooks/notification-hook";
 import { editGoal, removeGoal } from "../../redux/goals-slice";
 
 export default function SwipeableGoal({
@@ -11,11 +12,14 @@ export default function SwipeableGoal({
   incrementAmount,
   timesCompleted,
   goalId,
+  notificationId,
 }) {
   const updateRef = useRef(null);
   const dispatch = useDispatch();
 
-  const timesCompletedInt = parseInt(timesCompleted)
+  const { handleDeleteNotification, getScheduledNotifications } = useNotifications();
+
+  const timesCompletedInt = parseInt(timesCompleted);
 
   const handleIncrementGoal = () => {
     let incrementAmountInt = parseInt(incrementAmount);
@@ -25,9 +29,9 @@ export default function SwipeableGoal({
   };
 
   const handleCompleteGoal = () => {
-    dispatch(editGoal({id: goalId, timesCompleted: timesPerDay }))
-    close()
-  }
+    dispatch(editGoal({ id: goalId, timesCompleted: timesPerDay }));
+    close();
+  };
 
   const renderLeftAction = (
     text,
@@ -71,7 +75,14 @@ export default function SwipeableGoal({
         flexDirection: I18nManager.isRTL ? "row-reverse" : "row",
       }}
     >
-      {renderLeftAction("Done", "#0e9f6e", 128, progress, handleCompleteGoal, true)}
+      {renderLeftAction(
+        "Done",
+        "#0e9f6e",
+        128,
+        progress,
+        handleCompleteGoal,
+        true
+      )}
       {renderLeftAction(
         "+" + incrementAmount,
         "#31c48d",
@@ -88,7 +99,11 @@ export default function SwipeableGoal({
       outputRange: [-20, 0, 0, 1],
     });
 
-    const handleDeleteGoal = () => {
+    const handleDeleteGoal = async () => {
+      const notificationIdsArray = notificationId.split(",");
+      for (const notifId of notificationIdsArray) {
+        console.log(await handleDeleteNotification(notifId));
+      }
       close();
       dispatch(removeGoal(goalId));
     };

@@ -19,7 +19,7 @@ import {
   selectAllTasks,
 } from "../../redux/tasks-slice";
 import { MaterialIcons } from "@expo/vector-icons";
-import { format, add, sub, formatDistanceToNowStrict } from "date-fns";
+import { format, add, sub, formatDistanceToNowStrict, isToday } from "date-fns";
 import HomeTask from "../../components/home/HomeTask";
 import AddHome from "../../components/home/AddHome";
 import { AuthContext } from "../../context/auth-context";
@@ -117,17 +117,13 @@ export default function Home(props) {
   useEffect(() => {
     const handleResetGoals = async () => {
       const arrayOfGoalIds = allGoals.reduce((acc, el) => {
-        if (
-          formatDistanceToNowStrict(new Date(el.updatedAt), {
-            unit: "day",
-          }) !== "0 days"
-        ) {
+        if (!isToday(new Date(el.updatedAt))) {
           acc.push(el.id);
         }
         return acc;
       }, []);
-      if(arrayOfGoalIds.length > 0) {
-        const response = await dispatch(resetGoals(arrayOfGoalIds)).unwrap()
+      if (arrayOfGoalIds.length > 0) {
+        const response = await dispatch(resetGoals(arrayOfGoalIds)).unwrap();
       }
     };
     handleResetGoals();
@@ -197,6 +193,10 @@ export default function Home(props) {
     let timeInt = parseInt(timesPerDay);
     return timeInt > 5 ? Math.round(timeInt * 0.25).toString() : "1";
   };
+
+  const handleViewEditGoal = (goal) => {
+    props.navigation.navigate('EditGoal', { goal: goal })
+  }
 
   return (
     <View style={styles.container}>
@@ -310,12 +310,14 @@ export default function Home(props) {
               incrementAmount={getGoalIncrementAmount(goal.timesPerDay)}
               timesCompleted={goal.timesCompleted}
               timesPerDay={goal.timesPerDay}
+              notificationId={goal.notificationId}
             >
               <GoalRow
                 title={goal.title}
                 content={goal.content}
                 timesPerDay={goal.timesPerDay}
                 timesCompleted={goal.timesCompleted}
+                handlePress={() => handleViewEditGoal(goal)}
               />
             </SwipeableGoal>
           ))}

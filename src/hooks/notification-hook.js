@@ -77,23 +77,34 @@ function useNotifications() {
           repeats: true,
           hour: hour,
           minute: minute,
-          weekday: weekday
-        }
+          weekday: weekday,
+        },
       });
     }
     return response;
   };
-  
+
+  const handleDeleteNotification = async (id) => {
+    const response = await Notifications.cancelScheduledNotificationAsync(id);
+    return response;
+  };
+
   const getScheduledNotifications = async () => {
     const response = await Notifications.getAllScheduledNotificationsAsync();
-    return response
+    return response;
   };
 
   const cancelAllScheduledNotifications = async () => {
-    await Notifications.cancelAllScheduledNotificationsAsync()
-  }
- 
-  return { calcTrigger, handleScheduleNotification, getScheduledNotifications, cancelAllScheduledNotifications };
+    await Notifications.cancelAllScheduledNotificationsAsync();
+  };
+
+  return {
+    calcTrigger,
+    handleScheduleNotification,
+    getScheduledNotifications,
+    cancelAllScheduledNotifications,
+    handleDeleteNotification
+  };
 }
 
 export default useNotifications;
