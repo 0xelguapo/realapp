@@ -286,7 +286,10 @@ export default function Home(props) {
           {allGoals.map((goal) => (
             <SwipeableGoal
               key={goal.id}
+              goalId={goal.id}
               incrementAmount={getGoalIncrementAmount(goal.timesPerDay)}
+              timesCompleted={goal.timesCompleted}
+              timesPerDay={goal.timesPerDay}
             >
               <GoalRow
                 title={goal.title}

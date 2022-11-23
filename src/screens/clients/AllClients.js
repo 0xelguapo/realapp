@@ -54,15 +54,17 @@ export default function Clients({ navigation }) {
 
   const quickAddProperty = async (item) => {
     let propertyDetails = {
-      street: item.addressNumber ? item.addressNumber + ' ' + item.street : item.street,
+      street: item.addressNumber
+        ? item.addressNumber + " " + item.street
+        : item.street,
       city: item.municipality,
       state: item.region,
-      zip: item.postalCode
-    }
-    const response = await dispatch(addProperty(propertyDetails)).unwrap()
-    if(response) {
-      console.log(response)
-      onStatusChange('PROPERTY CREATED')
+      zip: item.postalCode,
+    };
+    const response = await dispatch(addProperty(propertyDetails)).unwrap();
+    if (response) {
+      console.log(response);
+      onStatusChange("PROPERTY CREATED");
     }
   };
 
@@ -105,7 +107,7 @@ export default function Clients({ navigation }) {
   const scrollOffsetY = useRef(new Animated.Value(0)).current;
   const headerScrollHeight = scrollOffsetY.interpolate({
     inputRange: [0, 50],
-    outputRange: [0, -90],
+    outputRange: [0, -80],
     extrapolate: "clamp",
   });
 
@@ -320,7 +322,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f5f5f5",
-    paddingTop: 30,
   },
   loadingContainer: {
     flex: 1,
@@ -332,7 +333,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingBottom: 20,
     zIndex: 3,
-    paddingTop: 20,
+    paddingTop: 50,
   },
   headerText: {
     fontSize: 25,

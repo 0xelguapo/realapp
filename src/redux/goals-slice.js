@@ -4,7 +4,7 @@ import {
   createEntityAdapter,
 } from "@reduxjs/toolkit";
 import { API, graphqlOperation } from "aws-amplify";
-import { createGoal, updateGoal } from "../graphql/mutations";
+import { createGoal, deleteGoal, updateGoal } from "../graphql/mutations";
 import { listGoals } from "../graphql/queries";
 
 const goalsAdapter = createEntityAdapter({
@@ -56,6 +56,21 @@ export const editGoal = createAsyncThunk(
   }
 );
 
+export const removeGoal = createAsyncThunk(
+  "goals/removeGoal",
+  async (goalId) => {
+    let response;
+    try {
+      response = await API.graphql(
+        graphqlOperation(deleteGoal, { input: { id: goalId } })
+      );
+    } catch (err) {
+      console.error(err);
+    }
+    return response.data.deleteGoal;
+  }
+);
+
 export const goalsSlice = createSlice({
   name: "goals",
   initialState,
@@ -71,9 +86,13 @@ export const goalsSlice = createSlice({
       })
       .addCase(addGoal.fulfilled, (state, action) => {
         goalsAdapter.addOne(state, action.payload);
-      }).addCase(editGoal.fulfilled, (state, action) => {
-        state.entities[action.payload.id] = action.payload
       })
+      .addCase(editGoal.fulfilled, (state, action) => {
+        state.entities[action.payload.id] = action.payload;
+      })
+      .addCase(removeGoal.fulfilled, (state, action) => {
+        goalsAdapter.removeOne(state, action.payload.id);
+      });
   },
 });
 

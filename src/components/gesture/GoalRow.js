@@ -1,18 +1,26 @@
 import { RectButton } from "react-native-gesture-handler";
 import { Animated, StyleSheet, View, Text, I18nManager } from "react-native";
+import { Feather } from "@expo/vector-icons";
 
+export const GoalRow = ({ title, content, timesPerDay, timesCompleted }) => {
+  let goalCompleted = parseInt(timesCompleted) - parseInt(timesPerDay) >= 0;
 
-export const GoalRow = ({ title, content, timesPerDay, timesCompleted }) => (
-  <RectButton style={styles.rectButton}>
-    <Text style={styles.fromText}>{title}</Text>
-    <Text numberOfLines={2} style={styles.messageText}>
-      {content}
-    </Text>
-    <Text style={styles.dateText}>
-      {`${timesCompleted}/${timesPerDay}`}
-    </Text>
-  </RectButton>
-);
+  return (
+    <RectButton style={styles.rectButton}>
+      <Text style={styles.fromText}>{title}</Text>
+      <Text numberOfLines={2} style={styles.messageText}>
+        {content}
+      </Text>
+      <Text style={styles.dateText}>
+        {!goalCompleted ? (
+          `${timesCompleted}/${timesPerDay}`
+        ) : (
+          <Feather name="check-circle" size={20} color="green" />
+        )}
+      </Text>
+    </RectButton>
+  );
+};
 
 const styles = StyleSheet.create({
   rectButton: {
@@ -41,7 +49,7 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
     position: "absolute",
     right: 20,
-    top: '50%',
+    top: "50%",
     color: "#999",
     fontWeight: "bold",
   },

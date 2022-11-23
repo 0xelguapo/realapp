@@ -1,7 +1,16 @@
-import { View, Text, Pressable, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  Pressable,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import { el } from "date-fns/locale";
 
 export default function DetailsProperties({ clientDetailsState }) {
+  const navigation = useNavigation();
   return (
     <View style={styles.detailsContainer}>
       <View style={styles.blockHeadingContainer}>
@@ -10,14 +19,24 @@ export default function DetailsProperties({ clientDetailsState }) {
       <View style={styles.detailContainer}>
         {clientDetailsState.properties.items?.length ? (
           clientDetailsState.properties.items.map((el) => (
-            <View style={styles.property} key={el.id}>
+            <TouchableOpacity
+              style={styles.property}
+              key={el.id}
+              onPress={() =>
+                navigation.navigate("PropertyDetails", { id: el.id })
+              }
+            >
               <Text style={styles.streetText}>{el.street}</Text>
               <View style={styles.cityStateContainer}>
-                {el.city && <Text style={styles.cityStateText}>{el.city + ", "}</Text>}
-                {el.state && <Text style={styles.cityStateText}>{el.state + " "}</Text>}
+                {el.city && (
+                  <Text style={styles.cityStateText}>{el.city + ", "}</Text>
+                )}
+                {el.state && (
+                  <Text style={styles.cityStateText}>{el.state + " "}</Text>
+                )}
                 {el.zip && <Text style={styles.cityStateText}>{el.zip}</Text>}
               </View>
-            </View>
+            </TouchableOpacity>
           ))
         ) : (
           <View style={styles.emptyPlaceholderContainer}>

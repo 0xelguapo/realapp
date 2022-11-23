@@ -3,15 +3,31 @@ import { Animated, StyleSheet, View, Text, I18nManager } from "react-native";
 import { RectButton } from "react-native-gesture-handler";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 import { useDispatch } from "react-redux";
+import { editGoal, removeGoal } from "../../redux/goals-slice";
 
 export default function SwipeableGoal({
   children,
   timesPerDay,
   incrementAmount,
+  timesCompleted,
+  goalId,
 }) {
   const updateRef = useRef(null);
   const dispatch = useDispatch();
 
+  const timesCompletedInt = parseInt(timesCompleted)
+
+  const handleIncrementGoal = () => {
+    let incrementAmountInt = parseInt(incrementAmount);
+    let newAmount = timesCompletedInt + incrementAmountInt;
+    dispatch(editGoal({ id: goalId, timesCompleted: newAmount.toString() }));
+    close();
+  };
+
+  const handleCompleteGoal = () => {
+    dispatch(editGoal({id: goalId, timesCompleted: timesPerDay }))
+    close()
+  }
 
   const renderLeftAction = (
     text,
@@ -38,7 +54,10 @@ export default function SwipeableGoal({
           { flex: 1, overflow: "hidden", transform: [{ translateX: 0 }] },
         ]}
       >
-        <RectButton style={[styles.leftAction, { backgroundColor: color }]}>
+        <RectButton
+          style={[styles.leftAction, { backgroundColor: color }]}
+          onPress={onPress}
+        >
           <Text style={styles.actionText}>{text}</Text>
         </RectButton>
       </Animated.View>
@@ -52,8 +71,14 @@ export default function SwipeableGoal({
         flexDirection: I18nManager.isRTL ? "row-reverse" : "row",
       }}
     >
-      {renderLeftAction("Done", "#0e9f6e", 128, progress, null, true)}
-      {renderLeftAction("+" + incrementAmount, "#31c48d", 64, progress, null)}
+      {renderLeftAction("Done", "#0e9f6e", 128, progress, handleCompleteGoal, true)}
+      {renderLeftAction(
+        "+" + incrementAmount,
+        "#31c48d",
+        64,
+        progress,
+        handleIncrementGoal
+      )}
     </View>
   );
 
@@ -63,8 +88,13 @@ export default function SwipeableGoal({
       outputRange: [-20, 0, 0, 1],
     });
 
+    const handleDeleteGoal = () => {
+      close();
+      dispatch(removeGoal(goalId));
+    };
+
     return (
-      <RectButton style={styles.rightAction} onPress={close}>
+      <RectButton style={styles.rightAction} onPress={handleDeleteGoal}>
         <Animated.Text style={[styles.actionText]}>Delete</Animated.Text>
       </RectButton>
     );
