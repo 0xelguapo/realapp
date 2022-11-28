@@ -47,7 +47,7 @@ type Client @model @auth(rules: [{ allow: owner }, { allow: public, provider: ap
   tasks: [Task] @hasMany(indexName: "byClient", fields: ["id"])
   group: [ClientGroup] @manyToMany(relationName: "GroupsClients")
   reminder: [Reminder] @hasMany(indexName: "byReminder", fields: ["id"])
-  deal: [Deal] @hasMany(indexName: "byDeal")
+  deal: [Deal] @hasMany(indexName: "byDeal", fields: ["id"])
   owner: String @auth(rules: [{ allow: owner, operations: [read, delete] }, { allow: public, provider: apiKey, operations: [create, update]}])
 }
 

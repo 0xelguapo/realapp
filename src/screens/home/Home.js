@@ -7,29 +7,33 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Pressable,
+  FlatList,
 } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { fetchReminders } from "../../redux/reminders-slice";
 import { API, graphqlOperation } from "aws-amplify";
 import { getUserStreak, updateUserStreak } from "../../graphql/customQueries";
-import {
-  completeTask,
-  fetchTasks,
-  selectAllTasks,
-} from "../../redux/tasks-slice";
+import { fetchTasks } from "../../redux/tasks-slice";
 import { MaterialIcons } from "@expo/vector-icons";
-import { format, add, sub, formatDistanceToNowStrict, isToday } from "date-fns";
-import HomeTask from "../../components/home/HomeTask";
+import {
+  format,
+  add,
+  sub,
+  formatDistanceToNowStrict,
+  isToday,
+  startOfDay,
+  endOfDay,
+} from "date-fns";
 import AddHome from "../../components/home/AddHome";
 import { AuthContext } from "../../context/auth-context";
-import SwipeableGoal from "../../components/gesture/SwipeableGoal";
-import {
-  fetchGoals,
-  selectAllGoals,
-  resetGoals,
-} from "../../redux/goals-slice";
-import { GoalRow } from "../../components/gesture/GoalRow";
+import { fetchGoals, resetGoals } from "../../redux/goals-slice";
+import HomeDate from "./HomeDate";
+import useGoals from "../../hooks/goals-hook";
+import useTasks from "../../hooks/tasks-hook";
+import ProgressContainer from "../../components/home/ProgressContainer";
+import OverdueTasks from "../../components/home/OverdueTasks";
+import TaskList from "../../components/home/TasksList";
+import GoalsList from "../../components/home/GoalsList";
 
 export default function Home(props) {
   let date = new Date();
@@ -47,43 +51,14 @@ export default function Home(props) {
   ]);
   const [activeDate, setActiveDate] = useState(nextFiveDates[1]);
 
-  const allTasks = useSelector(selectAllTasks);
-  const allGoals = useSelector(selectAllGoals);
-
-  const tasksOfDate = allTasks
-    .filter((task) => {
-      if (task.date.length > 1) {
-        return (
-          format(new Date(task.date), "L, d") === format(activeDate, "L, d")
-        );
-      } else if (task.date.length < 1) {
-        return true;
-      }
-    })
-    .sort((a, b) => {
-      if (b.date.length < 1) return 2;
-      else return new Date(a.date) - new Date(b.date);
-    });
-
-  const lengthOfCompletedTasks = tasksOfDate.reduce(
-    (acc, el) => {
-      if (el.completed) acc++;
-      return acc;
-    },
-    [0]
-  );
-
-  const lengthOfOverdueTasks = allTasks.reduce(
-    (acc, el) => {
-      if (
-        format(new Date(el.date), "L, d") < format(date, "L, d") &&
-        !el.completed
-      )
-        acc++;
-      return acc;
-    },
-    [0]
-  );
+  const { allGoals, goalsOfDay, getGoalIncrementAmount } = useGoals(activeDate);
+  const {
+    allTasks,
+    tasksOfDate,
+    lengthOfCompletedTasks,
+    lengthOfOverdueTasks,
+    handleCompleteTask,
+  } = useTasks(activeDate);
 
   const displayPaywall = async () => {
     try {
@@ -163,9 +138,7 @@ export default function Home(props) {
   }, [lengthOfCompletedTasks]);
 
   useEffect(() => {
-    dispatch(fetchTasks());
     dispatch(fetchReminders());
-    dispatch(fetchGoals());
   }, []);
 
   // useEffect(() => {
@@ -183,20 +156,34 @@ export default function Home(props) {
     dispatch(fetchGoals());
   };
 
-  const handleCompleteTask = async (id, completed) => {
-    const response = await dispatch(
-      completeTask({ id, completed: !completed })
-    ).unwrap();
-  };
-
-  const getGoalIncrementAmount = (timesPerDay) => {
-    let timeInt = parseInt(timesPerDay);
-    return timeInt > 5 ? Math.round(timeInt * 0.25).toString() : "1";
-  };
-
   const handleViewEditGoal = (goal) => {
-    props.navigation.navigate('EditGoal', { goal: goal })
-  }
+    props.navigation.navigate("EditGoal", { goal: goal });
+  };
+
+  const renderDate = ({ item, index }) => {
+    return (
+      <View style={styles.homeDateContainer}>
+        <HomeDate
+          activeDate={activeDate}
+          setActiveDate={setActiveDate}
+          index={index}
+          date={item}
+          nextFiveDates={nextFiveDates}
+        />
+      </View>
+    );
+  };
+
+  const onDatesEnd = () => {
+    let lastDay = nextFiveDates.length - 1;
+    if (lastDay < 1000) {
+      let temp = [...nextFiveDates];
+      for (let i = lastDay; i < lastDay + 10; i++) {
+        temp.push(add(date, { days: i }));
+      }
+      setNextFiveDates(temp);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -208,178 +195,55 @@ export default function Home(props) {
           <MaterialIcons name="refresh" size={20} color="#454545" />
         </TouchableOpacity>
       )}
-      <AddHome />
+      <AddHome activeDate={activeDate.toString()} />
       <View style={styles.headerContainer}>
         <Text style={styles.headerTitle}>Your Focus</Text>
+      </View>
+
+      <View style={styles.flatListDatesContainer}>
+        <FlatList
+          renderItem={renderDate}
+          data={nextFiveDates}
+          horizontal={true}
+          contentContainerStyle={[{ paddingHorizontal: 10 }]}
+          onEndReached={onDatesEnd}
+          onEndReachedThreshold={0.2}
+          showsHorizontalScrollIndicator={false}
+        />
       </View>
 
       <ScrollView
         style={styles.bodyContainer}
         contentContainerStyle={[{ paddingBottom: 50 }]}
       >
-        <View style={styles.datesContainer}>
-          {nextFiveDates.map((d, index) => {
-            return (
-              <Pressable
-                style={
-                  activeDate === d
-                    ? styles.activeIndividualDate
-                    : styles.individualDate
-                }
-                key={index}
-                onPress={() => setActiveDate(nextFiveDates[index])}
-              >
-                <Text
-                  style={
-                    activeDate === d ? styles.activeDayOfWeek : styles.dayOfWeek
-                  }
-                >
-                  {format(d, "EEEEEE").toUpperCase()}
-                </Text>
-                <Text
-                  style={
-                    activeDate === d
-                      ? styles.activeDayOfMonth
-                      : styles.dayOfMonth
-                  }
-                >
-                  {format(d, "d")}
-                </Text>
-              </Pressable>
-            );
-          })}
-        </View>
+        <ProgressContainer
+          tasksOfDate={tasksOfDate}
+          lengthOfCompletedTasks={lengthOfCompletedTasks}
+          streakCount={streakCount}
+        />
 
-        <View style={styles.progressContainer}>
-          <View style={styles.progressBoxContainer}>
-            <View style={styles.progressBox}>
-              <View style={styles.progressTitleContainer}>
-                <Text style={styles.progressTextTitle}>Today's Progress</Text>
-              </View>
-              <View style={styles.progressRatioContainer}>
-                <Text style={styles.progressRatio}>
-                  {lengthOfCompletedTasks || "0"}/{tasksOfDate?.length || "0"}
-                </Text>
-              </View>
-              <View style={styles.progressSubtextContainer}>
-                <Text style={styles.progressSubtext}>
-                  {tasksOfDate?.length - lengthOfCompletedTasks || "0"} more
-                  tasks to complete!
-                </Text>
-              </View>
-            </View>
-            <View style={styles.progressBox}>
-              <View style={styles.progressTitleContainer}>
-                <Text style={styles.progressTextTitle}>Streak Count</Text>
-              </View>
-              <View style={styles.progressRatioContainer}>
-                <Text style={styles.progressRatio}>{streakCount}</Text>
-              </View>
-              <View style={styles.progressSubtextContainer}>
-                {streakCount === 0 ? (
-                  <Text style={styles.progressSubtext}>
-                    Complete your tasks to start your streak!
-                  </Text>
-                ) : (
-                  <Text style={styles.progressSubtext}>
-                    You've completed all your tasks for {streakCount} days!
-                  </Text>
-                )}
-              </View>
-            </View>
-          </View>
-        </View>
+        <OverdueTasks
+          lengthOfOverdueTasks={lengthOfOverdueTasks}
+          onPress={() => props.navigation.navigate("Overdue")}
+        />
 
-        {lengthOfOverdueTasks > 0 && (
-          <TouchableOpacity
-            style={styles.overdueContainer}
-            onPress={() => props.navigation.navigate("Overdue")}
-          >
-            <View style={styles.overdueCircle}>
-              <Text style={styles.overdueLength}>{lengthOfOverdueTasks}</Text>
-            </View>
-            <Text style={styles.overdueText}>View Overdue</Text>
-          </TouchableOpacity>
-        )}
-
-        <View>
-          {allGoals.map((goal) => (
-            <SwipeableGoal
-              key={goal.id}
-              goalId={goal.id}
-              incrementAmount={getGoalIncrementAmount(goal.timesPerDay)}
-              timesCompleted={goal.timesCompleted}
-              timesPerDay={goal.timesPerDay}
-              notificationId={goal.notificationId}
-            >
-              <GoalRow
-                title={goal.title}
-                content={goal.content}
-                timesPerDay={goal.timesPerDay}
-                timesCompleted={goal.timesCompleted}
-                handlePress={() => handleViewEditGoal(goal)}
-              />
-            </SwipeableGoal>
-          ))}
+        <View style={styles.titleContainer}>
+          <Text style={styles.titleHeader}>DAILY GOALS</Text>
         </View>
+        <GoalsList
+          handleViewEditGoal={handleViewEditGoal}
+          goalsOfDay={goalsOfDay}
+          allGoalsLength={allGoals.length}
+          getGoalIncrementAmount={getGoalIncrementAmount}
+        />
 
         <View style={styles.titleContainer}>
           <Text style={styles.titleHeader}>TO DO</Text>
         </View>
-
-        {tasksOfDate.length === 0 ? (
-          <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>No tasks for today!</Text>
-            <Text style={styles.emptySubtext}>
-              Click the + button to start planning...
-            </Text>
-          </View>
-        ) : (
-          <>
-            <View style={styles.tasksContainer}>
-              {tasksOfDate.map((task, index) => {
-                if (!task.completed)
-                  return (
-                    <HomeTask
-                      key={task.id}
-                      title={task.title}
-                      index={index}
-                      completed={task.completed}
-                      content={task.content}
-                      length={tasksOfDate.length}
-                      date={task.date}
-                      clientId={task.clientId}
-                      onPress={() =>
-                        handleCompleteTask(task.id, task.completed)
-                      }
-                    />
-                  );
-              })}
-            </View>
-            <View style={styles.completedTasksContainer}>
-              <View style={styles.titleContainer}>
-                <Text style={styles.titleHeader}>COMPLETED</Text>
-              </View>
-              {tasksOfDate.map((task, index) => {
-                if (task.completed)
-                  return (
-                    <HomeTask
-                      key={task.id}
-                      title={task.title}
-                      index={index}
-                      completed={task.completed}
-                      content={task.content}
-                      length={tasksOfDate.length}
-                      date={task.date}
-                      onPress={() =>
-                        handleCompleteTask(task.id, task.completed)
-                      }
-                    />
-                  );
-              })}
-            </View>
-          </>
-        )}
+        <TaskList
+          tasksOfDate={tasksOfDate}
+          handleCompleteTask={handleCompleteTask}
+        />
       </ScrollView>
     </View>
   );
@@ -400,7 +264,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontWeight: "700",
-    fontSize: 20,
+    fontSize: 18,
     color: "#454545",
   },
   refreshContainer: {
@@ -409,78 +273,21 @@ const styles = StyleSheet.create({
     top: 55,
     zIndex: 3,
   },
-  datesContainer: {
-    display: "flex",
+
+  flatListDatesContainer: {
     flexDirection: "row",
-    justifyContent: "space-around",
+    height: 50,
   },
-  individualDate: {
-    display: "flex",
-    alignItems: "center",
-    paddingHorizontal: 8,
-    paddingVertical: 5,
+  homeDateContainer: {
+    marginRight: 30,
   },
-  dayOfWeek: {
-    fontWeight: "300",
-    color: "#6c6c6c",
-  },
-  dayOfMonth: {
-    color: "#454545",
-    marginTop: 5,
-  },
-  activeIndividualDate: {
-    display: "flex",
-    alignItems: "center",
-    backgroundColor: "#0071E3",
-    borderRadius: 50,
-    paddingHorizontal: 8,
-    paddingVertical: 5,
-  },
-  activeDayOfWeek: {
-    fontWeight: "600",
-    color: "white",
-  },
-  activeDayOfMonth: {
-    marginTop: 5,
-    color: "white",
-    fontWeight: "600",
-  },
+
   bodyContainer: {
     flex: 1,
     paddingHorizontal: 10,
     paddingVertical: 10,
   },
-  overdueContainer: {
-    display: "flex",
-    paddingHorizontal: 5,
-    paddingVertical: 10,
-    borderRadius: 5,
-    marginBottom: 10,
-    width: 130,
-    backgroundColor: "white",
-  },
-  overdueText: {
-    textAlign: "center",
-    fontWeight: "500",
-    color: "#F05252",
-  },
-  overdueCircle: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    position: "absolute",
-    right: 5,
-    top: 5,
-    width: 15,
-    height: 15,
-    borderRadius: 50,
-    backgroundColor: "#F05252",
-  },
-  overdueLength: {
-    fontSize: 12,
-    color: "white",
-    fontWeight: "500",
-  },
+
   titleContainer: {
     borderBottomColor: "#ababab",
     // borderBottomWidth: 0.2,
@@ -493,70 +300,5 @@ const styles = StyleSheet.create({
     fontWeight: "300",
     color: "#ababab",
     letterSpacing: 2,
-  },
-  tasksContainer: {
-    marginBottom: 10,
-    flex: 1,
-  },
-  tasksOfDateContainer: {},
-  remindersContainer: {
-    marginBottom: 10,
-    paddingVertical: 5,
-  },
-  progressContainer: {
-    paddingVertical: 15,
-  },
-  progressBoxContainer: {
-    flex: 1,
-    flexDirection: "row",
-    height: 110,
-    backgroundColor: "#efefef",
-    borderRadius: 10,
-  },
-  progressBox: {
-    flex: 1,
-    paddingHorizontal: 25,
-    paddingVertical: 10,
-    justifyContent: "center",
-  },
-  progressTitleContainer: {
-    height: 20,
-    justifyContent: "center",
-  },
-  progressRatioContainer: {
-    display: "flex",
-    justifyContent: "center",
-    height: 40,
-  },
-  progressSubtextContainer: {
-    height: 30,
-  },
-  progressTextTitle: {
-    color: "#6c6c6c",
-    fontWeight: "500",
-    fontSize: 15,
-  },
-  progressRatio: {
-    color: "#454545",
-    fontSize: 24,
-    fontWeight: "700",
-  },
-  progressSubtext: {
-    color: "#6c6c6c",
-    fontSize: 12,
-  },
-  emptyContainer: {
-    minHeight: 200,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  emptyText: {
-    fontSize: 20,
-    fontWeight: "500",
-    color: "#ababab",
-  },
-  emptySubtext: {
-    fontWeight: "300",
-    color: "#ababab",
   },
 });

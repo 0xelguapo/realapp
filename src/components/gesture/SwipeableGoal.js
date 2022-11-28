@@ -1,4 +1,4 @@
-import React, { Component, useRef } from "react";
+import React, { useRef } from "react";
 import { Animated, StyleSheet, View, Text, I18nManager } from "react-native";
 import { RectButton } from "react-native-gesture-handler";
 import Swipeable from "react-native-gesture-handler/Swipeable";
@@ -13,11 +13,14 @@ export default function SwipeableGoal({
   timesCompleted,
   goalId,
   notificationId,
+  length,
+  index,
 }) {
   const updateRef = useRef(null);
   const dispatch = useDispatch();
 
-  const { handleDeleteNotification, getScheduledNotifications } = useNotifications();
+  const { handleDeleteNotification } =
+    useNotifications();
 
   const timesCompletedInt = parseInt(timesCompleted);
 
@@ -100,9 +103,11 @@ export default function SwipeableGoal({
     });
 
     const handleDeleteGoal = async () => {
-      const notificationIdsArray = notificationId.split(",");
-      for (const notifId of notificationIdsArray) {
-        console.log(await handleDeleteNotification(notifId));
+      if (notificationId) {
+        const notificationIdsArray = notificationId.split(",");
+        for (const notifId of notificationIdsArray) {
+          console.log(await handleDeleteNotification(notifId));
+        }
       }
       close();
       dispatch(removeGoal(goalId));

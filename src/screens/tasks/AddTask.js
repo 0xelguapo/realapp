@@ -23,7 +23,14 @@ import { format, add } from "date-fns";
 const coeff = 1000 * 60 * 5;
 
 export default function AddTask({ navigation, route }) {
-  let curDate = new Date();
+  let curDate;
+
+  if (route.params?.activeDate) {
+    curDate = new Date(route.params.activeDate);
+  } else {
+    curDate = new Date();
+  }
+
   const dispatch = useDispatch();
   const allClients = useSelector(selectAllClients);
 
@@ -96,9 +103,9 @@ export default function AddTask({ navigation, route }) {
     setStartPickerVisible(false);
   };
   const handleAddTask = async () => {
-    if(!title) {
-      Alert.alert('Please enter a title');
-      return
+    if (!title) {
+      Alert.alert("Please enter a title");
+      return;
     }
     const taskDetails = selectedClient?.clientId
       ? {

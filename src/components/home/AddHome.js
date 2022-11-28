@@ -13,7 +13,7 @@ import { Entypo } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 
-export default function AddHome() {
+export default function AddHome({ activeDate }) {
   const [visible, setVisible] = useState(false);
   const navigation = useNavigation();
 
@@ -34,7 +34,7 @@ export default function AddHome() {
   };
 
   const handleViewAddTask = () => {
-    navigation.navigate("AddTask");
+    navigation.navigate("AddTask", { activeDate });
     setVisible(false);
   };
 

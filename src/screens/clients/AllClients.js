@@ -15,8 +15,6 @@ import {
   Animated,
   Pressable,
   TouchableOpacity,
-  FlatList,
-  SectionList,
 } from "react-native";
 import EachClient from "../../components/client/EachClient";
 import EachProperty from "../../components/property/EachProperty";
@@ -33,6 +31,8 @@ import { SuccessContext } from "../../context/success-context";
 import SuggestedProperty from "../../components/property/SuggestedProperty";
 
 export default function Clients({ navigation }) {
+  const sectionListRef = useRef(null);
+
   const [searchInput, setSearchInput] = useState("");
   const dispatch = useDispatch();
   const status = useSelector((state) => state.clients.status);
@@ -51,6 +51,21 @@ export default function Clients({ navigation }) {
   ]);
 
   const { onStatusChange } = useContext(SuccessContext);
+
+  const scrollToProperties = () => {
+    sectionListRef.current.scrollToLocation({
+      itemIndex: allClients.length - 1,
+      viewOffset: -170,
+      viewPosition: 0,
+    });
+  };
+
+  const scrollToTop = () => {
+    sectionListRef.current.scrollToLocation({
+      itemIndex: 0,
+      viewOffset: 100,
+    });
+  };
 
   const quickAddProperty = async (item) => {
     let propertyDetails = {
@@ -216,7 +231,14 @@ export default function Clients({ navigation }) {
           <View
             style={{ backgroundColor: "#f5f5f5", zIndex: 1, paddingBottom: 10 }}
           >
-            <Text style={styles.headerText}>Contacts / Properties</Text>
+            <View style={styles.headerTextContainer}>
+              <Pressable onPress={scrollToTop}>
+                <Text style={styles.headerText}>Contacts / </Text>
+              </Pressable>
+              <Pressable onPress={scrollToProperties}>
+                <Text style={styles.headerText}>Properties</Text>
+              </Pressable>
+            </View>
             <View style={styles.inputContainer}>
               <Ionicons name="ios-search" size={20} color="black" />
               <TextInput
@@ -286,7 +308,11 @@ export default function Clients({ navigation }) {
           ) : (
             <>
               <Animated.SectionList
+                ref={sectionListRef}
                 sections={filteredAllData}
+                onScrollToIndexFailed={() => {
+                  return;
+                }}
                 renderItem={({ section: { renderItem } }) => (
                   <View>{renderItem}</View>
                 )}
@@ -335,11 +361,15 @@ const styles = StyleSheet.create({
     zIndex: 3,
     paddingTop: 50,
   },
+  headerTextContainer: {
+    flexDirection: "row",
+  },
   headerText: {
     fontSize: 25,
     fontWeight: "700",
     color: "#454545",
   },
+
   sectionHeaderContainer: {
     paddingHorizontal: 10,
     backgroundColor: "white",

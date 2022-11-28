@@ -52,6 +52,7 @@ function useNotifications() {
   };
 
   const handleScheduleNotification = async (title, hour, minute, weekday) => {
+    let response;
     const { status: existingStatus } =
       await Notifications.getPermissionsAsync();
 

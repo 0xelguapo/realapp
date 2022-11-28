@@ -18,21 +18,21 @@ import useNotifications from "../../hooks/notification-hook";
 import { useDispatch } from "react-redux";
 import { addGoal } from "../../redux/goals-slice";
 
-const initialDaysActive = [
-  { day: "Mo", isActive: false, rule: RRule.MO, weekday: 2 },
-  { day: "Tu", isActive: false, rule: RRule.TU, weekday: 3 },
-  { day: "We", isActive: false, rule: RRule.WE, weekday: 4 },
-  { day: "Th", isActive: false, rule: RRule.TH, weekday: 5 },
-  { day: "Fr", isActive: false, rule: RRule.FR, weekday: 6 },
-  { day: "Sa", isActive: false, rule: RRule.SA, weekday: 7 },
-  { day: "Su", isActive: false, rule: RRule.SU, weekday: 1 },
-];
-
 export default function EditGoal(props) {
+  const initialDaysActive = [
+    { day: "Mo", isActive: false, rule: RRule.MO, weekday: 2 },
+    { day: "Tu", isActive: false, rule: RRule.TU, weekday: 3 },
+    { day: "We", isActive: false, rule: RRule.WE, weekday: 4 },
+    { day: "Th", isActive: false, rule: RRule.TH, weekday: 5 },
+    { day: "Fr", isActive: false, rule: RRule.FR, weekday: 6 },
+    { day: "Sa", isActive: false, rule: RRule.SA, weekday: 7 },
+    { day: "Su", isActive: false, rule: RRule.SU, weekday: 1 },
+  ];
+
   const { goal } = props.route.params;
 
   const rruleObj = RRule.fromString(goal.recurRule);
-  
+
   const constructDaysActive = () => {
     const ruleOptions = rruleObj.options.byweekday;
     let ruleCount = 0;
@@ -56,16 +56,16 @@ export default function EditGoal(props) {
   const [title, setTitle] = useState(goal.title);
   const [content, setContent] = useState(goal.content || "");
   const [repeatIsEnabled, setRepeatIsEnabled] = useState(
-    goal.notificationId.length > 0
+    goal.recurRule.length > 0
   );
   const [repeatOptionsVisible, setRepeatOptionsVisible] =
     useState(repeatIsEnabled);
   const [timesPerDay, setTimesPerDay] = useState(goal.timesPerDay);
   const [remindMeState, setRemindMeState] = useState(
-    goal.notificationId.length > 0
+    goal?.notificationId?.length > 0
   );
   const [notificationTime, setNotificationTime] = useState(
-    new Date(rruleObj.origOptions.dtstart)
+    new Date(rruleObj?.origOptions.dtstart)
   );
   const { handleScheduleNotification, cancelAllScheduledNotifications } =
     useNotifications();
@@ -103,8 +103,8 @@ export default function EditGoal(props) {
     }, []);
 
     const rule = new RRule({
-      freq: RRule.WEEKLY,
-      interval: 5,
+      freq: RRule.DAILY,
+      interval: 1,
       byweekday: weekdays,
       dtstart: new Date(),
       until: new Date(2026, 12, 31),
@@ -188,8 +188,25 @@ export default function EditGoal(props) {
               placeholderTextColor="#cacacb"
               returnKeyType="done"
               value={content}
+              multiline={true}
               onChangeText={setContent}
             />
+          </View>
+
+          <View style={styles.detailInputs}>
+            <Pressable
+              style={styles.switchContainer}
+              onPress={() => timesRef.current.focus()}
+            >
+              <Text style={styles.switchText}>Times Per Day</Text>
+              <TextInput
+                style={styles.timesInput}
+                keyboardType="number-pad"
+                value={timesPerDay}
+                onChangeText={setTimesPerDay}
+                ref={timesRef}
+              />
+            </Pressable>
           </View>
 
           <View style={styles.detailInputs}>
@@ -229,22 +246,6 @@ export default function EditGoal(props) {
                 ))}
               </View>
             )}
-          </View>
-
-          <View style={styles.detailInputs}>
-            <Pressable
-              style={styles.switchContainer}
-              onPress={() => timesRef.current.focus()}
-            >
-              <Text style={styles.switchText}>Times Per Day</Text>
-              <TextInput
-                style={styles.timesInput}
-                keyboardType="number-pad"
-                value={timesPerDay}
-                onChangeText={setTimesPerDay}
-                ref={timesRef}
-              />
-            </Pressable>
           </View>
 
           <View style={styles.detailInputs}>

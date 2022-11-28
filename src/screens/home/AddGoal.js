@@ -17,6 +17,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import useNotifications from "../../hooks/notification-hook";
 import { useDispatch } from "react-redux";
 import { addGoal } from "../../redux/goals-slice";
+import { endOfDay, startOfDay } from "date-fns";
 
 export default function AddGoal(props) {
   const dispatch = useDispatch();
@@ -29,10 +30,7 @@ export default function AddGoal(props) {
   const [remindMeState, setRemindMeState] = useState(true);
   const [notificationTime, setNotificationTime] = useState(new Date());
   const {
-    calcTrigger,
     handleScheduleNotification,
-    getScheduledNotifications,
-    cancelAllScheduledNotifications,
   } = useNotifications();
   const timesRef = useRef();
   const [daysActive, setDaysActive] = useState([
@@ -41,10 +39,12 @@ export default function AddGoal(props) {
     { day: "We", isActive: true, rule: RRule.WE, weekday: 4 },
     { day: "Th", isActive: true, rule: RRule.TH, weekday: 5 },
     { day: "Fr", isActive: true, rule: RRule.FR, weekday: 6 },
-    { day: "Sa", isActive: false, rule: RRule.SA, weekday: 7 },
-    { day: "Su", isActive: false, rule: RRule.SU, weekday: 1 },
+    { day: "Sa", isActive: true, rule: RRule.SA, weekday: 7 },
+    { day: "Su", isActive: true, rule: RRule.SU, weekday: 1 },
   ]);
   const [custom, setCustom] = useState(false);
+
+  const allActive = daysActive.every((day) => day.isActive);
 
   const handleToggleDaysActive = (index) => {
     setDaysActive((prevState) => {
@@ -75,11 +75,11 @@ export default function AddGoal(props) {
     }, []);
 
     const rule = new RRule({
-      freq: RRule.WEEKLY,
-      interval: 5,
+      freq: RRule.DAILY,
+      interval: 1,
       byweekday: weekdays,
-      dtstart: new Date(),
-      until: new Date(2026, 12, 31),
+      dtstart: startOfDay(new Date()),
+      until: endOfDay(new Date(2026, 12, 31)),
     });
 
     let notificationIdsArray;
@@ -161,7 +161,25 @@ export default function AddGoal(props) {
               returnKeyType="done"
               value={content}
               onChangeText={setContent}
+              multiline={true}
+              blurOnSubmit={true}
             />
+          </View>
+
+          <View style={styles.detailInputs}>
+            <Pressable
+              style={styles.switchContainer}
+              onPress={() => timesRef.current.focus()}
+            >
+              <Text style={styles.switchText}>Times Per Day</Text>
+              <TextInput
+                style={styles.timesInput}
+                keyboardType="number-pad"
+                value={timesPerDay}
+                onChangeText={setTimesPerDay}
+                ref={timesRef}
+              />
+            </Pressable>
           </View>
 
           <View style={styles.detailInputs}>
@@ -180,7 +198,11 @@ export default function AddGoal(props) {
               }
             >
               <Text style={styles.switchText}>
-                {custom ? "Custom" : "Every Weekday"}
+                {allActive
+                  ? "Everyday"
+                  : daysActive.map((day, index, arr) => {
+                      if (day.isActive) return day.day + ", ";
+                    })}
               </Text>
               <Entypo name="chevron-small-down" size={24} color="black" />
             </TouchableOpacity>
@@ -204,22 +226,6 @@ export default function AddGoal(props) {
           </View>
 
           <View style={styles.detailInputs}>
-            <Pressable
-              style={styles.switchContainer}
-              onPress={() => timesRef.current.focus()}
-            >
-              <Text style={styles.switchText}>Times Per Day</Text>
-              <TextInput
-                style={styles.timesInput}
-                keyboardType="number-pad"
-                value={timesPerDay}
-                onChangeText={setTimesPerDay}
-                ref={timesRef}
-              />
-            </Pressable>
-          </View>
-
-          <View style={styles.detailInputs}>
             <View style={styles.switchContainer}>
               <Text style={styles.switchText}>Remind Me</Text>
               <Switch
@@ -236,6 +242,7 @@ export default function AddGoal(props) {
                 display="inline"
                 minuteInterval={5}
                 style={{ flex: 1 }}
+                themeVariant="light"
               />
             </View>
           </View>
@@ -293,6 +300,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: "#454545",
     backgroundColor: "#f4f4f4",
+    paddingTop: 10,
   },
   detailInputs: {
     marginTop: 30,
