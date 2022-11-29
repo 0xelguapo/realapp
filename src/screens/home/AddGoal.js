@@ -80,7 +80,7 @@ export default function AddGoal(props) {
       until: endOfDay(new Date(2028, 12, 31)),
     });
 
-    let notificationIdsArray;
+    let notificationIdsArray = ''
 
     if (remindMeState) {
       const notificationPromises = daysActive.reduce((acc, el) => {

@@ -5,7 +5,11 @@ import {
 } from "@reduxjs/toolkit";
 import { API, graphqlOperation } from "aws-amplify";
 import { listReminders } from "../graphql/customQueries";
-import { deleteReminder, createReminder } from "../graphql/mutations";
+import {
+  deleteReminder,
+  createReminder,
+  updateReminder,
+} from "../graphql/mutations";
 
 const remindersAdapter = createEntityAdapter({
   sortComparer: (a, b) => a.freq.localeCompare(b.freq),
@@ -61,6 +65,21 @@ export const createOneReminder = createAsyncThunk(
   }
 );
 
+export const completeReminder = createAsyncThunk(
+  "reminders/completeReminder",
+  async (reminderDetails) => {
+    let response;
+    try {
+      response = await API.graphql(
+        graphqlOperation(updateReminder, { input: reminderDetails })
+      );
+    } catch (err) {
+      console.error(err);
+    }
+    return response.data.updateReminder;
+  }
+);
+
 export const remindersSlice = createSlice({
   name: "reminders",
   initialState,
@@ -69,7 +88,7 @@ export const remindersSlice = createSlice({
       for (const reminder in state.entities) {
         const clientId = state.entities[reminder].clientId;
         if (clientId === action.payload) {
-          remindersAdapter.removeOne(state, reminder)
+          remindersAdapter.removeOne(state, reminder);
         }
       }
     },
@@ -84,7 +103,9 @@ export const remindersSlice = createSlice({
       })
       .addCase(createOneReminder.fulfilled, (state, action) => {
         remindersAdapter.addOne(state, action.payload);
-      });
+      }).addCase(completeReminder.fulfilled, (state, action) => {
+        state.entities[action.payload.id] = action.payload
+      })
   },
 });
 

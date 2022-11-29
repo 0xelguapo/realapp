@@ -227,6 +227,7 @@ export default function Home(props) {
                   <HomeReminder
                     key={rem.id}
                     reminder={rem}
+                    activeDate={activeDate}
                     onPress={() =>
                       props.navigation.navigate("ClientDetails", {
                         client: { id: rem.client.id },

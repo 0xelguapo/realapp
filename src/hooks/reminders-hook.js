@@ -25,7 +25,7 @@ export default function useReminders(activeDate) {
       if (
         format(new Date(arrayOfDaysBetween[0]), "L, d") ===
           format(activeDateObj, "L, d") &&
-        !isSameDay(activeDateObj, new Date(el.createdat))
+        !isSameDay(activeDateObj, new Date(el.updatedAt))
       ) {
         acc.push(el);
       }
