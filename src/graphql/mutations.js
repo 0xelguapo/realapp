@@ -132,7 +132,7 @@ export const deleteClient = /* GraphQL */ `
       reminder {
         items {
           id
-          date
+          freq
           recurring
           recurRule
           notificationId
@@ -246,7 +246,7 @@ export const deleteReminder = /* GraphQL */ `
   ) {
     deleteReminder(input: $input, condition: $condition) {
       id
-      date
+      freq
       recurring
       recurRule
       notificationId
@@ -926,7 +926,7 @@ export const createClient = /* GraphQL */ `
       reminder {
         items {
           id
-          date
+          freq
           recurring
           recurRule
           notificationId
@@ -1038,7 +1038,7 @@ export const updateClient = /* GraphQL */ `
       reminder {
         items {
           id
-          date
+          freq
           recurring
           recurRule
           notificationId
@@ -1229,7 +1229,7 @@ export const createReminder = /* GraphQL */ `
   ) {
     createReminder(input: $input, condition: $condition) {
       id
-      date
+      freq
       recurring
       recurRule
       notificationId
@@ -1283,7 +1283,7 @@ export const updateReminder = /* GraphQL */ `
   ) {
     updateReminder(input: $input, condition: $condition) {
       id
-      date
+      freq
       recurring
       recurRule
       notificationId

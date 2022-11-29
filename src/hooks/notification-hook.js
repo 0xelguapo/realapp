@@ -92,6 +92,7 @@ function useNotifications() {
 
   const getScheduledNotifications = async () => {
     const response = await Notifications.getAllScheduledNotificationsAsync();
+    console.log(response);
     return response;
   };
 
@@ -104,7 +105,7 @@ function useNotifications() {
     handleScheduleNotification,
     getScheduledNotifications,
     cancelAllScheduledNotifications,
-    handleDeleteNotification
+    handleDeleteNotification,
   };
 }
 

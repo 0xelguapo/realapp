@@ -8,7 +8,7 @@ import { listReminders } from "../graphql/customQueries";
 import { deleteReminder, createReminder } from "../graphql/mutations";
 
 const remindersAdapter = createEntityAdapter({
-  sortComparer: (a, b) => a.date.localeCompare(b.date),
+  sortComparer: (a, b) => a.freq.localeCompare(b.freq),
 });
 
 const initialState = remindersAdapter.getInitialState({

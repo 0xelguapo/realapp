@@ -29,9 +29,7 @@ export default function AddGoal(props) {
   const [timesPerDay, setTimesPerDay] = useState("1");
   const [remindMeState, setRemindMeState] = useState(true);
   const [notificationTime, setNotificationTime] = useState(new Date());
-  const {
-    handleScheduleNotification,
-  } = useNotifications();
+  const { handleScheduleNotification } = useNotifications();
   const timesRef = useRef();
   const [daysActive, setDaysActive] = useState([
     { day: "Mo", isActive: true, rule: RRule.MO, weekday: 2 },
@@ -79,7 +77,7 @@ export default function AddGoal(props) {
       interval: 1,
       byweekday: weekdays,
       dtstart: startOfDay(new Date()),
-      until: endOfDay(new Date(2026, 12, 31)),
+      until: endOfDay(new Date(2028, 12, 31)),
     });
 
     let notificationIdsArray;
@@ -234,17 +232,19 @@ export default function AddGoal(props) {
                 onValueChange={toggleRemindMe}
               />
             </View>
-            <View style={styles.pickerContainer}>
-              <Text style={styles.switchText}>Time</Text>
-              <DateTimePicker
-                mode="time"
-                value={notificationTime}
-                display="inline"
-                minuteInterval={5}
-                style={{ flex: 1 }}
-                themeVariant="light"
-              />
-            </View>
+            {remindMeState && (
+              <View style={styles.pickerContainer}>
+                <Text style={styles.switchText}>Time</Text>
+                <DateTimePicker
+                  mode="time"
+                  value={notificationTime}
+                  display="inline"
+                  minuteInterval={5}
+                  style={{ flex: 1 }}
+                  themeVariant="light"
+                />
+              </View>
+            )}
           </View>
         </View>
       </ScrollView>

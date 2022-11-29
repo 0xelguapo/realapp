@@ -83,10 +83,11 @@ type PropertyGroup @model @auth(rules: [{ allow: owner }, { allow: public, provi
 
 type Reminder @model @auth(rules: [{ allow: owner }, { allow: public, provider: apiKey, operations: [create] }]) {
   id: ID!
-  date: String!
+  freq: String
   recurring: Boolean @default(value: "false")
   recurRule: String
   notificationId: String
+  startDay: String
   clientId: ID! @index(name: "byReminder")
   client: Client @belongsTo(fields: ["clientId"])
   owner: String @auth(rules: [{ allow: owner, operations: [read, delete] }, { allow: public, provider: apiKey, operations: [create, update]}])

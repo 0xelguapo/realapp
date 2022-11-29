@@ -9,8 +9,11 @@ import {
   TouchableOpacity,
   FlatList,
 } from "react-native";
-import { useDispatch } from "react-redux";
-import { fetchReminders } from "../../redux/reminders-slice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchReminders,
+  selectAllReminders,
+} from "../../redux/reminders-slice";
 import { API, graphqlOperation } from "aws-amplify";
 import { getUserStreak, updateUserStreak } from "../../graphql/customQueries";
 import { fetchTasks } from "../../redux/tasks-slice";
@@ -26,7 +29,7 @@ import {
 } from "date-fns";
 import AddHome from "../../components/home/AddHome";
 import { AuthContext } from "../../context/auth-context";
-import { fetchGoals, resetGoals } from "../../redux/goals-slice";
+import { fetchGoals } from "../../redux/goals-slice";
 import HomeDate from "./HomeDate";
 import useGoals from "../../hooks/goals-hook";
 import useTasks from "../../hooks/tasks-hook";
@@ -34,9 +37,13 @@ import ProgressContainer from "../../components/home/ProgressContainer";
 import OverdueTasks from "../../components/home/OverdueTasks";
 import TaskList from "../../components/home/TasksList";
 import GoalsList from "../../components/home/GoalsList";
+import useReminders from "../../hooks/reminders-hook";
+import HomeReminder from "../../components/home/HomeReminder";
 
 export default function Home(props) {
   let date = new Date();
+  const dispatch = useDispatch();
+
   const { user } = useContext(AuthContext);
   const [refreshVisible, setRefreshVisible] = useState(true);
   const [streakCount, setStreakCount] = useState(0);
@@ -51,6 +58,9 @@ export default function Home(props) {
   ]);
   const [activeDate, setActiveDate] = useState(nextFiveDates[1]);
 
+  const { remindersOfDate } = useReminders(activeDate);
+
+  console.log(remindersOfDate);
   const { allGoals, goalsOfDay, getGoalIncrementAmount } = useGoals(activeDate);
   const {
     allTasks,
@@ -60,18 +70,22 @@ export default function Home(props) {
     handleCompleteTask,
   } = useTasks(activeDate);
 
-  const displayPaywall = async () => {
-    try {
-      const customerInfo = await Purchases.getCustomerInfo();
-      if (
-        typeof customerInfo.entitlements.active[ENTITLEMENT_ID] === "undefined"
-      ) {
-        props.navigation.navigate("Paywall");
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  // const displayPaywall = async () => {
+  //   try {
+  //     const customerInfo = await Purchases.getCustomerInfo();
+  //     if (
+  //       typeof customerInfo.entitlements.active[ENTITLEMENT_ID] === "undefined"
+  //     ) {
+  //       props.navigation.navigate("Paywall");
+  //     }
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
+
+  //   useEffect(() => {
+  //   displayPaywall();
+  // }, []);
 
   useEffect(() => {
     let streakResponse;
@@ -88,21 +102,6 @@ export default function Home(props) {
     };
     getStreak();
   }, []);
-
-  useEffect(() => {
-    const handleResetGoals = async () => {
-      const arrayOfGoalIds = allGoals.reduce((acc, el) => {
-        if (!isToday(new Date(el.updatedAt))) {
-          acc.push(el.id);
-        }
-        return acc;
-      }, []);
-      if (arrayOfGoalIds.length > 0) {
-        const response = await dispatch(resetGoals(arrayOfGoalIds)).unwrap();
-      }
-    };
-    handleResetGoals();
-  }, [allGoals]);
 
   useEffect(() => {
     const incrementStreak = async () => {
@@ -136,16 +135,6 @@ export default function Home(props) {
       setStreakCount((prev) => prev++);
     }
   }, [lengthOfCompletedTasks]);
-
-  useEffect(() => {
-    dispatch(fetchReminders());
-  }, []);
-
-  // useEffect(() => {
-  //   displayPaywall();
-  // }, []);
-
-  const dispatch = useDispatch();
 
   const handleManualRefresh = () => {
     setRefreshVisible(false);
@@ -227,9 +216,31 @@ export default function Home(props) {
           onPress={() => props.navigation.navigate("Overdue")}
         />
 
-        <View style={styles.titleContainer}>
-          <Text style={styles.titleHeader}>DAILY GOALS</Text>
-        </View>
+        {remindersOfDate.length > 0 && (
+          <>
+            <View style={styles.titleContainer}>
+              <Text style={styles.titleHeader}>CONTACT REMINDERS</Text>
+            </View>
+            <View style={styles.reminderContainer}>
+              {remindersOfDate.map((rem, index) => {
+                return (
+                  <HomeReminder
+                    key={rem.id}
+                    reminder={rem}
+                    onPress={() =>
+                      props.navigation.navigate("ClientDetails", {
+                        client: { id: rem.client.id },
+                        viewContactInfo: true
+                      })
+                    }
+                  />
+                );
+              })}
+            </View>
+          </>
+        )}
+
+  
         <GoalsList
           handleViewEditGoal={handleViewEditGoal}
           goalsOfDay={goalsOfDay}
@@ -286,6 +297,11 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 10,
     paddingVertical: 10,
+  },
+
+  reminderContainer: {
+    borderRadius: 5,
+    backgroundColor: "white",
   },
 
   titleContainer: {

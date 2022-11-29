@@ -150,7 +150,7 @@ export const listReminders = /* GraphQL */ `
     listReminders(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        date
+        freq
         recurring
         recurRule
         clientId

@@ -1,5 +1,14 @@
 import * as Notifications from "expo-notifications";
-import { useEffect } from "react";
+import {
+  format,
+  add,
+  setHours,
+  getISODay,
+  getISOWeek,
+  getWeekOfMonth,
+  startOfDay,
+  endOfDay,
+} from "date-fns";
 import {
   View,
   Text,
@@ -9,12 +18,17 @@ import {
 } from "react-native";
 import { useDispatch } from "react-redux";
 import { createOneReminder } from "../../redux/reminders-slice";
+import useNotifications from "../../hooks/notification-hook";
+import { RRule } from "rrule";
 
 export default function EditReminder(props) {
   const { goBack } = props.navigation;
   const { clientId, homeMode, firstName, lastName } = props.route.params;
-  const fullName = lastName ? (firstName + ' ' + lastName) : (firstName)
+  const fullName = lastName ? firstName + " " + lastName : firstName;
   const dispatch = useDispatch();
+
+  const { getScheduledNotifications, cancelAllScheduledNotifications } =
+    useNotifications();
 
   const handleScheduleNotification = async (time) => {
     const response = await Notifications.scheduleNotificationAsync({
@@ -24,49 +38,76 @@ export default function EditReminder(props) {
       },
       trigger: time,
     });
+    console.log(response);
     return response;
   };
+
+  const createRRule = (freq, interval) => {
+    const rule = new RRule({
+      freq: freq,
+      interval: interval,
+      dtstart: startOfDay(new Date()),
+      until: endOfDay(new Date(2028, 12, 31)),
+    });
+
+    return rule.toString();
+  };
+
 
   const handleCreateReminder = async (length) => {
     let date = new Date();
     let notificationId;
+    let recurRule;
     switch (length) {
-      case "oneDay":
-        date.setDate(date.getDate() + 1);
-        date.setHours(8);
-        date.setMinutes(0);
-        notificationId = await handleScheduleNotification(date);
+      // case "tomorrow":
+      //   date.setDate(date.getDate() + 1);
+      //   date.setHours(9);
+      //   date.setMinutes(0);
+      //   notificationId = await handleScheduleNotification(date);
+      //   break;
+      case "weekly":
+        recurRule = createRRule(RRule.WEEKLY, 1)
+        notificationId = await handleScheduleNotification({
+          repeats: true,
+          weekday: getISODay(date),
+          hour: 9,
+        });
         break;
-      case "oneWeek":
-        date.setDate(date.getDate() + 7);
-        date.setHours(8);
-        date.setMinutes(0);
-        notificationId = await handleScheduleNotification(date);
+      case "monthly":
+        recurRule = createRRule(RRule.MONTHLY, 1)
+        notificationId = await handleScheduleNotification({
+          repeats: true,
+          weekOfMonth: getWeekOfMonth(new Date()),
+          hour: 9,
+        });
         break;
-      case "oneMonth":
-        date.setDate(date.getDate() + 30);
-        date.setHours(8);
-        date.setMinutes(0);
-        notificationId = await handleScheduleNotification(date);
+      case "quarterly":
+        recurRule = createRRule(RRule.YEARLY, 4)
+        const quartersly = [1, 2, 3, 4];
+        const promises = quarters.map((num) => {
+          return handleScheduleNotification({
+            repeats: true,
+            quarter: num,
+            hour: 9,
+          });
+        });
+        notificationId = (await Promise.all(promises)).join(',');
         break;
-      case "quarter":
-        date.setDate(date.getDate() + 90);
-        date.setHours(8);
-        date.setMinutes(0);
-        notificationId = await handleScheduleNotification(date);
-        break;
-      case "year":
-        date.setDate(date.getDate() + 365);
-        date.setHours(8);
-        date.setMinutes(0);
-        notificationId = await handleScheduleNotification(date);
+      case "yearly":
+        recurRule = createRRule(RRule.YEARLY, 1)
+        notificationId = await handleScheduleNotification({
+          repeats: true,
+          weekOfYear: getISOWeek(new Date()),
+          hour: 9,
+        });
         break;
     }
     dispatch(
       createOneReminder({
-        date: date,
+        freq: length,
         clientId: clientId,
         notificationId: notificationId,
+        recurRule: recurRule
       })
     );
     if (!homeMode) {
@@ -94,40 +135,40 @@ export default function EditReminder(props) {
           <Text style={styles.titleHeader}>Set a Reconnect Reminder</Text>
         </View>
         <View style={styles.optionsContainer}>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={styles.option}
-            onPress={() => handleCreateReminder("oneDay")}
+            onPress={() => handleCreateReminder("tomorrow")}
           >
             <Text style={styles.optionText}>Tomorrow</Text>
             <Text style={styles.optionSubtext}>ONE DAY FROM NOW</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <TouchableOpacity
             style={styles.option}
-            onPress={() => handleCreateReminder("oneWeek")}
+            onPress={() => handleCreateReminder("weekly")}
           >
             <Text style={styles.optionText}>Weekly</Text>
             <Text style={styles.optionSubtext}>EVERY WEEK</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.option}
-            onPress={() => handleCreateReminder("oneMonth")}
+            onPress={() => handleCreateReminder("monthly")}
           >
             <Text style={styles.optionText}>Monthly</Text>
-            <Text style={styles.optionSubtext}>EVERY 30 DAYS</Text>
+            <Text style={styles.optionSubtext}>EVERY MONTH</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.option}
-            onPress={() => handleCreateReminder("quarter")}
+            onPress={() => handleCreateReminder("quarterly")}
           >
             <Text style={styles.optionText}>Quarterly</Text>
-            <Text style={styles.optionSubtext}>EVERY 90 DAYS</Text>
+            <Text style={styles.optionSubtext}>EVERY THREE MONTHS</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={{...styles.option, borderBottomWidth: 0}}
-            onPress={() => handleCreateReminder("year")}
+            style={{ ...styles.option, borderBottomWidth: 0 }}
+            onPress={() => handleCreateReminder("yearly")}
           >
             <Text style={styles.optionText}>Yearly</Text>
-            <Text style={styles.optionSubtext}>EVERY 365 DAYS</Text>
+            <Text style={styles.optionSubtext}>EVERY YEAR</Text>
           </TouchableOpacity>
           {/* <TouchableOpacity style={{ ...styles.option, borderBottomWidth: 0 }}>
             <Text style={styles.optionText}>Custom</Text>

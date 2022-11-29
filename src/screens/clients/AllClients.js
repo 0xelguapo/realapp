@@ -244,7 +244,7 @@ export default function Clients({ navigation }) {
               <TextInput
                 style={styles.input}
                 placeholderTextColor="#7b7b7c"
-                placeholder="Search existing. Type any address to quick add"
+                placeholder="Search existing or type any address to quick add"
                 returnKeyType="done"
                 onChangeText={setSearchInput}
                 value={searchInput}
@@ -372,7 +372,7 @@ const styles = StyleSheet.create({
 
   sectionHeaderContainer: {
     paddingHorizontal: 10,
-    backgroundColor: "white",
+    backgroundColor: "#f9f9f9",
     paddingVertical: 5,
   },
   sectionHeaderText: {

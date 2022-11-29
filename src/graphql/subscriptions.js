@@ -200,7 +200,7 @@ export const onCreateClient = /* GraphQL */ `
       reminder {
         items {
           id
-          date
+          freq
           recurring
           recurRule
           notificationId
@@ -312,7 +312,7 @@ export const onUpdateClient = /* GraphQL */ `
       reminder {
         items {
           id
-          date
+          freq
           recurring
           recurRule
           notificationId
@@ -424,7 +424,7 @@ export const onDeleteClient = /* GraphQL */ `
       reminder {
         items {
           id
-          date
+          freq
           recurring
           recurRule
           notificationId
@@ -692,7 +692,7 @@ export const onCreateReminder = /* GraphQL */ `
   ) {
     onCreateReminder(filter: $filter, owner: $owner) {
       id
-      date
+      freq
       recurring
       recurRule
       notificationId
@@ -746,7 +746,7 @@ export const onUpdateReminder = /* GraphQL */ `
   ) {
     onUpdateReminder(filter: $filter, owner: $owner) {
       id
-      date
+      freq
       recurring
       recurRule
       notificationId
@@ -800,7 +800,7 @@ export const onDeleteReminder = /* GraphQL */ `
   ) {
     onDeleteReminder(filter: $filter, owner: $owner) {
       id
-      date
+      freq
       recurring
       recurRule
       notificationId

@@ -33,9 +33,9 @@ export default function TaskList({ tasksOfDate, handleCompleteTask }) {
             })}
           </View>
           <View style={styles.completedTasksContainer}>
-            <View style={styles.titleContainer}>
+            {/* <View style={styles.titleContainer}>
               <Text style={styles.titleHeader}>COMPLETED</Text>
-            </View>
+            </View> */}
             {tasksOfDate.map((task, index) => {
               if (task.completed)
                 return (

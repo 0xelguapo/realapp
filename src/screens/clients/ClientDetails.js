@@ -30,8 +30,10 @@ import DetailsProperties from "../../components/client/clientDetails/DetailsProp
 
 export default function ClientDetails(props) {
   const { id, phone } = props.route.params.client;
-  const { index } = props.route.params;
-  const [contactDetailsVisible, setContactDetailsVisible] = useState(false);
+  const { index, viewContactInfo } = props.route.params;
+  const [contactDetailsVisible, setContactDetailsVisible] = useState(
+    viewContactInfo || false
+  );
 
   const dispatch = useDispatch();
   const clientSelect = useSelector((state) => selectClientById(state, id));
@@ -131,7 +133,10 @@ export default function ClientDetails(props) {
             </Text>
             <Text style={styles.company}>{clientSelect.company}</Text>
           </View>
-          <ScrollView style={styles.body} contentContainerStyle={[{paddingBottom: 30}]}>
+          <ScrollView
+            style={styles.body}
+            contentContainerStyle={[{ paddingBottom: 30 }]}
+          >
             <ClientOptions
               clientDetailsState={clientSelect}
               clientId={id}
