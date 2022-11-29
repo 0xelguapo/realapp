@@ -14,6 +14,10 @@ import AddPropertyTask from "../properties/AddPropertyTask";
 import AddEditPropertyGroup from "../properties/AddEditPropertyGroup";
 import EditProperty from "../properties/EditProperty";
 import AddProperty from "../properties/AddProperty";
+import ViewAllGroups from "../more/ViewAllGroups";
+import ViewOneGroup from "../more/ViewOneGroup";
+import EditClientsOfGroup from "../more/EditClientsOfGroup";
+import AddClientsToGroup from "./AddClientsToGroup";
 
 const Stack = createNativeStackNavigator();
 
@@ -127,6 +131,28 @@ export default function ClientsNavigator() {
         }}
         name="AddPropertyTask"
         component={AddPropertyTask}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: false,
+        }}
+        name="ViewAllGroups"
+        component={ViewAllGroups}
+      />
+      <Stack.Screen
+        options={{ headerShown: false, presentation: "modal" }}
+        name="ViewOneGroup"
+        component={ViewOneGroup}
+      />
+      <Stack.Screen
+        options={{ headerShown: false, presentation: "modal" }}
+        name="EditClientsOfGroup"
+        component={EditClientsOfGroup}
+      />
+      <Stack.Screen
+        options={{ headerShown: false, presentation: "modal" }}
+        name="AddClientsToGroup"
+        component={AddClientsToGroup}
       />
     </Stack.Navigator>
   );

@@ -14,13 +14,17 @@ import HomeTask from "../../components/home/HomeTask";
 let curDate = new Date();
 
 export default function Overdue(props) {
+  const { activeDate } = props.route.params;
   const dispatch = useDispatch();
   const allTasks = useSelector(selectAllTasks);
 
   const overdueTasks = allTasks
     .filter((task) => {
       if (task.date.length > 1 && !task.completed) {
-        return format(new Date(task.date), "L, d") < format(curDate, "L, d");
+        return (
+          format(new Date(task.date), "L, d") <
+          format(new Date(activeDate), "L, d")
+        );
       } else if (task.date.length < 1 && !task.completed) {
         return true;
       }
@@ -35,8 +39,6 @@ export default function Overdue(props) {
       completeTask({ id, completed: !completed })
     ).unwrap();
   };
-
-
 
   return (
     <View style={styles.container}>

@@ -42,7 +42,7 @@ export default function EditClientsOfGroup(props) {
         groupID: groupID,
       })
     );
-    props.navigation.goBack()
+    props.navigation.goBack();
   };
 
   const thisGroup = useSelector((state) => selectGroupById(state, groupID));
@@ -89,8 +89,23 @@ export default function EditClientsOfGroup(props) {
         contentContainerStyle={{
           alignItems: "center",
           justifyContent: "center",
+          paddingBottom: 50,
         }}
       >
+        <TouchableOpacity
+          style={styles.addContainer}
+          onPress={() =>
+            props.navigation.navigate("AddClientsToGroup", {
+              groupID: groupID,
+            })
+          }
+        >
+          <View style={styles.addIconContainer}>
+            <Ionicons name="add" size={28} color="blue" />
+          </View>
+          <Text style={styles.addText}>Add Clients</Text>
+        </TouchableOpacity>
+
         {thisGroup.clients.items.map((client, index) => (
           <EditingClient
             key={client.client.id}
@@ -156,8 +171,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginTop: 5,
-    borderBottomWidth: 1,
-    borderBottomColor: "#e6e6e6",
     width: "80%",
     height: 25,
     alignSelf: "center",
@@ -165,5 +178,23 @@ const styles = StyleSheet.create({
   groupLengthText: {
     color: "#535353",
     marginRight: 5,
+  },
+  addContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    width: "100%",
+    paddingHorizontal: "3%",
+    height: 60,
+    borderBottomWidth: 0.5,
+    borderBottomColor: "#e6e6e6",
+  },
+  addIconContainer: {
+    width: 50,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  addText: {
+    fontSize: 18,
+    fontWeight: "500",
   },
 });

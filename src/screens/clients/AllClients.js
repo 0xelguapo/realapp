@@ -239,21 +239,30 @@ export default function Clients({ navigation }) {
                 <Text style={styles.headerText}>Properties</Text>
               </Pressable>
             </View>
-            <View style={styles.inputContainer}>
-              <Ionicons name="ios-search" size={20} color="black" />
-              <TextInput
-                style={styles.input}
-                placeholderTextColor="#7b7b7c"
-                placeholder="Search existing or type any address to quick add"
-                returnKeyType="done"
-                onChangeText={setSearchInput}
-                value={searchInput}
-              />
-              {searchInput.length !== 0 && (
-                <TouchableOpacity onPress={handleClearSearch}>
-                  <Feather name="x-circle" size={20} color="#7b7b7c" />
-                </TouchableOpacity>
-              )}
+            <View style={styles.searchHeaderContainer}>
+              <View style={styles.inputContainer}>
+                <Ionicons name="ios-search" size={20} color="black" />
+                <TextInput
+                  style={styles.input}
+                  placeholderTextColor="#7b7b7c"
+                  placeholder="Search or type any address to quick add"
+                  returnKeyType="done"
+                  onChangeText={setSearchInput}
+                  value={searchInput}
+                />
+                {searchInput.length !== 0 && (
+                  <TouchableOpacity onPress={handleClearSearch}>
+                    <Feather name="x-circle" size={20} color="#7b7b7c" />
+                  </TouchableOpacity>
+                )}
+              </View>
+
+              <TouchableOpacity
+                style={styles.viewGroups}
+                onPress={() => navigation.navigate("ViewAllGroups")}
+              >
+                <Ionicons name="people-outline" size={24} color="#535353" />
+              </TouchableOpacity>
             </View>
           </View>
 
@@ -369,6 +378,11 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: "#454545",
   },
+  searchHeaderContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 5,
+  },
 
   sectionHeaderContainer: {
     paddingHorizontal: 10,
@@ -377,6 +391,11 @@ const styles = StyleSheet.create({
   },
   sectionHeaderText: {
     fontWeight: "600",
+  },
+  viewGroups: {
+    justifyContent: "center",
+    alignItems: "center",
+    paddingLeft: 5,
   },
   addIconContainer: {
     alignItems: "center",
@@ -396,8 +415,8 @@ const styles = StyleSheet.create({
     },
   },
   inputContainer: {
+    flex: 1,
     alignItems: "center",
-    marginTop: 10,
     flexDirection: "row",
     paddingHorizontal: 8,
     borderColor: "#e9e9e9",

@@ -37,11 +37,11 @@ export default function EditingClient({
       <TouchableHighlight underlayColor="#f1f1f1" onPress={handleCheck}>
         <View style={styles.container}>
           <View style={styles.checkContainer}>
-            {checked && <Ionicons name="checkmark" size={30} color="#535353" />}
+            {checked && <Ionicons name="checkmark" size={30} color="blue" />}
           </View>
           <View style={styles.clientDetails}>
             <Text style={styles.name}>{fullName}</Text>
-            <Text style={styles.phone}>{company}</Text>
+            {company?.length > 0 && <Text style={styles.phone}>{company}</Text>}
           </View>
         </View>
       </TouchableHighlight>

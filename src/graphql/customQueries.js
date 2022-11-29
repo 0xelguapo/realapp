@@ -37,6 +37,32 @@ export const getClientGroups = /* GraphQL */ `
   }
 `;
 
+export const listClientsWithGroups = /* GraphQL */ `
+  query ListClients(
+    $filter: ModelClientFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listClients(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        firstName
+        lastName
+        company
+        group {
+          items {
+            id
+            clientID
+            clientGroupID
+          }
+          nextToken
+        }
+      }
+      nextToken
+    }
+  }
+`;
+
 export const listClientGroupsWithClients = /* GraphQL */ `
   query ListClientGroups(
     $filter: ModelClientGroupFilterInput

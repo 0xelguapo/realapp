@@ -4,6 +4,7 @@ import {
   createEntityAdapter,
 } from "@reduxjs/toolkit";
 import { API, graphqlOperation } from "aws-amplify";
+import { listClientsWithGroups } from "../graphql/customQueries";
 import {
   createClient,
   updateClient,
@@ -28,6 +29,19 @@ export const fetchClients = createAsyncThunk(
     let response;
     try {
       response = await API.graphql(graphqlOperation(listClients));
+    } catch (err) {
+      console.error(err);
+    }
+    return response.data.listClients.items;
+  }
+);
+
+export const fetchClientsWithGroups = createAsyncThunk(
+  "clients/fetchClientsWithGroups",
+  async () => {
+    let response;
+    try {
+      response = await API.graphql(graphqlOperation(listClientsWithGroups));
     } catch (err) {
       console.error(err);
     }
@@ -161,12 +175,17 @@ export const clientsSlice = createSlice({
   initialState,
   reducers: {
     handleAddClientToGroup: (state, action) => {
-      state.entities[action.payload.clientId].group.items.push(action.payload)
+      if(!state.entities[action.payload.clientId].group.items) {
+        state.entities[action.payload.clientId].group.items = []
+      }
+      state.entities[action.payload.clientId].group.items.push(action.payload);
     },
     handleRemoveClientFromGroup: (state, action) => {
-      const { clientId, clientGroupID, id } = action.payload
-      const indexToRemove = state.entities[clientId].group.items.findIndex(item => item.clientGroupID === clientGroupID);
-      state.entities[clientId].group.items.splice(indexToRemove, 1)
+      const { clientId, clientGroupID, id } = action.payload;
+      const indexToRemove = state.entities[clientId].group.items.findIndex(
+        (item) => item.clientGroupID === clientGroupID
+      );
+      state.entities[clientId].group.items.splice(indexToRemove, 1);
     },
   },
   extraReducers: (builder) => {
@@ -192,6 +211,14 @@ export const clientsSlice = createSlice({
       })
       .addCase(editClient.fulfilled, (state, action) => {
         state.entities[action.payload.id] = action.payload;
+      })
+      .addCase(fetchClientsWithGroups.fulfilled, (state, action) => {
+        for (let i = 0; i < action.payload.length; i++) {
+          if (action.payload[i].group.items.length > 0) {
+            state.entities[action.payload[i].id].group.items =
+              action.payload[i].group.items
+          } else continue;
+        }
       });
   },
 });

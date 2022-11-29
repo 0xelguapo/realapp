@@ -204,6 +204,7 @@ export const onCreateClient = /* GraphQL */ `
           recurring
           recurRule
           notificationId
+          lastCompleteDate
           clientId
           owner
           createdAt
@@ -316,6 +317,7 @@ export const onUpdateClient = /* GraphQL */ `
           recurring
           recurRule
           notificationId
+          lastCompleteDate
           clientId
           owner
           createdAt
@@ -428,6 +430,7 @@ export const onDeleteClient = /* GraphQL */ `
           recurring
           recurRule
           notificationId
+          lastCompleteDate
           clientId
           owner
           createdAt
@@ -696,6 +699,7 @@ export const onCreateReminder = /* GraphQL */ `
       recurring
       recurRule
       notificationId
+      lastCompleteDate
       clientId
       client {
         id
@@ -750,6 +754,7 @@ export const onUpdateReminder = /* GraphQL */ `
       recurring
       recurRule
       notificationId
+      lastCompleteDate
       clientId
       client {
         id
@@ -804,6 +809,7 @@ export const onDeleteReminder = /* GraphQL */ `
       recurring
       recurRule
       notificationId
+      lastCompleteDate
       clientId
       client {
         id

@@ -18,7 +18,7 @@ import {
 } from "../../redux/groups-slice";
 
 
-export default function ViewGroups(props) {
+export default function ViewAllGroups(props) {
   const [showInput, setShowInput] = useState(false);
   const [title, setTitle] = useState("");
   const inputRef = useRef(null);

@@ -164,6 +164,7 @@ export const getClient = /* GraphQL */ `
           recurring
           recurRule
           notificationId
+          lastCompleteDate
           clientId
           owner
           createdAt
@@ -370,6 +371,7 @@ export const getReminder = /* GraphQL */ `
       recurring
       recurRule
       notificationId
+      lastCompleteDate
       clientId
       client {
         id
@@ -426,6 +428,7 @@ export const listReminders = /* GraphQL */ `
         recurring
         recurRule
         notificationId
+        lastCompleteDate
         clientId
         client {
           id

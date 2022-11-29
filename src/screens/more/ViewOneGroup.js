@@ -22,6 +22,7 @@ export default function ViewOneGroup(props) {
   const thisGroup = useSelector((state) => selectGroupById(state, groupID));
 
   const handleViewClient = (client) => {
+    props.navigation.goBack();
     props.navigation.navigate("ClientDetails", {
       client: client,
       groupMode: true,
@@ -104,10 +105,10 @@ export default function ViewOneGroup(props) {
         </TouchableOpacity>
       </View>
       <ScrollView contentContainerStyle={styles.clientsContainer}>
-        {thisGroup.clients.items.map((client) => (
+        {thisGroup.clients.items.map((client, index) => (
           <EachClient
             taskMode={true}
-            key={client.client.id}
+            key={client.client.id + index}
             phone={client.client.phone}
             firstName={client.client.firstName}
             lastName={client.client.lastName}

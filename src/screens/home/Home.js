@@ -213,7 +213,8 @@ export default function Home(props) {
 
         <OverdueTasks
           lengthOfOverdueTasks={lengthOfOverdueTasks}
-          onPress={() => props.navigation.navigate("Overdue")}
+          onPress={() => props.navigation.navigate("Overdue", { activeDate: activeDate.toString() })}
+          
         />
 
         {remindersOfDate.length > 0 && (
