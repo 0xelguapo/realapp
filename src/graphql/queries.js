@@ -113,12 +113,14 @@ export const getClient = /* GraphQL */ `
       properties {
         items {
           id
+          type
           street
           city
           state
           zip
           price
           note
+          geometry
           clientId
           owner
           createdAt
@@ -160,7 +162,7 @@ export const getClient = /* GraphQL */ `
           id
           date
           recurring
-          recurDate
+          recurRule
           notificationId
           clientId
           owner
@@ -178,7 +180,6 @@ export const getClient = /* GraphQL */ `
           clientId
           createdAt
           updatedAt
-          clientDealId
           owner
         }
         nextToken
@@ -240,12 +241,14 @@ export const getProperty = /* GraphQL */ `
   query GetProperty($id: ID!) {
     getProperty(id: $id) {
       id
+      type
       street
       city
       state
       zip
       price
       note
+      geometry
       tasks {
         items {
           id
@@ -291,12 +294,14 @@ export const listProperties = /* GraphQL */ `
     listProperties(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
+        type
         street
         city
         state
         zip
         price
         note
+        geometry
         tasks {
           nextToken
         }
@@ -363,7 +368,7 @@ export const getReminder = /* GraphQL */ `
       id
       date
       recurring
-      recurDate
+      recurRule
       notificationId
       clientId
       client {
@@ -419,7 +424,7 @@ export const listReminders = /* GraphQL */ `
         id
         date
         recurring
-        recurDate
+        recurRule
         notificationId
         clientId
         client {
@@ -760,7 +765,6 @@ export const getDeal = /* GraphQL */ `
       }
       createdAt
       updatedAt
-      clientDealId
       owner
     }
   }
@@ -798,7 +802,6 @@ export const listDeals = /* GraphQL */ `
         }
         createdAt
         updatedAt
-        clientDealId
         owner
       }
       nextToken
@@ -915,12 +918,14 @@ export const getGroupsProperty = /* GraphQL */ `
       propertyGroupID
       property {
         id
+        type
         street
         city
         state
         zip
         price
         note
+        geometry
         tasks {
           nextToken
         }
@@ -966,12 +971,14 @@ export const listGroupsProperties = /* GraphQL */ `
         propertyGroupID
         property {
           id
+          type
           street
           city
           state
           zip
           price
           note
+          geometry
           clientId
           owner
           createdAt

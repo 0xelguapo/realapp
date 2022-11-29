@@ -105,34 +105,34 @@ export default function EditReminder(props) {
             style={styles.option}
             onPress={() => handleCreateReminder("oneWeek")}
           >
-            <Text style={styles.optionText}>Week</Text>
-            <Text style={styles.optionSubtext}>ONE WEEK FROM NOW</Text>
+            <Text style={styles.optionText}>Weekly</Text>
+            <Text style={styles.optionSubtext}>EVERY WEEK</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.option}
             onPress={() => handleCreateReminder("oneMonth")}
           >
-            <Text style={styles.optionText}>Month</Text>
-            <Text style={styles.optionSubtext}>ONE MONTH FROM NOW</Text>
+            <Text style={styles.optionText}>Monthly</Text>
+            <Text style={styles.optionSubtext}>EVERY 30 DAYS</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.option}
             onPress={() => handleCreateReminder("quarter")}
           >
-            <Text style={styles.optionText}>Quarter</Text>
-            <Text style={styles.optionSubtext}>THREE MONTHS FROM NOW</Text>
+            <Text style={styles.optionText}>Quarterly</Text>
+            <Text style={styles.optionSubtext}>EVERY 90 DAYS</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.option}
+            style={{...styles.option, borderBottomWidth: 0}}
             onPress={() => handleCreateReminder("year")}
           >
-            <Text style={styles.optionText}>Year</Text>
-            <Text style={styles.optionSubtext}>ONE YEAR FROM NOW</Text>
+            <Text style={styles.optionText}>Yearly</Text>
+            <Text style={styles.optionSubtext}>EVERY 365 DAYS</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={{ ...styles.option, borderBottomWidth: 0 }}>
+          {/* <TouchableOpacity style={{ ...styles.option, borderBottomWidth: 0 }}>
             <Text style={styles.optionText}>Custom</Text>
             <Text style={styles.optionSubtext}>SET A CUSTOM DATE</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
       <TouchableOpacity style={styles.cancelContainer} onPress={goBack}>

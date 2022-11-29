@@ -153,12 +153,14 @@ export const onCreateClient = /* GraphQL */ `
       properties {
         items {
           id
+          type
           street
           city
           state
           zip
           price
           note
+          geometry
           clientId
           owner
           createdAt
@@ -200,7 +202,7 @@ export const onCreateClient = /* GraphQL */ `
           id
           date
           recurring
-          recurDate
+          recurRule
           notificationId
           clientId
           owner
@@ -218,7 +220,6 @@ export const onCreateClient = /* GraphQL */ `
           clientId
           createdAt
           updatedAt
-          clientDealId
           owner
         }
         nextToken
@@ -264,12 +265,14 @@ export const onUpdateClient = /* GraphQL */ `
       properties {
         items {
           id
+          type
           street
           city
           state
           zip
           price
           note
+          geometry
           clientId
           owner
           createdAt
@@ -311,7 +314,7 @@ export const onUpdateClient = /* GraphQL */ `
           id
           date
           recurring
-          recurDate
+          recurRule
           notificationId
           clientId
           owner
@@ -329,7 +332,6 @@ export const onUpdateClient = /* GraphQL */ `
           clientId
           createdAt
           updatedAt
-          clientDealId
           owner
         }
         nextToken
@@ -375,12 +377,14 @@ export const onDeleteClient = /* GraphQL */ `
       properties {
         items {
           id
+          type
           street
           city
           state
           zip
           price
           note
+          geometry
           clientId
           owner
           createdAt
@@ -422,7 +426,7 @@ export const onDeleteClient = /* GraphQL */ `
           id
           date
           recurring
-          recurDate
+          recurRule
           notificationId
           clientId
           owner
@@ -440,7 +444,6 @@ export const onDeleteClient = /* GraphQL */ `
           clientId
           createdAt
           updatedAt
-          clientDealId
           owner
         }
         nextToken
@@ -458,12 +461,14 @@ export const onCreateProperty = /* GraphQL */ `
   ) {
     onCreateProperty(filter: $filter, owner: $owner) {
       id
+      type
       street
       city
       state
       zip
       price
       note
+      geometry
       tasks {
         items {
           id
@@ -507,12 +512,14 @@ export const onUpdateProperty = /* GraphQL */ `
   ) {
     onUpdateProperty(filter: $filter, owner: $owner) {
       id
+      type
       street
       city
       state
       zip
       price
       note
+      geometry
       tasks {
         items {
           id
@@ -556,12 +563,14 @@ export const onDeleteProperty = /* GraphQL */ `
   ) {
     onDeleteProperty(filter: $filter, owner: $owner) {
       id
+      type
       street
       city
       state
       zip
       price
       note
+      geometry
       tasks {
         items {
           id
@@ -685,7 +694,7 @@ export const onCreateReminder = /* GraphQL */ `
       id
       date
       recurring
-      recurDate
+      recurRule
       notificationId
       clientId
       client {
@@ -739,7 +748,7 @@ export const onUpdateReminder = /* GraphQL */ `
       id
       date
       recurring
-      recurDate
+      recurRule
       notificationId
       clientId
       client {
@@ -793,7 +802,7 @@ export const onDeleteReminder = /* GraphQL */ `
       id
       date
       recurring
-      recurDate
+      recurRule
       notificationId
       clientId
       client {
@@ -1340,7 +1349,6 @@ export const onCreateDeal = /* GraphQL */ `
       }
       createdAt
       updatedAt
-      clientDealId
       owner
     }
   }
@@ -1394,7 +1402,6 @@ export const onUpdateDeal = /* GraphQL */ `
       }
       createdAt
       updatedAt
-      clientDealId
       owner
     }
   }
@@ -1448,7 +1455,6 @@ export const onDeleteDeal = /* GraphQL */ `
       }
       createdAt
       updatedAt
-      clientDealId
       owner
     }
   }
@@ -1647,12 +1653,14 @@ export const onCreateGroupsProperty = /* GraphQL */ `
       propertyGroupID
       property {
         id
+        type
         street
         city
         state
         zip
         price
         note
+        geometry
         tasks {
           nextToken
         }
@@ -1692,12 +1700,14 @@ export const onUpdateGroupsProperty = /* GraphQL */ `
       propertyGroupID
       property {
         id
+        type
         street
         city
         state
         zip
         price
         note
+        geometry
         tasks {
           nextToken
         }
@@ -1737,12 +1747,14 @@ export const onDeleteGroupsProperty = /* GraphQL */ `
       propertyGroupID
       property {
         id
+        type
         street
         city
         state
         zip
         price
         note
+        geometry
         tasks {
           nextToken
         }

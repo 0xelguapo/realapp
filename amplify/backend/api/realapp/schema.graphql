@@ -85,7 +85,7 @@ type Reminder @model @auth(rules: [{ allow: owner }, { allow: public, provider: 
   id: ID!
   date: String!
   recurring: Boolean @default(value: "false")
-  recurDate: String
+  recurRule: String
   notificationId: String
   clientId: ID! @index(name: "byReminder")
   client: Client @belongsTo(fields: ["clientId"])

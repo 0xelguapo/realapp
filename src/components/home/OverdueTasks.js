@@ -13,7 +13,7 @@ export default function OverdueTasks({ lengthOfOverdueTasks, onPress  }) {
         <Text style={styles.overdueText}>View Overdue</Text>
       </TouchableOpacity>
     );
-  }
+  } else return null
 }
 
 const styles = StyleSheet.create({
