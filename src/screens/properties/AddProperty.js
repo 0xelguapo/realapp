@@ -8,6 +8,7 @@ import {
   FlatList,
   Keyboard,
   TouchableWithoutFeedback,
+  ActivityIndicator,
 } from "react-native";
 import { useEffect, useRef, useState, useMemo, useCallback } from "react";
 import {
@@ -20,6 +21,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { addProperty } from "../../redux/properties-slice";
 import { fetchClients, selectAllClients } from "../../redux/clients-slice";
 import EachClient from "../../components/client/EachClient";
+import SuggestedProperty from "../../components/property/SuggestedProperty";
+import { Geo } from "aws-amplify";
 
 export default function AddProperty({ navigation }) {
   const dispatch = useDispatch();
@@ -28,6 +31,9 @@ export default function AddProperty({ navigation }) {
   const [clientsVisible, setClientsVisible] = useState(false);
   const [searchInput, setSearchInput] = useState("");
   const [selectedClient, setSelectedClient] = useState("");
+  const [suggestedAddresses, setSuggestedAddresses] = useState([]);
+  const [suggestedLoading, setSuggestedLoading] = useState(false);
+  const [suggestedAddressChosen, setSuggestedAddressChosen] = useState(false)
 
   const [streetAddress, setStreetAddress] = useState("");
   const [city, setCity] = useState("");
@@ -66,6 +72,50 @@ export default function AddProperty({ navigation }) {
     setSelectedClient(client);
     setSearchInput(client.firstName + " " + client?.lastName);
     setClientsVisible(false);
+  };
+
+  const searchOptionContraints = {
+    countries: ["USA"],
+    maxResults: 5,
+  };
+
+  useEffect(() => {
+    if (streetAddress.length === 0) setSuggestedAddresses([]);
+    const delaySearch = setTimeout(async () => {
+      if (streetAddress.length > 6 && !suggestedAddressChosen) {
+        let result;
+        setSuggestedLoading(true);
+        try {
+          result = await Geo.searchByText(
+            streetAddress,
+            searchOptionContraints
+          );
+        } catch (err) {
+          console.error(err);
+        } finally {
+          setSuggestedLoading(false);
+        }
+        if (result) {
+          console.log(result);
+          setSuggestedAddresses(result);
+        }
+      }
+    }, 1200);
+    return () => clearTimeout(delaySearch);
+  }, [streetAddress]);
+
+  const handleChooseSuggestedProperty = (item) => {
+    let fullStreet;
+    fullStreet =
+      item?.addressNumber?.length > 0
+        ? item.addressNumber + " " + item.street
+        : item.street;
+    setStreetAddress(fullStreet);
+    setCity(item.municipality);
+    setStateAbbr(item.region);
+    setZipCode(item.postalCode);
+    setSuggestedAddressChosen(true)
+    setSuggestedAddresses([]);
   };
 
   const renderClient = useCallback(
@@ -120,9 +170,9 @@ export default function AddProperty({ navigation }) {
             />
             <TextInput
               style={styles.textInput}
-              placeholder={"Street Address"}
+              placeholder={"Street Address | or search via full address"}
               placeholderTextColor="#757575"
-              value={streetAddress}
+              defaultValue={streetAddress}
               onChangeText={setStreetAddress}
               autoCapitalize="words"
               autoCorrect={false}
@@ -130,6 +180,19 @@ export default function AddProperty({ navigation }) {
               blurOnSubmit={false}
               onSubmitEditing={() => cityRef.current.focus()}
             />
+          </View>
+          <View style={styles.suggestedAddressesContainer}>
+            {!suggestedLoading ? (
+              suggestedAddresses.map((item) => (
+                <SuggestedProperty
+                  item={item}
+                  buttonText="Select"
+                  handlePress={() => handleChooseSuggestedProperty(item)}
+                />
+              ))
+            ) : (
+              <ActivityIndicator size="small" />
+            )}
           </View>
           <View style={styles.inputContainer}>
             <MaterialCommunityIcons
@@ -141,7 +204,7 @@ export default function AddProperty({ navigation }) {
               style={styles.textInput}
               placeholder={"City"}
               placeholderTextColor="#757575"
-              value={city}
+              defaultValue={city}
               onChangeText={setCity}
               autoCapitalize="words"
               ref={cityRef}
@@ -159,7 +222,7 @@ export default function AddProperty({ navigation }) {
               }}
               placeholder={"State"}
               placeholderTextColor="#757575"
-              value={stateAbbr}
+              defaultValue={stateAbbr}
               onChangeText={setStateAbbr}
               autoCapitalize="characters"
               ref={stateRef}
@@ -170,7 +233,7 @@ export default function AddProperty({ navigation }) {
               style={{ ...styles.textInput, paddingLeft: 20 }}
               placeholder={"Zip"}
               placeholderTextColor="#757575"
-              value={zipCode}
+              defaultValue={zipCode}
               onChangeText={setZipCode}
               autoCapitalize="words"
               ref={zipRef}
@@ -185,7 +248,7 @@ export default function AddProperty({ navigation }) {
               style={styles.textInput}
               placeholder={"Price"}
               placeholderTextColor="#757575"
-              value={price}
+              defaultValue={price}
               onChangeText={setPrice}
               keyboardType="numeric"
               ref={priceRef}
@@ -389,4 +452,6 @@ const styles = StyleSheet.create({
   selectedClientName: {
     fontWeight: "700",
   },
+
+  suggestedAddressesContainer: {},
 });

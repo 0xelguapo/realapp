@@ -151,7 +151,11 @@ export default function Clients({ navigation }) {
       return (
         <>
           {!suggestedLoading ? (
-            <SuggestedProperty item={item} handlePress={quickAddProperty} />
+            <SuggestedProperty
+              item={item}
+              handlePress={() => quickAddProperty(item)}
+              buttonText={"+ Add"}
+            />
           ) : (
             <View style={styles.searchResultLoading}>
               <ActivityIndicator size="small" />
@@ -369,7 +373,7 @@ const styles = StyleSheet.create({
   },
   headerTextContainer: {
     flexDirection: "row",
-    paddingTop: 5
+    paddingTop: 5,
   },
   headerText: {
     fontSize: 20,

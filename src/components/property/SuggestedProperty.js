@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useState } from "react";
 
-export default function SuggestedProperty({ item, handlePress }) {
+export default function SuggestedProperty({ item, handlePress, buttonText }) {
   return (
     <View style={styles.searchResultContainer}>
       <View style={styles.searchResultTextContainer}>
@@ -19,7 +19,7 @@ export default function SuggestedProperty({ item, handlePress }) {
           style={styles.searchAddContainer}
           onPress={() => handlePress(item)}
         >
-          <Text style={styles.searchAddText}>Add +</Text>
+          <Text style={styles.searchAddText}>{buttonText}</Text>
         </TouchableOpacity>
       )}
     </View>
