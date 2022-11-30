@@ -15,6 +15,7 @@ import {
   MaterialCommunityIcons,
   Feather,
   Ionicons,
+  MaterialIcons
 } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchClients, selectAllClients } from "../../redux/clients-slice";
@@ -120,40 +121,10 @@ export default function AddDeal({ navigation }) {
           </TouchableOpacity>
 
           <View style={styles.inputContainer}>
-            <Feather name="map-pin" size={20} color="black" />
-            <TextInput
-              style={{
-                ...styles.textInput,
-                borderRightWidth: 0.5,
-                borderRadius: 0,
-              }}
-              placeholder={"State"}
-              placeholderTextColor="#757575"
-              value={stateAbbr}
-              onChangeText={setStateAbbr}
-              autoCapitalize="characters"
-              ref={stateRef}
-              blurOnSubmit={false}
-              onSubmitEditing={() => zipRef.current.focus()}
-            />
-            <TextInput
-              style={{ ...styles.textInput, paddingLeft: 20 }}
-              placeholder={"Zip"}
-              placeholderTextColor="#757575"
-              value={zipCode}
-              onChangeText={setZipCode}
-              autoCapitalize="words"
-              ref={zipRef}
-              keyboardType="numeric"
-              blurOnSubmit={false}
-              onSubmitEditing={() => priceRef.current.focus()}
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <Feather name="dollar-sign" size={20} color="black" />
+          <MaterialIcons name="drive-file-rename-outline" size={20} color="black" />
             <TextInput
               style={styles.textInput}
-              placeholder={"Price"}
+              placeholder={"Title"}
               placeholderTextColor="#757575"
               value={price}
               onChangeText={setPrice}
@@ -162,7 +133,22 @@ export default function AddDeal({ navigation }) {
             />
           </View>
 
-          {!clientsVisible ? (
+          <View style={styles.inputsContainer}>
+            <View style={styles.inputContainer}>
+              <Feather name="dollar-sign" size={20} color="black" />
+              <TextInput
+                style={styles.textInput}
+                placeholder={"Commission Amount"}
+                placeholderTextColor="#757575"
+                value={price}
+                onChangeText={setPrice}
+                keyboardType="numeric"
+                ref={priceRef}
+              />
+            </View>
+          </View>
+
+          {/* {!clientsVisible ? (
             <>
               {!selectedClient ? (
                 <TouchableOpacity
@@ -211,6 +197,7 @@ export default function AddDeal({ navigation }) {
               </View>
             </>
           )}
+           */}
           <KeyboardAvoidingView
             behavior="padding"
             style={{ flex: 1 }}
@@ -264,7 +251,6 @@ const styles = StyleSheet.create({
   },
   inputsContainer: {
     paddingVertical: 20,
-    flex: 1,
   },
   iconContainer: {
     marginRight: 10,

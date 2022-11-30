@@ -7,7 +7,14 @@ function ChooseContextProvider({ children }) {
   const [selectedProperty, setSelectedProperty] = useState();
 
   return (
-    <ChooseContext.Provider value={{ selectedClient, setSelectedClient }}>
+    <ChooseContext.Provider
+      value={{
+        selectedClient,
+        selectedProperty,
+        setSelectedClient,
+        setSelectedProperty,
+      }}
+    >
       {children}
     </ChooseContext.Provider>
   );

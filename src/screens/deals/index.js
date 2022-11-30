@@ -1,5 +1,5 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import ChooseClient from "../../components/client/ChooseClient";
+import ChooseClient from '../clients/ChooseClient'
 import AddDeal from "./AddDeal";
 import DealsHome from "./DealsHome";
 
@@ -20,7 +20,7 @@ export default function DealsNavigator() {
       />
       <Stack.Screen
         options={{ headerShown: false, presentation: "modal" }}
-        name="SelectClient"
+        name="ChooseClient"
         component={ChooseClient}
       />
     </Stack.Navigator>

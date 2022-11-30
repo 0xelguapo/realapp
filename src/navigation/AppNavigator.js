@@ -18,7 +18,7 @@ import {
   MaterialIcons,
 } from "@expo/vector-icons";
 import DealsNavigator from "../screens/deals";
-import { ClientContextProvider } from "../context/client-context";
+import { ChooseContextProvider } from "../context/choose-context";
 // import TasksNavigator from "../screens/tasks";
 
 Notifications.setNotificationHandler({
@@ -61,7 +61,7 @@ export default function AppNavigator() {
   return (
     <Provider store={store}>
       <SuccessContextProvider>
-        <ClientContextProvider>
+        <ChooseContextProvider>
           <SuccessMessage />
           <Tab.Navigator screenOptions={{ tabBarStyle: styles }}>
             <Tab.Screen
@@ -85,7 +85,7 @@ export default function AppNavigator() {
               options={optionsHandler}
             />
           </Tab.Navigator>
-        </ClientContextProvider>
+        </ChooseContextProvider>
       </SuccessContextProvider>
     </Provider>
   );

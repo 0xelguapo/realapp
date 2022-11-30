@@ -8,16 +8,16 @@ import {
 } from "react-native";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import { useCallback, useEffect, useState, useMemo, useContext } from "react";
-import EachClient from "./EachClient";
+import EachClient from "../../components/client/EachClient";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchClients, selectAllClients } from "../../redux/clients-slice";
-import { ClientsContext } from "../../context/client-context";
+import { ChooseContext } from "../../context/choose-context";
 import { useNavigation } from "@react-navigation/native";
 
 export default function ChooseClient() {
   const navigation = useNavigation();
   const [searchInput, setSearchInput] = useState("");
-  const { setSelectedClient } = useContext(ClientsContext);
+  const { setSelectedClient } = useContext(ChooseContext);
 
   const dispatch = useDispatch();
   const allClients = useSelector(selectAllClients);

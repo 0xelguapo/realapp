@@ -1,5 +1,4 @@
 import { useContext } from "react";
-import { ClientsContext } from "../context/client-context";
 import { API, AWSPinpointProvider, graphqlOperation } from "aws-amplify";
 import * as queries from "../graphql/queries";
 import * as mutations from "../graphql/mutations";

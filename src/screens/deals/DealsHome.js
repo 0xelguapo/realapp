@@ -4,7 +4,9 @@ import {
   Text,
   ScrollView,
   useWindowDimensions,
+  Animated,
 } from "react-native";
+import { useEffect, useRef, useState } from "react";
 import AddButton from "../../components/UI/AddButton";
 import { MaterialIcons } from "@expo/vector-icons";
 
@@ -19,6 +21,10 @@ const DATA = [
 
 export default function DealsHome({ navigation }) {
   const { height, width } = useWindowDimensions();
+  const [contentWidth, setContentWidth] = useState(1560);
+
+  const barValue = useRef(new Animated.Value(0)).current;
+
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
@@ -30,7 +36,41 @@ export default function DealsHome({ navigation }) {
           decelerationRate="fast"
           snapToInterval={width}
           snapToAlignment="center"
+          scrollEventThrottle={16}
+          onScroll={Animated.event(
+            [{ nativeEvent: { contentOffset: { x: barValue } } }],
+            { useNativeDriver: false }
+          )}
+          onContentSizeChange={(cw) => setContentWidth(cw)}
         >
+          <Animated.View
+            style={{
+              position: "absolute",
+              backgroundColor: "green",
+              height: 5,
+              top: 60,
+              width: 100,
+              transform: [
+                {
+                  translateX: barValue.interpolate({
+                    inputRange: [
+                      0,
+                      contentWidth / 4,
+                      contentWidth / 2,
+                      contentWidth * 0.75,
+                    ],
+                    outputRange: [
+                      0,
+                      contentWidth / 4 + 100,
+                      contentWidth / 2 + 200,
+                      contentWidth * 0.75 + 300,
+                    ],
+                    extrapolate: "clamp",
+                  }),
+                },
+              ],
+            }}
+          />
           <View style={{ ...styles.dealsContainer, width: width }}>
             <View style={styles.dealHeadingContainer}>
               <Text style={styles.dealHeadingText}>Qualified</Text>
