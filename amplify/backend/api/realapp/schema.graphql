@@ -47,7 +47,7 @@ type Client @model @auth(rules: [{ allow: owner }, { allow: public, provider: ap
   tasks: [Task] @hasMany(indexName: "byClient", fields: ["id"])
   group: [ClientGroup] @manyToMany(relationName: "GroupsClients")
   reminder: [Reminder] @hasMany(indexName: "byReminder", fields: ["id"])
-  deal: [Deal] @hasMany(indexName: "byDeal", fields: ["id"])
+  deal: [Deal] @hasMany(indexName: "byClientDeal", fields: ["id"])
   owner: String @auth(rules: [{ allow: owner, operations: [read, delete] }, { allow: public, provider: apiKey, operations: [create, update]}])
 }
 
@@ -63,6 +63,7 @@ type Property @model @auth(rules: [{ allow: owner }, { allow: public, provider: 
   geometry: AWSJSON
   tasks: [Task] @hasMany(indexName: "byProperty", fields: ["id"])
   group: [PropertyGroup] @manyToMany(relationName: "GroupsProperty")
+  deal: [Deal] @hasMany(indexName: "byPropertyDeal", fields: ["id"])
   clientId: ID @index(name: "byProperty")
   owner: String @auth(rules: [{ allow: owner, operations: [read, delete] }, { allow: public, provider: apiKey, operations: [create, update]}])
 }
@@ -142,9 +143,18 @@ type Deal @model @auth(rules: [{ allow: owner }, { allow: public, provider: apiK
   id: ID!
   title: String
   amount: String
-  stage: String
-  clientId: ID @index(name: "byDeal")
+  stage: [DealStage]
+  clientId: ID @index(name: "byClientDeal")
   client: Client @belongsTo(fields: ["clientId"])
+  propertyId: ID @index(name: "byPropertyDeal")
+  property: Property @belongsTo(fields: ["propertyId"])
+}
+
+enum DealStage {
+  Qualified
+  In Negotiations
+  Under Contract
+  Closed
 }
 
 type Mutation {

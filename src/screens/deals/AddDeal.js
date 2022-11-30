@@ -17,7 +17,6 @@ import {
   Ionicons,
 } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
-import { addProperty } from "../../redux/properties-slice";
 import { fetchClients, selectAllClients } from "../../redux/clients-slice";
 import EachClient from "../../components/client/EachClient";
 
@@ -82,22 +81,6 @@ export default function AddDeal({ navigation }) {
     []
   );
 
-  const handleAddProperty = async () => {
-    const propertyInputs = {
-      street: streetAddress,
-      city: city,
-      state: stateAbbr,
-      zip: zipCode,
-      price: price,
-      note: note,
-      clientId: selectedClient.id,
-    };
-    const response = await dispatch(addProperty(propertyInputs)).unwrap();
-    if (response) {
-      navigation.goBack();
-    }
-  };
-
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
@@ -105,50 +88,37 @@ export default function AddDeal({ navigation }) {
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <AntDesign name="left" size={25} color="#6c6c6c" />
           </TouchableOpacity>
-          <Text style={styles.screenTitle}>New Property</Text>
-          <TouchableOpacity onPress={handleAddProperty}>
+          <Text style={styles.screenTitle}>New Deal</Text>
+          <TouchableOpacity>
             <Text style={styles.saveText}>Save</Text>
           </TouchableOpacity>
         </View>
 
         <View style={styles.inputsContainer}>
-          <View style={styles.inputContainer}>
-            <MaterialCommunityIcons
-              name="office-building-marker-outline"
-              size={20}
-              color="black"
-            />
-            <TextInput
-              style={styles.textInput}
-              placeholder={"Street Address"}
-              placeholderTextColor="#757575"
-              value={streetAddress}
-              onChangeText={setStreetAddress}
-              autoCapitalize="words"
-              autoCorrect={false}
-              autoFocus={true}
-              blurOnSubmit={false}
-              onSubmitEditing={() => cityRef.current.focus()}
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <MaterialCommunityIcons
-              name="city-variant-outline"
-              size={20}
-              color="black"
-            />
-            <TextInput
-              style={styles.textInput}
-              placeholder={"City"}
-              placeholderTextColor="#757575"
-              value={city}
-              onChangeText={setCity}
-              autoCapitalize="words"
-              ref={cityRef}
-              blurOnSubmit={false}
-              onSubmitEditing={() => stateRef.current.focus()}
-            />
-          </View>
+          <TouchableOpacity
+            style={styles.addAnotherButton}
+            onPress={handleShowClients}
+          >
+            <View style={styles.iconContainer}>
+              <Ionicons name="person-outline" size={20} color="#026bff" />
+            </View>
+            <Text style={styles.addOwnershipText}>Choose Client</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.addAnotherButton}
+            onPress={handleShowClients}
+          >
+            <View style={styles.iconContainer}>
+              <MaterialCommunityIcons
+                name="city-variant-outline"
+                size={20}
+                color="#026bff"
+              />
+            </View>
+            <Text style={styles.addOwnershipText}>Choose Property</Text>
+          </TouchableOpacity>
+
           <View style={styles.inputContainer}>
             <Feather name="map-pin" size={20} color="black" />
             <TextInput
@@ -224,7 +194,7 @@ export default function AddDeal({ navigation }) {
               <View style={styles.addClientContainer}>
                 <TouchableOpacity
                   style={styles.addAnotherButton}
-                  onPress={handleShowClients}
+                  onPress={() => navigation.navigate("SelectClient")}
                 >
                   <Ionicons name="md-remove-circle" size={20} color="red" />
                 </TouchableOpacity>
@@ -236,13 +206,6 @@ export default function AddDeal({ navigation }) {
                     placeholder="Search..."
                     placeholderTextColor="#7b7b7c"
                     returnKeyType="done"
-                  />
-                  <FlatList
-                    keyboardShouldPersistTaps={"handled"}
-                    data={filteredData}
-                    renderItem={renderClient}
-                    refreshing={clientStatus !== "succeeded"}
-                    keyExtractor={(c) => c.id}
                   />
                 </View>
               </View>
@@ -302,6 +265,9 @@ const styles = StyleSheet.create({
   inputsContainer: {
     paddingVertical: 20,
     flex: 1,
+  },
+  iconContainer: {
+    marginRight: 10,
   },
   inputContainer: {
     backgroundColor: "white",

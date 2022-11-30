@@ -10,8 +10,15 @@ import HomeNavigator from "../screens/home";
 import ClientsNavigator from "../screens/clients";
 import MoreNavigator from "../screens/more";
 import PropertiesNavigator from "../screens/properties";
-import { AntDesign, Ionicons, Feather, FontAwesome, MaterialIcons } from "@expo/vector-icons";
+import {
+  AntDesign,
+  Ionicons,
+  Feather,
+  FontAwesome,
+  MaterialIcons,
+} from "@expo/vector-icons";
 import DealsNavigator from "../screens/deals";
+import { ClientContextProvider } from "../context/client-context";
 // import TasksNavigator from "../screens/tasks";
 
 Notifications.setNotificationHandler({
@@ -54,34 +61,35 @@ export default function AppNavigator() {
   return (
     <Provider store={store}>
       <SuccessContextProvider>
-        <SuccessMessage />
-        <Tab.Navigator screenOptions={{ tabBarStyle: styles }}>
-          <Tab.Screen
-            name="Focus"
-            component={HomeNavigator}
-            options={optionsHandler}
-          />
-          <Tab.Screen
-            name="Data"
-            component={ClientsNavigator}
-            options={optionsHandler}
-          />
-          <Tab.Screen
-            name="Deals"
-            component={DealsNavigator}
-            options={optionsHandler}
-          />
-          <Tab.Screen
-            name="More"
-            component={MoreNavigator}
-            options={optionsHandler}
-          />
-        </Tab.Navigator>
+        <ClientContextProvider>
+          <SuccessMessage />
+          <Tab.Navigator screenOptions={{ tabBarStyle: styles }}>
+            <Tab.Screen
+              name="Focus"
+              component={HomeNavigator}
+              options={optionsHandler}
+            />
+            <Tab.Screen
+              name="Data"
+              component={ClientsNavigator}
+              options={optionsHandler}
+            />
+            <Tab.Screen
+              name="Deals"
+              component={DealsNavigator}
+              options={optionsHandler}
+            />
+            <Tab.Screen
+              name="More"
+              component={MoreNavigator}
+              options={optionsHandler}
+            />
+          </Tab.Navigator>
+        </ClientContextProvider>
       </SuccessContextProvider>
     </Provider>
   );
 }
-
 
 const styles = {
   paddingVertical: 5,
@@ -163,17 +171,9 @@ const optionsHandler = ({ route }) => {
           ),
         tabBarIcon: ({ focused }) =>
           focused ? (
-            <MaterialIcons
-              name="attach-money"
-              size={28}
-              color="#0064e5"
-            />
+            <MaterialIcons name="attach-money" size={28} color="#0064e5" />
           ) : (
-            <MaterialIcons
-              name="attach-money"
-              size={28}
-              color="#727272"
-            />
+            <MaterialIcons name="attach-money" size={28} color="#727272" />
           ),
         headerShown: false,
       };

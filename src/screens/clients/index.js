@@ -18,6 +18,7 @@ import ViewAllGroups from "../more/ViewAllGroups";
 import ViewOneGroup from "../more/ViewOneGroup";
 import EditClientsOfGroup from "../more/EditClientsOfGroup";
 import AddClientsToGroup from "./AddClientsToGroup";
+import SelectClient from "./SelectClient";
 
 const Stack = createNativeStackNavigator();
 
@@ -153,6 +154,11 @@ export default function ClientsNavigator() {
         options={{ headerShown: false, presentation: "modal" }}
         name="AddClientsToGroup"
         component={AddClientsToGroup}
+      />
+      <Stack.Screen
+        options={{ headerShown: false, presentation: "modal" }}
+        name="SelectClient"
+        component={SelectClient}
       />
     </Stack.Navigator>
   );

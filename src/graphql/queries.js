@@ -179,6 +179,7 @@ export const getClient = /* GraphQL */ `
           amount
           stage
           clientId
+          propertyId
           createdAt
           updatedAt
           owner
@@ -279,6 +280,20 @@ export const getProperty = /* GraphQL */ `
         }
         nextToken
       }
+      deal {
+        items {
+          id
+          title
+          amount
+          stage
+          clientId
+          propertyId
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
       clientId
       owner
       createdAt
@@ -307,6 +322,9 @@ export const listProperties = /* GraphQL */ `
           nextToken
         }
         group {
+          nextToken
+        }
+        deal {
           nextToken
         }
         clientId
@@ -766,6 +784,31 @@ export const getDeal = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      propertyId
+      property {
+        id
+        type
+        street
+        city
+        state
+        zip
+        price
+        note
+        geometry
+        tasks {
+          nextToken
+        }
+        group {
+          nextToken
+        }
+        deal {
+          nextToken
+        }
+        clientId
+        owner
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
       owner
@@ -799,6 +842,22 @@ export const listDeals = /* GraphQL */ `
           clientCity
           clientState
           clientZip
+          owner
+          createdAt
+          updatedAt
+        }
+        propertyId
+        property {
+          id
+          type
+          street
+          city
+          state
+          zip
+          price
+          note
+          geometry
+          clientId
           owner
           createdAt
           updatedAt
@@ -933,6 +992,9 @@ export const getGroupsProperty = /* GraphQL */ `
           nextToken
         }
         group {
+          nextToken
+        }
+        deal {
           nextToken
         }
         clientId

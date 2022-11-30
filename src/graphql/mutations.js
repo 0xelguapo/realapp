@@ -151,6 +151,7 @@ export const deleteClient = /* GraphQL */ `
           amount
           stage
           clientId
+          propertyId
           createdAt
           updatedAt
           owner
@@ -201,6 +202,20 @@ export const deleteProperty = /* GraphQL */ `
           id
           propertyID
           propertyGroupID
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      deal {
+        items {
+          id
+          title
+          amount
+          stage
+          clientId
+          propertyId
           createdAt
           updatedAt
           owner
@@ -493,6 +508,31 @@ export const updateDeal = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      propertyId
+      property {
+        id
+        type
+        street
+        city
+        state
+        zip
+        price
+        note
+        geometry
+        tasks {
+          nextToken
+        }
+        group {
+          nextToken
+        }
+        deal {
+          nextToken
+        }
+        clientId
+        owner
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
       owner
@@ -542,6 +582,31 @@ export const deleteDeal = /* GraphQL */ `
         deal {
           nextToken
         }
+        owner
+        createdAt
+        updatedAt
+      }
+      propertyId
+      property {
+        id
+        type
+        street
+        city
+        state
+        zip
+        price
+        note
+        geometry
+        tasks {
+          nextToken
+        }
+        group {
+          nextToken
+        }
+        deal {
+          nextToken
+        }
+        clientId
         owner
         createdAt
         updatedAt
@@ -699,6 +764,9 @@ export const updateGroupsProperty = /* GraphQL */ `
         group {
           nextToken
         }
+        deal {
+          nextToken
+        }
         clientId
         owner
         createdAt
@@ -744,6 +812,9 @@ export const deleteGroupsProperty = /* GraphQL */ `
           nextToken
         }
         group {
+          nextToken
+        }
+        deal {
           nextToken
         }
         clientId
@@ -947,6 +1018,7 @@ export const createClient = /* GraphQL */ `
           amount
           stage
           clientId
+          propertyId
           createdAt
           updatedAt
           owner
@@ -1060,6 +1132,7 @@ export const updateClient = /* GraphQL */ `
           amount
           stage
           clientId
+          propertyId
           createdAt
           updatedAt
           owner
@@ -1116,6 +1189,20 @@ export const createProperty = /* GraphQL */ `
         }
         nextToken
       }
+      deal {
+        items {
+          id
+          title
+          amount
+          stage
+          clientId
+          propertyId
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
       clientId
       owner
       createdAt
@@ -1161,6 +1248,20 @@ export const updateProperty = /* GraphQL */ `
           id
           propertyID
           propertyGroupID
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      deal {
+        items {
+          id
+          title
+          amount
+          stage
+          clientId
+          propertyId
           createdAt
           updatedAt
           owner
@@ -1685,6 +1786,31 @@ export const createDeal = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      propertyId
+      property {
+        id
+        type
+        street
+        city
+        state
+        zip
+        price
+        note
+        geometry
+        tasks {
+          nextToken
+        }
+        group {
+          nextToken
+        }
+        deal {
+          nextToken
+        }
+        clientId
+        owner
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
       owner
@@ -1775,6 +1901,9 @@ export const createGroupsProperty = /* GraphQL */ `
           nextToken
         }
         group {
+          nextToken
+        }
+        deal {
           nextToken
         }
         clientId
