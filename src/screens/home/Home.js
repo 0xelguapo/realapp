@@ -27,7 +27,7 @@ import {
   startOfDay,
   endOfDay,
 } from "date-fns";
-import AddHome from "../../components/home/AddHome";
+import AddHome from "../../components/UI/MultiAddButton";
 import { AuthContext } from "../../context/auth-context";
 import { fetchGoals } from "../../redux/goals-slice";
 import HomeDate from "./HomeDate";
@@ -184,7 +184,12 @@ export default function Home(props) {
           <MaterialIcons name="refresh" size={20} color="#454545" />
         </TouchableOpacity>
       )}
-      <AddHome activeDate={activeDate.toString()} />
+      <AddHome
+        activeDate={activeDate.toString()}
+        showAddClient={true}
+        showAddTask={true}
+        showAddGoal={true}
+      />
       <View style={styles.headerContainer}>
         <Text style={styles.headerTitle}>Your Focus</Text>
       </View>
@@ -213,8 +218,11 @@ export default function Home(props) {
 
         <OverdueTasks
           lengthOfOverdueTasks={lengthOfOverdueTasks}
-          onPress={() => props.navigation.navigate("Overdue", { activeDate: activeDate.toString() })}
-          
+          onPress={() =>
+            props.navigation.navigate("Overdue", {
+              activeDate: activeDate.toString(),
+            })
+          }
         />
 
         {remindersOfDate.length > 0 && (
@@ -232,7 +240,7 @@ export default function Home(props) {
                     onPress={() =>
                       props.navigation.navigate("ClientDetails", {
                         client: { id: rem.client.id },
-                        viewContactInfo: true
+                        viewContactInfo: true,
                       })
                     }
                   />
@@ -242,7 +250,6 @@ export default function Home(props) {
           </>
         )}
 
-  
         <GoalsList
           handleViewEditGoal={handleViewEditGoal}
           goalsOfDay={goalsOfDay}

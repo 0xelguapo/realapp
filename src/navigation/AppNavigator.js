@@ -1,8 +1,6 @@
-import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 import { useEffect, useState, useRef } from "react";
-import { RC_API_KEY } from "../constants";
-import { Text, Platform } from "react-native";
+import { Text } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Provider } from "react-redux";
 import store from "../redux/index";
@@ -12,7 +10,8 @@ import HomeNavigator from "../screens/home";
 import ClientsNavigator from "../screens/clients";
 import MoreNavigator from "../screens/more";
 import PropertiesNavigator from "../screens/properties";
-import { AntDesign, Ionicons, Feather, FontAwesome } from "@expo/vector-icons";
+import { AntDesign, Ionicons, Feather, FontAwesome, MaterialIcons } from "@expo/vector-icons";
+import DealsNavigator from "../screens/deals";
 // import TasksNavigator from "../screens/tasks";
 
 Notifications.setNotificationHandler({
@@ -67,11 +66,11 @@ export default function AppNavigator() {
             component={ClientsNavigator}
             options={optionsHandler}
           />
-          {/* <Tab.Screen
-            name="Properties"
-            component={PropertiesNavigator}
+          <Tab.Screen
+            name="Deals"
+            component={DealsNavigator}
             options={optionsHandler}
-          /> */}
+          />
           <Tab.Screen
             name="More"
             component={MoreNavigator}
@@ -152,32 +151,32 @@ const optionsHandler = ({ route }) => {
           ),
         headerShown: false,
       };
-    // case "Tasks":
-    //   return {
-    //     tabBarLabel: ({ focused }) =>
-    //       focused ? (
-    //         <Text style={{ fontSize: 11, color: "#0064e5", fontWeight: "600" }}>
-    //           {route.name}
-    //         </Text>
-    //       ) : (
-    //         <Text style={{ fontSize: 11, color: "#727272" }}>{route.name}</Text>
-    //       ),
-    //     tabBarIcon: ({ focused }) =>
-    //       focused ? (
-    //         <MaterialCommunityIcons
-    //           name="clipboard-list-outline"
-    //           size={28}
-    //           color="#0064e5"
-    //         />
-    //       ) : (
-    //         <MaterialCommunityIcons
-    //           name="clipboard-list-outline"
-    //           size={28}
-    //           color="#727272"
-    //         />
-    //       ),
-    //     headerShown: false,
-    //   };
+    case "Deals":
+      return {
+        tabBarLabel: ({ focused }) =>
+          focused ? (
+            <Text style={{ fontSize: 11, color: "#0064e5", fontWeight: "600" }}>
+              {route.name}
+            </Text>
+          ) : (
+            <Text style={{ fontSize: 11, color: "#727272" }}>{route.name}</Text>
+          ),
+        tabBarIcon: ({ focused }) =>
+          focused ? (
+            <MaterialIcons
+              name="attach-money"
+              size={28}
+              color="#0064e5"
+            />
+          ) : (
+            <MaterialIcons
+              name="attach-money"
+              size={28}
+              color="#727272"
+            />
+          ),
+        headerShown: false,
+      };
     case "More":
       return {
         tabBarLabel: ({ focused }) =>

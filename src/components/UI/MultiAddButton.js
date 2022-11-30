@@ -8,12 +8,16 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useState, useEffect, useRef } from "react";
-import OptionIcon from "./OptionIcon";
-import { Entypo } from "@expo/vector-icons";
-import { Ionicons } from "@expo/vector-icons";
-import { Feather } from "@expo/vector-icons";
+import OptionIcon from "../home/OptionIcon";
+import { Entypo, Ionicons, Feather } from "@expo/vector-icons";
 
-export default function AddHome({ activeDate }) {
+export default function MultiAddButton({
+  activeDate,
+  showAddClient,
+  showAddTask,
+  showAddGoal,
+  showAddProperty,
+}) {
   const [visible, setVisible] = useState(false);
   const navigation = useNavigation();
 
@@ -44,27 +48,43 @@ export default function AddHome({ activeDate }) {
   };
 
   const handleViewAddGoal = () => {
-    navigation.navigate("AddGoal")
+    navigation.navigate("AddGoal");
     setVisible(false);
   };
+
+  const handleViewAddProperty = () => {
+    navigation.navigate('AddProperty');
+    setVisible(false)
+  }
 
   return (
     <>
       {visible && (
         <>
           <View style={styles.iconsContainer}>
-            <OptionIcon onPress={handleViewAddClient} text={"Add Client"}>
-              <Ionicons name="ios-person-add" size={28} color="black" />
-            </OptionIcon>
-            <OptionIcon onPress={handleViewAddTask} text={"Add Task"}>
-              <Entypo name="add-to-list" size={28} color="black" />
-            </OptionIcon>
+            {showAddClient && (
+              <OptionIcon onPress={handleViewAddClient} text={"Add Client"}>
+                <Ionicons name="ios-person-add" size={28} color="black" />
+              </OptionIcon>
+            )}
+            {showAddTask && (
+              <OptionIcon onPress={handleViewAddTask} text={"Add Task"}>
+                <Entypo name="add-to-list" size={28} color="black" />
+              </OptionIcon>
+            )}
             {/* <OptionIcon onPress={handleViewAddReminder} text={"Add Reminder"}>
               <Feather name="bell" size={28} color="black" />
             </OptionIcon> */}
-            <OptionIcon onPress={handleViewAddGoal} text={"Add Daily Goal"}>
-              <Entypo name="flag" size={28} color="black" />
-            </OptionIcon>
+            {showAddGoal && (
+              <OptionIcon onPress={handleViewAddGoal} text={"Add Daily Goal"}>
+                <Entypo name="flag" size={28} color="black" />
+              </OptionIcon>
+            )}
+            {showAddProperty && (
+              <OptionIcon onPress={handleViewAddProperty} text={"Add Property"}>
+                <Ionicons name="location" size={28} color="black" />
+              </OptionIcon>
+            )}
           </View>
           <TouchableWithoutFeedback onPress={() => setVisible(false)}>
             <View style={styles.backdrop}></View>
@@ -92,7 +112,7 @@ const styles = StyleSheet.create({
     height: "100%",
     width: "100%",
     backgroundColor: "rgba(0,0,0,.15)",
-    zIndex: 1,
+    zIndex: 2,
   },
   addIconContainer: {
     alignItems: "center",
@@ -115,7 +135,7 @@ const styles = StyleSheet.create({
   iconsContainer: {
     display: "flex",
     alignItems: "flex-end",
-    justifyContent: "center",
+    justifyContent: "flex-end",
     position: "absolute",
     bottom: 100,
     height: 250,

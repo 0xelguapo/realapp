@@ -29,6 +29,8 @@ import {
 import { Geo } from "aws-amplify";
 import { SuccessContext } from "../../context/success-context";
 import SuggestedProperty from "../../components/property/SuggestedProperty";
+import AddButton from "../../components/UI/AddButton";
+import AddHome from "../../components/UI/MultiAddButton";
 
 export default function Clients({ navigation }) {
   const sectionListRef = useRef(null);
@@ -261,7 +263,7 @@ export default function Clients({ navigation }) {
                 style={styles.viewGroups}
                 onPress={() => navigation.navigate("ViewAllGroups")}
               >
-                <Ionicons name="people-outline" size={24} color="#535353" />
+                <Ionicons name="people-outline" size={24} color="#0064e5" />
               </TouchableOpacity>
             </View>
           </View>
@@ -342,12 +344,7 @@ export default function Clients({ navigation }) {
             </>
           )}
         </View>
-        <TouchableOpacity
-          style={styles.addIconContainer}
-          onPress={() => navigation.navigate("AddClient")}
-        >
-          <Ionicons name="ios-person-add" size={25} color="white" />
-        </TouchableOpacity>
+        <AddHome showAddClient={true} showAddProperty={true} />
       </View>
     </>
   );
@@ -367,14 +364,15 @@ const styles = StyleSheet.create({
     display: "flex",
     paddingHorizontal: 20,
     paddingBottom: 20,
-    zIndex: 3,
+    zIndex: 2,
     paddingTop: 50,
   },
   headerTextContainer: {
     flexDirection: "row",
+    paddingTop: 5
   },
   headerText: {
-    fontSize: 25,
+    fontSize: 20,
     fontWeight: "700",
     color: "#454545",
   },

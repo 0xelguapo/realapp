@@ -39,7 +39,7 @@ export default function AddTask({ navigation, route }) {
   const [searchInput, setSearchInput] = useState("");
   const [date, setDate] = useState(
     add(new Date(Math.round(curDate.getTime() / coeff) * coeff), {
-      minutes: 10,
+      minutes: 15,
     })
   );
   const [endDate, setEndDate] = useState(add(new Date(date), { minutes: 30 }));
