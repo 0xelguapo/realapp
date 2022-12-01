@@ -9,6 +9,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 import AddButton from "../../components/UI/AddButton";
 import { MaterialIcons } from "@expo/vector-icons";
+import useDeals from "../../hooks/deals-hook";
 
 const DATA = [
   {
@@ -22,6 +23,10 @@ const DATA = [
 export default function DealsHome({ navigation }) {
   const { width } = useWindowDimensions();
   const [contentWidth, setContentWidth] = useState(1560);
+
+  const { allDeals, qualifiedDeals } = useDeals()
+
+  console.log(qualifiedDeals)
 
   const barValue = useRef(new Animated.Value(0)).current;
 

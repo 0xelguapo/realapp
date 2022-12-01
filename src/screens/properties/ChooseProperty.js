@@ -4,25 +4,28 @@ import {
   TouchableOpacity,
   StyleSheet,
   FlatList,
-  TextInput,
+  ActivityIndicator,
 } from "react-native";
-import { AntDesign, Ionicons } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 import { useCallback, useEffect, useState, useMemo, useContext } from "react";
-import EachClient from "../../components/client/EachClient";
 import { useDispatch, useSelector } from "react-redux";
 import { ChooseContext } from "../../context/choose-context";
 import { useNavigation } from "@react-navigation/native";
 import {
+  fetchOneProperty,
   fetchProperties,
   selectAllProperties,
 } from "../../redux/properties-slice";
 import EachProperty from "../../components/property/EachProperty";
 import SearchBar from "../../components/UI/SearchBar";
+import { fetchClients, selectClientById } from "../../redux/clients-slice";
 
 export default function ChooseProperty() {
   const navigation = useNavigation();
   const [searchInput, setSearchInput] = useState("");
-  const { setSelectedProperty } = useContext(ChooseContext);
+  const { setSelectedProperty, setSelectedClient } = useContext(ChooseContext);
+  const clients = useSelector((state) => state.clients.entities);
+  const clientStatus = useSelector((state) => state.clients.status);
 
   const dispatch = useDispatch();
   const allProperties = useSelector(selectAllProperties);
@@ -42,10 +45,17 @@ export default function ChooseProperty() {
     if (status !== "succeeded") {
       dispatch(fetchProperties());
     }
+    if (clientStatus !== "succeeded") {
+      dispatch(fetchClients());
+    }
   }, []);
 
-  const handleSelectProperty = (item) => {
+  const handleSelectProperty = async (item) => {
     setSelectedProperty(item);
+    const response = await dispatch(fetchOneProperty(item.id)).unwrap();
+    if (response && response?.clientId) {
+      setSelectedClient(clients[response.clientId]);
+    }
     navigation.goBack();
   };
 
@@ -67,7 +77,7 @@ export default function ChooseProperty() {
     <View style={styles.container}>
       <View style={styles.headingContainer}>
         <TouchableOpacity
-          onPress={() => props.navigation.goBack()}
+          onPress={() => navigation.goBack()}
           style={styles.exitContainer}
         >
           <AntDesign name="left" size={25} />
@@ -83,13 +93,19 @@ export default function ChooseProperty() {
       </View>
 
       <View style={styles.list}>
-        <FlatList
-          data={filteredData}
-          renderItem={renderProperty}
-          keyExtractor={(c) => c.id}
-          refreshing={status !== "succeeded"}
-          contentContainerStyle={{ paddingBottom: 50 }}
-        />
+        {status !== "succeeded" ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" />
+          </View>
+        ) : (
+          <FlatList
+            data={filteredData}
+            renderItem={renderProperty}
+            keyExtractor={(c) => c.id}
+            refreshing={status !== "succeeded"}
+            contentContainerStyle={{ paddingBottom: 50 }}
+          />
+        )}
       </View>
     </View>
   );
@@ -140,5 +156,10 @@ const styles = StyleSheet.create({
   },
   list: {
     flex: 1,
+  },
+  loadingContainer: {
+    flex: 0.5,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

@@ -11,6 +11,7 @@ import {
   ScrollView,
   useWindowDimensions,
   Dimensions,
+  Alert,
 } from "react-native";
 import { useEffect, useRef, useState, useContext } from "react";
 import {
@@ -20,8 +21,11 @@ import {
   Ionicons,
   MaterialIcons,
 } from "@expo/vector-icons";
+
 import { useDispatch } from "react-redux";
 import { ChooseContext } from "../../context/choose-context";
+import { addDeal } from "../../redux/deals-slice";
+import { SuccessContext } from "../../context/success-context";
 
 const STAGE_TYPES = [
   "QUALIFIED",
@@ -41,14 +45,14 @@ export default function AddDeal({ navigation }) {
     setSelectedProperty,
   } = useContext(ChooseContext);
 
+  const {onStatusChange } = useContext(SuccessContext)
+
   const { width } = useWindowDimensions();
-  const [selectedStage, setSelectedStage] = useState("");
+  const [selectedStage, setSelectedStage] = useState("Qualified");
 
   const [dealTitle, setDealTitle] = useState("");
-  const [price, setPrice] = useState("");
+  const [amount, setAmount] = useState("");
   const [note, setNote] = useState("");
-
-  const priceRef = useRef();
 
   useEffect(() => {
     const clearSelected = navigation.addListener("beforeRemove", (e) => {
@@ -70,6 +74,30 @@ export default function AddDeal({ navigation }) {
     }
   };
 
+  const handleCreateDeal = async () => {
+    if (!selectedClient && !selectedProperty) {
+      Alert.alert("Please add a client or a property");
+      return;
+    }
+    let dealDetails = {
+      title:
+        dealTitle.length > 0
+          ? dealTitle
+          : selectedProperty?.id
+          ? selectedProperty.street
+          : selectedClient.firstName + " " + selectedClient?.lastName,
+      amount: amount,
+      stage: selectedStage,
+      clientId: (selectedClient?.id && selectedClient.id) || "",
+      propertyId: (selectedProperty?.id && selectedProperty.id) || "",
+    };
+    const response = await dispatch(addDeal(dealDetails)).unwrap();
+    if(response) {
+      onStatusChange('DEAL CREATED')
+      navigation.goBack()
+    }
+  };
+
   function StickyHeader() {
     return (
       <View style={styles.headingContainer}>
@@ -77,7 +105,7 @@ export default function AddDeal({ navigation }) {
           <AntDesign name="left" size={25} color="#6c6c6c" />
         </TouchableOpacity>
         <Text style={styles.screenTitle}>New Deal</Text>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handleCreateDeal}>
           <Text style={styles.saveText}>Save</Text>
         </TouchableOpacity>
       </View>
@@ -85,7 +113,11 @@ export default function AddDeal({ navigation }) {
   }
 
   return (
-    <ScrollView style={styles.container} stickyHeaderIndices={[0]} keyboardShouldPersistTaps="handled">
+    <ScrollView
+      style={styles.container}
+      stickyHeaderIndices={[0]}
+      keyboardShouldPersistTaps="handled"
+    >
       {<StickyHeader />}
       <View style={styles.inputsContainer}>
         <TouchableOpacity
@@ -107,6 +139,9 @@ export default function AddDeal({ navigation }) {
               <Text style={styles.addOwnershipText}>
                 {selectedClient.firstName + " " + selectedClient?.lastName}
               </Text>
+              <TouchableOpacity style={styles.removeSelectedButton} onPress={() => setSelectedClient(null)}>
+                <AntDesign name="closecircle" size={18} color="#6B7280" />
+              </TouchableOpacity>
             </>
           )}
         </TouchableOpacity>
@@ -144,6 +179,9 @@ export default function AddDeal({ navigation }) {
                   " " +
                   selectedProperty.zip}
               </Text>
+              <TouchableOpacity style={styles.removeSelectedButton} onPress={() => setSelectedProperty(null)}>
+                <AntDesign name="closecircle" size={18} color="#6B7280" />
+              </TouchableOpacity>
             </>
           )}
         </TouchableOpacity>
@@ -156,12 +194,16 @@ export default function AddDeal({ navigation }) {
           />
           <TextInput
             style={styles.textInput}
-            placeholder={"Title"}
+            placeholder={
+              selectedProperty?.id
+                ? selectedProperty.street
+                : selectedClient?.id
+                ? selectedClient.firstName + " " + selectedClient?.lastName
+                : "Title"
+            }
             placeholderTextColor="#757575"
             defaultValue={dealTitle}
             onChangeText={setDealTitle}
-            ref={priceRef}
-            autoFocus={true}
           />
         </View>
 
@@ -172,11 +214,10 @@ export default function AddDeal({ navigation }) {
               style={styles.textInput}
               placeholder={"Commission Amount"}
               placeholderTextColor="#757575"
-              defaultValue={price}
-              onChangeText={setPrice}
+              defaultValue={amount}
+              onChangeText={setAmount}
               keyboardType="numeric"
               returnKeyType="done"
-              ref={priceRef}
             />
           </View>
         </View>
@@ -286,6 +327,12 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     height: "90%",
+  },
+
+  removeSelectedButton: {
+    position: "absolute",
+    right: "5%",
+    zIndex: 3,
   },
 
   stageContainer: {

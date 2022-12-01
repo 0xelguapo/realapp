@@ -178,6 +178,8 @@ export const getClient = /* GraphQL */ `
           title
           amount
           stage
+          note
+          closeDate
           clientId
           propertyId
           createdAt
@@ -286,6 +288,8 @@ export const getProperty = /* GraphQL */ `
           title
           amount
           stage
+          note
+          closeDate
           clientId
           propertyId
           createdAt
@@ -747,6 +751,8 @@ export const getDeal = /* GraphQL */ `
       title
       amount
       stage
+      note
+      closeDate
       clientId
       client {
         id
@@ -827,6 +833,8 @@ export const listDeals = /* GraphQL */ `
         title
         amount
         stage
+        note
+        closeDate
         clientId
         client {
           id

@@ -150,6 +150,8 @@ export const deleteClient = /* GraphQL */ `
           title
           amount
           stage
+          note
+          closeDate
           clientId
           propertyId
           createdAt
@@ -214,6 +216,8 @@ export const deleteProperty = /* GraphQL */ `
           title
           amount
           stage
+          note
+          closeDate
           clientId
           propertyId
           createdAt
@@ -471,6 +475,8 @@ export const updateDeal = /* GraphQL */ `
       title
       amount
       stage
+      note
+      closeDate
       clientId
       client {
         id
@@ -549,6 +555,8 @@ export const deleteDeal = /* GraphQL */ `
       title
       amount
       stage
+      note
+      closeDate
       clientId
       client {
         id
@@ -1017,6 +1025,8 @@ export const createClient = /* GraphQL */ `
           title
           amount
           stage
+          note
+          closeDate
           clientId
           propertyId
           createdAt
@@ -1131,6 +1141,8 @@ export const updateClient = /* GraphQL */ `
           title
           amount
           stage
+          note
+          closeDate
           clientId
           propertyId
           createdAt
@@ -1195,6 +1207,8 @@ export const createProperty = /* GraphQL */ `
           title
           amount
           stage
+          note
+          closeDate
           clientId
           propertyId
           createdAt
@@ -1260,6 +1274,8 @@ export const updateProperty = /* GraphQL */ `
           title
           amount
           stage
+          note
+          closeDate
           clientId
           propertyId
           createdAt
@@ -1749,6 +1765,8 @@ export const createDeal = /* GraphQL */ `
       title
       amount
       stage
+      note
+      closeDate
       clientId
       client {
         id

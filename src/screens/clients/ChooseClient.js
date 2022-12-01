@@ -5,19 +5,24 @@ import {
   StyleSheet,
   FlatList,
   TextInput,
+  ActivityIndicator,
 } from "react-native";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import { useCallback, useEffect, useState, useMemo, useContext } from "react";
 import EachClient from "../../components/client/EachClient";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchClients, selectAllClients } from "../../redux/clients-slice";
+import {
+  fetchClients,
+  fetchOneClient,
+  selectAllClients,
+} from "../../redux/clients-slice";
 import { ChooseContext } from "../../context/choose-context";
 import { useNavigation } from "@react-navigation/native";
 
 export default function ChooseClient() {
   const navigation = useNavigation();
   const [searchInput, setSearchInput] = useState("");
-  const { setSelectedClient } = useContext(ChooseContext);
+  const { setSelectedClient, setSelectedProperty } = useContext(ChooseContext);
 
   const dispatch = useDispatch();
   const allClients = useSelector(selectAllClients);
@@ -38,8 +43,11 @@ export default function ChooseClient() {
     }
   }, []);
 
-  const handleSelectClient = (item) => {
+  const handleSelectClient = async (item) => {
     setSelectedClient(item);
+    const response = await dispatch(fetchOneClient(item.id)).unwrap();
+    if (response.properties?.items.length > 0)
+      setSelectedProperty(response.properties.items[0]);
     navigation.goBack();
   };
 
@@ -80,13 +88,19 @@ export default function ChooseClient() {
         </View>
       </View>
       <View style={styles.list}>
-        <FlatList
-          data={filteredData}
-          renderItem={renderClient}
-          keyExtractor={(c) => c.id}
-          refreshing={status !== "succeeded"}
-          contentContainerStyle={{ paddingBottom: 50 }}
-        />
+        {status !== "succeeded" ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" />
+          </View>
+        ) : (
+          <FlatList
+            data={filteredData}
+            renderItem={renderClient}
+            keyExtractor={(c) => c.id}
+            refreshing={status !== "succeeded"}
+            contentContainerStyle={{ paddingBottom: 50 }}
+          />
+        )}
       </View>
     </View>
   );
@@ -133,5 +147,10 @@ const styles = StyleSheet.create({
   list: {
     flex: 1,
     paddingLeft: 20,
+  },
+  loadingContainer: {
+    flex: 0.5,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

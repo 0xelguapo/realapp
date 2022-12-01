@@ -218,6 +218,8 @@ export const onCreateClient = /* GraphQL */ `
           title
           amount
           stage
+          note
+          closeDate
           clientId
           propertyId
           createdAt
@@ -332,6 +334,8 @@ export const onUpdateClient = /* GraphQL */ `
           title
           amount
           stage
+          note
+          closeDate
           clientId
           propertyId
           createdAt
@@ -446,6 +450,8 @@ export const onDeleteClient = /* GraphQL */ `
           title
           amount
           stage
+          note
+          closeDate
           clientId
           propertyId
           createdAt
@@ -510,6 +516,8 @@ export const onCreateProperty = /* GraphQL */ `
           title
           amount
           stage
+          note
+          closeDate
           clientId
           propertyId
           createdAt
@@ -575,6 +583,8 @@ export const onUpdateProperty = /* GraphQL */ `
           title
           amount
           stage
+          note
+          closeDate
           clientId
           propertyId
           createdAt
@@ -640,6 +650,8 @@ export const onDeleteProperty = /* GraphQL */ `
           title
           amount
           stage
+          note
+          closeDate
           clientId
           propertyId
           createdAt
@@ -1361,6 +1373,8 @@ export const onCreateDeal = /* GraphQL */ `
       title
       amount
       stage
+      note
+      closeDate
       clientId
       client {
         id
@@ -1439,6 +1453,8 @@ export const onUpdateDeal = /* GraphQL */ `
       title
       amount
       stage
+      note
+      closeDate
       clientId
       client {
         id
@@ -1517,6 +1533,8 @@ export const onDeleteDeal = /* GraphQL */ `
       title
       amount
       stage
+      note
+      closeDate
       clientId
       client {
         id
