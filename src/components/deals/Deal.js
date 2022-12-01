@@ -7,7 +7,7 @@ export default function Deal({ deal, onPress }) {
         <Text style={styles.titleText}>{deal.title}</Text>
       </View>
       <Text style={styles.detailsText}>
-        ${parseInt(deal.amount).toLocaleString()}{" "}
+        {deal?.amount ? `$${parseInt(deal.amount).toLocaleString()} ` : "$0"}
         {deal.clientId.length > 0 &&
           `• ${deal.client.firstName + " " + deal.client?.lastName}`}
       </Text>

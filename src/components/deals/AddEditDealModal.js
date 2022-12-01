@@ -5,15 +5,9 @@ import {
   TouchableOpacity,
   TextInput,
   KeyboardAvoidingView,
-  Keyboard,
-  TouchableWithoutFeedback,
-  Animated,
   ScrollView,
-  useWindowDimensions,
   Dimensions,
-  Alert,
 } from "react-native";
-import { useEffect, useRef, useState, useContext } from "react";
 import {
   AntDesign,
   MaterialCommunityIcons,
@@ -21,11 +15,7 @@ import {
   Ionicons,
   MaterialIcons,
 } from "@expo/vector-icons";
-
-import { useDispatch } from "react-redux";
-import { ChooseContext } from "../../context/choose-context";
-import { addDeal } from "../../redux/deals-slice";
-import { SuccessContext } from "../../context/success-context";
+import { useNavigation } from "@react-navigation/native";
 
 const STAGE_TYPES = [
   "QUALIFIED",
@@ -36,67 +26,23 @@ const STAGE_TYPES = [
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
-export default function AddDeal({ navigation }) {
-  const dispatch = useDispatch();
-  const {
-    selectedClient,
-    setSelectedClient,
-    selectedProperty,
-    setSelectedProperty,
-  } = useContext(ChooseContext);
+export default function AddEditDealModal({
+  screenTitle,
+  selectedClient,
+  selectedProperty,
+  dealTitle,
+  setDealTitle,
+  amount,
+  setAmount,
+  note,
+  setNote,
+  handlePickStage,
+  handleSubmit,
+  contentOffset,
+}) {
 
-  const {onStatusChange } = useContext(SuccessContext)
-
-  const { width } = useWindowDimensions();
-  const [selectedStage, setSelectedStage] = useState("Qualified");
-
-  const [dealTitle, setDealTitle] = useState("");
-  const [amount, setAmount] = useState("");
-  const [note, setNote] = useState("");
-
-  useEffect(() => {
-    const clearSelected = navigation.addListener("beforeRemove", (e) => {
-      setSelectedClient(null);
-      setSelectedProperty(null);
-    });
-    return clearSelected;
-  }, [navigation]);
-
-  const handlePickStage = (e) => {
-    const { x: xPosition } = e.nativeEvent.contentOffset;
-    if (xPosition < SCREEN_WIDTH / 2) setSelectedStage("Qualified");
-    else if (xPosition >= SCREEN_WIDTH / 2 && xPosition < SCREEN_WIDTH) {
-      setSelectedStage("Negotiations");
-    } else if (xPosition >= SCREEN_WIDTH && xPosition < SCREEN_WIDTH + 40) {
-      setSelectedStage("Contract");
-    } else if (xPosition > SCREEN_WIDTH + 50) {
-      setSelectedStage("Closed");
-    }
-  };
-
-  const handleCreateDeal = async () => {
-    if (!selectedClient && !selectedProperty) {
-      Alert.alert("Please add a client or a property");
-      return;
-    }
-    let dealDetails = {
-      title:
-        dealTitle.length > 0
-          ? dealTitle
-          : selectedProperty?.id
-          ? selectedProperty.street
-          : selectedClient.firstName + " " + selectedClient?.lastName,
-      amount: amount,
-      stage: selectedStage,
-      clientId: (selectedClient?.id && selectedClient.id) || null,
-      propertyId: (selectedProperty?.id && selectedProperty.id) || null,
-    };
-    const response = await dispatch(addDeal(dealDetails)).unwrap();
-    if(response) {
-      onStatusChange('DEAL CREATED')
-      navigation.goBack()
-    }
-  };
+  console.log(contentOffset)
+  const navigation = useNavigation();
 
   function StickyHeader() {
     return (
@@ -104,8 +50,8 @@ export default function AddDeal({ navigation }) {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <AntDesign name="left" size={25} color="#6c6c6c" />
         </TouchableOpacity>
-        <Text style={styles.screenTitle}>New Deal</Text>
-        <TouchableOpacity onPress={handleCreateDeal}>
+        <Text style={styles.screenTitle}>{screenTitle}</Text>
+        <TouchableOpacity onPress={handleSubmit}>
           <Text style={styles.saveText}>Save</Text>
         </TouchableOpacity>
       </View>
@@ -139,7 +85,10 @@ export default function AddDeal({ navigation }) {
               <Text style={styles.addOwnershipText}>
                 {selectedClient.firstName + " " + selectedClient?.lastName}
               </Text>
-              <TouchableOpacity style={styles.removeSelectedButton} onPress={() => setSelectedClient(null)}>
+              <TouchableOpacity
+                style={styles.removeSelectedButton}
+                onPress={() => setSelectedClient(null)}
+              >
                 <AntDesign name="closecircle" size={18} color="#6B7280" />
               </TouchableOpacity>
             </>
@@ -179,7 +128,10 @@ export default function AddDeal({ navigation }) {
                   " " +
                   selectedProperty.zip}
               </Text>
-              <TouchableOpacity style={styles.removeSelectedButton} onPress={() => setSelectedProperty(null)}>
+              <TouchableOpacity
+                style={styles.removeSelectedButton}
+                onPress={() => setSelectedProperty(null)}
+              >
                 <AntDesign name="closecircle" size={18} color="#6B7280" />
               </TouchableOpacity>
             </>
@@ -233,6 +185,7 @@ export default function AddDeal({ navigation }) {
             pagingEnabled={true}
             decelerationRate={"fast"}
             horizontal={true}
+            contentOffset={{ x: contentOffset }}
             onMomentumScrollEnd={handlePickStage}
             contentContainerStyle={[
               {

@@ -6,7 +6,7 @@ import {
   useWindowDimensions,
   Animated,
 } from "react-native";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import AddButton from "../../components/UI/AddButton";
 import { MaterialIcons } from "@expo/vector-icons";
 import useDeals from "../../hooks/deals-hook";
@@ -108,7 +108,7 @@ export default function DealsHome({ navigation }) {
       </View>
 
       <AddButton
-        onPress={() => navigation.navigate("AddDeal")}
+        onPress={() => navigation.navigate("AddEditDeal")}
         icon={<MaterialIcons name="attach-money" size={28} color="white" />}
       />
     </View>
