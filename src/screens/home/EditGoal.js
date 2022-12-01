@@ -16,7 +16,7 @@ import { RRule } from "rrule";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import useNotifications from "../../hooks/notification-hook";
 import { useDispatch } from "react-redux";
-import { addGoal } from "../../redux/goals-slice";
+import { addGoal, editGoal } from "../../redux/goals-slice";
 
 export default function EditGoal(props) {
   const initialDaysActive = [
@@ -92,7 +92,7 @@ export default function EditGoal(props) {
     setRemindMeState((prevState) => !prevState);
   };
 
-  const handleAddGoal = async () => {
+  const handleEditGoal = async () => {
     if (!title) {
       Alert.alert("Please enter a title!");
       return;
@@ -135,6 +135,7 @@ export default function EditGoal(props) {
     }
 
     const goalDetails = {
+      id: goal.id,
       title: title,
       content: content,
       timesPerDay: timesPerDay,
@@ -143,7 +144,7 @@ export default function EditGoal(props) {
       notificationId: notificationIdsArray.toString() || "",
     };
 
-    const response = await dispatch(addGoal(goalDetails)).unwrap();
+    const response = await dispatch(editGoal(goalDetails)).unwrap();
     if (response) props.navigation.goBack();
   };
 
@@ -154,7 +155,7 @@ export default function EditGoal(props) {
           <AntDesign name="left" size={25} color="#6c6c6c" />
         </TouchableOpacity>
         <Text style={styles.screenTitle}>Edit Goal</Text>
-        <TouchableOpacity onPress={handleAddGoal}>
+        <TouchableOpacity onPress={handleEditGoal}>
           <Text style={styles.saveText}>Save</Text>
         </TouchableOpacity>
       </View>

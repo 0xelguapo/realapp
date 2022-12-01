@@ -10,6 +10,7 @@ import { useEffect, useRef, useState } from "react";
 import AddButton from "../../components/UI/AddButton";
 import { MaterialIcons } from "@expo/vector-icons";
 import useDeals from "../../hooks/deals-hook";
+import DealsList from "../../components/deals/DealsList";
 
 const DATA = [
   {
@@ -24,9 +25,8 @@ export default function DealsHome({ navigation }) {
   const { width } = useWindowDimensions();
   const [contentWidth, setContentWidth] = useState(1560);
 
-  const { allDeals, qualifiedDeals } = useDeals()
-
-  console.log(qualifiedDeals)
+  const { qualifiedDeals, negotiationsDeals, contractDeals, closedDeals } =
+    useDeals();
 
   const barValue = useRef(new Animated.Value(0)).current;
 
@@ -67,9 +67,9 @@ export default function DealsHome({ navigation }) {
                     ],
                     outputRange: [
                       0,
-                      contentWidth / 4 + width/4,
-                      contentWidth / 2 + width/2,
-                      contentWidth * 0.75 + width-100,
+                      contentWidth / 4 + width / 4,
+                      contentWidth / 2 + width / 2,
+                      contentWidth * 0.75 + width - 100,
                     ],
                     extrapolate: "clamp",
                   }),
@@ -81,24 +81,28 @@ export default function DealsHome({ navigation }) {
             <View style={styles.dealHeadingContainer}>
               <Text style={styles.dealHeadingText}>Qualified</Text>
             </View>
+            <DealsList dealsData={qualifiedDeals} />
           </View>
 
           <View style={{ ...styles.dealsContainer, width: width }}>
             <View style={styles.dealHeadingContainer}>
               <Text style={styles.dealHeadingText}>In Negotiations</Text>
             </View>
+            <DealsList dealsData={negotiationsDeals} />
           </View>
 
           <View style={{ ...styles.dealsContainer, width: width }}>
             <View style={styles.dealHeadingContainer}>
               <Text style={styles.dealHeadingText}>Under Contract</Text>
             </View>
+            <DealsList dealsData={contractDeals} />
           </View>
 
           <View style={{ ...styles.dealsContainer, width: width }}>
             <View style={styles.dealHeadingContainer}>
               <Text style={styles.dealHeadingText}>Closed</Text>
             </View>
+            <DealsList dealsData={closedDeals} />
           </View>
         </ScrollView>
       </View>
@@ -135,7 +139,7 @@ const styles = StyleSheet.create({
   dealHeadingContainer: {
     height: 60,
     paddingHorizontal: 20,
-    backgroundColor: "#efefef",
+    backgroundColor: "#e6e6e6",
     justifyContent: "center",
   },
   dealHeadingText: {

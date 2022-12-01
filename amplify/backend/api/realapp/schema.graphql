@@ -113,8 +113,6 @@ type ConnectionHistory @model @auth(rules: [{ allow: owner }, { allow: public, p
 
 type Task @model @auth(rules: [{ allow: owner }, { allow: public, provider: apiKey, operations: [create] }]) {
   id: ID!
-  clientId: ID @index(name: "byClient", sortKeyFields: ["title"])
-  propertyId: ID @index(name: "byProperty")
   title: String!
   content: String
   completed: Boolean
@@ -122,6 +120,8 @@ type Task @model @auth(rules: [{ allow: owner }, { allow: public, provider: apiK
   endDate: String
   notificationId: String
   type: TaskType
+  clientId: ID @index(name: "byClient", sortKeyFields: ["title"])
+  propertyId: ID @index(name: "byProperty")
   client: Client @belongsTo(fields: ["clientId"])
   owner: String @auth(rules: [{ allow: owner, operations: [read, delete] }, { allow: public, provider: apiKey, operations: [create, update]}])
 }
@@ -154,8 +154,8 @@ type Deal @model @auth(rules: [{ allow: owner }, { allow: public, provider: apiK
 
 enum DealStage {
   Qualified
-  In Negotiations
-  Under Contract
+  Negotiations
+  Contract
   Closed
 }
 

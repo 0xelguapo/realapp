@@ -66,9 +66,9 @@ export default function AddDeal({ navigation }) {
     const { x: xPosition } = e.nativeEvent.contentOffset;
     if (xPosition < SCREEN_WIDTH / 2) setSelectedStage("Qualified");
     else if (xPosition >= SCREEN_WIDTH / 2 && xPosition < SCREEN_WIDTH) {
-      setSelectedStage("In Negotiations");
+      setSelectedStage("Negotiations");
     } else if (xPosition >= SCREEN_WIDTH && xPosition < SCREEN_WIDTH + 40) {
-      setSelectedStage("Under Contract");
+      setSelectedStage("Contract");
     } else if (xPosition > SCREEN_WIDTH + 50) {
       setSelectedStage("Closed");
     }
@@ -88,8 +88,8 @@ export default function AddDeal({ navigation }) {
           : selectedClient.firstName + " " + selectedClient?.lastName,
       amount: amount,
       stage: selectedStage,
-      clientId: (selectedClient?.id && selectedClient.id) || "",
-      propertyId: (selectedProperty?.id && selectedProperty.id) || "",
+      clientId: (selectedClient?.id && selectedClient.id) || null,
+      propertyId: (selectedProperty?.id && selectedProperty.id) || null,
     };
     const response = await dispatch(addDeal(dealDetails)).unwrap();
     if(response) {
