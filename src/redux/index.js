@@ -6,6 +6,7 @@ import tasksReducer from "./tasks-slice";
 import propertiesReducer from "./properties-slice";
 import propertyGroupsReducer from "./propertyGroups-slice";
 import goalsReducer from './goals-slice'
+import dealsReducer from './deals-slice'
 
 const store = configureStore({
   reducer: {
@@ -15,7 +16,8 @@ const store = configureStore({
     tasks: tasksReducer,
     properties: propertiesReducer,
     propertyGroups: propertyGroupsReducer,
-    goals: goalsReducer
+    goals: goalsReducer,
+    deals: dealsReducer
   },
 });
 

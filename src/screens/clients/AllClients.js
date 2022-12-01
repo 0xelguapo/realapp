@@ -31,6 +31,7 @@ import { SuccessContext } from "../../context/success-context";
 import SuggestedProperty from "../../components/property/SuggestedProperty";
 import AddButton from "../../components/UI/AddButton";
 import AddHome from "../../components/UI/MultiAddButton";
+import SearchBar from "../../components/UI/SearchBar";
 
 export default function Clients({ navigation }) {
   const sectionListRef = useRef(null);
@@ -246,23 +247,11 @@ export default function Clients({ navigation }) {
               </Pressable>
             </View>
             <View style={styles.searchHeaderContainer}>
-              <View style={styles.inputContainer}>
-                <Ionicons name="ios-search" size={20} color="black" />
-                <TextInput
-                  style={styles.input}
-                  placeholderTextColor="#7b7b7c"
-                  placeholder="Search or type any address to quick add"
-                  returnKeyType="done"
-                  onChangeText={setSearchInput}
-                  value={searchInput}
-                />
-                {searchInput.length !== 0 && (
-                  <TouchableOpacity onPress={handleClearSearch}>
-                    <Feather name="x-circle" size={20} color="#7b7b7c" />
-                  </TouchableOpacity>
-                )}
-              </View>
-
+              <SearchBar
+                searchInput={searchInput}
+                setSearchInput={setSearchInput}
+                handleClearSearch={handleClearSearch}
+              />
               <TouchableOpacity
                 style={styles.viewGroups}
                 onPress={() => navigation.navigate("ViewAllGroups")}

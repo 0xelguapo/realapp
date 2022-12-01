@@ -64,7 +64,7 @@ export default function More(props) {
       <View style={styles.headingContainer}>
         <Text style={styles.headingText}>EXTRAS</Text>
         <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
-          <SimpleLineIcons name="options" size={24} color="#dddddf" />
+          <Ionicons name="settings-outline" size={24} color="#dddddf" />
         </TouchableOpacity>
         {modalVisible && (
           <View style={styles.menuContainer}>

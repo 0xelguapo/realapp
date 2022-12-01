@@ -20,7 +20,7 @@ const DATA = [
 ];
 
 export default function DealsHome({ navigation }) {
-  const { height, width } = useWindowDimensions();
+  const { width } = useWindowDimensions();
   const [contentWidth, setContentWidth] = useState(1560);
 
   const barValue = useRef(new Animated.Value(0)).current;
@@ -36,7 +36,7 @@ export default function DealsHome({ navigation }) {
           decelerationRate="fast"
           snapToInterval={width}
           snapToAlignment="center"
-          scrollEventThrottle={16}
+          scrollEventThrottle={5}
           onScroll={Animated.event(
             [{ nativeEvent: { contentOffset: { x: barValue } } }],
             { useNativeDriver: false }
@@ -50,6 +50,7 @@ export default function DealsHome({ navigation }) {
               height: 5,
               top: 60,
               width: 100,
+              borderRadius: 10,
               transform: [
                 {
                   translateX: barValue.interpolate({
@@ -61,9 +62,9 @@ export default function DealsHome({ navigation }) {
                     ],
                     outputRange: [
                       0,
-                      contentWidth / 4 + 100,
-                      contentWidth / 2 + 200,
-                      contentWidth * 0.75 + 300,
+                      contentWidth / 4 + width/4,
+                      contentWidth / 2 + width/2,
+                      contentWidth * 0.75 + width-100,
                     ],
                     extrapolate: "clamp",
                   }),

@@ -1,5 +1,13 @@
 import React, { useRef } from "react";
-import { Animated, StyleSheet, View, Text, I18nManager } from "react-native";
+import {
+  Animated,
+  StyleSheet,
+  View,
+  Text,
+  I18nManager,
+  Dimensions,
+  useWindowDimensions,
+} from "react-native";
 import { RectButton } from "react-native-gesture-handler";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 import { useDispatch } from "react-redux";
@@ -16,11 +24,13 @@ export default function SwipeableGoal({
   length,
   index,
 }) {
+  const { width: SCREEN_WIDTH } = useWindowDimensions();
+  const TRANSLATE_X_THRESHOLD = -SCREEN_WIDTH * 0.3;
+
   const updateRef = useRef(null);
   const dispatch = useDispatch();
 
-  const { handleDeleteNotification } =
-    useNotifications();
+  const { handleDeleteNotification } = useNotifications();
 
   const timesCompletedInt = parseInt(timesCompleted);
 
@@ -96,22 +106,22 @@ export default function SwipeableGoal({
     </View>
   );
 
+  const handleDeleteGoal = async () => {
+    if (notificationId) {
+      const notificationIdsArray = notificationId.split(",");
+      for (const notifId of notificationIdsArray) {
+        console.log(await handleDeleteNotification(notifId));
+      }
+    }
+    dispatch(removeGoal(goalId));
+    close();
+  };
+
   const renderRightActions = (progress, dragX) => {
     const trans = dragX.interpolate({
       inputRange: [0, 50, 100, 101],
       outputRange: [-20, 0, 0, 1],
     });
-
-    const handleDeleteGoal = async () => {
-      if (notificationId) {
-        const notificationIdsArray = notificationId.split(",");
-        for (const notifId of notificationIdsArray) {
-          console.log(await handleDeleteNotification(notifId));
-        }
-      }
-      close();
-      dispatch(removeGoal(goalId));
-    };
 
     return (
       <RectButton style={styles.rightAction} onPress={handleDeleteGoal}>
@@ -124,12 +134,18 @@ export default function SwipeableGoal({
     updateRef.current.close();
   };
 
+  const swipeOpen = () => {
+    updateRef.current.onSwipeableOpen("right");
+  };
+
   return (
     <Swipeable
+      overshootRight={false}
+      onSwipeableRightOpen={handleDeleteGoal}
       ref={updateRef}
       friction={2}
       leftThreshold={50}
-      rightThreshold={130}
+      rightThreshold={135}
       renderLeftActions={renderLeftActions}
       renderRightActions={renderRightActions}
     >

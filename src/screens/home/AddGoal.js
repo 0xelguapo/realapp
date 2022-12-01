@@ -140,6 +140,7 @@ export default function AddGoal(props) {
       <ScrollView
         stickyHeaderIndices={[0]}
         contentContainerStyle={[{ height: "auto" }]}
+        keyboardShouldPersistTaps="handled"
       >
         <StickyHeader />
         <View style={styles.innerContainer}>
@@ -151,6 +152,7 @@ export default function AddGoal(props) {
               returnKeyType="done"
               value={title}
               onChangeText={setTitle}
+              autoFocus={true}
             />
             <TextInput
               style={styles.descriptionInput}

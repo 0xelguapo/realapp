@@ -9,24 +9,12 @@ import {
   TouchableOpacity,
   FlatList,
 } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchReminders,
-  selectAllReminders,
-} from "../../redux/reminders-slice";
+import { useDispatch } from "react-redux";
 import { API, graphqlOperation } from "aws-amplify";
 import { getUserStreak, updateUserStreak } from "../../graphql/customQueries";
 import { fetchTasks } from "../../redux/tasks-slice";
 import { MaterialIcons } from "@expo/vector-icons";
-import {
-  format,
-  add,
-  sub,
-  formatDistanceToNowStrict,
-  isToday,
-  startOfDay,
-  endOfDay,
-} from "date-fns";
+import { add, sub, formatDistanceToNowStrict } from "date-fns";
 import AddHome from "../../components/UI/MultiAddButton";
 import { AuthContext } from "../../context/auth-context";
 import { fetchGoals } from "../../redux/goals-slice";
@@ -60,7 +48,6 @@ export default function Home(props) {
 
   const { remindersOfDate } = useReminders(activeDate);
 
-  console.log(remindersOfDate);
   const { allGoals, goalsOfDay, getGoalIncrementAmount } = useGoals(activeDate);
   const {
     allTasks,

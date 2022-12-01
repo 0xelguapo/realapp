@@ -5,218 +5,231 @@ import {
   TouchableOpacity,
   TextInput,
   KeyboardAvoidingView,
-  FlatList,
   Keyboard,
   TouchableWithoutFeedback,
+  Animated,
+  ScrollView,
+  useWindowDimensions,
+  Dimensions,
 } from "react-native";
-import { useEffect, useRef, useState, useMemo, useCallback } from "react";
+import { useEffect, useRef, useState, useContext } from "react";
 import {
   AntDesign,
   MaterialCommunityIcons,
   Feather,
   Ionicons,
-  MaterialIcons
+  MaterialIcons,
 } from "@expo/vector-icons";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchClients, selectAllClients } from "../../redux/clients-slice";
-import EachClient from "../../components/client/EachClient";
+import { useDispatch } from "react-redux";
+import { ChooseContext } from "../../context/choose-context";
+
+const STAGE_TYPES = [
+  "QUALIFIED",
+  "IN NEGOTIATIONS",
+  "UNDER CONTRACT",
+  "CLOSED",
+];
+
+const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 export default function AddDeal({ navigation }) {
   const dispatch = useDispatch();
-  const allClients = useSelector(selectAllClients);
-  const clientStatus = useSelector((state) => state.clients.status);
-  const [clientsVisible, setClientsVisible] = useState(false);
-  const [searchInput, setSearchInput] = useState("");
-  const [selectedClient, setSelectedClient] = useState("");
+  const {
+    selectedClient,
+    setSelectedClient,
+    selectedProperty,
+    setSelectedProperty,
+  } = useContext(ChooseContext);
 
-  const [streetAddress, setStreetAddress] = useState("");
-  const [city, setCity] = useState("");
-  const [stateAbbr, setStateAbbr] = useState("");
-  const [zipCode, setZipCode] = useState("");
+  const { width } = useWindowDimensions();
+  const [selectedStage, setSelectedStage] = useState("");
+
+  const [dealTitle, setDealTitle] = useState("");
   const [price, setPrice] = useState("");
   const [note, setNote] = useState("");
-  const cityRef = useRef();
-  const stateRef = useRef();
-  const zipRef = useRef();
+
   const priceRef = useRef();
 
-  const filteredData = useMemo(() => {
-    return allClients.filter((c) => {
-      const fullName = c.firstName + " " + c?.lastName;
-      const clientData = fullName ? fullName.toUpperCase() : "".toUpperCase();
-      const textData = searchInput.toUpperCase();
-      return clientData.indexOf(textData) > -1;
-    });
-  }, [searchInput, allClients]);
-
   useEffect(() => {
-    if (clientStatus !== "succeeded") dispatch(fetchClients());
-  }, []);
+    const clearSelected = navigation.addListener("beforeRemove", (e) => {
+      setSelectedClient(null);
+      setSelectedProperty(null);
+    });
+    return clearSelected;
+  }, [navigation]);
 
-  const handleShowClients = () => {
-    setClientsVisible(!clientsVisible);
-    if (selectedClient) {
-      setSearchInput("");
-      setSelectedClient("");
+  const handlePickStage = (e) => {
+    const { x: xPosition } = e.nativeEvent.contentOffset;
+    if (xPosition < SCREEN_WIDTH / 2) setSelectedStage("Qualified");
+    else if (xPosition >= SCREEN_WIDTH / 2 && xPosition < SCREEN_WIDTH) {
+      setSelectedStage("In Negotiations");
+    } else if (xPosition >= SCREEN_WIDTH && xPosition < SCREEN_WIDTH + 40) {
+      setSelectedStage("Under Contract");
+    } else if (xPosition > SCREEN_WIDTH + 50) {
+      setSelectedStage("Closed");
     }
-    Keyboard.dismiss();
   };
 
-  const handleChooseClient = (client) => {
-    setSelectedClient(client);
-    setSearchInput(client.firstName + " " + client?.lastName);
-    setClientsVisible(false);
-  };
-
-  const renderClient = useCallback(
-    ({ item }) => (
-      <EachClient
-        onPress={() => handleChooseClient(item)}
-        taskMode={true}
-        firstName={item.firstName}
-        lastName={item.lastName}
-        phone={item.phone}
-        company={item.company}
-      />
-    ),
-    []
-  );
+  function StickyHeader() {
+    return (
+      <View style={styles.headingContainer}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <AntDesign name="left" size={25} color="#6c6c6c" />
+        </TouchableOpacity>
+        <Text style={styles.screenTitle}>New Deal</Text>
+        <TouchableOpacity>
+          <Text style={styles.saveText}>Save</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={styles.container}>
-        <View style={styles.headingContainer}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <AntDesign name="left" size={25} color="#6c6c6c" />
-          </TouchableOpacity>
-          <Text style={styles.screenTitle}>New Deal</Text>
-          <TouchableOpacity>
-            <Text style={styles.saveText}>Save</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.inputsContainer}>
-          <TouchableOpacity
-            style={styles.addAnotherButton}
-            onPress={handleShowClients}
-          >
-            <View style={styles.iconContainer}>
-              <Ionicons name="person-outline" size={20} color="#026bff" />
-            </View>
-            <Text style={styles.addOwnershipText}>Choose Client</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.addAnotherButton}
-            onPress={handleShowClients}
-          >
-            <View style={styles.iconContainer}>
-              <MaterialCommunityIcons
-                name="city-variant-outline"
-                size={20}
-                color="#026bff"
-              />
-            </View>
-            <Text style={styles.addOwnershipText}>Choose Property</Text>
-          </TouchableOpacity>
-
-          <View style={styles.inputContainer}>
-          <MaterialIcons name="drive-file-rename-outline" size={20} color="black" />
-            <TextInput
-              style={styles.textInput}
-              placeholder={"Title"}
-              placeholderTextColor="#757575"
-              value={price}
-              onChangeText={setPrice}
-              keyboardType="numeric"
-              ref={priceRef}
-            />
-          </View>
-
-          <View style={styles.inputsContainer}>
-            <View style={styles.inputContainer}>
-              <Feather name="dollar-sign" size={20} color="black" />
-              <TextInput
-                style={styles.textInput}
-                placeholder={"Commission Amount"}
-                placeholderTextColor="#757575"
-                value={price}
-                onChangeText={setPrice}
-                keyboardType="numeric"
-                ref={priceRef}
-              />
-            </View>
-          </View>
-
-          {/* {!clientsVisible ? (
+    <ScrollView style={styles.container} stickyHeaderIndices={[0]} keyboardShouldPersistTaps="handled">
+      {<StickyHeader />}
+      <View style={styles.inputsContainer}>
+        <TouchableOpacity
+          style={styles.addAnotherButton}
+          onPress={() => navigation.navigate("ChooseClient")}
+        >
+          {!selectedClient ? (
             <>
-              {!selectedClient ? (
-                <TouchableOpacity
-                  style={styles.addAnotherButton}
-                  onPress={handleShowClients}
-                >
-                  <Ionicons name="md-add-sharp" size={24} color="#026bff" />
-                  <Text style={styles.addOwnershipText}>Add Ownership</Text>
-                </TouchableOpacity>
-              ) : (
-                <TouchableOpacity
-                  style={styles.addAnotherButton}
-                  onPress={handleShowClients}
-                >
-                  <Ionicons name="md-remove-circle" size={20} color="red" />
-                  <Text style={styles.ownedByText}>
-                    Owned by:{" "}
-                    <Text style={styles.selectedClientName}>
-                      {selectedClient.firstName +
-                        " " +
-                        selectedClient?.lastName}
-                    </Text>
-                  </Text>
-                </TouchableOpacity>
-              )}
+              <View style={styles.iconContainer}>
+                <Ionicons name="person-outline" size={20} color="#026bff" />
+              </View>
+              <Text style={styles.addOwnershipText}>Choose Client</Text>
             </>
           ) : (
             <>
-              <View style={styles.addClientContainer}>
-                <TouchableOpacity
-                  style={styles.addAnotherButton}
-                  onPress={() => navigation.navigate("SelectClient")}
-                >
-                  <Ionicons name="md-remove-circle" size={20} color="red" />
-                </TouchableOpacity>
-                <View style={styles.listViewContainer}>
-                  <TextInput
-                    style={styles.search}
-                    value={searchInput}
-                    onChangeText={setSearchInput}
-                    placeholder="Search..."
-                    placeholderTextColor="#7b7b7c"
-                    returnKeyType="done"
-                  />
-                </View>
+              <View style={styles.iconContainer}>
+                <Ionicons name="person-outline" size={20} color="#026bff" />
               </View>
+              <Text style={styles.addOwnershipText}>
+                {selectedClient.firstName + " " + selectedClient?.lastName}
+              </Text>
             </>
           )}
-           */}
-          <KeyboardAvoidingView
-            behavior="padding"
-            style={{ flex: 1 }}
-            keyboardVerticalOffset={100}
-          >
-            <View style={styles.addNoteContainer}>
-              <Text style={styles.addNoteHeader}>Add a note</Text>
-              <TextInput
-                style={styles.addNoteInput}
-                value={note}
-                onChangeText={setNote}
-                multiline={true}
-                onFocus={() => setClientsVisible(false)}
-              />
-            </View>
-          </KeyboardAvoidingView>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.addAnotherButton}
+          onPress={() => navigation.navigate("ChooseProperty")}
+        >
+          {!selectedProperty ? (
+            <>
+              <View style={styles.iconContainer}>
+                <MaterialCommunityIcons
+                  name="city-variant-outline"
+                  size={20}
+                  color="#026bff"
+                />
+              </View>
+              <Text style={styles.addOwnershipText}>Choose Property</Text>
+            </>
+          ) : (
+            <>
+              <View style={styles.iconContainer}>
+                <MaterialCommunityIcons
+                  name="city-variant-outline"
+                  size={20}
+                  color="#026bff"
+                />
+              </View>
+              <Text style={styles.addOwnershipText}>
+                {selectedProperty.street +
+                  ". " +
+                  selectedProperty.city +
+                  ", " +
+                  selectedProperty.state +
+                  " " +
+                  selectedProperty.zip}
+              </Text>
+            </>
+          )}
+        </TouchableOpacity>
+
+        <View style={styles.inputContainer}>
+          <MaterialIcons
+            name="drive-file-rename-outline"
+            size={20}
+            color="black"
+          />
+          <TextInput
+            style={styles.textInput}
+            placeholder={"Title"}
+            placeholderTextColor="#757575"
+            defaultValue={dealTitle}
+            onChangeText={setDealTitle}
+            ref={priceRef}
+            autoFocus={true}
+          />
         </View>
+
+        <View style={styles.inputsContainer}>
+          <View style={styles.inputContainer}>
+            <Feather name="dollar-sign" size={20} color="black" />
+            <TextInput
+              style={styles.textInput}
+              placeholder={"Commission Amount"}
+              placeholderTextColor="#757575"
+              defaultValue={price}
+              onChangeText={setPrice}
+              keyboardType="numeric"
+              returnKeyType="done"
+              ref={priceRef}
+            />
+          </View>
+        </View>
+        <View style={styles.stageHeadingContainer}>
+          <Text style={styles.stageHeadingText}>Stage</Text>
+        </View>
+        <View style={styles.stageContainer}>
+          <View style={styles.stageOpacityCover} />
+          <View style={styles.triangle} />
+
+          <ScrollView
+            snapToInterval={SCREEN_WIDTH / 2}
+            pagingEnabled={true}
+            decelerationRate={"fast"}
+            horizontal={true}
+            onMomentumScrollEnd={handlePickStage}
+            contentContainerStyle={[
+              {
+                alignItems: "center",
+                paddingHorizontal: SCREEN_WIDTH / 4,
+              },
+            ]}
+            showsHorizontalScrollIndicator={false}
+            style={{ backgroundColor: "darkgreen", height: "90%" }}
+          >
+            {STAGE_TYPES.map((type, index) => (
+              <View
+                key={index}
+                style={{ width: SCREEN_WIDTH / 2, alignItems: "center" }}
+              >
+                <Text style={{ color: "white" }}>{type}</Text>
+              </View>
+            ))}
+          </ScrollView>
+        </View>
+
+        <KeyboardAvoidingView
+          behavior="padding"
+          style={{ flex: 1 }}
+          keyboardVerticalOffset={120}
+        >
+          <View style={styles.addNoteContainer}>
+            <Text style={styles.addNoteHeader}>Add a note</Text>
+            <TextInput
+              style={styles.addNoteInput}
+              value={note}
+              onChangeText={setNote}
+              multiline={true}
+            />
+          </View>
+        </KeyboardAvoidingView>
       </View>
-    </TouchableWithoutFeedback>
+    </ScrollView>
   );
 }
 
@@ -224,6 +237,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingBottom: 100,
+    backgroundColor: "#f6f6f6",
   },
   headingContainer: {
     flexDirection: "row",
@@ -273,6 +287,40 @@ const styles = StyleSheet.create({
     fontSize: 16,
     height: "90%",
   },
+
+  stageContainer: {
+    height: 50,
+  },
+  stageHeadingContainer: {
+    height: 30,
+    paddingHorizontal: 10,
+    justifyContent: "center",
+  },
+  stageHeadingText: {
+    fontSize: 16,
+    color: "#757575",
+  },
+  triangle: {
+    position: "absolute",
+    height: 12,
+    zIndex: 5,
+    right: SCREEN_WIDTH / 2 - 5,
+    borderLeftWidth: 12,
+    borderTopWidth: 12,
+    borderRightWidth: 12,
+    borderLeftColor: "transparent",
+    borderRightColor: "transparent",
+    borderTopColor: "#f9f9f9",
+  },
+  stageOpacityCover: {
+    height: "100%",
+    width: SCREEN_WIDTH / 3.5,
+    backgroundColor: "darkgreen",
+    opacity: 0.8,
+    position: "absolute",
+    zIndex: 2,
+  },
+
   addNoteContainer: {
     paddingVertical: 20,
     height: 150,
@@ -303,34 +351,7 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     color: "#026bff",
   },
-  removeOwnershipContainer: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    height: "100%",
-  },
-  removeOwnershipText: {
-    color: "red",
-    fontWeight: "500",
-    paddingLeft: 5,
-  },
-  addClientContainer: {
-    display: "flex",
-    flex: 2,
-  },
-  listViewContainer: {
-    flex: 1,
-    paddingHorizontal: 20,
-    backgroundColor: "white",
-  },
-  search: {
-    fontSize: 16,
-    height: 30,
-    paddingVertical: 5,
-  },
-  ownedByText: {
-    fontWeight: "500",
-  },
+
   selectedClientNameContainer: {
     marginLeft: 5,
     paddingVertical: 5,
