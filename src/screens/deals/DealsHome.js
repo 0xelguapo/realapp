@@ -25,8 +25,7 @@ export default function DealsHome({ navigation }) {
   const { width } = useWindowDimensions();
   const [contentWidth, setContentWidth] = useState(1560);
 
-  const { qualifiedDeals, negotiationsDeals, contractDeals, closedDeals } =
-    useDeals();
+  const { filteredDeals } = useDeals();
 
   const barValue = useRef(new Animated.Value(0)).current;
 
@@ -80,29 +79,45 @@ export default function DealsHome({ navigation }) {
           <View style={{ ...styles.dealsContainer, width: width }}>
             <View style={styles.dealHeadingContainer}>
               <Text style={styles.dealHeadingText}>Qualified</Text>
+              <Text style={styles.dealTotalAmountText}>${filteredDeals.Qualified.amount.toLocaleString()}</Text>
             </View>
-            <DealsList dealsData={qualifiedDeals} />
+            {filteredDeals.Qualified.data.length > 0 ? (
+              <DealsList dealsData={filteredDeals.Qualified.data} />
+            ) : (
+              <View style={styles.emptyDealsContainer}>
+                <Text style={styles.emptyDealsText}>
+                  Start tracking your deals!
+                </Text>
+                <Text style={styles.emptySubtext}>Tap the '$' to add</Text>
+              </View>
+            )}
           </View>
 
           <View style={{ ...styles.dealsContainer, width: width }}>
             <View style={styles.dealHeadingContainer}>
               <Text style={styles.dealHeadingText}>In Negotiations</Text>
+              <Text style={styles.dealTotalAmountText}>${filteredDeals.Negotiations.amount.toLocaleString()}</Text>
+
             </View>
-            <DealsList dealsData={negotiationsDeals} />
+            <DealsList dealsData={filteredDeals.Negotiations.data} />
           </View>
 
           <View style={{ ...styles.dealsContainer, width: width }}>
             <View style={styles.dealHeadingContainer}>
               <Text style={styles.dealHeadingText}>Under Contract</Text>
+              <Text style={styles.dealTotalAmountText}>${filteredDeals.Contract.amount.toLocaleString()}</Text>
+
             </View>
-            <DealsList dealsData={contractDeals} />
+            <DealsList dealsData={filteredDeals.Contract.data} />
           </View>
 
           <View style={{ ...styles.dealsContainer, width: width }}>
             <View style={styles.dealHeadingContainer}>
               <Text style={styles.dealHeadingText}>Closed</Text>
+              <Text style={styles.dealTotalAmountText}>${filteredDeals.Closed.amount.toLocaleString()}</Text>
+
             </View>
-            <DealsList dealsData={closedDeals} />
+            <DealsList dealsData={filteredDeals.Closed.data} />
           </View>
         </ScrollView>
       </View>
@@ -144,5 +159,24 @@ const styles = StyleSheet.create({
   },
   dealHeadingText: {
     fontWeight: "500",
+  },
+  dealTotalAmountText: {
+    marginTop: 3,
+    fontWeight: '500',
+    color: '#6c6c6c'
+  },
+  emptyDealsContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  emptyDealsText: {
+    fontSize: 20,
+    fontWeight: "500",
+    color: "#ababab",
+  },
+  emptySubtext: {
+    fontWeight: "300",
+    color: "#ababab",
   },
 });

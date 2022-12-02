@@ -33,7 +33,7 @@ export default function AddProperty({ navigation }) {
   const [selectedClient, setSelectedClient] = useState("");
   const [suggestedAddresses, setSuggestedAddresses] = useState([]);
   const [suggestedLoading, setSuggestedLoading] = useState(false);
-  const [suggestedAddressChosen, setSuggestedAddressChosen] = useState(false)
+  const [suggestedAddressChosen, setSuggestedAddressChosen] = useState(false);
 
   const [streetAddress, setStreetAddress] = useState("");
   const [city, setCity] = useState("");
@@ -114,7 +114,7 @@ export default function AddProperty({ navigation }) {
     setCity(item.municipality);
     setStateAbbr(item.region);
     setZipCode(item.postalCode);
-    setSuggestedAddressChosen(true)
+    setSuggestedAddressChosen(true);
     setSuggestedAddresses([]);
   };
 
@@ -183,8 +183,9 @@ export default function AddProperty({ navigation }) {
           </View>
           <View style={styles.suggestedAddressesContainer}>
             {!suggestedLoading ? (
-              suggestedAddresses.map((item) => (
+              suggestedAddresses.map((item, index) => (
                 <SuggestedProperty
+                  key={index}
                   item={item}
                   buttonText="Select"
                   handlePress={() => handleChooseSuggestedProperty(item)}

@@ -13,34 +13,24 @@ function useDeals() {
 
   const allDeals = useSelector(selectAllDeals);
 
-  const qualifiedDeals = allDeals.reduce((acc, el) => {
-    if (el.stage === STAGES[0]) {
-      acc.push(el);
+  const filteredDeals = allDeals.reduce(
+    (acc, el) => {
+      acc[el.stage].data.push(el);
+      acc[el.stage].amount =
+        acc[el.stage].amount + parseInt(el.amount || 0);
+      return acc;
+    },
+    {
+      Qualified: { data: [], amount: 0 },
+      Negotiations: { data: [], amount: 0 },
+      Contract: { data: [], amount: 0 },
+      Closed: { data: [], amount: 0 },
     }
-    return acc;
-  }, []);
+  );
 
-  const negotiationsDeals = allDeals.reduce((acc, el) => {
-    if (el.stage === STAGES[1]) {
-      acc.push(el);
-    }
-    return acc;
-  }, []);
-
-  const contractDeals = allDeals.reduce((acc, el) => {
-    if (el.stage === STAGES[2]) {
-      acc.push(el);
-    }
-    return acc;
-  }, []);
-
-  const closedDeals = allDeals.reduce((acc, el) => {
-    if(el.stage === STAGES[3]) {
-      acc.push(el)
-    }
-     return acc
-  }, [])
-
-  return { allDeals, qualifiedDeals, negotiationsDeals, contractDeals, closedDeals};
+  return {
+    allDeals,
+    filteredDeals,
+  };
 }
 export default useDeals;
