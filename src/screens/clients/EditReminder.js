@@ -83,7 +83,7 @@ export default function EditReminder(props) {
         break;
       case "quarterly":
         recurRule = createRRule(RRule.YEARLY, 4)
-        const quartersly = [1, 2, 3, 4];
+        const quarters = [1, 2, 3, 4];
         const promises = quarters.map((num) => {
           return handleScheduleNotification({
             repeats: true,

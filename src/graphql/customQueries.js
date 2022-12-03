@@ -178,6 +178,7 @@ export const listReminders = /* GraphQL */ `
         id
         freq
         recurring
+        notificationId
         recurRule
         clientId
         client {

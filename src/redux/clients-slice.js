@@ -175,8 +175,8 @@ export const clientsSlice = createSlice({
   initialState,
   reducers: {
     handleAddClientToGroup: (state, action) => {
-      if(!state.entities[action.payload.clientId].group.items) {
-        state.entities[action.payload.clientId].group.items = []
+      if (!state.entities[action.payload.clientId].group.items) {
+        state.entities[action.payload.clientId].group.items = [];
       }
       state.entities[action.payload.clientId].group.items.push(action.payload);
     },
@@ -186,6 +186,13 @@ export const clientsSlice = createSlice({
         (item) => item.clientGroupID === clientGroupID
       );
       state.entities[clientId].group.items.splice(indexToRemove, 1);
+    },
+    handleClientAfterDeleteReminder: (state, action) => {
+      const { clientId, reminderId } = action.payload;
+      const reminderIndexToRemove = state.entities[
+        clientId
+      ].reminder.items.findIndex((el) => el.id === reminderId);
+      state.entities[clientId].reminder.items.splice(reminderIndexToRemove, 1);
     },
   },
   extraReducers: (builder) => {
@@ -216,7 +223,7 @@ export const clientsSlice = createSlice({
         for (let i = 0; i < action.payload.length; i++) {
           if (action.payload[i].group.items.length > 0) {
             state.entities[action.payload[i].id].group.items =
-              action.payload[i].group.items
+              action.payload[i].group.items;
           } else continue;
         }
       });
@@ -229,7 +236,10 @@ export const {
   selectIds: selectClientIds,
 } = clientsAdapter.getSelectors((state) => state.clients);
 
-export const { handleAddClientToGroup, handleRemoveClientFromGroup } =
-  clientsSlice.actions;
+export const {
+  handleAddClientToGroup,
+  handleRemoveClientFromGroup,
+  handleClientAfterDeleteReminder,
+} = clientsSlice.actions;
 
 export default clientsSlice.reducer;

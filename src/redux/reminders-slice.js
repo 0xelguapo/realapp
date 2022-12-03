@@ -12,7 +12,7 @@ import {
 } from "../graphql/mutations";
 
 const remindersAdapter = createEntityAdapter({
-  sortComparer: (a, b) => a.freq.localeCompare(b.freq),
+  sortComparer: (a, b) => a.createdAt.localeCompare(b.createdAt),
 });
 
 const initialState = remindersAdapter.getInitialState({

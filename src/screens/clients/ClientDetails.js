@@ -35,6 +35,7 @@ export default function ClientDetails(props) {
     viewContactInfo || false
   );
 
+  
   const dispatch = useDispatch();
   const clientSelect = useSelector((state) => selectClientById(state, id));
   const fetchClientDetails = () => {
@@ -119,12 +120,12 @@ export default function ClientDetails(props) {
         </View>
       ) : (
         <SafeAreaView style={styles.container}>
-          <TouchableOpacity
-            style={styles.backButtonContainer}
-            onPress={props.navigation.goBack}
-          >
-            <AntDesign name="left" size={24} color="black" />
-          </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.backButtonContainer}
+              onPress={props.navigation.goBack}
+            >
+              <AntDesign name="left" size={24} color="black" />
+            </TouchableOpacity>
           <View style={styles.header}>
             <Text style={styles.name}>
               {clientSelect.lastName

@@ -9,6 +9,10 @@ import EditClientsOfGroup from "./EditClientsOfGroup";
 import ViewAllReminders from "./ViewAllReminders";
 import Settings from "./Settings";
 import ContactsToImport from "./ContactsToImport";
+import AddConnectionHistory from "../clients/AddConnectionHistory";
+import AddEditNote from "../clients/AddEditNote";
+import AddClientTask from '../clients/AddClientTask'
+import EditClient from "../clients/EditClient";
 
 const Stack = createNativeStackNavigator();
 
@@ -49,9 +53,44 @@ export default function MoreNavigator() {
         component={ViewOneGroup}
       />
       <Stack.Screen
-        options={{ presentation: "modal", headerShown: false }}
+        options={{ headerShown: false }}
         name="ClientDetails"
         component={ClientDetails}
+      />
+            <Stack.Screen
+        options={{
+          headerShown: false,
+          presentation: "transparentModal",
+          cardOverlayEnabled: true,
+          animation: "fade",
+        }}
+        name="AddConnectionHistory"
+        component={AddConnectionHistory}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: false,
+          presentation: "transparentModal",
+          cardOverlayEnabled: true,
+          animation: "fade",
+        }}
+        name="AddEditNote"
+        component={AddEditNote}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: false,
+          presentation: "transparentModal",
+          cardOverlayEnabled: true,
+          animation: "fade",
+        }}
+        name="AddClientTask"
+        component={AddClientTask}
+      />
+      <Stack.Screen
+        options={{ presentation: "modal", headerShown: false }}
+        name="EditClient"
+        component={EditClient}
       />
       <Stack.Screen
         options={{ presentation: "modal", headerShown: false }}

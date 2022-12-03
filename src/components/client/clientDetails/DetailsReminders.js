@@ -1,8 +1,17 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { format, parseISO } from "date-fns";
-import { Feather } from "@expo/vector-icons";
+import { Feather, EvilIcons } from "@expo/vector-icons";
+import useReminders from "../../../hooks/reminders-hook";
 
 export default function DetailsReminders({ clientDetailsState }) {
+  const { handleDeleteReminder } = useReminders(undefined, false);
+
   return (
     <View style={styles.remindersContainer}>
       <View style={styles.bellIcon}>
@@ -16,9 +25,13 @@ export default function DetailsReminders({ clientDetailsState }) {
         {clientDetailsState.reminder.items?.length > 0 ? (
           clientDetailsState.reminder.items.map((item) => (
             <View key={item.id} style={styles.reminder}>
-              <Text style={styles.reminderDate}>
-                {item.freq}
-              </Text>
+              <Text style={styles.reminderDate}>{item.freq}</Text>
+              <TouchableOpacity
+                style={styles.iconContainer}
+                onPress={() => handleDeleteReminder(item)}
+              >
+                <EvilIcons name="close-o" size={14} color="darkgrey" />
+              </TouchableOpacity>
             </View>
           ))
         ) : (
@@ -44,15 +57,20 @@ const styles = StyleSheet.create({
   reminder: {
     marginRight: 10,
     borderRadius: 5,
-    paddingHorizontal: 5,
+    paddingHorizontal: 8,
     paddingVertical: 2,
     backgroundColor: "#e4e4e4",
     justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
   },
   reminderDate: {
     display: "flex",
     color: "#545454",
     fontWeight: "500",
+  },
+  iconContainer: {
+    marginLeft: 3,
   },
   bellIcon: { marginRight: 5 },
   emptyPlaceholderContainer: {

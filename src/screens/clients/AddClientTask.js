@@ -67,7 +67,7 @@ export default function AddConnectionHistory(props) {
           value={date}
           is24Hour={true}
           onChange={(e, date) => setDate(date)}
-          style={{ minWidth: 170, flex: 1 }}
+          style={{ minWidth: 180, flex: 1 }}
         />
       </AddSimple.Actions>
     </AddSimple>
