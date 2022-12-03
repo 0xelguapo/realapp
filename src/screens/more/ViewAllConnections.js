@@ -5,8 +5,7 @@ import ScreenHeading from "../../components/UI/ScreenHeading";
 import useConnections from "../../hooks/connections-hook";
 
 export default function ViewAllConnections(props) {
-  const { allConnections } = useConnections();
-  console.log(allConnections);
+  const { allConnections, handleDeleteConnection } = useConnections();
 
   const renderConnection = useCallback(({ item, index }) => {
     return (
@@ -15,6 +14,12 @@ export default function ViewAllConnections(props) {
         client={item.client}
         title={item.title}
         content={item.content}
+        handleDelete={() => handleDeleteConnection(item.client.id, item.id)}
+        onPress={() =>
+          props.navigation.navigate("ClientDetails", {
+            client: { id: item.client.id },
+          })
+        }
       />
     );
   }, []);

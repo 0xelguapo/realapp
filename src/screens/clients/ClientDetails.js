@@ -41,7 +41,7 @@ export default function ClientDetails(props) {
   const fetchClientDetails = () => {
     dispatch(fetchOneClient(id));
   };
-
+  
   useEffect(() => {
     fetchClientDetails();
   }, []);

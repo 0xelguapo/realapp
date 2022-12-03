@@ -194,6 +194,20 @@ export const clientsSlice = createSlice({
       ].reminder.items.findIndex((el) => el.id === reminderId);
       state.entities[clientId].reminder.items.splice(reminderIndexToRemove, 1);
     },
+    handleClientAfterDeleteConnection: (state, action) => {
+      const { clientId, connectionId } = action.payload;
+      let indextoRemove;
+      if (state.entities[clientId]?.connectionHistory?.items?.length > 0) {
+        indextoRemove = state.entities[
+          clientId
+        ]?.connectionHistory?.items.findIndex((el) => el.id === connectionId);
+
+        state.entities[clientId].connectionHistory.items.splice(
+          connectionIndexToRemove,
+          1
+        );
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -240,6 +254,7 @@ export const {
   handleAddClientToGroup,
   handleRemoveClientFromGroup,
   handleClientAfterDeleteReminder,
+  handleClientAfterDeleteConnection,
 } = clientsSlice.actions;
 
 export default clientsSlice.reducer;

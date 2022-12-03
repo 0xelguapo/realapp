@@ -24,8 +24,9 @@ function AddSimple({ title, goBack, children, withDescription = false, enableOve
   );
 }
 
-AddSimple.Actions = ({ handleSubmit, children }) => (
-  <View style={styles.controlsContainer}>
+function AddSimpleActions({ handleSubmit, children}) {
+  return (
+    <View style={styles.controlsContainer}>
     <View style={styles.controlOptions}>{children}</View>
     <TouchableOpacity underlayColor="#e8e8e8" onPress={handleSubmit}>
       <View style={styles.submitContainer}>
@@ -33,9 +34,14 @@ AddSimple.Actions = ({ handleSubmit, children }) => (
       </View>
     </TouchableOpacity>
   </View>
-);
+  )
+}
 
-export default AddSimple;
+const all = AddSimple;
+all.Actions = AddSimpleActions
+
+
+export default all;
 
 const styles = StyleSheet.create({
   container: {

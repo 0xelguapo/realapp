@@ -1,19 +1,27 @@
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux"
-import { fetchConnections, selectAllConnections } from "../redux/connections-slice";
+import { useDispatch, useSelector } from "react-redux";
+import { handleClientAfterDeleteConnection } from "../redux/clients-slice";
+import {
+  fetchConnections,
+  removeConnection,
+  selectAllConnections,
+} from "../redux/connections-slice";
 
 function useConnections() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchConnections())
-  }, [])
+    dispatch(fetchConnections());
+  }, []);
 
-  const allConnections = useSelector(selectAllConnections)
+  const allConnections = useSelector(selectAllConnections);
 
-  return { allConnections }
+  const handleDeleteConnection = (clientId, connectionId) => {
+    dispatch(removeConnection(connectionId));
+    // dispatch(handleClientAfterDeleteConnection({ clientId, connectionId }));
+  };
 
-
+  return { allConnections, handleDeleteConnection };
 }
 
-export default useConnections
+export default useConnections;

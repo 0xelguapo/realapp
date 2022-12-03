@@ -4,6 +4,7 @@ import {
   createEntityAdapter,
 } from "@reduxjs/toolkit";
 import { API, graphqlOperation } from "aws-amplify";
+import { deleteConnectionHistory } from "../graphql/mutations";
 import { listConnectionHistories } from "../graphql/queries";
 
 const connectionsAdapter = createEntityAdapter({
@@ -28,6 +29,21 @@ export const fetchConnections = createAsyncThunk(
   }
 );
 
+export const removeConnection = createAsyncThunk(
+  "connections/removeConnection",
+  async (connectionId) => {
+    let response;
+    try {
+      response = await API.graphql(
+        graphqlOperation(deleteConnectionHistory, { input: { id: connectionId } })
+      );
+    } catch (err) {
+      console.error(err);
+    }
+    return response.data.deleteConnectionHistory;
+  }
+);
+
 export const connectionsSlice = createSlice({
   name: "connections",
   initialState,
@@ -40,6 +56,9 @@ export const connectionsSlice = createSlice({
       .addCase(fetchConnections.fulfilled, (state, action) => {
         state.status = "succeeded";
         connectionsAdapter.upsertMany(state, action.payload);
+      })
+      .addCase(removeConnection.fulfilled, (state, action) => {
+        connectionsAdapter.removeOne(state, action.payload.id);
       });
   },
 });

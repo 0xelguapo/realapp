@@ -5,7 +5,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import { AntDesign, Ionicons, Entypo } from "@expo/vector-icons";
+import { Ionicons, Entypo } from "@expo/vector-icons";
 import { format } from "date-fns";
 import SwipeToDeleteWrapper from "../../components/gesture/SwipeToDeleteWrapper";
 import useReminders from "../../hooks/reminders-hook";
