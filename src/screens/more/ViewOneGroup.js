@@ -17,7 +17,7 @@ import {
 } from "../../redux/groups-slice";
 
 export default function ViewOneGroup(props) {
-  const { groupID, groupTitle } = props.route.params;
+  const { groupID } = props.route.params;
   const dispatch = useDispatch();
   const thisGroup = useSelector((state) => selectGroupById(state, groupID));
 

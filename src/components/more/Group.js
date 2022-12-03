@@ -1,34 +1,19 @@
-import { useState } from "react";
 import { StyleSheet, View, Text, Pressable } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import useClient from "../../hooks/client-hook";
-import { useNavigation } from "@react-navigation/native";
 
-export default function ClientGroup({ el }) {
-  const navigation = useNavigation();
-
-  const handleViewGroup = () => {
-    navigation.navigate("ViewOneGroup", {
-      groupID: el.id,
-      groupTitle: el.title,
-    });
-  };
-
+export default function Group({ title, length = 0, onPress, icon }) {
   return (
-    <Pressable style={styles.clientGroup} onPress={handleViewGroup}>
+    <Pressable style={styles.container} onPress={onPress}>
       <View>
-        <Text style={styles.clientGroupTitle}>{el.title}</Text>
-        <View style={styles.clientGroupDetails}>
+        <Text style={styles.title}>{title}</Text>
+        <View style={styles.details}>
           <Text>
-            {!el.clients?.length ? (
-              <Text style={styles.clientsLength}>
-                {el.clients.items.length}
-              </Text>
+            {length > 0 ? (
+              <Text style={styles.length}>{length}</Text>
             ) : (
-              <Text style={styles.clientsLength}>0</Text>
+              <Text style={styles.length}>0</Text>
             )}
           </Text>
-          <Ionicons name="ios-people-outline" size={12} color="#535353" />
+          {icon}
         </View>
       </View>
     </Pressable>
@@ -36,7 +21,7 @@ export default function ClientGroup({ el }) {
 }
 
 const styles = StyleSheet.create({
-  clientGroup: {
+  container: {
     paddingHorizontal: 15,
     borderWidth: 0.8,
     height: 60,
@@ -46,17 +31,17 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     paddingVertical: 5,
   },
-  clientGroupDetails: {
+  details: {
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
     width: 22,
   },
-  clientGroupTitle: {
+  title: {
     fontWeight: "600",
     marginBottom: 3,
   },
-  clientsLength: {
+  length: {
     fontSize: 12,
     fontWeight: "500",
     color: "#535353",
