@@ -215,6 +215,9 @@ export const listPropertyGroupsWithProperties = /* GraphQL */ `
               property {
                 id
                 street
+                city
+                state
+                zip
               }
           }
           nextToken

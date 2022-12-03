@@ -7,12 +7,16 @@ import {
   TextInput,
   SectionList,
 } from "react-native";
-import { AntDesign, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import {
+  AntDesign,
+  Ionicons,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 import Group from "../../components/more/Group";
 import useGroups from "../../hooks/groups-hook";
 import ScreenHeading from "../../components/UI/ScreenHeading";
 
-export default function ViewAllGroups({navigation}) {
+export default function ViewAllGroups({ navigation }) {
   const {
     clientGroups,
     propertyGroups,
@@ -25,10 +29,15 @@ export default function ViewAllGroups({navigation}) {
   const [propertyInputVisible, setPropertyInputVisible] = useState(false);
   const [propertyGroupTitle, setPropertyGroupTitle] = useState("");
 
-  const handleViewClientGroup = (id, title) => {
+  const handleViewClientGroup = (id) => {
     navigation.navigate("ViewOneGroup", {
       groupID: id,
-      groupTitle: title,
+    });
+  };
+
+  const handleViewPropertyGroup = (id) => {
+    navigation.navigate("ViewOnePropertyGroup", {
+      groupID: id,
     });
   };
 
@@ -38,7 +47,7 @@ export default function ViewAllGroups({navigation}) {
         <Group
           title={item.title}
           length={item.clients.items.length}
-          onPress={() => handleViewClientGroup(item.id, item.title)}
+          onPress={() => handleViewClientGroup(item.id)}
           icon={
             <Ionicons name="ios-people-outline" size={12} color="#535353" />
           }
@@ -54,10 +63,12 @@ export default function ViewAllGroups({navigation}) {
         <Group
           title={item.title}
           length={item.properties.items.length}
+          onPress={() => handleViewPropertyGroup(item.id)}
           icon={
             <MaterialCommunityIcons
               name="office-building-marker-outline"
-              size={12} color="#535353"
+              size={12}
+              color="#535353"
             />
           }
         />
@@ -120,7 +131,7 @@ export default function ViewAllGroups({navigation}) {
 
   return (
     <View style={styles.container}>
-      <ScreenHeading screenTitle={"View Groups"} />
+      <ScreenHeading screenTitle={"View Groups"} handleGoBack={navigation.goBack}/>
       <View style={styles.body}>
         <SectionList
           sections={DATA}

@@ -12,6 +12,7 @@ export default function EachProperty({
   state = "",
   zipCode = "",
   handlePress,
+  noHorizontalPadding = false,
 }) {
   return (
     <TouchableHighlight
@@ -19,7 +20,12 @@ export default function EachProperty({
       underlayColor="#f1f1f1"
       style={styles.touchable}
     >
-      <View style={styles.container}>
+      <View
+        style={[
+          { ...styles.container },
+          noHorizontalPadding && { paddingHorizontal: 0 },
+        ]}
+      >
         <View style={styles.streetContainer}>
           <Text style={styles.streetText}>{street}</Text>
         </View>

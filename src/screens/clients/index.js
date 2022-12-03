@@ -19,6 +19,7 @@ import ViewOneGroup from "../more/ViewOneGroup";
 import EditClientsOfGroup from "../more/EditClientsOfGroup";
 import AddClientsToGroup from "./AddClientsToGroup";
 import ChooseClient from "./ChooseClient";
+import ViewOnePropertyGroup from "../properties/ViewOnePropertyGroup";
 
 const Stack = createNativeStackNavigator();
 
@@ -144,6 +145,11 @@ export default function ClientsNavigator() {
         options={{ headerShown: false, presentation: "modal" }}
         name="ViewOneGroup"
         component={ViewOneGroup}
+      />
+        <Stack.Screen
+        options={{ headerShown: false, presentation: "modal" }}
+        name="ViewOnePropertyGroup"
+        component={ViewOnePropertyGroup}
       />
       <Stack.Screen
         options={{ headerShown: false, presentation: "modal" }}

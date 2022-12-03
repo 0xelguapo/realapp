@@ -1,13 +1,7 @@
-import { useEffect, useState } from "react";
 import {
-  View,
-  Text,
   StyleSheet,
-  ScrollView,
-  TouchableOpacity,
   Alert,
 } from "react-native";
-import { Ionicons, Feather } from "@expo/vector-icons";
 import EachClient from "../../components/client/EachClient";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -72,11 +66,8 @@ export default function ViewOneGroup(props) {
     <OneGroupView
       title={thisGroup.title}
       length={thisGroup.clients.items.length}
-      items={thisGroup.clients.items}
-      RenderComponent={EachClient}
       handleDelete={handleDeleteGroup}
       handleEdit={handleEditGroup}
-      handlePressItem={handleViewClient}
     >
       {thisGroup.clients.items.map((client, index) => (
         <EachClient

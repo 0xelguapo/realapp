@@ -7,12 +7,14 @@ import {
   selectAllPropertyGroups,
 } from "../redux/propertyGroups-slice";
 
-function useGroups() {
+function useGroups(fetch = true) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchGroups());
-    dispatch(fetchPropertyGroups());
+    if (fetch) {
+      dispatch(fetchGroups());
+      dispatch(fetchPropertyGroups());
+    }
   }, []);
 
   const clientGroups = useSelector(selectAllGroups);
