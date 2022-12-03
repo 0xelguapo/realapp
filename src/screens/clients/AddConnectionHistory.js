@@ -23,13 +23,7 @@ export default function AddConnectionHistory(props) {
       clientId: clientId,
       title: title,
       content: content,
-      date: date.toLocaleString(undefined, {
-        year: "numeric",
-        month: "numeric",
-        day: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
+      date: date.toString()
     });
 
     props.navigation.navigate({

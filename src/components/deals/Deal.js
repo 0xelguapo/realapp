@@ -1,8 +1,8 @@
-import { View, StyleSheet, Text, Pressable } from "react-native";
+import { View, StyleSheet, Text, Pressable, TouchableOpacity } from "react-native";
 
 export default function Deal({ deal, onPress }) {
   return (
-    <Pressable style={styles.container} onPress={onPress}>
+    <TouchableOpacity style={styles.container} onPress={onPress}>
       <View style={styles.titleContainer}>
         <Text style={styles.titleText}>{deal.title}</Text>
       </View>
@@ -11,7 +11,7 @@ export default function Deal({ deal, onPress }) {
         {deal.clientId.length > 0 &&
           `• ${deal.client.firstName + " " + deal.client?.lastName}`}
       </Text>
-    </Pressable>
+    </TouchableOpacity>
   );
 }
 

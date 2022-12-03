@@ -7,6 +7,7 @@ import propertiesReducer from "./properties-slice";
 import propertyGroupsReducer from "./propertyGroups-slice";
 import goalsReducer from './goals-slice'
 import dealsReducer from './deals-slice'
+import connectionsReducer from './connections-slice'
 
 const store = configureStore({
   reducer: {
@@ -17,7 +18,8 @@ const store = configureStore({
     properties: propertiesReducer,
     propertyGroups: propertyGroupsReducer,
     goals: goalsReducer,
-    deals: dealsReducer
+    deals: dealsReducer,
+    connections: connectionsReducer
   },
 });
 

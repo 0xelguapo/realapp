@@ -25,7 +25,7 @@ export default function useReminders(activeDate = new Date(), fetch = true) {
 
   const handleDeleteReminder = async (reminder) => {
     const notificationIds = reminder?.notificationId.split(",");
-    const promises = notificationIds.map((notifId, index) =>
+    const promises = notificationIds.map((notifId) =>
       handleDeleteNotification(notifId)
     );
     await Promise.all(promises);

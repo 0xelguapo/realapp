@@ -11,8 +11,9 @@ import Settings from "./Settings";
 import ContactsToImport from "./ContactsToImport";
 import AddConnectionHistory from "../clients/AddConnectionHistory";
 import AddEditNote from "../clients/AddEditNote";
-import AddClientTask from '../clients/AddClientTask'
+import AddClientTask from "../clients/AddClientTask";
 import EditClient from "../clients/EditClient";
+import ViewAllConnections from "./ViewAllConnections";
 
 const Stack = createNativeStackNavigator();
 
@@ -57,7 +58,7 @@ export default function MoreNavigator() {
         name="ClientDetails"
         component={ClientDetails}
       />
-            <Stack.Screen
+      <Stack.Screen
         options={{
           headerShown: false,
           presentation: "transparentModal",
@@ -111,6 +112,11 @@ export default function MoreNavigator() {
         options={{ headerShown: false }}
         name="ContactsToImport"
         component={ContactsToImport}
+      />
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name="ViewAllConnections"
+        component={ViewAllConnections}
       />
     </Stack.Navigator>
   );

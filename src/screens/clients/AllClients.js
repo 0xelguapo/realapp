@@ -44,7 +44,7 @@ export default function Clients({ navigation }) {
   const [suggestedLoading, setSuggestedLoading] = useState(false);
   const [suggestedAddresses, setSuggestedAddresses] = useState([
     {
-      addressNumber: "Type any full street address to quick add",
+      addressNumber: "Type any full address in the search bar to quick add",
       street: "",
       municipality: "You can search anywhere",
       region: "within the US!",

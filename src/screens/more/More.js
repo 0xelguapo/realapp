@@ -8,7 +8,7 @@ import {
   Pressable,
 } from "react-native";
 import { API, Auth, graphqlOperation } from "aws-amplify";
-import { Feather, Ionicons, SimpleLineIcons } from "@expo/vector-icons";
+import { Feather, Ionicons, AntDesign } from "@expo/vector-icons";
 import * as queries from "../../graphql/queries";
 import Note from "../../components/more/Note";
 
@@ -45,8 +45,8 @@ export default function More(props) {
     props.navigation.navigate("AddNote");
   };
 
-  const handleViewGroups = () => {
-    props.navigation.navigate("ViewAllGroups");
+  const handleViewConnections = () => {
+    props.navigation.navigate("ViewAllConnections");
   };
 
   const handleViewReminders = () => {
@@ -80,9 +80,9 @@ export default function More(props) {
           <Feather name="bell" size={24} color="#535353" />
           <Text style={styles.optionText}>Reminders</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.option} onPress={handleViewGroups}>
-          <Ionicons name="people-outline" size={24} color="#535353" />
-          <Text style={styles.optionText}>Groups</Text>
+        <TouchableOpacity style={styles.option} onPress={handleViewConnections}>
+          <AntDesign name="phone" size={24} color="#535353" />
+          <Text style={styles.optionText}>Connection Logs</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.headingContainer}>

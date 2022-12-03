@@ -9,21 +9,17 @@ import { AntDesign, Ionicons, Entypo } from "@expo/vector-icons";
 import { format } from "date-fns";
 import SwipeToDeleteWrapper from "../../components/gesture/SwipeToDeleteWrapper";
 import useReminders from "../../hooks/reminders-hook";
+import ScreenHeading from "../../components/UI/ScreenHeading";
 
 export default function ViewAllReminders(props) {
   const { allReminders, handleDeleteReminder } = useReminders();
 
   return (
     <View style={styles.container}>
-      <View style={styles.headingContainer}>
-        <TouchableOpacity
-          style={styles.backIconContainer}
-          onPress={props.navigation.goBack}
-        >
-          <AntDesign name="left" size={24} color="#ababab" />
-        </TouchableOpacity>
-        <Text style={styles.screenTitle}>All Reminders</Text>
-      </View>
+      <ScreenHeading
+        screenTitle={"All Reminders"}
+        handleGoBack={props.navigation.goBack}
+      />
       <ScrollView style={{ flex: 1 }}>
         {allReminders.map((rem, index) => (
           <SwipeToDeleteWrapper
@@ -67,28 +63,9 @@ export default function ViewAllReminders(props) {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 65,
     paddingBottom: 20,
     flex: 1,
-    backgroundColor: "#f5f5f5",
-  },
-  headingContainer: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    justifyContent: "center",
-    marginBottom: 5,
-  },
-  backIconContainer: {
-    position: "absolute",
-    left: 20,
-  },
-  screenTitle: {
-    fontWeight: "500",
-    fontSize: 20,
-    marginLeft: 5,
+    backgroundColor: "#f1f1f1",
   },
   reminderContainer: {
     minHeight: 60,

@@ -83,6 +83,5 @@ const styles = StyleSheet.create({
   },
   controlOptions: {
     flexDirection: 'row',
-    borderWidth: 1,
   },
 });
