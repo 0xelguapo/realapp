@@ -218,15 +218,14 @@ export default function Clients({ navigation }) {
     }, []);
   }, [searchInput, allClients, allProperties, status, allData]);
 
-  const getAllProperties = async () => {
-    dispatch(fetchProperties());
-  };
-
-  const getAllClients = async () => {
-    dispatch(fetchClients());
-  };
-
   useEffect(() => {
+    const getAllProperties = async () => {
+      dispatch(fetchProperties());
+    };
+
+    const getAllClients = async () => {
+      dispatch(fetchClients());
+    };
     getAllClients();
     getAllProperties();
   }, []);

@@ -8,7 +8,7 @@ import { listClientGroupsWithClients } from "../graphql/customQueries";
 import * as mutations from "../graphql/mutations";
 
 const groupsAdapter = createEntityAdapter({
-  sortComparer: (a, b) => b.createdAt.localeCompare(a.createdAt),
+  sortComparer: (a, b) => a.title.localeCompare(b.title),
 });
 
 const initialState = groupsAdapter.getInitialState({

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useContext } from "react";
+import { useCallback, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -6,107 +6,154 @@ import {
   TouchableOpacity,
   TextInput,
   ScrollView,
+  SectionList,
 } from "react-native";
-import { useIsFocused } from "@react-navigation/native";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import Group from "../../components/more/Group";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  fetchGroups,
-  addGroup,
-  selectAllGroups,
-} from "../../redux/groups-slice";
-
+import useGroups from "../../hooks/groups-hook";
+import ScreenHeading from "../../components/UI/ScreenHeading";
 
 export default function ViewAllGroups(props) {
-  const [showInput, setShowInput] = useState(false);
+  const { clientGroups, propertyGroups, handleAddClientGroup } = useGroups();
+
+  const renderClientGroup = useCallback(({ item, index }) => (
+    <View style={{ paddingHorizontal: 20 }}>
+      <Group el={item} />
+    </View>
+  ));
+
+  const [clientInputVisible, setClientInputVisible] = useState(false);
   const [title, setTitle] = useState("");
-  const inputRef = useRef(null);
-  const isFocused = useIsFocused()
-
-  const dispatch = useDispatch();
-  const groups = useSelector(selectAllGroups);
-
-  useEffect(() => {
-    if(isFocused) dispatch(fetchGroups());
-  }, [dispatch, isFocused]);
 
   const handleSubmit = async () => {
-    dispatch(addGroup(title));
+    if (title.length > 0) {
+      handleAddClientGroup(title);
+    }
     setTitle("");
-    setShowInput(false);
+    setShowClientInput(false);
   };
+  
+  function Header({
+    sectionTitle,
+    buttonText,
+    inputVisible,
+    toggleInputVisible,
+  }) {
+    return (
+      <>
+        <View style={styles.sectionHeaderContainer}>
+          <Text style={styles.sectionHeaderText}>{sectionTitle}</Text>
+        </View>
+        <View style={{ paddingHorizontal: 20, backgroundColor: "#f1f1f1" }}>
+          <CreateGroupButton
+            buttonText={buttonText}
+            inputVisible={inputVisible}
+            toggleInputVisible={toggleInputVisible}
+          />
+          {inputVisible && (
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.input}
+                returnKeyType="done"
+                onChangeText={setTitle}
+                onSubmitEditing={handleSubmit}
+                autoFocus={true}
+                value={title}
+              />
+            </View>
+          )}
+        </View>
+      </>
+    );
+  }
 
-  useEffect(() => {
-    if (showInput) inputRef.current.focus();
-  }, [showInput]);
+
+
+  const DATA = [
+    {
+      header: (
+        <Header
+          sectionTitle={"Client Groups"}
+          buttonText={"Create a new client group"}
+          toggleInputVisible={() =>
+            setClientInputVisible((prevState) => !prevState)
+          }
+          inputVisible={clientInputVisible}
+        />
+      ),
+      data: clientGroups,
+      renderItem: renderClientGroup,
+    },
+    {
+      title: "Property Groups",
+      data: propertyGroups,
+      header: (
+        <Header
+          sectionTitle={"Property Groups"}
+          buttonText="Create a new property group"
+        />
+      ),
+    },
+  ];
 
   return (
     <View style={styles.container}>
-      <View style={styles.headingContainer}>
-        <TouchableOpacity
-          style={styles.backButtonContainer}
-          onPress={props.navigation.goBack}
-        >
-          <AntDesign name="left" size={24} color="#ababab" />
-        </TouchableOpacity>
-        <Text style={styles.screenTitle}>All Groups</Text>
-      </View>
+      <ScreenHeading screenTitle={"View Groups"} />
       <View style={styles.body}>
-        <TouchableOpacity
-          style={styles.createButton}
-          onPress={() => setShowInput(!showInput)}
-        >
-          <Text style={styles.createButtonText}>Create a New Group</Text>
-          {showInput ? (
-            <AntDesign name="minus" size={24} color="black" />
-          ) : (
-            <Ionicons name="add" size={24} color="black" />
+        <SectionList
+          sections={DATA}
+          keyExtractor={(item, index) => item.id + index}
+          renderItem={({ section: { renderItem } }) => (
+            <View>{renderItem}</View>
           )}
-        </TouchableOpacity>
-        {showInput && (
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.input}
-              returnKeyType="done"
-              onChangeText={setTitle}
-              onSubmitEditing={handleSubmit}
-              ref={inputRef}
-              value={title}
-            />
-          </View>
-        )}
-        <ScrollView
-          contentContainerStyle={{ paddingTop: 30, paddingBottom: 100 }}
+          keyboardShouldPersistTaps="handled"
+          renderSectionHeader={({ section: { header } }) => header}
+          // contentContainerStyle={[{ paddingHorizontal: 20 }]}
+        />
+        {/* <ScrollView
+          contentContainerStyle={{ paddingTop: 20, paddingBottom: 100 }}
         >
-          {groups.map((el) => (
+          {clientGroups.map((el) => (
             <Group key={el.id} el={el} />
           ))}
-        </ScrollView>
+        </ScrollView> */}
       </View>
     </View>
   );
 }
+
+function CreateGroupButton({ inputVisible, toggleInputVisible, buttonText }) {
+  return (
+    <TouchableOpacity style={styles.createButton} onPress={toggleInputVisible}>
+      <Text style={styles.createButtonText}>{buttonText}</Text>
+      {inputVisible ? (
+        <AntDesign name="minus" size={24} color="black" />
+      ) : (
+        <Ionicons name="add" size={24} color="black" />
+      )}
+    </TouchableOpacity>
+  );
+}
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 25,
-    paddingTop: 65,
     paddingBottom: 40,
-    backgroundColor: '#f4f4f4',
-    flex: 1
-  },
-  headingContainer: {
-    display: "flex",
-    justifyContent: "center",
-    flexDirection: "row",
-  },
-  backButtonContainer: { position: "absolute", left: 0 },
-  screenTitle: {
-    fontWeight: "500",
-    fontSize: 20,
+    backgroundColor: "#f1f1f1",
+    flex: 1,
   },
   body: {
-    paddingVertical: 30,
+    paddingVertical: 10,
+    flex: 1,
+  },
+  sectionHeaderContainer: {
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    backgroundColor: "#f1f1f1",
+  },
+  sectionHeaderText: {
+    fontWeight: "500",
+    fontSize: 18,
+    marginBottom: 5,
+    color: "#454545",
   },
   createButton: {
     backgroundColor: "#D9D9D9",
@@ -116,6 +163,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     flexDirection: "row",
+    marginBottom: 10,
   },
   createButtonText: {
     fontSize: 14,
@@ -123,7 +171,7 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     display: "flex",
-    paddingVertical: 10,
+    marginBottom: 10,
   },
   input: {
     height: 35,

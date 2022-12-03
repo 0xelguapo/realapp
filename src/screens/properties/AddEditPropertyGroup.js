@@ -81,7 +81,7 @@ export default function AddEditPropertyGroup(props) {
   return (
     <View style={styles.container}>
       <View style={styles.headingContainer}>
-        <Text style={styles.screenTitle}>Add to Category</Text>
+        <Text style={styles.screenTitle}>Add to Group</Text>
         <TouchableOpacity onPress={props.navigation.goBack}>
           <AntDesign name="close" size={24} color="#ababab" />
         </TouchableOpacity>
@@ -93,7 +93,7 @@ export default function AddEditPropertyGroup(props) {
           style={styles.createButton}
           onPress={() => setShowInput(!showInput)}
         >
-          <Text style={styles.createButtonText}>Create a New Category</Text>
+          <Text style={styles.createButtonText}>Create a New Group</Text>
           {showInput ? (
             <AntDesign name="minus" size={24} color="black" />
           ) : (

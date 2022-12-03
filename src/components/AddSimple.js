@@ -7,10 +7,19 @@ import {
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 
-function AddSimple({ title, goBack, children, withDescription = false, enableOverlayGoBack = true }) {
+function AddSimple({
+  title,
+  goBack,
+  children,
+  withDescription = false,
+  enableOverlayGoBack = true,
+}) {
   return (
     <View style={styles.container}>
-      <Pressable onPress={enableOverlayGoBack ? goBack : null} style={styles.backdrop}></Pressable>
+      <Pressable
+        onPress={enableOverlayGoBack ? goBack : null}
+        style={styles.backdrop}
+      ></Pressable>
       <View style={styles.modalContainer}>
         <View style={styles.titleHeaderContainer}>
           <Text style={styles.titleHeader}>{title}</Text>
@@ -24,22 +33,21 @@ function AddSimple({ title, goBack, children, withDescription = false, enableOve
   );
 }
 
-function AddSimpleActions({ handleSubmit, children}) {
+function AddSimpleActions({ handleSubmit, children }) {
   return (
     <View style={styles.controlsContainer}>
-    <View style={styles.controlOptions}>{children}</View>
-    <TouchableOpacity underlayColor="#e8e8e8" onPress={handleSubmit}>
-      <View style={styles.submitContainer}>
-        <AntDesign name="checkcircleo" size={30} color="#6c6c6c" />
-      </View>
-    </TouchableOpacity>
-  </View>
-  )
+      <View style={styles.controlOptions}>{children}</View>
+      <TouchableOpacity underlayColor="#e8e8e8" onPress={handleSubmit}>
+        <View style={styles.submitContainer}>
+          <AntDesign name="checkcircleo" size={30} color="#6c6c6c" />
+        </View>
+      </TouchableOpacity>
+    </View>
+  );
 }
 
 const all = AddSimple;
-all.Actions = AddSimpleActions
-
+all.Actions = AddSimpleActions;
 
 export default all;
 
@@ -84,10 +92,10 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
-    width: '100%',
+    width: "100%",
     paddingBottom: 10,
   },
   controlOptions: {
-    flexDirection: 'row',
+    flexDirection: "row",
   },
 });

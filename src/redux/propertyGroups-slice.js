@@ -14,7 +14,7 @@ import { listPropertyGroups, getPropertyGroup } from "../graphql/queries";
 import { listPropertyGroupsWithProperties } from "../graphql/customQueries";
 
 const propertyGroupsAdapter = createEntityAdapter({
-  sortComparer: (a, b) => a.createdAt.localeCompare(b.createdAt),
+  sortComparer: (a, b) => a.title.localeCompare(b.title),
 });
 
 const initialState = propertyGroupsAdapter.getInitialState({

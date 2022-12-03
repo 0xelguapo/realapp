@@ -38,7 +38,7 @@ export default function PropertyOptions({
         >
           <View style={styles.optionIconContainer}>
             <MaterialIcons name="label-outline" size={24} color="#535353" />
-            <Text style={styles.optionText}>CATEGORY</Text>
+            <Text style={styles.optionText}>GROUP</Text>
           </View>
         </TouchableOpacity>
       )}

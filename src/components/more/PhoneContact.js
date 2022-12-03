@@ -21,7 +21,9 @@ export default function PhoneContact({
         <Text style={styles.nameText}>
           {lastName ? firstName + " " + lastName : firstName}
         </Text>
-        <Text style={styles.companyText}>{company}</Text>
+        {company?.length > 0 && (
+          <Text style={styles.companyText}>{company}</Text>
+        )}
       </View>
       <TouchableOpacity
         style={
