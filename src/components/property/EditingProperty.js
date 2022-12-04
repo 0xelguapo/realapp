@@ -8,22 +8,22 @@ import {
 import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 
-export default function EditingClient({
-  firstName,
-  lastName,
-  company,
-  clientGroupID,
+export default function EditingProperty({
+  street,
+  city = '',
+  state = '',
+  zip = '',
   handleAddToRemove,
+  groupsPropertyID
 }) {
-  const fullName = lastName ? firstName + " " + lastName : firstName;
   const [checked, setChecked] = useState(true);
 
   const handleCheck = () => {
     if (checked) {
-      handleAddToRemove(clientGroupID, false);
+      handleAddToRemove(groupsPropertyID, false);
       setChecked(false);
     } else {
-      handleAddToRemove(clientGroupID, true);
+      handleAddToRemove(groupsPropertyID, true);
       setChecked(true);
     }
   };
@@ -35,9 +35,11 @@ export default function EditingClient({
           <View style={styles.checkContainer}>
             {checked && <Ionicons name="checkmark" size={30} color="blue" />}
           </View>
-          <View style={styles.clientDetails}>
-            <Text style={styles.name}>{fullName}</Text>
-            {company?.length > 0 && <Text style={styles.phone}>{company}</Text>}
+          <View style={styles.details}>
+            <Text style={styles.title}>{street}</Text>
+            <Text style={styles.subtitle}>
+              {city + " " + state + " " + zip}
+            </Text>
           </View>
         </View>
       </TouchableHighlight>
@@ -61,15 +63,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  clientDetails: {
+  details: {
     width: "90%",
   },
-  name: {
+  title: {
     fontWeight: "600",
     fontSize: 18,
     marginBottom: 3,
   },
-  company: {
+  subtitle: {
     color: "#7b7b7c",
   },
   phone: {

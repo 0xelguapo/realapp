@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addGroup, fetchGroups, selectAllGroups } from "../redux/groups-slice";
 import {
@@ -9,6 +9,7 @@ import {
 
 function useGroups(fetch = true) {
   const dispatch = useDispatch();
+  const [toBeRemovedArray, setToBeRemovedArray] = useState([]);
 
   useEffect(() => {
     if (fetch) {
@@ -28,11 +29,26 @@ function useGroups(fetch = true) {
     dispatch(addPropertyGroup(title));
   };
 
+  const handleRemoveArray = (relatedGroupID, undo = false) => {
+    let idsArray = [...toBeRemovedArray];
+    if (!undo) {
+      idsArray.push(relatedGroupID);
+      setToBeRemovedArray(idsArray);
+    } else {
+      const index = idsArray.indexOf(relatedGroupID);
+      idsArray.splice(index, 1);
+      setToBeRemovedArray(idsArray);
+    }
+    return idsArray;
+  };
+
   return {
     clientGroups,
     propertyGroups,
+    toBeRemovedArray,
     handleAddClientGroup,
     handleAddPropertyGroup,
+    handleRemoveArray,
   };
 }
 

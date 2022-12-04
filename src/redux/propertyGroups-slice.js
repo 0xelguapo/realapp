@@ -87,22 +87,57 @@ export const removePropertyFromGroup = createAsyncThunk(
   }
 );
 
+export const editPropertyGroupTitle = createAsyncThunk(
+  "propertyGroups/editTitle",
+  async ({ id, title }) => {
+    let response;
+    try {
+      response = await API.graphql(
+        graphqlOperation(updatePropertyGroup, { input: { id, title } })
+      );
+    } catch (err) {
+      console.error(err);
+    }
+    return response.data.updatePropertyGroup;
+  }
+);
+
+export const removeMultiplePropertiesFromGroup = createAsyncThunk(
+  "propertyGroups/remove",
+  async (removeDetails) => {
+    let response;
+    const { removeIDs, groupID } = removeDetails;
+    const promises = removeIDs.map((removeID) => {
+      return API.graphql(
+        graphqlOperation(deleteGroupsProperty, { input: { id: removeID } })
+      );
+    });
+    try {
+      response = await Promise.all(promises);
+    } catch (err) {
+      console.error(err);
+    }
+    if (response) {
+      return { removeIDs, groupID };
+    }
+  }
+);
+
 export const propertyGroupsSlice = createSlice({
   name: "propertyGroups",
   initialState,
   reducers: {
     handlePropertyGroupsOnDeleteProperty: (state, action) => {
-      for(const propertyGroup in state.entities) {
+      for (const propertyGroup in state.entities) {
         const propertiesArray = state.entities[propertyGroup].properties.items;
-        for(let i = 0; i < propertiesArray.length; i++) {
-          if(propertiesArray[i].property.id === action.payload) {
-            state.entities[propertyGroup].properties.items.splice(i, 1)
+        for (let i = 0; i < propertiesArray.length; i++) {
+          if (propertiesArray[i].property.id === action.payload) {
+            state.entities[propertyGroup].properties.items.splice(i, 1);
             break;
           }
-
         }
       }
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -117,11 +152,30 @@ export const propertyGroupsSlice = createSlice({
         state.entities[action.payload.propertyGroupID].properties.items.push(
           action.payload
         );
-      }).addCase(removePropertyFromGroup.fulfilled, (state, action) => {
-        const { propertyGroupID, id } = action.payload;
-        const indexToRemove = state.entities[propertyGroupID].properties.items.findIndex(item => item.id === id);
-        state.entities[propertyGroupID].properties.items.splice(indexToRemove, 1)
       })
+      .addCase(editPropertyGroupTitle.fulfilled, (state, action) => {
+        const { id, title } = action.payload;
+        state.entities[id].title = title;
+      })
+      .addCase(removePropertyFromGroup.fulfilled, (state, action) => {
+        const { propertyGroupID, id } = action.payload;
+        const indexToRemove = state.entities[
+          propertyGroupID
+        ].properties.items.findIndex((item) => item.id === id);
+        state.entities[propertyGroupID].properties.items.splice(
+          indexToRemove,
+          1
+        );
+      })
+      .addCase(removeMultiplePropertiesFromGroup.fulfilled, (state, action) => {
+        const updatedProperties = state.entities[
+          action.payload.groupID
+        ].properties.items.filter(
+          (el) => !action.payload.removeIDs.includes(el.id)
+        );
+        state.entities[action.payload.groupID].properties.items =
+          updatedProperties;
+      });
   },
 });
 
@@ -131,6 +185,7 @@ export const {
   selectIds: selectPropertyGroupIds,
 } = propertyGroupsAdapter.getSelectors((state) => state.propertyGroups);
 
-export const { handlePropertyGroupsOnDeleteProperty } = propertyGroupsSlice.actions
+export const { handlePropertyGroupsOnDeleteProperty } =
+  propertyGroupsSlice.actions;
 
 export default propertyGroupsSlice.reducer;

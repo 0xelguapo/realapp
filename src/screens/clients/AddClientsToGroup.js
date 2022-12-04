@@ -7,7 +7,7 @@ import {
   TextInput,
 } from "react-native";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
-import { useCallback, useEffect, useState, useMemo } from "react";
+import { useCallback, useEffect, useState, useMemo, useContext } from "react";
 import EachClient from "../../components/client/EachClient";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -17,6 +17,7 @@ import {
   selectAllClients,
 } from "../../redux/clients-slice";
 import { addClientToGroup } from "../../redux/groups-slice";
+import { SuccessContext } from "../../context/success-context";
 
 export default function AddClientsToGroup(props) {
   const { groupID } = props.route.params;
@@ -41,6 +42,7 @@ export default function AddClientsToGroup(props) {
     });
   }, [searchInput, allClients]);
 
+
   useEffect(() => {
     if (allClients.length < 1) {
       dispatch(fetchClients());
@@ -53,7 +55,6 @@ export default function AddClientsToGroup(props) {
     const response = await dispatch(
       addClientToGroup({ clientId: id, clientGroupID: groupID })
     ).unwrap();
-    console.log(response);
     if (response) {
       dispatch(
         handleAddClientToGroup({

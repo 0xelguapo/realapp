@@ -10,7 +10,13 @@ export default function ViewOnePropertyGroup({ route, navigation }) {
   );
 
   const handleDeleteGroup = () => {};
-  const handleEditGroup = () => {};
+
+  const handleEditGroup = () => {
+    navigation.navigate("EditPropertiesOfGroup", {
+      groupID: groupID,
+      groupTitle: propertyGroup.title,
+    });
+  };
 
   const handleViewProperty = (propertyId) => {
     navigation.goBack();
