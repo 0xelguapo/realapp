@@ -12,7 +12,9 @@ export default function OneGroupView({
   length,
   handleDelete,
   handleEdit,
-  children
+  children,
+  clientMode,
+  handleEmail,
 }) {
   return (
     <View style={styles.container}>
@@ -32,6 +34,16 @@ export default function OneGroupView({
           <Ionicons name="ios-people-outline" size={12} color="#535353" />
         </View>
       </View>
+      {clientMode && (
+        <View style={styles.emailButtonContainer}>
+          <TouchableOpacity style={styles.emailContainer} onPress={handleEmail}>
+            <View style={styles.emailIconContainer}>
+              <Feather name="mail" size={24} color="#0064e5" />
+            </View>
+            <Text style={styles.emailText}>Compose Email</Text>
+          </TouchableOpacity>
+        </View>
+      )}
       <View style={styles.editContainer}>
         <TouchableOpacity style={styles.editButton} onPress={handleEdit}>
           <Feather name="edit-2" size={20} color="#535353" />
@@ -86,7 +98,24 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: "500",
     color: "#454545",
-    marginBottom: 5,
+  },
+  emailButtonContainer: {
+    borderBottomWidth: 1,
+    borderBottomColor: "#ababab",
+  },
+  emailContainer: {
+    flexDirection: "row",
+    paddingVertical: 10,
+    alignItems: "center",
+    paddingHorizontal: 20,
+  },
+  emailIconContainer: {
+    marginRight: 10,
+  },
+  emailText: {
+    fontSize: 16,
+    fontWeight: "500",
+    color: "#0064e5",
   },
   editContainer: {
     flexDirection: "row",
@@ -119,5 +148,6 @@ const styles = StyleSheet.create({
   },
   clientsContainer: {
     paddingHorizontal: 20,
+    minHeight: 50,
   },
 });

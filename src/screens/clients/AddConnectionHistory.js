@@ -6,10 +6,14 @@ import useClient from "../../hooks/client-hook";
 
 export default function AddConnectionHistory(props) {
   const [title, setTitle] = useState(null);
-  const [content, setContent] = useState(null)
+  const [content, setContent] = useState(null);
   const [date, setDate] = useState(new Date());
   const { addConnection } = useClient();
-  const { clientId } = props.route.params;
+  const {
+    clientId,
+    groupMode = false,
+    clientIdsArray = [],
+  } = props.route.params;
 
   const inputRef = useRef(null);
 
@@ -19,18 +23,31 @@ export default function AddConnectionHistory(props) {
       return;
     }
 
-    const connection = await addConnection({
-      clientId: clientId,
-      title: title,
-      content: content,
-      date: date.toString()
-    });
+    if (groupMode) {
+      const promises = clientIdsArray.map((id) =>
+        addConnection({
+          clientId: id,
+          title: title,
+          content: content,
+          date: date.toString(),
+        })
+      );
+      await Promise.all(promises);
+      props.navigation.goBack();
+    } else {
+      const connection = await addConnection({
+        clientId: clientId,
+        title: title,
+        content: content,
+        date: date.toString(),
+      });
 
-    props.navigation.navigate({
-      name: "ClientDetails",
-      params: { id: clientId },
-      merge: true,
-    });
+      props.navigation.navigate({
+        name: "ClientDetails",
+        params: { id: clientId },
+        merge: true,
+      });
+    }
   };
 
   useEffect(() => {
@@ -40,7 +57,7 @@ export default function AddConnectionHistory(props) {
   return (
     <AddSimple
       goBack={props.navigation.goBack}
-      title="LOG A CONNECTION"
+      title={!groupMode ? 'LOG A CONNECTION' : `LOG ${clientIdsArray.length} CONNECTIONS`}
       enableOverlayGoBack={false}
     >
       <TextInput
@@ -59,7 +76,7 @@ export default function AddConnectionHistory(props) {
         placeholder="Optional description..."
         placeholderTextColor="#d6d6d6"
       />
-      <View style={{ }}>
+      <View style={{}}>
         <AddSimple.Actions handleSubmit={handlePress}>
           <DateTimePicker
             mode="datetime"

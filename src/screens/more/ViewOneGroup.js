@@ -1,7 +1,4 @@
-import {
-  StyleSheet,
-  Alert,
-} from "react-native";
+import { StyleSheet, Alert } from "react-native";
 import EachClient from "../../components/client/EachClient";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -10,6 +7,7 @@ import {
   removeMultipleClientsFromGroup,
 } from "../../redux/groups-slice";
 import OneGroupView from "../../components/UI/OneGroupView";
+import * as MailComposer from "expo-mail-composer";
 
 export default function ViewOneGroup(props) {
   const { groupID } = props.route.params;
@@ -62,12 +60,55 @@ export default function ViewOneGroup(props) {
     );
   };
 
+  const handleEmail = async () => {
+    let canCompose;
+    let sendEmail;
+    try {
+      canCompose = await MailComposer.isAvailableAsync();
+    } catch (err) {
+      console.error(err);
+    }
+
+    if (canCompose) {
+      const clientEmails = thisGroup.clients.items.reduce(
+        (acc, el) => {
+          let emails;
+          if (el.client.email?.length > 0) {
+            emails = el.client.email.split(",");
+            acc.recipients.push(emails[0]);
+            acc.ccs.push(...emails.slice(1));
+          }
+          return acc;
+        },
+        { recipients: [], ccs: [] }
+      );
+      try {
+        sendEmail = await MailComposer.composeAsync({
+          recipients: clientEmails.recipients,
+          ccRecipients: clientEmails.ccs,
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    if (sendEmail.status === "sent") {
+      const clientIdsArray = thisGroup.clients.items.map((el) => el.client.id);
+      props.navigation.navigate("AddConnectionHistory", {
+        clientId: null,
+        groupMode: true,
+        clientIdsArray: clientIdsArray,
+      });
+    }
+  };
+
   return (
     <OneGroupView
       title={thisGroup.title}
       length={thisGroup.clients.items.length}
       handleDelete={handleDeleteGroup}
       handleEdit={handleEditGroup}
+      clientMode={true}
+      handleEmail={handleEmail}
     >
       {thisGroup.clients.items.map((client, index) => (
         <EachClient
