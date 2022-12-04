@@ -6,11 +6,9 @@ import {
   FlatList,
   ActivityIndicator,
 } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
 import { AntDesign } from "@expo/vector-icons";
 import { useCallback, useEffect, useState, useMemo, useContext } from "react";
 import EachProperty from "./EachProperty";
-import { selectAllProperties } from "../../redux/properties-slice";
 import SearchBar from "../UI/SearchBar";
 
 export default function PropertiesList({
@@ -60,7 +58,7 @@ export default function PropertiesList({
           <FlatList
             data={filteredData}
             renderItem={renderProperty}
-            keyExtractor={(c) => c.id}
+            keyExtractor={(c, index) => c.id + index}
             refreshing={status !== "succeeded"}
             contentContainerStyle={{ paddingBottom: 50 }}
           />

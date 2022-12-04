@@ -4,6 +4,7 @@ import {
   Text,
   TouchableHighlight,
   Pressable,
+  TouchableOpacity,
 } from "react-native";
 
 export default function EachProperty({
@@ -15,11 +16,7 @@ export default function EachProperty({
   noHorizontalPadding = false,
 }) {
   return (
-    <TouchableHighlight
-      onPress={handlePress}
-      underlayColor="#f1f1f1"
-      style={styles.touchable}
-    >
+    <TouchableOpacity onPress={handlePress} style={styles.touchable}>
       <View
         style={[
           { ...styles.container },
@@ -35,7 +32,7 @@ export default function EachProperty({
           {zipCode.length > 0 && <Text>{zipCode}</Text>}
         </View>
       </View>
-    </TouchableHighlight>
+    </TouchableOpacity>
   );
 }
 

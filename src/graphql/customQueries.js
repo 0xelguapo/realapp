@@ -63,6 +63,40 @@ export const listClientsWithGroups = /* GraphQL */ `
   }
 `;
 
+
+export const listPropertiesWithGroups = /* GraphQL */ `
+  query ListProperties(
+    $filter: ModelPropertyFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listProperties(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        type
+        street
+        city
+        state
+        zip
+        price
+        note
+        geometry
+        group {
+          items {
+            id
+            propertyID
+            propertyGroupID
+          }
+          nextToken
+        }
+        clientId
+        owner
+      }
+      nextToken
+    }
+  }
+`;
+
 export const listClientGroupsWithClients = /* GraphQL */ `
   query ListClientGroups(
     $filter: ModelClientGroupFilterInput

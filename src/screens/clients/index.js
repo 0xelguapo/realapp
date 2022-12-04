@@ -21,6 +21,7 @@ import AddClientsToGroup from "./AddClientsToGroup";
 import ChooseClient from "./ChooseClient";
 import ViewOnePropertyGroup from "../properties/ViewOnePropertyGroup";
 import EditPropertiesOfGroup from "../properties/EditPropertiesOfGroup";
+import AddPropertiesToGroup from "../properties/AddPropertiesToGroup";
 
 const Stack = createNativeStackNavigator();
 
@@ -112,15 +113,6 @@ export default function ClientsNavigator() {
         component={EditProperty}
       />
       <Stack.Screen
-        options={{
-          headerShown: false,
-          presentation: "transparentModal",
-          animation: "slide_from_bottom",
-        }}
-        name="AddEditPropertyGroup"
-        component={AddEditPropertyGroup}
-      />
-      <Stack.Screen
         options={{ headerShown: false, presentation: "modal" }}
         name="AddOwner"
         component={AddOwner}
@@ -134,6 +126,15 @@ export default function ClientsNavigator() {
         }}
         name="AddPropertyTask"
         component={AddPropertyTask}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: false,
+          presentation: "transparentModal",
+          animation: "slide_from_bottom",
+        }}
+        name="AddEditPropertyGroup"
+        component={AddEditPropertyGroup}
       />
       <Stack.Screen
         options={{
@@ -161,6 +162,11 @@ export default function ClientsNavigator() {
         options={{ headerShown: false, presentation: "modal" }}
         name="EditPropertiesOfGroup"
         component={EditPropertiesOfGroup}
+      />
+      <Stack.Screen
+        options={{ headerShown: false, presentation: "modal" }}
+        name="AddPropertiesToGroup"
+        component={AddPropertiesToGroup}
       />
       <Stack.Screen
         options={{ headerShown: false, presentation: "modal" }}

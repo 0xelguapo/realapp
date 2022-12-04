@@ -17,7 +17,6 @@ import {
   selectAllClients,
 } from "../../redux/clients-slice";
 import { addClientToGroup } from "../../redux/groups-slice";
-import { SuccessContext } from "../../context/success-context";
 
 export default function AddClientsToGroup(props) {
   const { groupID } = props.route.params;
@@ -42,13 +41,13 @@ export default function AddClientsToGroup(props) {
     });
   }, [searchInput, allClients]);
 
-
   useEffect(() => {
-    if (allClients.length < 1) {
-      dispatch(fetchClients());
-    } else {
-      dispatch(fetchClientsWithGroups()).unwrap();
-    }
+    dispatch(fetchClientsWithGroups()).unwrap();
+
+    // if (allClients.length < 1) {
+    //   dispatch(fetchClients());
+    // } else {
+    // }
   }, []);
 
   const handleSelectClient = async (id) => {

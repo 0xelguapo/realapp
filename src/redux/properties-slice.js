@@ -4,6 +4,7 @@ import {
   createEntityAdapter,
 } from "@reduxjs/toolkit";
 import { API, graphqlOperation } from "aws-amplify";
+import { listPropertiesWithGroups } from "../graphql/customQueries";
 import {
   createProperty,
   createTask,
@@ -29,6 +30,19 @@ export const fetchProperties = createAsyncThunk(
       response = await API.graphql(graphqlOperation(listProperties));
     } catch (err) {
       console.error(err);
+    }
+    return response.data.listProperties.items;
+  }
+);
+
+export const fetchPropertiesWithGroups = createAsyncThunk(
+  "clients/fetchPropertiesWithGroups",
+  async () => {
+    let response;
+    try {
+      response = await API.graphql(graphqlOperation(listPropertiesWithGroups));
+    } catch (err) {
+      console.err;
     }
     return response.data.listProperties.items;
   }
@@ -114,6 +128,9 @@ export const propertiesSlice = createSlice({
   initialState,
   reducers: {
     handleAddPropertyToGroup: (state, action) => {
+      if (!state.entities[action.payload.propertyId].group.items) {
+        state.entities[action.payload.propertyId].group.items = [];
+      }
       state.entities[action.payload.propertyId].group.items.push(
         action.payload
       );
@@ -127,9 +144,11 @@ export const propertiesSlice = createSlice({
     },
     handleRemoveTaskFromProperty: (state, action) => {
       const { propertyId, taskId } = action.payload;
-      const indexToRemove = state.entities[propertyId].tasks.items.findIndex(item => item.id === taskId)
-      state.entities[propertyId].tasks.items.splice(indexToRemove, 1)
-    }
+      const indexToRemove = state.entities[propertyId].tasks.items.findIndex(
+        (item) => item.id === taskId
+      );
+      state.entities[propertyId].tasks.items.splice(indexToRemove, 1);
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -151,9 +170,20 @@ export const propertiesSlice = createSlice({
       })
       .addCase(removeProperty.fulfilled, (state, action) => {
         propertiesAdapter.removeOne(state, action.payload.id);
-      }).addCase(addPropertyTask.fulfilled, (state, action) => {
-        state.entities[action.payload.propertyId].tasks.items.push(action.payload)
       })
+      .addCase(addPropertyTask.fulfilled, (state, action) => {
+        state.entities[action.payload.propertyId].tasks.items.push(
+          action.payload
+        );
+      })
+      .addCase(fetchPropertiesWithGroups.fulfilled, (state, action) => {
+        for (let i = 0; i < action.payload.length; i++) {
+          if (action.payload[i].group.items.length > 0) {
+            state.entities[action.payload[i].id].group.items =
+              action.payload[i].group.items;
+          } else continue;
+        }
+      });
   },
 });
 
@@ -163,7 +193,10 @@ export const {
   selectIds: selectPropertyIds,
 } = propertiesAdapter.getSelectors((state) => state.properties);
 
-export const { handleAddPropertyToGroup, handleRemovePropertyFromGroup, handleRemoveTaskFromProperty } =
-  propertiesSlice.actions;
+export const {
+  handleAddPropertyToGroup,
+  handleRemovePropertyFromGroup,
+  handleRemoveTaskFromProperty,
+} = propertiesSlice.actions;
 
 export default propertiesSlice.reducer;

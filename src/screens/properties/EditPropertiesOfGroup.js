@@ -34,8 +34,6 @@ export default function EditPropertiesOfGroup(props) {
     props.navigation.goBack();
   };
 
-  console.log(propertyGroup)
-
   return (
     <EditItemsOfGroup
       groupTitleInput={groupTitleInput}
@@ -49,19 +47,17 @@ export default function EditPropertiesOfGroup(props) {
         props.navigation.navigate("AddPropertiesToGroup", { groupID: groupID })
       }
     >
-      {propertyGroup.properties.items.map(
-        ({ property, id }, index) => (
-          <EditingProperty
-            key={property.id}
-            street={property.street}
-            city={property.city}
-            state={property.state}
-            zip={property.zip}
-            groupsPropertyID={id}
-            handleAddToRemove={handleRemoveArray}
-          />
-        )
-      )}
+      {propertyGroup.properties.items.map(({ property, id }, index) => (
+        <EditingProperty
+          key={property.id}
+          street={property.street}
+          city={property.city}
+          state={property.state}
+          zip={property.zip}
+          groupsPropertyID={id}
+          handleAddToRemove={handleRemoveArray}
+        />
+      ))}
     </EditItemsOfGroup>
   );
 }

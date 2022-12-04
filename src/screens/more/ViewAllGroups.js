@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   TextInput,
   SectionList,
+  ScrollView,
 } from "react-native";
 import {
   AntDesign,
@@ -41,41 +42,6 @@ export default function ViewAllGroups({ navigation }) {
     });
   };
 
-  const renderClientGroup = useCallback(
-    ({ item, index }) => (
-      <View style={{ paddingHorizontal: 20 }}>
-        <Group
-          title={item.title}
-          length={item.clients.items.length}
-          onPress={() => handleViewClientGroup(item.id)}
-          icon={
-            <Ionicons name="ios-people-outline" size={12} color="#535353" />
-          }
-        />
-      </View>
-    ),
-    []
-  );
-
-  const renderPropertyGroup = useCallback(({ item, index }) => {
-    return (
-      <View style={{ paddingHorizontal: 20 }}>
-        <Group
-          title={item.title}
-          length={item.properties.items.length}
-          onPress={() => handleViewPropertyGroup(item.id)}
-          icon={
-            <MaterialCommunityIcons
-              name="office-building-marker-outline"
-              size={12}
-              color="#535353"
-            />
-          }
-        />
-      </View>
-    );
-  }, []);
-
   const handleClientGroupSubmit = async () => {
     if (clientGroupTitle.length > 0) {
       handleAddClientGroup(title);
@@ -92,56 +58,69 @@ export default function ViewAllGroups({ navigation }) {
     setPropertyInputVisible(false);
   };
 
-  const DATA = [
-    {
-      data: clientGroups,
-      renderItem: renderClientGroup,
-      header: (
-        <Header
-          sectionTitle={"Client Groups"}
-          buttonText={"Create a new client group"}
-          toggleInputVisible={() =>
-            setClientInputVisible((prevState) => !prevState)
-          }
-          inputVisible={clientInputVisible}
-          title={clientGroupTitle}
-          setTitle={setClientGroupTitle}
-          handleSubmit={handleClientGroupSubmit}
-        />
-      ),
-    },
-    {
-      data: propertyGroups,
-      renderItem: renderPropertyGroup,
-      header: (
-        <Header
-          sectionTitle={"Property Groups"}
-          buttonText="Create a new property group"
-          toggleInputVisible={() =>
-            setPropertyInputVisible((prevState = !prevState))
-          }
-          inputVisible={propertyInputVisible}
-          title={propertyGroupTitle}
-          setTitle={setPropertyGroupTitle}
-          handleSubmit={handlePropertyGroupSubmit}
-        />
-      ),
-    },
-  ];
-
   return (
     <View style={styles.container}>
-      <ScreenHeading screenTitle={"View Groups"} handleGoBack={navigation.goBack}/>
+      <ScreenHeading
+        screenTitle={"View Groups"}
+        handleGoBack={navigation.goBack}
+      />
       <View style={styles.body}>
-        <SectionList
-          sections={DATA}
-          keyExtractor={(item, index) => item.id + index}
-          renderItem={({ section: { renderItem } }) => (
-            <View>{renderItem}</View>
-          )}
-          keyboardShouldPersistTaps="handled"
-          renderSectionHeader={({ section: { header } }) => header}
-        />
+        <ScrollView>
+          <Header
+            sectionTitle={"Client Groups"}
+            buttonText={"Create a new client group"}
+            toggleInputVisible={() =>
+              setClientInputVisible((prevState) => !prevState)
+            }
+            inputVisible={clientInputVisible}
+            title={clientGroupTitle}
+            setTitle={setClientGroupTitle}
+            handleSubmit={handleClientGroupSubmit}
+          />
+          {clientGroups.map((item, indesx) => (
+            <View style={{ paddingHorizontal: 20 }} key={item.id}>
+              <Group
+                title={item.title}
+                length={item.clients.items.length}
+                onPress={() => handleViewClientGroup(item.id)}
+                icon={
+                  <Ionicons
+                    name="ios-people-outline"
+                    size={12}
+                    color="#535353"
+                  />
+                }
+              />
+            </View>
+          ))}
+          <Header
+            sectionTitle={"Property Groups"}
+            buttonText="Create a new property group"
+            toggleInputVisible={() =>
+              setPropertyInputVisible((prevState) => !prevState)
+            }
+            inputVisible={propertyInputVisible}
+            title={propertyGroupTitle}
+            setTitle={setPropertyGroupTitle}
+            handleSubmit={handlePropertyGroupSubmit}
+          />
+          {propertyGroups.map((item, index) => (
+            <View style={{ paddingHorizontal: 20 }} key={item.id + index}>
+              <Group
+                title={item.title}
+                length={item.properties.items.length}
+                onPress={() => handleViewPropertyGroup(item.id)}
+                icon={
+                  <MaterialCommunityIcons
+                    name="office-building-marker-outline"
+                    size={12}
+                    color="#535353"
+                  />
+                }
+              />
+            </View>
+          ))}
+        </ScrollView>
       </View>
     </View>
   );
