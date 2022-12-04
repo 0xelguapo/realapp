@@ -9,6 +9,7 @@ import {
   updatePropertyGroup,
   createGroupsProperty,
   deleteGroupsProperty,
+  deletePropertyGroup,
 } from "../graphql/mutations";
 import { listPropertyGroups, getPropertyGroup } from "../graphql/queries";
 import { listPropertyGroupsWithProperties } from "../graphql/customQueries";
@@ -102,6 +103,21 @@ export const editPropertyGroupTitle = createAsyncThunk(
   }
 );
 
+export const removePropertyGroup = createAsyncThunk(
+  "propertyGroups/removePropertyGroup",
+  async (id) => {
+    let response;
+    try {
+      response = await API.graphql(
+        graphqlOperation(deletePropertyGroup, { input: { id } })
+      );
+    } catch (err) {
+      console.error(err);
+    }
+    return response.data.deletePropertyGroup;
+  }
+);
+
 export const removeMultiplePropertiesFromGroup = createAsyncThunk(
   "propertyGroups/remove",
   async (removeDetails) => {
@@ -156,6 +172,9 @@ export const propertyGroupsSlice = createSlice({
       .addCase(editPropertyGroupTitle.fulfilled, (state, action) => {
         const { id, title } = action.payload;
         state.entities[id].title = title;
+      })
+      .addCase(removePropertyGroup.fulfilled, (state, action) => {
+        propertyGroupsAdapter.removeOne(state, action.payload.id);
       })
       .addCase(removePropertyFromGroup.fulfilled, (state, action) => {
         const { propertyGroupID, id } = action.payload;

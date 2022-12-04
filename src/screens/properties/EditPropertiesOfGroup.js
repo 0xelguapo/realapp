@@ -49,7 +49,7 @@ export default function EditPropertiesOfGroup(props) {
     >
       {propertyGroup.properties.items.map(({ property, id }, index) => (
         <EditingProperty
-          key={property.id}
+          key={property.id + index}
           street={property.street}
           city={property.city}
           state={property.state}

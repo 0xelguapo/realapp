@@ -42,7 +42,6 @@ export default function AddPropertiesToGroup(props) {
     const response = await dispatch(
       addPropertyToGroup({ propertyID: id, propertyGroupID: groupID })
     ).unwrap();
-    console.log(response);
     if (response) {
       dispatch(
         handleAddPropertyToGroup({

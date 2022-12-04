@@ -4,6 +4,8 @@ import { addGroup, fetchGroups, selectAllGroups } from "../redux/groups-slice";
 import {
   addPropertyGroup,
   fetchPropertyGroups,
+  removeMultiplePropertiesFromGroup,
+  removePropertyGroup,
   selectAllPropertyGroups,
 } from "../redux/propertyGroups-slice";
 
@@ -42,6 +44,22 @@ function useGroups(fetch = true) {
     return idsArray;
   };
 
+  const handleDeletePropertyGroup = (id, propertyGroup) => {
+    if (propertyGroup.properties.items.length === 0) {
+      dispatch(removePropertyGroup(id));
+    } else {
+      const allPropertiesToBeRemoved = propertyGroup.properties.items.map(
+        (el) => el.id
+      );
+      dispatch(
+        removeMultiplePropertiesFromGroup({
+          removeIDs: allPropertiesToBeRemoved,
+          groupID: id,
+        })
+      ).then(() => dispatch(removePropertyGroup(id)));
+    }
+  };
+
   return {
     clientGroups,
     propertyGroups,
@@ -49,6 +67,7 @@ function useGroups(fetch = true) {
     handleAddClientGroup,
     handleAddPropertyGroup,
     handleRemoveArray,
+    handleDeletePropertyGroup,
   };
 }
 

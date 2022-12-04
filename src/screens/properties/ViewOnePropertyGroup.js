@@ -1,6 +1,8 @@
+import { Alert } from "react-native";
 import { useSelector } from "react-redux";
 import EachProperty from "../../components/property/EachProperty";
 import OneGroupView from "../../components/UI/OneGroupView";
+import useGroups from "../../hooks/groups-hook";
 import { selectPropertyGroupById } from "../../redux/propertyGroups-slice";
 
 export default function ViewOnePropertyGroup({ route, navigation }) {
@@ -8,8 +10,25 @@ export default function ViewOnePropertyGroup({ route, navigation }) {
   const propertyGroup = useSelector((state) =>
     selectPropertyGroupById(state, groupID)
   );
+  const { handleDeletePropertyGroup } = useGroups(false);
 
-  const handleDeleteGroup = () => {};
+  const handleDeleteGroup = () => {
+    Alert.alert(
+      "Are you sure you want to delete this group? This action cannot be undone",
+      null,
+      [
+        { text: "Cancel", style: "default" },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: () => {
+            handleDeletePropertyGroup(groupID, propertyGroup);
+            navigation.goBack()
+          },
+        },
+      ]
+    );
+  };
 
   const handleEditGroup = () => {
     navigation.navigate("EditPropertiesOfGroup", {

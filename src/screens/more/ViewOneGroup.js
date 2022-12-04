@@ -36,7 +36,7 @@ export default function ViewOneGroup(props) {
       "Are you sure you want to delete this group? This action cannot be undone",
       null,
       [
-        { text: "Cancel", style: "cancel" },
+        { text: "Cancel", style: "default" },
         {
           text: "Delete",
           style: "destructive",
