@@ -84,8 +84,7 @@ export default function ViewOneGroup(props) {
       );
       try {
         sendEmail = await MailComposer.composeAsync({
-          recipients: clientEmails.recipients,
-          ccRecipients: clientEmails.ccs,
+          bccRecipients: clientEmails.recipients,
         });
       } catch (err) {
         console.error(err);
@@ -122,56 +121,6 @@ export default function ViewOneGroup(props) {
         />
       ))}
     </OneGroupView>
-    // <View style={styles.container}>
-    //   <View style={styles.headingContainer}>
-    //     <View style={styles.rectangleContainer}>
-    //       <View style={styles.rectangle}></View>
-    //     </View>
-    //     <Text style={styles.headerText}>{thisGroup.title}</Text>
-    //     <View style={styles.clientGroupDetails}>
-    //       <Text>
-    //         {thisGroup.clients.items.length !== 0 ? (
-    //           <Text style={styles.clientsLength}>
-    //             {thisGroup.clients.items.length}
-    //           </Text>
-    //         ) : (
-    //           <Text style={styles.clientsLength}>0</Text>
-    //         )}
-    //       </Text>
-    //       <Ionicons name="ios-people-outline" size={12} color="#535353" />
-    //     </View>
-    //   </View>
-    //   <View style={styles.editContainer}>
-    //     <TouchableOpacity style={styles.editButton} onPress={handleEditGroup}>
-    //       <Feather name="edit-2" size={20} color="#535353" />
-    //       <Text style={styles.editText}>EDIT</Text>
-    //     </TouchableOpacity>
-    //     <TouchableOpacity
-    //       style={{
-    //         ...styles.editButton,
-    //         borderLeftWidth: 1,
-    //         borderLeftColor: "#e6e6e6",
-    //       }}
-    //       onPress={handleDeleteGroup}
-    //     >
-    //       <Ionicons name="remove-circle-outline" size={24} color="#535353" />
-    //       <Text style={styles.editText}>DELETE</Text>
-    //     </TouchableOpacity>
-    //   </View>
-    //   <ScrollView contentContainerStyle={styles.clientsContainer}>
-    //     {thisGroup.clients.items.map((client, index) => (
-    //       <EachClient
-    //         taskMode={true}
-    //         key={client.client.id + index}
-    //         phone={client.client.phone}
-    //         firstName={client.client.firstName}
-    //         lastName={client.client.lastName}
-    //         company={client.client.company}
-    //         onPress={() => handleViewClient(client.client)}
-    //       />
-    //     ))}
-    //   </ScrollView>
-    // </View>
   );
 }
 
