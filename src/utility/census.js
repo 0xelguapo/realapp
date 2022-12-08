@@ -25,16 +25,6 @@ export const CENSUS_VARIABLES = {
         variable: "S2406_C06_001E",
       },
     ],
-    education: [
-      {
-        title: "% High School Graduates or Equivalent",
-        variable: "S1501_C02_009E",
-      },
-      { title: "% of Some College, No Degree", variable: "S1501_C02_010E" },
-      { title: "% of Associate's Degree", variable: "S1501_C02_011E" },
-      { title: "% of Bachelor's Degree", variable: "S1501_C02_012E" },
-      { title: "% of Gradutes/PhD Degree", variable: "S1501_C02_013E" },
-    ],
     enrollment: [
       {
         title: "Population 3 years and over enrolled in school",
@@ -47,6 +37,16 @@ export const CENSUS_VARIABLES = {
         title: "% Enrolled in Graduate / Professional School",
         variable: "S1401_C02_009E",
       },
+    ],
+    education: [
+      {
+        title: "% High School Graduates or Equivalent",
+        variable: "S1501_C02_009E",
+      },
+      { title: "% of Some College, No Degree", variable: "S1501_C02_010E" },
+      { title: "% of Associate's Degree", variable: "S1501_C02_011E" },
+      { title: "% of Bachelor's Degree", variable: "S1501_C02_012E" },
+      { title: "% of Gradutes/PhD Degree", variable: "S1501_C02_013E" },
     ],
     commute: [
       {
@@ -89,6 +89,29 @@ export const CENSUS_VARIABLES = {
   },
 };
 
+export const MAIN_DATA = {
+  S1901_C01_001E: {
+    title: "Households",
+    category: "Financial",
+    measurement: "unit",
+  },
+  S1901_C01_012E: {
+    title: "Median Household Income",
+    category: "Financial",
+    measurement: "$",
+  },
+  B25077_001E: {
+    title: "Median Value of Home",
+    category: "Housing Financials",
+    measurement: "$",
+  },
+  B25105_001E: {
+    title: "Median Housing Costs (including mortgage)",
+    category: "Housing Financials",
+    measurement: "$",
+  },
+}
+
 export const MAPPED_TITLES_WITH_CATEGORY = {
   S1901_C01_001E: {
     title: "Number of Households",
@@ -98,7 +121,7 @@ export const MAPPED_TITLES_WITH_CATEGORY = {
   S1901_C01_012E: {
     title: "Median Household Income",
     category: "Financial",
-    measurement: "unit",
+    measurement: "$",
   },
   S2406_C01_001E: {
     title: "# of civilians employed, age 16 years and over",
@@ -108,53 +131,53 @@ export const MAPPED_TITLES_WITH_CATEGORY = {
   S2406_C02_001E: {
     title: "% employees of private companies",
     category: "Employment",
-    measurement: "percent",
+    measurement: "%",
   },
   S2406_C03_001E: {
     title: "% self employed in own incorporated business",
     category: "Employment",
-    measurement: "percent",
+    measurement: "%",
   },
   S2406_C04_001E: {
     title: "% non-profit workers",
     category: "Employment",
-    measurement: "percent",
+    measurement: "%",
   },
   S2406_C05_001E: {
     title: "% local, state, federal government workers",
     category: "Employment",
-    measurement: "percent",
+    measurement: "%",
   },
   S2406_C06_001E: {
     title:
       "% Self Employed in not incorprated businesses / unpaid family workers",
     category: "Employment",
-    measurement: "percent",
+    measurement: "%",
   },
   S1501_C02_009E: {
     title: "% High School Graduates or Equivalent",
     category: "Education",
-    measurement: "percent",
+    measurement: "%",
   },
   S1501_C02_010E: {
     title: "% of Some College, No Degree",
     category: "Education",
-    measurement: "percent",
+    measurement: "%",
   },
   S1501_C02_011E: {
     title: "% of Associate's Degree",
     category: "Education",
-    measurement: "percent",
+    measurement: "%",
   },
   S1501_C02_012E: {
     title: "% of Bachelor's Degree",
     category: "Education",
-    measurement: "percent",
+    measurement: "%",
   },
   S1501_C02_013E: {
     title: "% of Gradutes/PhD Degree",
     category: "Education",
-    measurement: "percent",
+    measurement: "%",
   },
   S1401_C01_001E: {
     title: "Population 3 years and over enrolled in school",
@@ -164,37 +187,37 @@ export const MAPPED_TITLES_WITH_CATEGORY = {
   S1401_C02_003E: {
     title: "% Enrolled in K-12",
     category: "Education",
-    measurement: "percent",
+    measurement: "%",
   },
   S1401_C02_008E: {
     title: "% Enrolled in College",
     category: "Education",
-    measurement: "percent",
+    measurement: "%",
   },
   S1401_C02_009E: {
     title: "% Enrolled in Graduate / Professional School",
     category: "Education",
-    measurement: "percent",
+    measurement: "%",
   },
   S1401_C06_001E: {
     title: "% in private school",
     category: "Education",
-    measurement: "percent",
+    measurement: "%",
   },
   S0801_C01_003E: {
     title: "% drove alone to work",
     category: "Commute",
-    measurement: "percent",
+    measurement: "%",
   },
   S0801_C01_004E: {
     title: "% carpooled to work",
     category: "Commute",
-    measurement: "percent",
+    measurement: "%",
   },
   S0801_C01_009E: {
     title: "% took public transportation",
     category: "Commute",
-    measurement: "percent",
+    measurement: "%",
   },
   S0801_C01_046E: {
     title: "Average travel time to work in minutes",
@@ -264,41 +287,41 @@ export const MAPPED_TITLES_WITH_CATEGORY = {
   B25031_001E: {
     title: "Median Gross Rent",
     category: "Housing Financials",
-    measurement: "unit",
+    measurement: "$",
   },
   B25031_003E: {
     title: "Median Rent 1 Bedroom",
     category: "Housing Financials",
-    measurement: "unit",
+    measurement: "$",
   },
   B25031_004E: {
     title: "Median Rent 2 Bedrooms",
     category: "Housing Financials",
-    measurement: "unit",
+    measurement: "$",
   },
   B25031_005E: {
     title: "Median Rent 3 Bedrooms",
     category: "Housing Financials",
-    measurement: "unit",
+    measurement: "$",
   },
   B25031_006E: {
     title: "Median Rent 4 Bedrooms",
     category: "Housing Financials",
-    measurement: "unit",
+    measurement: "$",
   },
   B25031_007E: {
     title: "Median Rent 5+ Bedrooms",
     category: "Housing Financials",
-    measurement: "unit",
+    measurement: "$",
   },
   B25077_001E: {
     title: "Median Value of Home",
     category: "Housing Financials",
-    measurement: "unit",
+    measurement: "$",
   },
   B25105_001E: {
-    title: "Median Housing Costs (including mortgage)",
+    title: "Median Housing Costs",
     category: "Housing Financials",
-    measurement: "unit",
+    measurement: "$",
   },
 };

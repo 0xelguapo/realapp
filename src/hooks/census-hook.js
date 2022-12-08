@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 
-import { CENSUS_VARIABLES, MAPPED_TITLES, MAPPED_TITLES_WITH_CATEGORY } from "../utility/census";
+import {
+  CENSUS_VARIABLES,
+  MAIN_DATA,
+  MAPPED_TITLES_WITH_CATEGORY,
+} from "../utility/census";
 
 const KEY = "52a1cdb690a176f1610acecf067b4c68f77f5677";
 
@@ -26,6 +30,7 @@ function getACS5DetailVariables() {
 
 export default function useCensus(zipCode) {
   const [isLoading, setIsLoading] = useState(true);
+  const [mainProfileData, setMainProfileData] = useState([]);
   const [censusData, setCensusData] = useState([]);
 
   const ACS5_DETAIL = `https://api.census.gov/data/2020/acs/acs5?&get=${getACS5DetailVariables()}&for=zip%20code%20tabulation%20area:${zipCode}&key=${KEY}`;
@@ -40,9 +45,7 @@ export default function useCensus(zipCode) {
         detailResponse = await fetch(ACS5_DETAIL, { method: "GET" });
       } catch (error) {
         console.error(error);
-      } finally {
-        setIsLoading(false);
-      }
+      } 
       let parsedSubject = await subjectResponse.json();
       let parsedDetail = await detailResponse.json();
       parsedSubject[0].pop();
@@ -51,60 +54,46 @@ export default function useCensus(zipCode) {
       parsedDetail[1].pop();
 
       let finalArray = [];
-      let finalObj = {}
-
-      // for(let i = 0; i < parsedSubject[0].length; i++) {
-      //   const currentVariable = parsedSubject[0][i];
-      //   const currentValue = parsedSubject[1][i];
-
-      //   const currentCategory = finalObj[MAPPED_TITLES_WITH_CATEGORY[currentVariable].category];
-      //   const currentTitle = MAPPED_TITLES_WITH_CATEGORY[currentVariable].title
-      //   if(!currentCategory) {
-      //     finalObj[MAPPED_TITLES_WITH_CATEGORY[currentVariable].category] = [{ title: currentTitle, value: currentValue}]
-      //   } else {
-      //     currentCategory.push({ title: currentTitle, value: currentValue})
-      //   }
-      // }
-
-      // for(let i = 0; i < parsedDetail[0].length; i++) {
-      //   const currentVariable = parsedDetail[0][i];
-      //   const currentValue = parsedDetail[1][i];
-
-      //   const currentCategory = finalObj[MAPPED_TITLES_WITH_CATEGORY[currentVariable].category];
-      //   const currentTitle = MAPPED_TITLES_WITH_CATEGORY[currentVariable].title
-      //   if(!currentCategory) {
-      //     finalObj[MAPPED_TITLES_WITH_CATEGORY[currentVariable].category] = [{ title: currentTitle, value: currentValue}]
-      //   } else {
-      //     currentCategory.push({ title: currentTitle, value: currentValue})
-      //   }
-      // }
-
-      // console.log(finalObj)
+      let mainData = [];
 
       for (let i = 0; i < parsedSubject[0].length; i++) {
         let subObj = {};
         subObj.value = parsedSubject[1][i];
-        subObj.title = MAPPED_TITLES_WITH_CATEGORY[parsedSubject[0][i]].title
+        subObj.title = MAPPED_TITLES_WITH_CATEGORY[parsedSubject[0][i]].title;
         subObj.variable = parsedSubject[0][i];
-        subObj.category = MAPPED_TITLES_WITH_CATEGORY[parsedSubject[0][i]].category;
+        subObj.category =
+          MAPPED_TITLES_WITH_CATEGORY[parsedSubject[0][i]].category;
+        subObj.measurement =
+          MAPPED_TITLES_WITH_CATEGORY[parsedSubject[0][i]].measurement;
+        if (MAIN_DATA[parsedSubject[0][i]]) {
+          mainData.push(subObj);
+        }
         finalArray.push(subObj);
       }
 
+      let detailedArray = [];
       for (let i = 0; i < parsedDetail[0].length; i++) {
         let detailObj = {};
-        detailObj.category = MAPPED_TITLES_WITH_CATEGORY[parsedDetail[0][i]].category
+        detailObj.category =
+          MAPPED_TITLES_WITH_CATEGORY[parsedDetail[0][i]].category;
         detailObj.value = parsedDetail[1][i];
-        detailObj.title = MAPPED_TITLES_WITH_CATEGORY[parsedDetail[0][i]].title
+        detailObj.title = MAPPED_TITLES_WITH_CATEGORY[parsedDetail[0][i]].title;
+        detailObj.measurement =
+          MAPPED_TITLES_WITH_CATEGORY[parsedDetail[0][i]].measurement;
         detailObj.variable = parsedDetail[0][i];
-        finalArray.push(detailObj);
+        if(MAIN_DATA[parsedDetail[0][i]]) {
+          mainData.push(detailObj)
+        }
+        detailedArray.push(detailObj);
       }
-
-      console.log(finalArray)
+      setMainProfileData(mainData)
+      finalArray.splice(2, 0, ...detailedArray);
       setCensusData(finalArray);
+      setIsLoading(false)
       return subjectResponse;
     };
     grabCensus();
   }, []);
 
-  return { isLoading, censusData };
+  return { isLoading, censusData, mainProfileData };
 }
