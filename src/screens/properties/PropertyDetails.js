@@ -23,7 +23,6 @@ import { handlePropertyGroupsOnDeleteProperty } from "../../redux/propertyGroups
 import PropertyTask from "../../components/property/PropertyTask";
 import { removeOneTask } from "../../redux/tasks-slice";
 import CensusData from "../../components/property/CensusData";
-import useCensus from "../../hooks/census-hook";
 
 export default function PropertyDetails({ navigation, route }) {
   const { id } = route.params;
@@ -31,7 +30,7 @@ export default function PropertyDetails({ navigation, route }) {
   const property = useSelector((state) => selectPropertyById(state, id));
   const propertyOwnerId = property?.clientId;
   const [propertyDetailsVisible, setPropertyDetailsVisible] = useState(false);
-  const { ACS5_VARIABLES } = useCensus('90275')
+  const propertyZip = property.zip.slice(0, 5)
 
   const propertyOwner = useSelector((state) =>
     selectClientById(state, propertyOwnerId)
@@ -236,7 +235,7 @@ export default function PropertyDetails({ navigation, route }) {
             </View>
           </>
         ) : (
-          <CensusData />
+          <CensusData zipCode={propertyZip}/>
         )}
       </ScrollView>
     </SafeAreaView>

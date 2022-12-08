@@ -1,6 +1,8 @@
 import { StyleSheet, View, Text } from 'react-native'
+import useCensus from '../../hooks/census-hook'
 
-export default function CensusData() {
+export default function CensusData({ zipCode }) {
+  useCensus('90275')
   return (
     <View>
 
@@ -10,6 +12,6 @@ export default function CensusData() {
 
 const styles = StyleSheet.create({
   container: {
-    
+
   }
 })
