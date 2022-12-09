@@ -69,11 +69,15 @@
     },
     "hostedUIDomainName": "realapp36e78817-36e78817",
     "authProvidersUserPool": [
-      "Google"
+      "Google",
+      "SignInWithApple"
     ],
-    "hostedUIProviderMeta": "[{\"ProviderName\":\"Google\",\"authorize_scopes\":\"openid email profile\",\"AttributeMapping\":{\"email\":\"email\",\"username\":\"sub\"}}]",
+    "hostedUIProviderMeta": "[{\"ProviderName\":\"Google\",\"authorize_scopes\":\"openid email profile\",\"AttributeMapping\":{\"email\":\"email\",\"username\":\"sub\"}},{\"ProviderName\":\"SignInWithApple\",\"authorize_scopes\":\"email\",\"AttributeMapping\":{\"email\":\"email\"}}]",
     "authProviders": [],
     "googleClientId": "973695514664-mek3ctj1oppfglu3knj55snkt7lmj3m6.apps.googleusercontent.com",
+    "signinwithappleAuthorizeScopes": [
+      "email"
+    ],
     "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"https://coagent.co/dashboard/clients/\",\"https://coagent.co/\",\"http://localhost:3000/dashboard/clients/\",\"http://localhost:3000/\"],\"LogoutURLs\":[\"https://coagent.co/\",\"http://localhost:3000/\"]}"
   }
 }
