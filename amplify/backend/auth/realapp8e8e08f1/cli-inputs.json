@@ -78,6 +78,7 @@
     "signinwithappleAuthorizeScopes": [
       "email"
     ],
-    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"https://coagent.co/dashboard/clients/\",\"https://coagent.co/\",\"http://localhost:3000/dashboard/clients/\",\"http://localhost:3000/\"],\"LogoutURLs\":[\"https://coagent.co/\",\"http://localhost:3000/\"]}"
+    "hostedUIProviderCreds": "[{\"ProviderName\":\"Google\",\"client_id\":\"722122786669-rkc7u3no792gnf3emamhqrhdicgte146.apps.googleusercontent.com\",\"client_secret\":\"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\"},{\"ProviderName\":\"SignInWithApple\",\"client_id\":\"com.amazonaws.coagent.sid\",\"team_id\":\"4VGM29FQS3\",\"key_id\":\"RLY6H3TFGD\",\"private_key\":\"MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgHCP4ja4aIgJIeFGmC+exwp6MA0vvoIWx/Lpd9yZfoQ6gCgYIKoZIzj0DAQehRANCAAQWN2vmXECxL7vmrS/b2Pcm3TmGzWsStM+yvdqCwgOIUVSV6agWTG+BmfebkpvycEZ+OdYuUBoRQbUK4z16TN1a\"}]",
+    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"https://coagent.co/dashboard/clients/\",\"https://coagent.co/\",\"http://localhost:3000/dashboard/clients/\",\"http://localhost:3000/\",\"coagent://\"],\"LogoutURLs\":[\"https://coagent.co/\",\"http://localhost:3000/\",\"coagent://\"]}"
   }
 }

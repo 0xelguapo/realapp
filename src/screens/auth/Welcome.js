@@ -4,7 +4,11 @@ import {
   View,
   TouchableHighlight,
   TouchableOpacity,
+  Button,
 } from "react-native";
+import { Auth } from "aws-amplify";
+import { CognitoHostedUIIdentityProvider } from "@aws-amplify/auth";
+
 import LottieView from "lottie-react-native";
 
 export default function Welcome({ navigation }) {
@@ -26,6 +30,14 @@ export default function Welcome({ navigation }) {
       >
         <Text style={styles.buttonText}>Create an Account</Text>
       </TouchableHighlight>
+      <Button
+        title="Open Google"
+        onPress={() =>
+          Auth.federatedSignIn({
+            provider: CognitoHostedUIIdentityProvider.Google,
+          })
+        }
+      />
       <TouchableOpacity onPress={() => navigation.navigate("Login")}>
         <Text style={styles.login}>Existing User? Log In here</Text>
       </TouchableOpacity>

@@ -7,12 +7,43 @@ import Navigation from "./src/navigation/index";
 import { useEffect } from "react";
 import { RC_API_KEY } from "./src/constants/index";
 import * as SplashScreenDefault from "expo-splash-screen";
-import 'react-native-url-polyfill/auto';
-import 'react-native-get-random-values';
+import "react-native-url-polyfill/auto";
+import "react-native-get-random-values";
+import * as Linking from "expo-linking";
+import * as WebBrowser from "expo-web-browser";
 
 SplashScreenDefault.preventAutoHideAsync();
 
-Amplify.configure(awsconfig);
+const isLocalHost = Boolean(__DEV__);
+
+async function urlOpener(url, redirectUrl) {
+  const { type, url: newUrl } = await WebBrowser.openAuthSessionAsync(
+    url,
+    redirectUrl
+  );
+
+  if (type === "success" && Platform.OS === "ios") {
+    WebBrowser.dismissBrowser();
+    return Linking.openURL(newUrl);
+  }
+}
+
+const { 4: localRedirectSignIn } = awsconfig.oauth.redirectSignIn.split(",");
+
+const { 4: localRedirectSignOut } = awsconfig.oauth.redirectSignOut.split(",");
+
+const updatedConfig = {
+  ...awsconfig,
+  oauth: {
+    ...awsconfig.oauth,
+    redirectSignIn: localRedirectSignIn,
+    redirectSignOut: localRedirectSignOut,
+    urlOpener
+  },
+};
+Amplify.configure(updatedConfig);
+
+// Amplify.configure(awsconfig);
 
 export default function App() {
   useEffect(() => {

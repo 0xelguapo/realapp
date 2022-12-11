@@ -1,6 +1,6 @@
 import { createContext, useState, useCallback, useEffect } from "react";
 import Purchases from "react-native-purchases";
-import { API, Auth, graphqlOperation } from "aws-amplify";
+import { API, Auth, graphqlOperation, Hub } from "aws-amplify";
 import { Alert } from "react-native";
 import { updateUser } from "../graphql/mutations";
 
@@ -32,6 +32,26 @@ function AuthProvider({ children }) {
     } finally {
       setAppIsReady(true);
     }
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = Hub.listen("auth", ({ payload: { event, data } }) => {
+      switch (event) {
+        case "signIn":
+          loginPurchaserUser(data.signInUserSession.idToken.payload.email);
+          setUser(data);
+          break;
+        case "signOut":
+          setUser(null);
+          break;
+      }
+    });
+
+    Auth.currentAuthenticatedUser()
+      .then((currentUser) => setUser(currentUser))
+      .catch(() => console.log("Not signed in"));
+
+    return unsubscribe;
   }, []);
 
   useEffect(() => {

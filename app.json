@@ -5,6 +5,7 @@
     "version": "1.1.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
+    "scheme": "coagent",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -19,7 +20,10 @@
     ],
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "co.coagent.coagent"
+      "bundleIdentifier": "co.coagent.coagent",
+      "entitlements": {
+        "com.apple.developer.applesignin": ["Default"]
+      }
     },
     "android": {
       "adaptiveIcon": {
