@@ -30,14 +30,14 @@ export default function Welcome({ navigation }) {
       >
         <Text style={styles.buttonText}>Create an Account</Text>
       </TouchableHighlight>
-      <Button
+      {/* <Button
         title="Open Google"
         onPress={() =>
           Auth.federatedSignIn({
             provider: CognitoHostedUIIdentityProvider.Google,
           })
         }
-      />
+      /> */}
       <TouchableOpacity onPress={() => navigation.navigate("Login")}>
         <Text style={styles.login}>Existing User? Log In here</Text>
       </TouchableOpacity>

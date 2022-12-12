@@ -103,8 +103,6 @@ export const deleteClient = /* GraphQL */ `
       tasks {
         items {
           id
-          clientId
-          propertyId
           title
           content
           completed
@@ -112,6 +110,8 @@ export const deleteClient = /* GraphQL */ `
           endDate
           notificationId
           type
+          clientId
+          propertyId
           owner
           createdAt
           updatedAt
@@ -154,9 +154,9 @@ export const deleteClient = /* GraphQL */ `
           closeDate
           clientId
           propertyId
+          owner
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
@@ -184,8 +184,6 @@ export const deleteProperty = /* GraphQL */ `
       tasks {
         items {
           id
-          clientId
-          propertyId
           title
           content
           completed
@@ -193,6 +191,8 @@ export const deleteProperty = /* GraphQL */ `
           endDate
           notificationId
           type
+          clientId
+          propertyId
           owner
           createdAt
           updatedAt
@@ -220,9 +220,9 @@ export const deleteProperty = /* GraphQL */ `
           closeDate
           clientId
           propertyId
+          owner
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
@@ -399,8 +399,6 @@ export const deleteTask = /* GraphQL */ `
   ) {
     deleteTask(input: $input, condition: $condition) {
       id
-      clientId
-      propertyId
       title
       content
       completed
@@ -408,6 +406,8 @@ export const deleteTask = /* GraphQL */ `
       endDate
       notificationId
       type
+      clientId
+      propertyId
       client {
         id
         firstName
@@ -462,86 +462,6 @@ export const deleteNote = /* GraphQL */ `
       owner
       createdAt
       updatedAt
-    }
-  }
-`;
-export const updateDeal = /* GraphQL */ `
-  mutation UpdateDeal(
-    $input: UpdateDealInput!
-    $condition: ModelDealConditionInput
-  ) {
-    updateDeal(input: $input, condition: $condition) {
-      id
-      title
-      amount
-      stage
-      note
-      closeDate
-      clientId
-      client {
-        id
-        firstName
-        lastName
-        company
-        phone
-        email
-        notes
-        birthday
-        favorite
-        clientStreet
-        clientCity
-        clientState
-        clientZip
-        connectionHistory {
-          nextToken
-        }
-        properties {
-          nextToken
-        }
-        tasks {
-          nextToken
-        }
-        group {
-          nextToken
-        }
-        reminder {
-          nextToken
-        }
-        deal {
-          nextToken
-        }
-        owner
-        createdAt
-        updatedAt
-      }
-      propertyId
-      property {
-        id
-        type
-        street
-        city
-        state
-        zip
-        price
-        note
-        geometry
-        tasks {
-          nextToken
-        }
-        group {
-          nextToken
-        }
-        deal {
-          nextToken
-        }
-        clientId
-        owner
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-      owner
     }
   }
 `;
@@ -619,9 +539,9 @@ export const deleteDeal = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      owner
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -978,8 +898,6 @@ export const createClient = /* GraphQL */ `
       tasks {
         items {
           id
-          clientId
-          propertyId
           title
           content
           completed
@@ -987,6 +905,8 @@ export const createClient = /* GraphQL */ `
           endDate
           notificationId
           type
+          clientId
+          propertyId
           owner
           createdAt
           updatedAt
@@ -1029,9 +949,9 @@ export const createClient = /* GraphQL */ `
           closeDate
           clientId
           propertyId
+          owner
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
@@ -1094,8 +1014,6 @@ export const updateClient = /* GraphQL */ `
       tasks {
         items {
           id
-          clientId
-          propertyId
           title
           content
           completed
@@ -1103,6 +1021,8 @@ export const updateClient = /* GraphQL */ `
           endDate
           notificationId
           type
+          clientId
+          propertyId
           owner
           createdAt
           updatedAt
@@ -1145,9 +1065,9 @@ export const updateClient = /* GraphQL */ `
           closeDate
           clientId
           propertyId
+          owner
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
@@ -1175,8 +1095,6 @@ export const createProperty = /* GraphQL */ `
       tasks {
         items {
           id
-          clientId
-          propertyId
           title
           content
           completed
@@ -1184,6 +1102,8 @@ export const createProperty = /* GraphQL */ `
           endDate
           notificationId
           type
+          clientId
+          propertyId
           owner
           createdAt
           updatedAt
@@ -1211,9 +1131,9 @@ export const createProperty = /* GraphQL */ `
           closeDate
           clientId
           propertyId
+          owner
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
@@ -1242,8 +1162,6 @@ export const updateProperty = /* GraphQL */ `
       tasks {
         items {
           id
-          clientId
-          propertyId
           title
           content
           completed
@@ -1251,6 +1169,8 @@ export const updateProperty = /* GraphQL */ `
           endDate
           notificationId
           type
+          clientId
+          propertyId
           owner
           createdAt
           updatedAt
@@ -1278,9 +1198,9 @@ export const updateProperty = /* GraphQL */ `
           closeDate
           clientId
           propertyId
+          owner
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
@@ -1616,8 +1536,6 @@ export const createTask = /* GraphQL */ `
   ) {
     createTask(input: $input, condition: $condition) {
       id
-      clientId
-      propertyId
       title
       content
       completed
@@ -1625,6 +1543,8 @@ export const createTask = /* GraphQL */ `
       endDate
       notificationId
       type
+      clientId
+      propertyId
       client {
         id
         firstName
@@ -1674,8 +1594,6 @@ export const updateTask = /* GraphQL */ `
   ) {
     updateTask(input: $input, condition: $condition) {
       id
-      clientId
-      propertyId
       title
       content
       completed
@@ -1683,6 +1601,8 @@ export const updateTask = /* GraphQL */ `
       endDate
       notificationId
       type
+      clientId
+      propertyId
       client {
         id
         firstName
@@ -1829,9 +1749,89 @@ export const createDeal = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      owner
       createdAt
       updatedAt
+    }
+  }
+`;
+export const updateDeal = /* GraphQL */ `
+  mutation UpdateDeal(
+    $input: UpdateDealInput!
+    $condition: ModelDealConditionInput
+  ) {
+    updateDeal(input: $input, condition: $condition) {
+      id
+      title
+      amount
+      stage
+      note
+      closeDate
+      clientId
+      client {
+        id
+        firstName
+        lastName
+        company
+        phone
+        email
+        notes
+        birthday
+        favorite
+        clientStreet
+        clientCity
+        clientState
+        clientZip
+        connectionHistory {
+          nextToken
+        }
+        properties {
+          nextToken
+        }
+        tasks {
+          nextToken
+        }
+        group {
+          nextToken
+        }
+        reminder {
+          nextToken
+        }
+        deal {
+          nextToken
+        }
+        owner
+        createdAt
+        updatedAt
+      }
+      propertyId
+      property {
+        id
+        type
+        street
+        city
+        state
+        zip
+        price
+        note
+        geometry
+        tasks {
+          nextToken
+        }
+        group {
+          nextToken
+        }
+        deal {
+          nextToken
+        }
+        clientId
+        owner
+        createdAt
+        updatedAt
+      }
       owner
+      createdAt
+      updatedAt
     }
   }
 `;

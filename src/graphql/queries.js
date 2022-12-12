@@ -131,8 +131,6 @@ export const getClient = /* GraphQL */ `
       tasks {
         items {
           id
-          clientId
-          propertyId
           title
           content
           completed
@@ -140,6 +138,8 @@ export const getClient = /* GraphQL */ `
           endDate
           notificationId
           type
+          clientId
+          propertyId
           owner
           createdAt
           updatedAt
@@ -182,9 +182,9 @@ export const getClient = /* GraphQL */ `
           closeDate
           clientId
           propertyId
+          owner
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
@@ -256,8 +256,6 @@ export const getProperty = /* GraphQL */ `
       tasks {
         items {
           id
-          clientId
-          propertyId
           title
           content
           completed
@@ -265,6 +263,8 @@ export const getProperty = /* GraphQL */ `
           endDate
           notificationId
           type
+          clientId
+          propertyId
           owner
           createdAt
           updatedAt
@@ -292,9 +292,9 @@ export const getProperty = /* GraphQL */ `
           closeDate
           clientId
           propertyId
+          owner
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
@@ -618,8 +618,6 @@ export const getTask = /* GraphQL */ `
   query GetTask($id: ID!) {
     getTask(id: $id) {
       id
-      clientId
-      propertyId
       title
       content
       completed
@@ -627,6 +625,8 @@ export const getTask = /* GraphQL */ `
       endDate
       notificationId
       type
+      clientId
+      propertyId
       client {
         id
         firstName
@@ -678,8 +678,6 @@ export const listTasks = /* GraphQL */ `
     listTasks(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        clientId
-        propertyId
         title
         content
         completed
@@ -687,6 +685,8 @@ export const listTasks = /* GraphQL */ `
         endDate
         notificationId
         type
+        clientId
+        propertyId
         client {
           id
           firstName
@@ -815,9 +815,9 @@ export const getDeal = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      owner
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -870,9 +870,9 @@ export const listDeals = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        owner
         createdAt
         updatedAt
-        owner
       }
       nextToken
     }

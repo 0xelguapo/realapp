@@ -6,7 +6,6 @@ import {
   TouchableHighlight,
   TouchableOpacity,
 } from "react-native";
-import { SimpleLineIcons, Ionicons } from "@expo/vector-icons";
 
 export default function EachClient({
   firstName,

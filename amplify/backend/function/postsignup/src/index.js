@@ -65,6 +65,13 @@ const createPropertyQuery = /* GraphQL */ `
   }
 `;
 
+const createDealQuery = /* GraphQL */ `
+  mutation createDeal($input: CreateDealInput!) {
+    createDeal(input: $input) {
+      id
+    }
+  }
+`;
 
 const GRAPHQL_APIKEY = process.env.API_REALAPP_GRAPHQLAPIKEYOUTPUT;
 const GRAPHQL_ENDPOINT = process.env.API_REALAPP_GRAPHQLAPIENDPOINTOUTPUT;
@@ -116,6 +123,8 @@ export const handler = async (event, context, callback) => {
   }
   
 
+// ---- create client query ----
+
   const createClientVariables = { input: { firstName: "Jon Snow", lastName: "Sample", favorite: true, company: "CoAgent Team", phone: "3105558592,2125559912", email: "eric@coagent.co,emailMeAnytime@youremail.com", notes: "You can import your existing clients from an excel sheet or .csv on our website, https://coagent.co/", clientStreet: "5422 Nights Watch Blvd", clientState: "CA", clientCity: "Thrones", clientZip: "88228", owner: userId } };
   const createClientVariablesTwo = { input: { firstName: "First", lastName: "Contact", favorite: true, company: "CoAgent Team", phone: "1215552151,4245559421", email: "eric@coagent.co,emailMeAnytime@youremail.com", notes: "Welcome to your first contact! Browse around this screen and get a feel of things. Create reminders, log your call/connection histories, and set up tasks.", clientStreet: "54221 Jon Snow Avenue", clientState: "CA", clientCity: "Thrones", clientZip: "512142", owner: userId } };
 
@@ -150,6 +159,8 @@ export const handler = async (event, context, callback) => {
   }
   
   let firstCreatedClientId = createClientBody.data.createClient.id;
+  
+
   
   //  ---- create reminder for first client ---- //
   let date = new Date();
@@ -313,15 +324,43 @@ export const handler = async (event, context, callback) => {
   
   const createPropertyRequest = new Request(GRAPHQL_ENDPOINT, createPropertyOptions);
   
+  let createPropertyBody;
+  let createPropertyResponse;
+  
   try {
-    await fetch(createPropertyRequest);
+    createPropertyResponse = await fetch(createPropertyRequest);
+    createPropertyBody = await createPropertyResponse.json()
+  } catch (error) {
+    console.log(error)
+  }
+  
+    let firstCreatedPropertyId = createPropertyBody.data.createProperty.id;
+
+  
+    // ---- create deal for first client ---- //
+  
+  const createDealVariables = { input: { title: 'My First Deal', amount: '30000', stage: 'Qualified', clientId: firstCreatedClientId, propertyId: firstCreatedPropertyId, owner: userId }}
+  
+  const createDealOptions = {
+    method: 'POST',
+    headers: {
+      'x-api-key': GRAPHQL_APIKEY
+    },
+    body: JSON.stringify({ query: createDealQuery, variables: createDealVariables})
+  }
+  
+  const createDealRequest = new Request(GRAPHQL_ENDPOINT, createDealOptions);
+  
+  try {
+    await fetch(createDealRequest)
   } catch (error) {
     console.log(error)
   }
   
   
+  
   // ---- create second property ---- //
-  const createSecondPropertyVariables = { input: { street: '94381 Braavos Street', city: 'City of Braavos', state: 'WE', zip: '19205', note: 'Retail investment property, ready to sell but she is unsure about market conditions. Cap rate estimated around 5.50%. ', price: '3000000', clientId: secondCreatedClientId, owner: userId}}
+  const createSecondPropertyVariables = { input: { street: '94381 Braavos Street', city: 'City of Braavos', state: 'WE', zip: '90505', note: 'Retail investment property, ready to sell but she is unsure about market conditions. Cap rate estimated around 5.50%. ', price: '3000000', clientId: secondCreatedClientId, owner: userId}}
   
   const createSecondPropertyOptions = {
     method: 'POST',

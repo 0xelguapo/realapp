@@ -171,8 +171,6 @@ export const onCreateClient = /* GraphQL */ `
       tasks {
         items {
           id
-          clientId
-          propertyId
           title
           content
           completed
@@ -180,6 +178,8 @@ export const onCreateClient = /* GraphQL */ `
           endDate
           notificationId
           type
+          clientId
+          propertyId
           owner
           createdAt
           updatedAt
@@ -222,9 +222,9 @@ export const onCreateClient = /* GraphQL */ `
           closeDate
           clientId
           propertyId
+          owner
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
@@ -287,8 +287,6 @@ export const onUpdateClient = /* GraphQL */ `
       tasks {
         items {
           id
-          clientId
-          propertyId
           title
           content
           completed
@@ -296,6 +294,8 @@ export const onUpdateClient = /* GraphQL */ `
           endDate
           notificationId
           type
+          clientId
+          propertyId
           owner
           createdAt
           updatedAt
@@ -338,9 +338,9 @@ export const onUpdateClient = /* GraphQL */ `
           closeDate
           clientId
           propertyId
+          owner
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
@@ -403,8 +403,6 @@ export const onDeleteClient = /* GraphQL */ `
       tasks {
         items {
           id
-          clientId
-          propertyId
           title
           content
           completed
@@ -412,6 +410,8 @@ export const onDeleteClient = /* GraphQL */ `
           endDate
           notificationId
           type
+          clientId
+          propertyId
           owner
           createdAt
           updatedAt
@@ -454,9 +454,9 @@ export const onDeleteClient = /* GraphQL */ `
           closeDate
           clientId
           propertyId
+          owner
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
@@ -484,8 +484,6 @@ export const onCreateProperty = /* GraphQL */ `
       tasks {
         items {
           id
-          clientId
-          propertyId
           title
           content
           completed
@@ -493,6 +491,8 @@ export const onCreateProperty = /* GraphQL */ `
           endDate
           notificationId
           type
+          clientId
+          propertyId
           owner
           createdAt
           updatedAt
@@ -520,9 +520,9 @@ export const onCreateProperty = /* GraphQL */ `
           closeDate
           clientId
           propertyId
+          owner
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
@@ -551,8 +551,6 @@ export const onUpdateProperty = /* GraphQL */ `
       tasks {
         items {
           id
-          clientId
-          propertyId
           title
           content
           completed
@@ -560,6 +558,8 @@ export const onUpdateProperty = /* GraphQL */ `
           endDate
           notificationId
           type
+          clientId
+          propertyId
           owner
           createdAt
           updatedAt
@@ -587,9 +587,9 @@ export const onUpdateProperty = /* GraphQL */ `
           closeDate
           clientId
           propertyId
+          owner
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
@@ -618,8 +618,6 @@ export const onDeleteProperty = /* GraphQL */ `
       tasks {
         items {
           id
-          clientId
-          propertyId
           title
           content
           completed
@@ -627,6 +625,8 @@ export const onDeleteProperty = /* GraphQL */ `
           endDate
           notificationId
           type
+          clientId
+          propertyId
           owner
           createdAt
           updatedAt
@@ -654,9 +654,9 @@ export const onDeleteProperty = /* GraphQL */ `
           closeDate
           clientId
           propertyId
+          owner
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
@@ -1151,8 +1151,6 @@ export const onCreateTask = /* GraphQL */ `
   ) {
     onCreateTask(filter: $filter, owner: $owner) {
       id
-      clientId
-      propertyId
       title
       content
       completed
@@ -1160,6 +1158,8 @@ export const onCreateTask = /* GraphQL */ `
       endDate
       notificationId
       type
+      clientId
+      propertyId
       client {
         id
         firstName
@@ -1209,8 +1209,6 @@ export const onUpdateTask = /* GraphQL */ `
   ) {
     onUpdateTask(filter: $filter, owner: $owner) {
       id
-      clientId
-      propertyId
       title
       content
       completed
@@ -1218,6 +1216,8 @@ export const onUpdateTask = /* GraphQL */ `
       endDate
       notificationId
       type
+      clientId
+      propertyId
       client {
         id
         firstName
@@ -1267,8 +1267,6 @@ export const onDeleteTask = /* GraphQL */ `
   ) {
     onDeleteTask(filter: $filter, owner: $owner) {
       id
-      clientId
-      propertyId
       title
       content
       completed
@@ -1276,6 +1274,8 @@ export const onDeleteTask = /* GraphQL */ `
       endDate
       notificationId
       type
+      clientId
+      propertyId
       client {
         id
         firstName
@@ -1437,9 +1437,9 @@ export const onCreateDeal = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      owner
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -1517,9 +1517,9 @@ export const onUpdateDeal = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      owner
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -1597,9 +1597,9 @@ export const onDeleteDeal = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      owner
       createdAt
       updatedAt
-      owner
     }
   }
 `;

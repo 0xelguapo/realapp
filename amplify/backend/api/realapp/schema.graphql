@@ -143,13 +143,14 @@ type Deal @model @auth(rules: [{ allow: owner }, { allow: public, provider: apiK
   id: ID!
   title: String
   amount: String
-  stage: DealStage
+  stage: DealStage!
   note: String
   closeDate: String
   clientId: ID @index(name: "byClientDeal")
   client: Client @belongsTo(fields: ["clientId"])
   propertyId: ID @index(name: "byPropertyDeal")
   property: Property @belongsTo(fields: ["propertyId"])
+  owner: String @auth(rules: [{ allow: owner, operations: [read, delete] }, { allow: public, provider: apiKey, operations: [create, update]}])
 }
 
 enum DealStage {
