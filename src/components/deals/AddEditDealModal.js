@@ -40,8 +40,6 @@ export default function AddEditDealModal({
   handleSubmit,
   contentOffset,
 }) {
-
-  console.log(contentOffset)
   const navigation = useNavigation();
 
   function StickyHeader() {

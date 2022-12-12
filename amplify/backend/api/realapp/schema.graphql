@@ -120,6 +120,7 @@ type Task @model @auth(rules: [{ allow: owner }, { allow: public, provider: apiK
   endDate: String
   notificationId: String
   type: TaskType
+  recurRule: String
   clientId: ID @index(name: "byClient", sortKeyFields: ["title"])
   propertyId: ID @index(name: "byProperty")
   client: Client @belongsTo(fields: ["clientId"])

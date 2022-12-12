@@ -11,7 +11,7 @@ function AuthProvider({ children }) {
   const [isLoading, setIsLoading] = useState(false);
   const [appIsReady, setAppIsReady] = useState(false);
 
-  const loginPurchaserUser = useCallback(async (userId) => {
+  const loginPurchaserUser = async (userId) => {
     let response;
     try {
       response = await Purchases.logIn(userId);
@@ -19,7 +19,7 @@ function AuthProvider({ children }) {
       console.error(err);
     }
     return response;
-  });
+  };
 
   const checkUser = useCallback(async () => {
     try {
@@ -38,7 +38,7 @@ function AuthProvider({ children }) {
     const unsubscribe = Hub.listen("auth", ({ payload: { event, data } }) => {
       switch (event) {
         case "signIn":
-          loginPurchaserUser(data.signInUserSession.idToken.payload.email);
+          loginPurchaserUser(data.signInUserSession.idToken.payload.sub);
           setUser(data);
           break;
         case "signOut":
@@ -46,16 +46,8 @@ function AuthProvider({ children }) {
           break;
       }
     });
-
-    Auth.currentAuthenticatedUser()
-      .then((currentUser) => setUser(currentUser))
-      .catch(() => console.log("Not signed in"));
-
-    return unsubscribe;
-  }, []);
-
-  useEffect(() => {
     checkUser();
+    return unsubscribe;
   }, []);
 
   const signup = useCallback(async (username, password) => {

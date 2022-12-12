@@ -5,32 +5,26 @@ import {
   TouchableOpacity,
   TextInput,
   KeyboardAvoidingView,
-  FlatList,
   Keyboard,
   TouchableWithoutFeedback,
   ActivityIndicator,
 } from "react-native";
-import { useEffect, useRef, useState, useMemo, useCallback } from "react";
+import { useEffect, useRef, useState, useContext } from "react";
 import {
   AntDesign,
   MaterialCommunityIcons,
   Feather,
   Ionicons,
 } from "@expo/vector-icons";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { addProperty } from "../../redux/properties-slice";
-import { fetchClients, selectAllClients } from "../../redux/clients-slice";
-import EachClient from "../../components/client/EachClient";
 import SuggestedProperty from "../../components/property/SuggestedProperty";
 import { Geo } from "aws-amplify";
+import { ChooseContext } from "../../context/choose-context";
 
 export default function AddProperty({ navigation }) {
   const dispatch = useDispatch();
-  const allClients = useSelector(selectAllClients);
-  const clientStatus = useSelector((state) => state.clients.status);
-  const [clientsVisible, setClientsVisible] = useState(false);
-  const [searchInput, setSearchInput] = useState("");
-  const [selectedClient, setSelectedClient] = useState("");
+  const { selectedClient, setSelectedClient, setSelectedProperty } = useContext(ChooseContext);
   const [suggestedAddresses, setSuggestedAddresses] = useState([]);
   const [suggestedLoading, setSuggestedLoading] = useState(false);
   const [suggestedAddressChosen, setSuggestedAddressChosen] = useState(false);
@@ -45,34 +39,6 @@ export default function AddProperty({ navigation }) {
   const stateRef = useRef();
   const zipRef = useRef();
   const priceRef = useRef();
-
-  const filteredData = useMemo(() => {
-    return allClients.filter((c) => {
-      const fullName = c.firstName + " " + c?.lastName;
-      const clientData = fullName ? fullName.toUpperCase() : "".toUpperCase();
-      const textData = searchInput.toUpperCase();
-      return clientData.indexOf(textData) > -1;
-    });
-  }, [searchInput, allClients]);
-
-  useEffect(() => {
-    if (clientStatus !== "succeeded") dispatch(fetchClients());
-  }, []);
-
-  const handleShowClients = () => {
-    setClientsVisible(!clientsVisible);
-    if (selectedClient) {
-      setSearchInput("");
-      setSelectedClient("");
-    }
-    Keyboard.dismiss();
-  };
-
-  const handleChooseClient = (client) => {
-    setSelectedClient(client);
-    setSearchInput(client.firstName + " " + client?.lastName);
-    setClientsVisible(false);
-  };
 
   const searchOptionContraints = {
     countries: ["USA"],
@@ -104,6 +70,14 @@ export default function AddProperty({ navigation }) {
     return () => clearTimeout(delaySearch);
   }, [streetAddress]);
 
+  useEffect(() => {
+    const clearSelected = navigation.addListener("beforeRemove", (e) => {
+      setSelectedClient(null);
+      setSelectedProperty(null)
+    });
+    return clearSelected;
+  }, [navigation]);
+
   const handleChooseSuggestedProperty = (item) => {
     let fullStreet;
     fullStreet =
@@ -117,20 +91,6 @@ export default function AddProperty({ navigation }) {
     setSuggestedAddressChosen(true);
     setSuggestedAddresses([]);
   };
-
-  const renderClient = useCallback(
-    ({ item }) => (
-      <EachClient
-        onPress={() => handleChooseClient(item)}
-        taskMode={true}
-        firstName={item.firstName}
-        lastName={item.lastName}
-        phone={item.phone}
-        company={item.company}
-      />
-    ),
-    []
-  );
 
   const handleAddProperty = async () => {
     const propertyInputs = {
@@ -256,62 +216,29 @@ export default function AddProperty({ navigation }) {
             />
           </View>
 
-          {!clientsVisible ? (
-            <>
-              {!selectedClient ? (
-                <TouchableOpacity
-                  style={styles.addAnotherButton}
-                  onPress={handleShowClients}
-                >
-                  <Ionicons name="md-add-sharp" size={24} color="#026bff" />
-                  <Text style={styles.addOwnershipText}>Add Ownership</Text>
-                </TouchableOpacity>
-              ) : (
-                <TouchableOpacity
-                  style={styles.addAnotherButton}
-                  onPress={handleShowClients}
-                >
-                  <Ionicons name="md-remove-circle" size={20} color="red" />
-                  <Text style={styles.ownedByText}>
-                    Owned by:{" "}
-                    <Text style={styles.selectedClientName}>
-                      {selectedClient.firstName +
-                        " " +
-                        selectedClient?.lastName}
-                    </Text>
-                  </Text>
-                </TouchableOpacity>
-              )}
-            </>
+          {!selectedClient ? (
+            <TouchableOpacity
+              style={styles.addAnotherButton}
+              onPress={() => navigation.navigate("ChooseClient")}
+            >
+              <Ionicons name="md-add-sharp" size={24} color="#026bff" />
+              <Text style={styles.addOwnershipText}>Add Ownership</Text>
+            </TouchableOpacity>
           ) : (
-            <>
-              <View style={styles.addClientContainer}>
-                <TouchableOpacity
-                  style={styles.addAnotherButton}
-                  onPress={handleShowClients}
-                >
-                  <Ionicons name="md-remove-circle" size={20} color="red" />
-                </TouchableOpacity>
-                <View style={styles.listViewContainer}>
-                  <TextInput
-                    style={styles.search}
-                    value={searchInput}
-                    onChangeText={setSearchInput}
-                    placeholder="Search..."
-                    placeholderTextColor="#7b7b7c"
-                    returnKeyType="done"
-                  />
-                  <FlatList
-                    keyboardShouldPersistTaps={"handled"}
-                    data={filteredData}
-                    renderItem={renderClient}
-                    refreshing={clientStatus !== "succeeded"}
-                    keyExtractor={(c) => c.id}
-                  />
-                </View>
-              </View>
-            </>
+            <TouchableOpacity
+              style={styles.addAnotherButton}
+              onPress={() => navigation.navigate("ChooseClient")}
+            >
+              <Ionicons name="md-remove-circle" size={20} color="red" />
+              <Text style={styles.ownedByText}>
+                Owned by:{" "}
+                <Text style={styles.selectedClientName}>
+                  {selectedClient.firstName + " " + selectedClient?.lastName}
+                </Text>
+              </Text>
+            </TouchableOpacity>
           )}
+
           <KeyboardAvoidingView
             behavior="padding"
             style={{ flex: 1 }}
@@ -324,7 +251,6 @@ export default function AddProperty({ navigation }) {
                 value={note}
                 onChangeText={setNote}
                 multiline={true}
-                onFocus={() => setClientsVisible(false)}
               />
             </View>
           </KeyboardAvoidingView>

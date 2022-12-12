@@ -20,6 +20,7 @@ import { useDispatch } from "react-redux";
 import { createOneReminder } from "../../redux/reminders-slice";
 import useNotifications from "../../hooks/notification-hook";
 import { RRule } from "rrule";
+import { handleClientAfterAddReminder } from "../../redux/clients-slice";
 
 export default function EditReminder(props) {
   const { goBack } = props.navigation;
@@ -38,7 +39,6 @@ export default function EditReminder(props) {
       },
       trigger: time,
     });
-    console.log(response);
     return response;
   };
 
@@ -53,20 +53,13 @@ export default function EditReminder(props) {
     return rule.toString();
   };
 
-
   const handleCreateReminder = async (length) => {
     let date = new Date();
     let notificationId;
     let recurRule;
     switch (length) {
-      // case "tomorrow":
-      //   date.setDate(date.getDate() + 1);
-      //   date.setHours(9);
-      //   date.setMinutes(0);
-      //   notificationId = await handleScheduleNotification(date);
-      //   break;
       case "weekly":
-        recurRule = createRRule(RRule.WEEKLY, 1)
+        recurRule = createRRule(RRule.WEEKLY, 1);
         notificationId = await handleScheduleNotification({
           repeats: true,
           weekday: getISODay(date),
@@ -74,7 +67,7 @@ export default function EditReminder(props) {
         });
         break;
       case "monthly":
-        recurRule = createRRule(RRule.MONTHLY, 1)
+        recurRule = createRRule(RRule.MONTHLY, 1);
         notificationId = await handleScheduleNotification({
           repeats: true,
           weekOfMonth: getWeekOfMonth(new Date()),
@@ -82,7 +75,7 @@ export default function EditReminder(props) {
         });
         break;
       case "quarterly":
-        recurRule = createRRule(RRule.YEARLY, 4)
+        recurRule = createRRule(RRule.YEARLY, 4);
         const quarters = [1, 2, 3, 4];
         const promises = quarters.map((num) => {
           return handleScheduleNotification({
@@ -91,10 +84,10 @@ export default function EditReminder(props) {
             hour: 9,
           });
         });
-        notificationId = (await Promise.all(promises)).join(',');
+        notificationId = (await Promise.all(promises)).join(",");
         break;
       case "yearly":
-        recurRule = createRRule(RRule.YEARLY, 1)
+        recurRule = createRRule(RRule.YEARLY, 1);
         notificationId = await handleScheduleNotification({
           repeats: true,
           weekOfYear: getISOWeek(new Date()),
@@ -102,14 +95,17 @@ export default function EditReminder(props) {
         });
         break;
     }
-    dispatch(
+    const reminderResponse = await dispatch(
       createOneReminder({
         freq: length,
         clientId: clientId,
         notificationId: notificationId,
-        recurRule: recurRule
+        recurRule: recurRule,
       })
-    );
+    ).unwrap();
+
+    dispatch(handleClientAfterAddReminder(reminderResponse));
+
     if (!homeMode) {
       props.navigation.navigate({
         name: "ClientDetails",
@@ -132,7 +128,7 @@ export default function EditReminder(props) {
       />
       <View style={styles.modalContainer}>
         <View style={styles.titleHeaderContainer}>
-          <Text style={styles.titleHeader}>Set a Reconnect Reminder</Text>
+          <Text style={styles.titleHeader}>Set a Repeating Reminder</Text>
         </View>
         <View style={styles.optionsContainer}>
           {/* <TouchableOpacity

@@ -50,29 +50,28 @@ export default function Home(props) {
 
   const { allGoals, goalsOfDay, getGoalIncrementAmount } = useGoals(activeDate);
   const {
-    allTasks,
     tasksOfDate,
     lengthOfCompletedTasks,
     lengthOfOverdueTasks,
     handleCompleteTask,
   } = useTasks(activeDate);
 
-  // const displayPaywall = async () => {
-  //   try {
-  //     const customerInfo = await Purchases.getCustomerInfo();
-  //     if (
-  //       typeof customerInfo.entitlements.active[ENTITLEMENT_ID] === "undefined"
-  //     ) {
-  //       props.navigation.navigate("Paywall");
-  //     }
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // };
-
-  //   useEffect(() => {
-  //   displayPaywall();
-  // }, []);
+  useEffect(() => {
+    const displayPaywall = async () => {
+      try {
+        const customerInfo = await Purchases.getCustomerInfo();
+        if (
+          typeof customerInfo.entitlements.active[ENTITLEMENT_ID] ===
+          "undefined"
+        ) {
+          props.navigation.navigate("Paywall");
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    displayPaywall();
+  }, []);
 
   useEffect(() => {
     let streakResponse;
@@ -82,7 +81,7 @@ export default function Home(props) {
       streakResponse = await API.graphql(
         graphqlOperation(getUserStreak, { id: user.attributes.sub })
       );
-      setStreakCount(parseInt(streakResponse.data.getUser.streakCount));
+      setStreakCount(parseInt(streakResponse.streakgetUser.streakCount));
       streakDate = new Date(streakResponse.data.getUser.streakDate);
       setStreakDate(streakDate);
       return streakResponse.data.getUser;

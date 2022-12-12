@@ -1,4 +1,4 @@
-import { startOfDay, format, endOfDay, isSameDay } from "date-fns";
+import { startOfDay, format, endOfDay, isSameDay, add } from "date-fns";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RRule } from "rrule";
@@ -57,5 +57,26 @@ export default function useReminders(activeDate = new Date(), fetch = true) {
     return acc;
   }, []);
 
-  return { allReminders, remindersOfDate, handleDeleteReminder };
+  const getNextReminderDate = (freq, recurRule) => {
+    let curDate = startOfDay(new Date())
+    const ruleObj = RRule.fromString(recurRule)
+    let arrayOfDaysBetween;
+    switch(freq) {
+      case 'weekly':
+        arrayOfDaysBetween = ruleObj.between(curDate, add(curDate, { days: 8 }))
+        break;
+      case 'monthly':
+        arrayOfDaysBetween = ruleObj.between(curDate, add(curDate, {days: 32}))
+        break;
+      case 'quarterly':
+        arrayOfDaysBetween = ruleObj.between(curDate, add(curDate, {days: 95 }))
+        break;
+      case 'yearly':
+        arrayOfDaysBetween = ruleObj.between(curDate, add(curDate, { years: 1, days: 1}))
+        break;
+    }
+    return arrayOfDaysBetween[0].toString()
+  }
+
+  return { allReminders, remindersOfDate, handleDeleteReminder, getNextReminderDate };
 }

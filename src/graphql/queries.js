@@ -138,6 +138,7 @@ export const getClient = /* GraphQL */ `
           endDate
           notificationId
           type
+          recurRule
           clientId
           propertyId
           owner
@@ -263,6 +264,7 @@ export const getProperty = /* GraphQL */ `
           endDate
           notificationId
           type
+          recurRule
           clientId
           propertyId
           owner
@@ -625,6 +627,7 @@ export const getTask = /* GraphQL */ `
       endDate
       notificationId
       type
+      recurRule
       clientId
       propertyId
       client {
@@ -685,6 +688,7 @@ export const listTasks = /* GraphQL */ `
         endDate
         notificationId
         type
+        recurRule
         clientId
         propertyId
         client {

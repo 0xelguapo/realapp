@@ -44,7 +44,7 @@ export default function ViewAllGroups({ navigation }) {
 
   const handleClientGroupSubmit = async () => {
     if (clientGroupTitle.length > 0) {
-      handleAddClientGroup(title);
+      handleAddClientGroup(clientGroupTitle);
     }
     setClientGroupTitle("");
     setClientInputVisible(false);

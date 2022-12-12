@@ -10,7 +10,10 @@ import { Feather, EvilIcons } from "@expo/vector-icons";
 import useReminders from "../../../hooks/reminders-hook";
 
 export default function DetailsReminders({ clientDetailsState }) {
-  const { handleDeleteReminder } = useReminders(undefined, false);
+  const { handleDeleteReminder, getNextReminderDate } = useReminders(
+    undefined,
+    false
+  );
 
   return (
     <View style={styles.remindersContainer}>
@@ -25,7 +28,14 @@ export default function DetailsReminders({ clientDetailsState }) {
         {clientDetailsState.reminder.items?.length > 0 ? (
           clientDetailsState.reminder.items.map((item) => (
             <View key={item.id} style={styles.reminder}>
-              <Text style={styles.reminderDate}>{item.freq}</Text>
+              <Text style={styles.reminderDate}>
+                Next:{" "}
+                {format(
+                  new Date(getNextReminderDate(item.freq, item.recurRule)),
+                  "LL/dd/yy"
+                )}{" "}
+                [{item.freq}]
+              </Text>
               <TouchableOpacity
                 style={styles.iconContainer}
                 onPress={() => handleDeleteReminder(item)}

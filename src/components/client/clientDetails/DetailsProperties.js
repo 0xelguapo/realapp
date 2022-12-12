@@ -1,3 +1,5 @@
+import { useContext } from "react";
+import {ChooseContext} from '../../../context/choose-context'
 import {
   View,
   Text,
@@ -9,12 +11,16 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { el } from "date-fns/locale";
 
-export default function DetailsProperties({ clientDetailsState }) {
+export default function DetailsProperties({ clientDetailsState, viewAddProperty }) {
   const navigation = useNavigation();
+
   return (
     <View style={styles.detailsContainer}>
       <View style={styles.blockHeadingContainer}>
         <Text style={styles.blockHeadingText}>PROPERTIES</Text>
+        <Pressable onPress={viewAddProperty}>
+          <Ionicons name="add-circle-outline" size={20} color="#ababab" />
+        </Pressable>
       </View>
       <View style={styles.detailContainer}>
         {clientDetailsState.properties.items?.length ? (

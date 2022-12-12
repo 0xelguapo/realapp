@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import {
   View,
   Text,
@@ -27,6 +27,7 @@ import { handleGroupsOnDeleteClient } from "../../redux/groups-slice";
 import { handleRemindersOnDeleteClient } from "../../redux/reminders-slice";
 import { AntDesign } from "@expo/vector-icons";
 import DetailsProperties from "../../components/client/clientDetails/DetailsProperties";
+import { ChooseContext } from "../../context/choose-context";
 
 export default function ClientDetails(props) {
   const { id, phone } = props.route.params.client;
@@ -34,14 +35,14 @@ export default function ClientDetails(props) {
   const [contactDetailsVisible, setContactDetailsVisible] = useState(
     viewContactInfo || false
   );
+  const { setSelectedClient } = useContext(ChooseContext);
 
-  
   const dispatch = useDispatch();
   const clientSelect = useSelector((state) => selectClientById(state, id));
   const fetchClientDetails = () => {
     dispatch(fetchOneClient(id));
   };
-  
+
   useEffect(() => {
     fetchClientDetails();
   }, []);
@@ -90,6 +91,11 @@ export default function ClientDetails(props) {
     });
   };
 
+  const viewAddProperty = () => {
+    setSelectedClient(clientSelect);
+    props.navigation.navigate("AddProperty");
+  };
+
   const removeClientHandler = () => {
     Alert.alert("Are you sure you want to delete this client?", null, [
       { text: "Cancel", style: "cancel" },
@@ -120,12 +126,12 @@ export default function ClientDetails(props) {
         </View>
       ) : (
         <SafeAreaView style={styles.container}>
-            <TouchableOpacity
-              style={styles.backButtonContainer}
-              onPress={props.navigation.goBack}
-            >
-              <AntDesign name="left" size={24} color="black" />
-            </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.backButtonContainer}
+            onPress={props.navigation.goBack}
+          >
+            <AntDesign name="left" size={24} color="black" />
+          </TouchableOpacity>
           <View style={styles.header}>
             <Text style={styles.name}>
               {clientSelect.lastName
@@ -198,7 +204,10 @@ export default function ClientDetails(props) {
                   clientDetailsState={clientSelect}
                   viewTaskHandler={viewTaskHandler}
                 />
-                <DetailsProperties clientDetailsState={clientSelect} />
+                <DetailsProperties
+                  clientDetailsState={clientSelect}
+                  viewAddProperty={viewAddProperty}
+                />
               </View>
             )}
           </ScrollView>

@@ -208,6 +208,10 @@ export const clientsSlice = createSlice({
         );
       }
     },
+    handleClientAfterAddReminder: (state, action) => {
+      const { clientId } = action.payload;
+      state.entities[clientId].reminder.items.push(action.payload)
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -255,6 +259,7 @@ export const {
   handleRemoveClientFromGroup,
   handleClientAfterDeleteReminder,
   handleClientAfterDeleteConnection,
+handleClientAfterAddReminder,
 } = clientsSlice.actions;
 
 export default clientsSlice.reducer;

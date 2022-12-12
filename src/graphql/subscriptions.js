@@ -178,6 +178,7 @@ export const onCreateClient = /* GraphQL */ `
           endDate
           notificationId
           type
+          recurRule
           clientId
           propertyId
           owner
@@ -294,6 +295,7 @@ export const onUpdateClient = /* GraphQL */ `
           endDate
           notificationId
           type
+          recurRule
           clientId
           propertyId
           owner
@@ -410,6 +412,7 @@ export const onDeleteClient = /* GraphQL */ `
           endDate
           notificationId
           type
+          recurRule
           clientId
           propertyId
           owner
@@ -491,6 +494,7 @@ export const onCreateProperty = /* GraphQL */ `
           endDate
           notificationId
           type
+          recurRule
           clientId
           propertyId
           owner
@@ -558,6 +562,7 @@ export const onUpdateProperty = /* GraphQL */ `
           endDate
           notificationId
           type
+          recurRule
           clientId
           propertyId
           owner
@@ -625,6 +630,7 @@ export const onDeleteProperty = /* GraphQL */ `
           endDate
           notificationId
           type
+          recurRule
           clientId
           propertyId
           owner
@@ -1158,6 +1164,7 @@ export const onCreateTask = /* GraphQL */ `
       endDate
       notificationId
       type
+      recurRule
       clientId
       propertyId
       client {
@@ -1216,6 +1223,7 @@ export const onUpdateTask = /* GraphQL */ `
       endDate
       notificationId
       type
+      recurRule
       clientId
       propertyId
       client {
@@ -1274,6 +1282,7 @@ export const onDeleteTask = /* GraphQL */ `
       endDate
       notificationId
       type
+      recurRule
       clientId
       propertyId
       client {
