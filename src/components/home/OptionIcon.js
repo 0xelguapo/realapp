@@ -1,17 +1,14 @@
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import ProIcon from "../UI/ProIcon";
 
-export default function OptionIcon(props) {
+export default function OptionIcon({ onPress, text, children, pro = false }) {
   return (
-    <TouchableOpacity
-      style={styles.iconContainer}
-      onPress={props.onPress}
-    >
+    <TouchableOpacity style={styles.iconContainer} onPress={onPress}>
       <View style={styles.iconTextContainer}>
-        <Text style={styles.iconText}>{props.text}</Text>
+        {pro && <ProIcon top={-12} left={-15} />}
+        <Text style={styles.iconText}>{text}</Text>
       </View>
-      <View style={styles.icon}>
-        {props.children}
-      </View>
+      <View style={styles.icon}>{children}</View>
     </TouchableOpacity>
   );
 }
@@ -21,7 +18,7 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 15
+    marginBottom: 15,
   },
   iconTextContainer: {
     backgroundColor: "white",

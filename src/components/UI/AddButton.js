@@ -1,9 +1,11 @@
 import { View, TouchableOpacity, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import ProIcon from "./ProIcon";
 
-export default function AddButton({onPress, icon}) {
+export default function AddButton({ onPress, icon, pro = false }) {
   return (
     <TouchableOpacity style={styles.addIconContainer} onPress={onPress}>
+      {pro && <ProIcon top={-5} right={0} />}
       {icon}
     </TouchableOpacity>
   );

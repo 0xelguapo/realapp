@@ -7,16 +7,19 @@ import {
   Alert,
   FlatList,
 } from "react-native";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import * as Linking from "expo-linking";
 import Purchases from "react-native-purchases";
 import PackageItem from "../purchase/PackageItem";
 import { ENTITLEMENT_ID } from "../../constants";
 import { useNavigation } from "@react-navigation/native";
+import { AuthContext } from "../../context/auth-context";
+import { Feather } from "@expo/vector-icons";
 
 // remove go back after setting up payments
 
 const TermsOfUse = () => {
+  const { signOut } = useContext(AuthContext);
   const navigation = useNavigation();
   const restorePurchase = async () => {
     let restoreResponse;
@@ -28,7 +31,9 @@ const TermsOfUse = () => {
       );
       console.error(err);
     }
-    if (typeof restoreResponse.entitlements.active[ENTITLEMENT_ID] !== "undefined") {
+    if (
+      typeof restoreResponse.entitlements.active[ENTITLEMENT_ID] !== "undefined"
+    ) {
       navigation.navigate("HomeScreen");
     }
   };
@@ -72,6 +77,14 @@ const TermsOfUse = () => {
           onPress={() => Linking.openURL("https://coagent.co/privacy-policy")}
         >
           Privacy Policy
+        </Text>
+      </View>
+      <View style={styles.signOutContainer}>
+        <Text
+          style={{ color: "#6c6c6c", textDecorationLine: "underline" }}
+          onPress={() => signOut()}
+        >
+          Sign Out
         </Text>
       </View>
     </>
@@ -146,40 +159,47 @@ export default function Paywall(props) {
     getPackages();
   }, []);
 
-  function HeaderComponent () {
-    return (<View style={styles.headingContainer}>
-      <Text style={styles.headingText}>
-        Build Better Relationships with CoAgent
-      </Text>
-      <Pressable style={styles.smallPixel} onPress={() => props.navigation.goBack()} />
-      <View style={styles.monthlyContainer}>
+  function HeaderComponent() {
+    return (
+      <View style={styles.headingContainer}>
+        <TouchableOpacity style={styles.exitButton} onPress={props.navigation.goBack}>
+          <Feather name="x" size={20} color="#6c6c6c" />
+        </TouchableOpacity>
+        <Text style={styles.headingText}>
+          Build Better Relationships with CoAgent
+        </Text>
         <Pressable
-          style={[
-            showMonthly
-              ? styles.monthToggleButton
-              : { ...styles.monthToggleButton, backgroundColor: "#0064e5" },
-          ]}
-          onPress={() => setShowMonthly(false)}
-        >
-          <Text style={styles.monthlyText}>Yearly</Text>
-        </Pressable>
-        <Pressable
-          style={[
-            showMonthly
-              ? { ...styles.monthToggleButton, backgroundColor: "#0064e5" }
-              : styles.monthToggleButton,
-          ]}
-          onPress={() => setShowMonthly(true)}
-        >
-          <Text style={styles.monthlyText}>Monthly</Text>
-        </Pressable>
+          style={styles.smallPixel}
+          onPress={() => props.navigation.goBack()}
+        />
+        <View style={styles.monthlyContainer}>
+          <Pressable
+            style={[
+              showMonthly
+                ? styles.monthToggleButton
+                : { ...styles.monthToggleButton, backgroundColor: "#0064e5" },
+            ]}
+            onPress={() => setShowMonthly(false)}
+          >
+            <Text style={styles.monthlyText}>Yearly</Text>
+          </Pressable>
+          <Pressable
+            style={[
+              showMonthly
+                ? { ...styles.monthToggleButton, backgroundColor: "#0064e5" }
+                : styles.monthToggleButton,
+            ]}
+            onPress={() => setShowMonthly(true)}
+          >
+            <Text style={styles.monthlyText}>Monthly</Text>
+          </Pressable>
+        </View>
       </View>
-    </View>)
+    );
   }
 
   return (
     <View style={styles.container}>
-      
       {showMonthly ? (
         <FlatList
           data={packages}
@@ -216,9 +236,13 @@ const styles = StyleSheet.create({
   },
   exitButton: {
     position: "absolute",
-    right: 30,
-    top: 50,
+    left: 20,
+    top: -5,
     zIndex: 2,
+    backgroundColor: '#f9f9f9',
+    borderRadius: 50,
+    paddingHorizontal: 5,
+    paddingVertical: 5,
   },
   headingContainer: {
     paddingTop: 30,
@@ -303,5 +327,9 @@ const styles = StyleSheet.create({
     height: 3,
     right: 20,
     top: 50,
-  }
+  },
+  signOutContainer: {
+    marginTop: 40,
+    alignSelf: "center",
+  },
 });

@@ -3,6 +3,7 @@ import Purchases from "react-native-purchases";
 import { API, Auth, graphqlOperation, Hub } from "aws-amplify";
 import { Alert } from "react-native";
 import { updateUser } from "../graphql/mutations";
+import { ENTITLEMENT_ID } from "../constants/index";
 
 const AuthContext = createContext();
 
@@ -10,6 +11,26 @@ function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [appIsReady, setAppIsReady] = useState(false);
+  const [isProUser, setIsProUser] = useState(false);
+
+  useEffect(() => {
+    const checkIfPaying = async () => {
+      try {
+        const customerInfo = await Purchases.getCustomerInfo();
+        if (
+          typeof customerInfo.entitlements.active[ENTITLEMENT_ID] ===
+          "undefined"
+        ) {
+          setIsProUser(false);
+        } else {
+          setIsProUser(true);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    checkIfPaying();
+  }, []);
 
   const loginPurchaserUser = async (userId) => {
     let response;
@@ -163,6 +184,7 @@ function AuthProvider({ children }) {
         isLoggedIn: !!user,
         appIsReady,
         isLoading,
+        isProUser,
         signup,
         resend,
         signin,

@@ -28,8 +28,10 @@ import { handleRemindersOnDeleteClient } from "../../redux/reminders-slice";
 import { AntDesign } from "@expo/vector-icons";
 import DetailsProperties from "../../components/client/clientDetails/DetailsProperties";
 import { ChooseContext } from "../../context/choose-context";
+import { AuthContext } from "../../context/auth-context";
 
 export default function ClientDetails(props) {
+  const { isProUser } = useContext(AuthContext);
   const { id, phone } = props.route.params.client;
   const { index, viewContactInfo } = props.route.params;
   const [contactDetailsVisible, setContactDetailsVisible] = useState(
@@ -77,18 +79,26 @@ export default function ClientDetails(props) {
   };
 
   const viewEditGroupHandler = () => {
-    props.navigation.navigate("AddEditGroup", {
-      clientId: id,
-      index: index,
-    });
+    if (!isProUser) {
+      props.navigation.navigate("Paywall");
+    } else {
+      props.navigation.navigate("AddEditGroup", {
+        clientId: id,
+        index: index,
+      });
+    }
   };
 
   const viewEditReminder = () => {
-    props.navigation.navigate("EditReminder", {
-      clientId: id,
-      firstName: clientSelect.firstName,
-      lastName: clientSelect.lastName,
-    });
+    if (!isProUser) {
+      props.navigation.navigate("Paywall");
+    } else {
+      props.navigation.navigate("EditReminder", {
+        clientId: id,
+        firstName: clientSelect.firstName,
+        lastName: clientSelect.lastName,
+      });
+    }
   };
 
   const viewAddProperty = () => {

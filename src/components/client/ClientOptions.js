@@ -8,6 +8,7 @@ import {
 import { AntDesign } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
+import ProIcon from "../UI/ProIcon";
 
 export default function ClientOptions({
   favoriteHandler,
@@ -53,6 +54,7 @@ export default function ClientOptions({
         onPress={viewEditReminder}
       >
         <View style={styles.optionIconContainer}>
+          <ProIcon top={-10} right={12} small={true} />
           <Feather name="bell" size={24} color="#535353" />
           <Text style={styles.optionText}>REMIND</Text>
         </View>
@@ -64,6 +66,7 @@ export default function ClientOptions({
           onPress={viewEditGroupHandler}
         >
           <View style={styles.optionIconContainer}>
+          <ProIcon top={-10} right={12} small={true} />
             <Ionicons name="people-outline" size={24} color="#535353" />
             <Text style={styles.optionText}>GROUP</Text>
           </View>

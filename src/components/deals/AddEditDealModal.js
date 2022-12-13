@@ -39,6 +39,7 @@ export default function AddEditDealModal({
   handlePickStage,
   handleSubmit,
   contentOffset,
+  handleDeleteDeal
 }) {
   const navigation = useNavigation();
 
@@ -220,6 +221,11 @@ export default function AddEditDealModal({
             />
           </View>
         </KeyboardAvoidingView>
+        {screenTitle == "Edit Deal" && (
+          <TouchableOpacity style={styles.deleteButton} onPress={handleDeleteDeal}>
+            <Text style={styles.deleteButtonText}>Delete Deal</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </ScrollView>
   );
@@ -360,4 +366,14 @@ const styles = StyleSheet.create({
   selectedClientName: {
     fontWeight: "700",
   },
+  deleteButton: {
+    paddingHorizontal: 20,
+    marginTop: 10,
+    paddingVertical: 5,
+    backgroundColor: '#f9f9f9'
+  },
+  deleteButtonText: {
+    color: 'red',
+    fontWeight: '300'
+  }
 });

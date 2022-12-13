@@ -6,28 +6,29 @@ import {
   useWindowDimensions,
   Animated,
 } from "react-native";
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import AddButton from "../../components/UI/AddButton";
 import { MaterialIcons } from "@expo/vector-icons";
 import useDeals from "../../hooks/deals-hook";
 import DealsList from "../../components/deals/DealsList";
-
-const DATA = [
-  {
-    id: "129124123",
-    title: "Property Address",
-    amount: "$12912312",
-    stage: "qualified",
-  },
-];
+import { AuthContext } from "../../context/auth-context";
 
 export default function DealsHome({ navigation }) {
   const { width } = useWindowDimensions();
+  const { isProUser } = useContext(AuthContext);
   const [contentWidth, setContentWidth] = useState(1560);
 
-  const { filteredDeals } = useDeals();
+  const { filteredDeals, lengthOfAllDeals } = useDeals();
 
   const barValue = useRef(new Animated.Value(0)).current;
+
+  const viewAddDealHandler = () => {
+    if (!isProUser && lengthOfAllDeals > 1) {
+      navigation.navigate("Paywall");
+    } else {
+      navigation.navigate("AddEditDeal");
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -79,7 +80,9 @@ export default function DealsHome({ navigation }) {
           <View style={{ ...styles.dealsContainer, width: width }}>
             <View style={styles.dealHeadingContainer}>
               <Text style={styles.dealHeadingText}>Qualified</Text>
-              <Text style={styles.dealTotalAmountText}>${filteredDeals.Qualified.amount.toLocaleString()}</Text>
+              <Text style={styles.dealTotalAmountText}>
+                ${filteredDeals.Qualified.amount.toLocaleString()}
+              </Text>
             </View>
             {filteredDeals.Qualified.data.length > 0 ? (
               <DealsList dealsData={filteredDeals.Qualified.data} />
@@ -96,8 +99,9 @@ export default function DealsHome({ navigation }) {
           <View style={{ ...styles.dealsContainer, width: width }}>
             <View style={styles.dealHeadingContainer}>
               <Text style={styles.dealHeadingText}>In Negotiations</Text>
-              <Text style={styles.dealTotalAmountText}>${filteredDeals.Negotiations.amount.toLocaleString()}</Text>
-
+              <Text style={styles.dealTotalAmountText}>
+                ${filteredDeals.Negotiations.amount.toLocaleString()}
+              </Text>
             </View>
             <DealsList dealsData={filteredDeals.Negotiations.data} />
           </View>
@@ -105,8 +109,9 @@ export default function DealsHome({ navigation }) {
           <View style={{ ...styles.dealsContainer, width: width }}>
             <View style={styles.dealHeadingContainer}>
               <Text style={styles.dealHeadingText}>Under Contract</Text>
-              <Text style={styles.dealTotalAmountText}>${filteredDeals.Contract.amount.toLocaleString()}</Text>
-
+              <Text style={styles.dealTotalAmountText}>
+                ${filteredDeals.Contract.amount.toLocaleString()}
+              </Text>
             </View>
             <DealsList dealsData={filteredDeals.Contract.data} />
           </View>
@@ -114,8 +119,9 @@ export default function DealsHome({ navigation }) {
           <View style={{ ...styles.dealsContainer, width: width }}>
             <View style={styles.dealHeadingContainer}>
               <Text style={styles.dealHeadingText}>Closed</Text>
-              <Text style={styles.dealTotalAmountText}>${filteredDeals.Closed.amount.toLocaleString()}</Text>
-
+              <Text style={styles.dealTotalAmountText}>
+                ${filteredDeals.Closed.amount.toLocaleString()}
+              </Text>
             </View>
             <DealsList dealsData={filteredDeals.Closed.data} />
           </View>
@@ -123,8 +129,9 @@ export default function DealsHome({ navigation }) {
       </View>
 
       <AddButton
-        onPress={() => navigation.navigate("AddEditDeal")}
+        onPress={viewAddDealHandler}
         icon={<MaterialIcons name="attach-money" size={28} color="white" />}
+        pro={lengthOfAllDeals > 1}
       />
     </View>
   );
@@ -162,8 +169,8 @@ const styles = StyleSheet.create({
   },
   dealTotalAmountText: {
     marginTop: 3,
-    fontWeight: '500',
-    color: '#6c6c6c'
+    fontWeight: "500",
+    color: "#6c6c6c",
   },
   emptyDealsContainer: {
     flex: 1,

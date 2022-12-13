@@ -7,9 +7,11 @@ import {
   Text,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import OptionIcon from "../home/OptionIcon";
 import { Entypo, Ionicons, Feather } from "@expo/vector-icons";
+import ProIcon from "./ProIcon";
+import { AuthContext } from "../../context/auth-context";
 
 export default function MultiAddButton({
   activeDate,
@@ -17,9 +19,11 @@ export default function MultiAddButton({
   showAddTask,
   showAddGoal,
   showAddProperty,
+  pro,
 }) {
   const [visible, setVisible] = useState(false);
   const navigation = useNavigation();
+  const { isProUser } = useContext(AuthContext);
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
@@ -33,7 +37,11 @@ export default function MultiAddButton({
   }, [fadeAnim]);
 
   const handleViewAddClient = () => {
-    navigation.navigate("AddClient");
+    if (!isProUser && pro) {
+      navigation.navigate("Paywall");
+    } else {
+      navigation.navigate("AddClient");
+    }
     setVisible(false);
   };
 
@@ -42,20 +50,19 @@ export default function MultiAddButton({
     setVisible(false);
   };
 
-  const handleViewAddReminder = () => {
-    navigation.navigate("AddReminder");
-    setVisible(false);
-  };
-
   const handleViewAddGoal = () => {
-    navigation.navigate("AddGoal");
+    if (!isProUser) {
+      navigation.navigate("Paywall");
+    } else {
+      navigation.navigate("AddGoal");
+    }
     setVisible(false);
   };
 
   const handleViewAddProperty = () => {
-    navigation.navigate('AddProperty');
-    setVisible(false)
-  }
+    navigation.navigate("AddProperty");
+    setVisible(false);
+  };
 
   return (
     <>
@@ -63,7 +70,11 @@ export default function MultiAddButton({
         <>
           <View style={styles.iconsContainer}>
             {showAddClient && (
-              <OptionIcon onPress={handleViewAddClient} text={"Add Client"}>
+              <OptionIcon
+                onPress={handleViewAddClient}
+                text={"Add Client"}
+                pro={pro}
+              >
                 <Ionicons name="ios-person-add" size={28} color="black" />
               </OptionIcon>
             )}
@@ -72,11 +83,12 @@ export default function MultiAddButton({
                 <Entypo name="add-to-list" size={28} color="black" />
               </OptionIcon>
             )}
-            {/* <OptionIcon onPress={handleViewAddReminder} text={"Add Reminder"}>
-              <Feather name="bell" size={28} color="black" />
-            </OptionIcon> */}
             {showAddGoal && (
-              <OptionIcon onPress={handleViewAddGoal} text={"Add Daily Goal"}>
+              <OptionIcon
+                onPress={handleViewAddGoal}
+                text={"Add Daily Goal"}
+                pro={true}
+              >
                 <Entypo name="flag" size={28} color="black" />
               </OptionIcon>
             )}

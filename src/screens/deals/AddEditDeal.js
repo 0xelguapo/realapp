@@ -2,7 +2,7 @@ import { useWindowDimensions, Dimensions, Alert } from "react-native";
 import { useEffect, useState, useContext } from "react";
 import { useDispatch } from "react-redux";
 import { ChooseContext } from "../../context/choose-context";
-import { addDeal, editDeal } from "../../redux/deals-slice";
+import { addDeal, editDeal, removeDeal } from "../../redux/deals-slice";
 import { SuccessContext } from "../../context/success-context";
 import AddEditDealModal from "../../components/deals/AddEditDealModal";
 
@@ -106,6 +106,20 @@ export default function AddEditDeal({ navigation, route }) {
     navigation.goBack();
   };
 
+  const handleDeleteDeal = async () => {
+    Alert.alert("Delete Deal", "Are you sure you want to delete this deal?", [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Delete Deal",
+        style: "destructive",
+        onPress: () => {
+          dispatch(removeDeal(deal.id));
+          navigation.goBack()
+        },
+      },
+    ]);
+  }
+
   return (
     <AddEditDealModal
       screenTitle={deal ? "Edit Deal" : "New Deal"}
@@ -120,6 +134,7 @@ export default function AddEditDeal({ navigation, route }) {
       handlePickStage={handlePickStage}
       handleSubmit={handleSubmitDeal}
       contentOffset={contentOffset}
+      handleDeleteDeal={handleDeleteDeal}
     />
   );
 }

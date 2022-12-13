@@ -30,14 +30,11 @@ export default function PackageItem({
           {!monthly && (
             <View style={styles.strikeThroughContainer}>
               <Text style={styles.strikeThroughText}>$24.99 USD</Text>
-              <Text style={styles.saveText}>(Save $50/year)</Text>
+              <Text style={styles.saveText}>(Save $100/year)</Text>
             </View>
           )}
           <Text style={styles.priceText}>
             {purchasePackage.product.priceString}
-            {/* {monthly
-              ? purchasePackage.product.priceString
-              : "$" + Math.max(purchasePackage.product.price / 12).toFixed(2)} */}
           </Text>
           <Text style={styles.subtext}>
             {monthly
@@ -49,7 +46,7 @@ export default function PackageItem({
           <View style={styles.bulletContainer}>
             <View style={styles.bulletCircle} />
             <Text style={styles.bulletText}>
-              Unlimited contacts and properties
+              Unlimited contacts, properties, and deals
             </Text>
           </View>
           <View style={styles.bulletContainer}>

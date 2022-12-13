@@ -46,7 +46,7 @@ export default function ImportContacts(props) {
 
           <Text style={styles.headingSubtext}>
             {" "}
-            You can choose who to upload later!
+            You can choose who to upload in your Settings!
           </Text>
         </View>
         <View style={styles.imageContainer}>

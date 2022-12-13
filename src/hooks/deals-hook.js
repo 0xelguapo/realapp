@@ -12,6 +12,7 @@ function useDeals() {
   }, []);
 
   const allDeals = useSelector(selectAllDeals);
+  const lengthOfAllDeals = allDeals.length
 
   const filteredDeals = allDeals.reduce(
     (acc, el) => {
@@ -31,6 +32,7 @@ function useDeals() {
   return {
     allDeals,
     filteredDeals,
+    lengthOfAllDeals
   };
 }
 export default useDeals;

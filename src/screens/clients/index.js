@@ -22,6 +22,7 @@ import ChooseClient from "./ChooseClient";
 import ViewOnePropertyGroup from "../properties/ViewOnePropertyGroup";
 import EditPropertiesOfGroup from "../properties/EditPropertiesOfGroup";
 import AddPropertiesToGroup from "../properties/AddPropertiesToGroup";
+import Paywall from "../../components/UI/Paywall";
 
 const Stack = createNativeStackNavigator();
 
@@ -177,6 +178,11 @@ export default function ClientsNavigator() {
         options={{ headerShown: false, presentation: "modal" }}
         name="ChooseClient"
         component={ChooseClient}
+      />
+      <Stack.Screen
+        options={{ headerShown: false, presentation: "transparentModal" }}
+        name="Paywall"
+        component={Paywall}
       />
     </Stack.Navigator>
   );

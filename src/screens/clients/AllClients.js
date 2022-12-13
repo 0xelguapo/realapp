@@ -11,7 +11,6 @@ import {
   Text,
   View,
   ActivityIndicator,
-  TextInput,
   Animated,
   Pressable,
   TouchableOpacity,
@@ -29,12 +28,14 @@ import {
 import { Geo } from "aws-amplify";
 import { SuccessContext } from "../../context/success-context";
 import SuggestedProperty from "../../components/property/SuggestedProperty";
-import AddButton from "../../components/UI/AddButton";
-import AddHome from "../../components/UI/MultiAddButton";
+import MultiAddButton from "../../components/UI/MultiAddButton";
 import SearchBar from "../../components/UI/SearchBar";
+import { AuthContext } from "../../context/auth-context";
+import ProIcon from "../../components/UI/ProIcon";
 
 export default function Clients({ navigation }) {
   const sectionListRef = useRef(null);
+  const { isProUser } = useContext(AuthContext);
 
   const [searchInput, setSearchInput] = useState("");
   const dispatch = useDispatch();
@@ -132,6 +133,14 @@ export default function Clients({ navigation }) {
   const viewClientHandler = useCallback((client, index) => {
     navigation.navigate("ClientDetails", { client: client, index: index });
   }, []);
+
+  const viewAllGroupsHandler = () => {
+    if (!isProUser) {
+      navigation.navigate("Paywall");
+    } else {
+      navigation.navigate('ViewAllGroups')
+    }
+  }
 
   const renderProperty = useCallback(({ item, index }) => {
     return (
@@ -253,8 +262,9 @@ export default function Clients({ navigation }) {
               />
               <TouchableOpacity
                 style={styles.viewGroups}
-                onPress={() => navigation.navigate("ViewAllGroups")}
+                onPress={viewAllGroupsHandler}
               >
+                <ProIcon top={-5} right={-12} small={true} />
                 <Ionicons name="people-outline" size={24} color="#0064e5" />
               </TouchableOpacity>
             </View>
@@ -336,7 +346,7 @@ export default function Clients({ navigation }) {
             </>
           )}
         </View>
-        <AddHome showAddClient={true} showAddProperty={true} />
+        <MultiAddButton showAddClient={true} showAddProperty={true} pro={allClients.length > 20} />
       </View>
     </>
   );
