@@ -13,25 +13,6 @@ function AuthProvider({ children }) {
   const [appIsReady, setAppIsReady] = useState(false);
   const [isProUser, setIsProUser] = useState(false);
 
-  useEffect(() => {
-    const checkIfPaying = async () => {
-      try {
-        const customerInfo = await Purchases.getCustomerInfo();
-        if (
-          typeof customerInfo.entitlements.active[ENTITLEMENT_ID] ===
-          "undefined"
-        ) {
-          setIsProUser(false);
-        } else {
-          setIsProUser(true);
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    checkIfPaying();
-  }, []);
-
   const loginPurchaserUser = async (userId) => {
     let response;
     try {
@@ -176,6 +157,27 @@ function AuthProvider({ children }) {
     }
     setUser(null);
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      const checkIfPaying = async () => {
+        try {
+          const customerInfo = await Purchases.getCustomerInfo();
+          if (
+            typeof customerInfo.entitlements.active[ENTITLEMENT_ID] ===
+            "undefined"
+          ) {
+            setIsProUser(false);
+          } else {
+            setIsProUser(true);
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      };
+      checkIfPaying();
+    }
+  }, [user]);
 
   return (
     <AuthContext.Provider

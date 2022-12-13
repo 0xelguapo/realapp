@@ -38,7 +38,7 @@ const updatedConfig = {
     ...awsconfig.oauth,
     redirectSignIn: localRedirectSignIn,
     redirectSignOut: localRedirectSignOut,
-    urlOpener
+    urlOpener,
   },
 };
 Amplify.configure(updatedConfig);
@@ -47,10 +47,13 @@ Amplify.configure(updatedConfig);
 
 export default function App() {
   useEffect(() => {
-    Purchases.setDebugLogsEnabled(true);
-    Purchases.configure({
-      apiKey: RC_API_KEY,
-    });
+    const configurePurchases = async () => {
+      await Purchases.setDebugLogsEnabled(true);
+      await Purchases.configure({
+        apiKey: RC_API_KEY,
+      });
+    };
+    configurePurchases();
   }, []);
 
   return (

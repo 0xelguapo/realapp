@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useEffect } from "react";
+import { useState, useMemo, useCallback, useEffect, useContext } from "react";
 import {
   View,
   Text,
@@ -19,45 +19,35 @@ import { useDispatch, useSelector } from "react-redux";
 import { addTask } from "../../redux/tasks-slice";
 import { fetchClients, selectAllClients } from "../../redux/clients-slice";
 import { format, add } from "date-fns";
+import { SuccessContext } from "../../context/success-context";
 
 const coeff = 1000 * 60 * 5;
 
 export default function AddTask({ navigation, route }) {
   let curDate;
-
   if (route.params?.activeDate) {
     curDate = new Date(route.params.activeDate);
   } else {
     curDate = new Date();
   }
+  const {onStatusChange} = useContext(SuccessContext)
 
   const dispatch = useDispatch();
   const allClients = useSelector(selectAllClients);
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [searchInput, setSearchInput] = useState("");
   const [date, setDate] = useState(
     add(new Date(Math.round(curDate.getTime() / coeff) * coeff), {
       minutes: 15,
     })
   );
   const [endDate, setEndDate] = useState(add(new Date(date), { minutes: 30 }));
-  const [pickerVisible, setPickerVisible] = useState(false);
   const [startPickerVisible, setStartPickerVisible] = useState(false);
   const [endPickerVisible, setEndPickerVisible] = useState(false);
 
   const [clientsVisible, setClientsVisible] = useState(false);
   const [selectedClient, setSelectedClient] = useState({});
-
-  const filteredData = useMemo(() => {
-    return allClients.filter((c) => {
-      const fullName = c.firstName + " " + c?.lastName;
-      const clientData = fullName ? fullName.toUpperCase() : "".toUpperCase();
-      const textData = searchInput.toUpperCase();
-      return clientData.indexOf(textData) > -1;
-    });
-  }, [searchInput, allClients]);
 
   useEffect(() => {
     if (allClients.length < 1) dispatch(fetchClients());
@@ -66,15 +56,12 @@ export default function AddTask({ navigation, route }) {
   const onStartDateChange = (e, selectedDate) => {
     const currentDate = selectedDate || date;
     setDate(currentDate);
+    setEndDate(add(new Date(currentDate), { minutes: 30 }));
   };
 
   const onEndDateChange = (e, selectedDate) => {
     const currentDate = selectedDate || endDate;
     setEndDate(currentDate);
-  };
-
-  const showPickers = () => {
-    setPickerVisible(!pickerVisible);
   };
 
   const showClients = () => {
@@ -126,6 +113,7 @@ export default function AddTask({ navigation, route }) {
 
     const response = await dispatch(addTask(taskDetails)).unwrap();
     if (response) {
+      onStatusChange('TASK CREATED')
       navigation.goBack();
     } else {
       console.error("cannot add task");
@@ -311,6 +299,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     borderBottomWidth: 0.2,
     borderColor: "#ababab",
+    color: "#6c6c6c",
   },
   setDatesContainer: {
     borderBottomWidth: 0.2,

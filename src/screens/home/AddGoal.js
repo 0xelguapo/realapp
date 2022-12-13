@@ -175,6 +175,7 @@ export default function AddGoal(props) {
               <TextInput
                 style={styles.timesInput}
                 keyboardType="number-pad"
+                returnKeyType="done"
                 value={timesPerDay}
                 onChangeText={setTimesPerDay}
                 ref={timesRef}

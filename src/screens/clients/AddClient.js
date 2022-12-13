@@ -54,6 +54,9 @@ function propertyReducer(state, action) {
 
 export default function AddClient({ navigation }) {
   const { onStatusChange } = useContext(SuccessContext);
+  const secondInputRef = useRef(null);
+  const thirdInputRef = useRef(null);
+
   const phoneInputRef = useRef(null);
   const emailInputRef = useRef(null);
   const dispatch = useDispatch();
@@ -236,6 +239,8 @@ export default function AddClient({ navigation }) {
               onChangeText={setFirstName}
               autoCapitalize="words"
               autoFocus={true}
+              blurOnSubmit={false}
+              onSubmitEditing={() => secondInputRef.current.focus()}
             />
           </View>
           <View style={styles.inputContainerOne}>
@@ -247,6 +252,9 @@ export default function AddClient({ navigation }) {
               value={lastName}
               onChangeText={setLastName}
               autoCapitalize="words"
+              ref={secondInputRef}
+              onSubmitEditing={() => thirdInputRef.current.focus()}
+              blurOnSubmit={false}
             />
           </View>
           <View style={styles.inputContainerOne}>
@@ -258,6 +266,8 @@ export default function AddClient({ navigation }) {
               value={company}
               onChangeText={setCompany}
               autoCapitalize="words"
+              ref={thirdInputRef}
+              blurOnSubmit={true}
             />
           </View>
 

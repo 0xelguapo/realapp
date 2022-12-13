@@ -8,7 +8,7 @@ export default function Deal({ deal, onPress }) {
       </View>
       <Text style={styles.detailsText}>
         {deal?.amount ? `$${parseInt(deal.amount).toLocaleString()} ` : "$0"}
-        {deal.clientId.length > 0 &&
+        {deal.clientId?.length > 0 &&
           `• ${deal.client.firstName + " " + deal.client?.lastName}`}
       </Text>
     </TouchableOpacity>

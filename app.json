@@ -2,7 +2,7 @@
   "expo": {
     "name": "CoAgent",
     "slug": "realapp",
-    "version": "1.1.2",
+    "version": "1.2.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "scheme": "coagent",
@@ -21,8 +21,14 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "co.coagent.coagent",
+      "infoPlist": {
+        "NSCameraUsageDescription": "Camera is not used in app",
+        "NSLocationWhenInUsageDescription": "Location is not used in app"
+      },
       "entitlements": {
-        "com.apple.developer.applesignin": ["Default"]
+        "com.apple.developer.applesignin": [
+          "Default"
+        ]
       }
     },
     "android": {
